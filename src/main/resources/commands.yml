@@ -1,0 +1,16 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# Author : Smudge
+
+commands:
+
+  reload:
+    enabled: true
+    name: "leafreload"
+
+    permission: "leaf.reload"
+    message: "{message} Reloaded all configs! <3"
