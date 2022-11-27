@@ -5,6 +5,8 @@ import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
+import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
+import com.github.smuddgge.leaf.placeholders.standard.ServerPlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -42,9 +44,30 @@ public class Leaf {
     public void onProxyInitialization(ProxyInitializeEvent event) {
 
         // Register placeholders
+        PlaceholderManager.register(new ServerPlaceholder());
+        PlaceholderManager.register(new VersionPlaceholder());
         PlaceholderManager.register(new VersionPlaceholder());
 
         // Register placeholder conditions
         ConditionManager.register(new MatchCondition());
+        ConditionManager.register(new PermissionCondition());
+    }
+
+    /**
+     * Used to get the proxy server instance.
+     *
+     * @return The proxy server.
+     */
+    public static ProxyServer getServer() {
+        return Leaf.server;
+    }
+
+    /**
+     * Used to get the logger instance.
+     *
+     * @return The logger.
+     */
+    public static Logger getLogger() {
+        return Leaf.logger;
     }
 }
