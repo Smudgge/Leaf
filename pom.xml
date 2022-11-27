@@ -170,5 +170,12 @@
             <artifactId>SquishyYaml</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <!-- Jupiter -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
