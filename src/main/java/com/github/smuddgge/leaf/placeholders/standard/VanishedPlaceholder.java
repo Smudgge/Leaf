@@ -1,7 +1,6 @@
 package com.github.smuddgge.leaf.placeholders.standard;
 
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.placeholders.Placeholder;
 import com.github.smuddgge.leaf.placeholders.StandardPlaceholder;
 
 /**

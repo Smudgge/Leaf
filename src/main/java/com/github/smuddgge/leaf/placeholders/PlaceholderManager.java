@@ -57,6 +57,16 @@ public class PlaceholderManager {
     }
 
     /**
+     * Used to parse placeholders in a message.
+     *
+     * @param message The message to parse.
+     * @return The converted string.
+     */
+    public static String parse(String message) {
+        return PlaceholderManager.parse(message, null, null);
+    }
+
+    /**
      * Used to register a placeholder in the manager.
      *
      * @param placeholder The placeholder to register.
