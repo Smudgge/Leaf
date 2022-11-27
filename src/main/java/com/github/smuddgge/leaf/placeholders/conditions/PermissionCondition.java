@@ -8,20 +8,21 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderType;
 import com.github.smuddgge.squishyyaml.ConfigurationSection;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
- * Represents the match condition.
+ * Represents the permission condition.
  */
-public class MatchCondition implements PlaceholderCondition {
+public class PermissionCondition implements PlaceholderCondition {
 
     @Override
     public String getIdentifier() {
-        return "MATCH";
+        return "PERMISSION";
     }
 
     @Override
     public String getValue(ConfigurationSection section, User user) {
+        if (user == null) return null;
+
         String condition = section.getString("condition");
         String pattern = PlaceholderManager.parse(condition.split(":")[1], PlaceholderType.STANDARD, user);
 
@@ -33,15 +34,18 @@ public class MatchCondition implements PlaceholderCondition {
         }
 
         for (String key : options) {
-            if (!Objects.equals(key, pattern)) continue;
+            String permission = pattern.replace("?", key);
+
+            if (!user.hasPermission(permission)) continue;
 
             return section.getSection("options").getString(key);
         }
+
         return null;
     }
 
     @Override
     public String getValue(ConfigurationSection section) {
-        return this.getValue(section, null);
+        return null;
     }
 }

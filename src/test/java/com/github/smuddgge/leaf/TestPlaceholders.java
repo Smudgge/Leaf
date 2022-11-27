@@ -1,5 +1,8 @@
 package com.github.smuddgge.leaf;
 
+import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.placeholders.standard.ServerPlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
 import org.junit.jupiter.api.Test;
 

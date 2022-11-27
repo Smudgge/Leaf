@@ -2,6 +2,8 @@ package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.placeholders.ConditionManager;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
 import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
 import com.google.inject.Inject;

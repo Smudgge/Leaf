@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.placeholders;
 
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.squishyyaml.YamlConfigurationSection;
+import com.github.smuddgge.squishyyaml.ConfigurationSection;
 
 /**
  * Represents a placeholder's condition.
@@ -20,10 +20,10 @@ public interface PlaceholderCondition {
      * Used to get the value of the custom placeholder with context of a user.
      *
      * @param section The placeholder's configuration section.
-     * @param user The instance of the user.
+     * @param user    The instance of the user.
      * @return The value.
      */
-    String getValue(YamlConfigurationSection section, User user);
+    String getValue(ConfigurationSection section, User user);
 
     /**
      * Used to get the value of the custom placeholder.
@@ -31,5 +31,5 @@ public interface PlaceholderCondition {
      * @param section The placeholder's configuration section.
      * @return The value.
      */
-    String getValue(YamlConfigurationSection section);
+    String getValue(ConfigurationSection section);
 }

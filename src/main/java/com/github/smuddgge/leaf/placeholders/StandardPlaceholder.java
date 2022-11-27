@@ -16,8 +16,8 @@ public abstract class StandardPlaceholder implements Placeholder {
     public abstract String getIdentifier();
 
     @Override
-    public abstract String getValue();
+    public abstract String getValue(User user);
 
     @Override
-    public abstract String getValue(User user);
+    public abstract String getValue();
 }
