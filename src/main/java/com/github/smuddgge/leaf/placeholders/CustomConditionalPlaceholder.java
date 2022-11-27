@@ -2,8 +2,8 @@ package com.github.smuddgge.leaf.placeholders;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.squishyyaml.ConfigurationSection;
 
 /**
  * Represents a custom placeholder.
@@ -16,7 +16,7 @@ public class CustomConditionalPlaceholder implements Placeholder {
 
     private PlaceholderCondition condition;
 
-    private boolean valid;
+    private boolean valid = true;
 
     /**
      * Used to create a custom placeholder.
@@ -67,12 +67,14 @@ public class CustomConditionalPlaceholder implements Placeholder {
     @Override
     public String getValue(User user) {
         if (!this.valid) return null;
-        return this.condition.getValue(this.section, user);
+        String value = this.condition.getValue(this.section, user);
+        return value == null ? this.section.getSection("options").getString("Default") : value;
     }
 
     @Override
     public String getValue() {
         if (!this.valid) return null;
-        return this.condition.getValue(this.section);
+        String value = this.condition.getValue(this.section);
+        return value == null ? this.section.getSection("options").getString("Default") : value;
     }
 }

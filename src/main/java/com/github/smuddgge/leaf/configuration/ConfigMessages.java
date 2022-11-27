@@ -1,15 +1,17 @@
 package com.github.smuddgge.leaf.configuration;
 
+import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.placeholders.CustomConditionalPlaceholder;
-import com.github.smuddgge.leaf.placeholders.Placeholder;
-import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
-import com.github.smuddgge.leaf.placeholders.PlaceholderType;
-import com.github.smuddgge.squishyyaml.YamlConfiguration;
+import com.github.smuddgge.leaf.placeholders.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigMessages extends YamlConfiguration {
+
+    private static List<String> registeredPlaceholders = new ArrayList<>();
 
     private static ConfigMessages config;
 
@@ -39,8 +41,12 @@ public class ConfigMessages extends YamlConfiguration {
     public static void reload() {
         ConfigMessages.config.load();
 
-        for (String placeholderIdentifier : ConfigMessages.get().getKeys("placeholders")) {
+        for (String placeholderIdentifier : ConfigMessages.registeredPlaceholders) {
             PlaceholderManager.unregister(placeholderIdentifier);
+        }
+
+        for (String placeholderIdentifier : ConfigMessages.get().getKeys("placeholders")) {
+            ConfigMessages.registeredPlaceholders.add(placeholderIdentifier);
 
             String value = ConfigMessages.get().getSection("placeholders").getString(placeholderIdentifier);
 
@@ -68,6 +74,8 @@ public class ConfigMessages extends YamlConfiguration {
                             }
                         }
                 );
+
+                continue;
             }
 
             PlaceholderManager.register(new CustomConditionalPlaceholder(placeholderIdentifier));

@@ -1,5 +1,7 @@
 package com.github.smuddgge.leaf;
 
+import com.github.smuddgge.leaf.commands.CommandHandler;
+import com.github.smuddgge.leaf.commands.commands.Reload;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
@@ -7,6 +9,7 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
 import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
 import com.github.smuddgge.leaf.placeholders.standard.ServerPlaceholder;
+import com.github.smuddgge.leaf.placeholders.standard.VanishedPlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -30,6 +33,8 @@ public class Leaf {
     private static ProxyServer server;
     private static Logger logger;
 
+    private static CommandHandler commandHandler;
+
     @Inject
     public void SmUtility(ProxyServer server, Logger logger, @DataDirectory final Path folder) {
         Leaf.server = server;
@@ -45,12 +50,23 @@ public class Leaf {
 
         // Register placeholders
         PlaceholderManager.register(new ServerPlaceholder());
-        PlaceholderManager.register(new VersionPlaceholder());
+        PlaceholderManager.register(new VanishedPlaceholder());
         PlaceholderManager.register(new VersionPlaceholder());
 
         // Register placeholder conditions
         ConditionManager.register(new MatchCondition());
         ConditionManager.register(new PermissionCondition());
+
+        // Setup commands
+        Leaf.commandHandler = new CommandHandler();
+
+        Leaf.commandHandler.append(new Reload());
+
+        Leaf.commandHandler.register();
+
+        // Reload configuration to load custom placeholders
+        ConfigMessages.reload();
+
     }
 
     /**
@@ -69,5 +85,14 @@ public class Leaf {
      */
     public static Logger getLogger() {
         return Leaf.logger;
+    }
+
+    /**
+     * Used to get the command handler.
+     *
+     * @return The instance of the command handler.
+     */
+    public static CommandHandler getCommandHandler() {
+        return Leaf.commandHandler;
     }
 }

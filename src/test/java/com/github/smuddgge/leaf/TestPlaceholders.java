@@ -12,6 +12,6 @@ public class TestPlaceholders {
     public void test() {
         PlaceholderManager.register(new VersionPlaceholder());
 
-        System.out.println(PlaceholderManager.parse("Plugin version : <version>", null));
+        System.out.println(PlaceholderManager.parse("Plugin version : <version>"));
     }
 }

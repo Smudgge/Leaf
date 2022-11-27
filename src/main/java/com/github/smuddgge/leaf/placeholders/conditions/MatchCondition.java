@@ -1,11 +1,11 @@
 package com.github.smuddgge.leaf.placeholders.conditions;
 
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderCondition;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderType;
-import com.github.smuddgge.squishyyaml.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;

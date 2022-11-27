@@ -25,7 +25,7 @@ placeholders:
       true: "&#c0fce6"
       false: "&#ffffee"
 
-  server:
+  server_formatted:
     condition: "MATCH:<server>"
     options:
       Default: "<server>"

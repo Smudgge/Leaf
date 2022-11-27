@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.placeholders;
 
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.datatype.User;
 
 import java.util.ArrayList;
@@ -32,10 +33,17 @@ public class PlaceholderManager {
             // If we are filtering and the placeholder is not the filter type, skip.
             if (filterType != null && placeholder.getType() != filterType) continue;
 
-            PlaceholderType placeholderType = placeholder.getType();
-            String replacer = placeholderType.getPrefix() + placeholder.getIdentifier() + placeholderType.getSuffix();
+            String replacer = placeholder.getString();
 
-            message = message.replace(replacer, placeholder.getValue(user));
+            String value = placeholder.getValue(user);
+
+            if (value == null) value = "null";
+
+            if (placeholder.getType() == PlaceholderType.CUSTOM) {
+                value = PlaceholderManager.parse(value, PlaceholderType.STANDARD, user);
+            }
+
+            message = message.replace(replacer, value);
         }
 
         return message;
@@ -67,12 +75,34 @@ public class PlaceholderManager {
     }
 
     /**
+     * Used to get a placeholder.
+     *
+     * @param identifier The placeholder's identifier.
+     * @return The instance of the placeholder.
+     */
+    public static Placeholder get(String identifier) {
+        for (Placeholder placeholder : PlaceholderManager.placeholderList) {
+            if (!Objects.equals(placeholder.getIdentifier(), identifier)) continue;
+
+            return placeholder;
+        }
+        return null;
+    }
+
+    /**
      * Used to register a placeholder in the manager.
      *
      * @param placeholder The placeholder to register.
      */
     public static void register(Placeholder placeholder) {
+        if (PlaceholderManager.get(placeholder.getIdentifier()) != null) {
+            MessageManager.warn("Duplicate placeholder : " + placeholder.getIdentifier());
+            return;
+        }
+
         PlaceholderManager.placeholderList.add(placeholder);
+
+        MessageManager.log("&aRegistered &7placeholder : " + placeholder.getIdentifier());
     }
 
     /**
@@ -81,10 +111,12 @@ public class PlaceholderManager {
      * @param identifier The placeholder's identifier.
      */
     public static void unregister(String identifier) {
-        for (Placeholder placeholder : PlaceholderManager.placeholderList) {
-            if (!Objects.equals(placeholder.getIdentifier(), identifier)) continue;
+        Placeholder placeholder = PlaceholderManager.get(identifier);
 
-            PlaceholderManager.placeholderList.remove(placeholder);
-        }
+        if (placeholder == null) return;
+
+        MessageManager.log("&eUnregistered &7placeholder : " + identifier);
+
+        PlaceholderManager.placeholderList.remove(placeholder);
     }
 }

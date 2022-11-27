@@ -16,6 +16,7 @@ public class VanishedPlaceholder extends StandardPlaceholder {
 
     @Override
     public String getValue(User user) {
+        if (user == null) return null;
         return String.valueOf(user.isVanished());
     }
 

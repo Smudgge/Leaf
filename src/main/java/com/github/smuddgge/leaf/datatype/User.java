@@ -1,26 +1,13 @@
 package com.github.smuddgge.leaf.datatype;
 
+import com.github.smuddgge.leaf.MessageManager;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 /**
  * Represents a user connected to one of the servers.
  */
-public class User {
-
-    /**
-     * The instance of the player
-     */
-    private final Player player;
-
-    /**
-     * Used to create a user.
-     *
-     * @param player The player to wrap.
-     */
-    public User(Player player) {
-        this.player = player;
-    }
+public record User(Player player) {
 
     /**
      * Used to get what server the user is connected to.
@@ -48,5 +35,17 @@ public class User {
      * @return True if they are vanished.
      */
     public boolean isVanished() {
+        // TODO check if the user is vanished
+        return false;
+    }
+
+    /**
+     * Used to send a user a message.
+     * This will also convert the messages placeholders and colours.
+     *
+     * @param message The message to send.
+     */
+    public void sendMessage(String message) {
+        this.player.sendMessage(MessageManager.convert(message, this));
     }
 }

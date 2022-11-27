@@ -17,6 +17,8 @@ public class ServerPlaceholder extends StandardPlaceholder {
     @Override
     public String getValue(User user) {
         if (user == null) return null;
+        if (user.getConnectedServer() == null) return null;
+
         return user.getConnectedServer().getServerInfo().getName();
     }
 

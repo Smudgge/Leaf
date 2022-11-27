@@ -41,4 +41,13 @@ public interface Placeholder {
      * @return The placeholders value.
      */
     String getValue();
+
+    /**
+     * Used to get the placeholder as a string.
+     *
+     * @return Placeholder as a string.
+     */
+    default String getString() {
+        return this.getType().getPrefix() + this.getIdentifier() + this.getType().getSuffix();
+    }
 }
