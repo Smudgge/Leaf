@@ -48,4 +48,13 @@ public record User(Player player) {
     public void sendMessage(String message) {
         this.player.sendMessage(MessageManager.convert(message, this));
     }
+
+    /**
+     * Used to get the users name.
+     *
+     * @return The users name.
+     */
+    public CharSequence getName() {
+        return this.player.getGameProfile().getName();
+    }
 }

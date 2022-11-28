@@ -8,7 +8,6 @@ import com.github.smuddgge.leaf.commands.Suggestions;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
 /**
  * Represents the reload command.
@@ -69,8 +68,8 @@ public class Reload extends Command {
         ConfigCommands.reload();
         ConfigMessages.reload();
 
-        // Register the new commands
-        Leaf.getCommandHandler().register();
+        // Reload the commands and re-register them
+        Leaf.reloadCommands();
 
         MessageManager.log("&f&lReloaded successfully");
     }

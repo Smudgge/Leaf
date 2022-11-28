@@ -8,7 +8,6 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -68,6 +67,15 @@ public abstract class Command implements SimpleCommand {
     }
 
     /**
+     * Used to get if the command is enabled.
+     *
+     * @return True if the command is enabled.
+     */
+    public boolean isEnabled() {
+        return ConfigCommands.isCommandEnabled(this.getIdentifier());
+    }
+
+    /**
      * Executed when the command is run in the console.
      *
      * @param arguments The arguments given in the command.
@@ -123,13 +131,9 @@ public abstract class Command implements SimpleCommand {
 
         if (source instanceof Player) {
 
-            this.onPlayerRun(invocation.arguments(), new User((Player) source));
+            int index = invocation.arguments().length;
 
-            List<String> list = new ArrayList<>();
-
-            list.add("Test");
-
-            return CompletableFuture.completedFuture(list);
+            return CompletableFuture.completedFuture(this.getSuggestions(new User((Player) source)).get().get(index));
 
         }
 

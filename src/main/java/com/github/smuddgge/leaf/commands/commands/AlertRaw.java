@@ -5,7 +5,6 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.Suggestions;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
@@ -44,10 +43,8 @@ public class AlertRaw extends Command {
             MessageManager.log(component);
 
         } catch (Exception exception) {
-            player.sendMessage(ConfigManager.getMessages().getMessages().getInvalidArgument());
+            return new CommandStatus().incorrectArguments();
         }
-
-        MessageManager.log(message);
 
         return new CommandStatus();
     }

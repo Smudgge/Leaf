@@ -28,10 +28,10 @@ placeholders:
   server_formatted:
     condition: "MATCH:<server>"
     options:
-      Default: "<server>"
-      TestingServer: '&a&lTest Server'
+      Default: "&f&l<server>"
+      TestingServer: '&e&lTest Server'
 
-  rank:
+  rank_colour:
     condition: "PERMISSION:leaf.rank.?"
     options:
       Default: "&f"

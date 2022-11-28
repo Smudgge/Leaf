@@ -8,6 +8,12 @@
 
 commands:
 
+  # I'd love if you kept this command on your server <3
+  # Shows information about this plugin.
+  info:
+    enabled: true
+    name: "leaf"
+
   reload:
     enabled: true
     name: "leafreload"
@@ -22,3 +28,25 @@ commands:
 
     # %message% returns the command argument
     message: "&8&l[&f&lAlert&8&l]&r &a%message%"
+
+  find:
+    enabled: true
+    name: "find"
+    permission: "leaf.find"
+
+    not_found: "{error_colour}Player could not be found."
+
+    # Placeholders will parse in terms of the player to find.
+    found: "{message} Player was found on {server_formatted}"
+
+chats:
+
+  staff:
+    enabled: true
+    name: "staffchat"
+    aliases: ["sc"]
+    permission: "leaf.staffchat"
+
+    # %player% : The players name.
+    # %message% : The message the player has sent.
+    format: '{server_formatted} {rank_colour}%player% &7: {vanish_colour}%message%'

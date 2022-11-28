@@ -1,9 +1,11 @@
 package com.github.smuddgge.leaf.configuration;
 
-import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.placeholders.*;
+import com.github.smuddgge.leaf.placeholders.CustomConditionalPlaceholder;
+import com.github.smuddgge.leaf.placeholders.Placeholder;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.placeholders.PlaceholderType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public class ConfigMessages extends YamlConfiguration {
 
-    private static List<String> registeredPlaceholders = new ArrayList<>();
+    private static final List<String> registeredPlaceholders = new ArrayList<>();
 
     private static ConfigMessages config;
 

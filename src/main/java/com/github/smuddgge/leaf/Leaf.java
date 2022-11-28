@@ -1,10 +1,14 @@
 package com.github.smuddgge.leaf;
 
+import com.github.smuddgge.leaf.commands.ChatCommand;
 import com.github.smuddgge.leaf.commands.CommandHandler;
 import com.github.smuddgge.leaf.commands.commands.Alert;
+import com.github.smuddgge.leaf.commands.commands.Find;
+import com.github.smuddgge.leaf.commands.commands.Info;
 import com.github.smuddgge.leaf.commands.commands.Reload;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -61,17 +65,11 @@ public class Leaf {
         ConditionManager.register(new MatchCondition());
         ConditionManager.register(new PermissionCondition());
 
-        // Setup commands
-        Leaf.commandHandler = new CommandHandler();
-
-        Leaf.commandHandler.append(new Reload());
-        Leaf.commandHandler.append(new Alert());
-
-        Leaf.commandHandler.register();
-
         // Reload configuration to load custom placeholders
         ConfigMessages.reload();
 
+        // Reload all commands
+        Leaf.reloadCommands();
     }
 
     /**
@@ -99,5 +97,24 @@ public class Leaf {
      */
     public static CommandHandler getCommandHandler() {
         return Leaf.commandHandler;
+    }
+
+    /**
+     * Used to reload the commands.
+     */
+    public static void reloadCommands() {
+        Leaf.commandHandler = new CommandHandler();
+
+        Leaf.commandHandler.append(new Info());
+        Leaf.commandHandler.append(new Reload());
+        Leaf.commandHandler.append(new Alert());
+        Leaf.commandHandler.append(new Find());
+
+        for (String identifier : ConfigCommands.get().getSection("chats").getKeys()) {
+            ConfigurationSection section = ConfigCommands.get().getSection("chats").getSection(identifier);
+            Leaf.commandHandler.append(new ChatCommand(identifier, section));
+        }
+
+        Leaf.commandHandler.register();
     }
 }

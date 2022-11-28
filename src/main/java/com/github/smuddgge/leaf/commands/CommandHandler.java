@@ -15,7 +15,7 @@ public class CommandHandler {
 
     private final List<Command> commands = new ArrayList<>();
 
-    private List<String> registeredCommands = new ArrayList<>();
+    private final List<String> registeredCommands = new ArrayList<>();
 
     /**
      * Used to append a command to the command handler.
@@ -34,7 +34,13 @@ public class CommandHandler {
 
         for (Command command : this.commands) {
             // Check if command is enabled
-            if (!ConfigCommands.isCommandEnabled(command.getIdentifier())) continue;
+            if (!command.isEnabled()) {
+                MessageManager.log(command.getIdentifier() + " is not enabled in configuration, therefore disabling.");
+                continue;
+            }
+
+            // Log
+            MessageManager.log("&aEnabling &7command : " + command.getName());
 
             // Check if the command is valid
             if (command.getName() == null) {

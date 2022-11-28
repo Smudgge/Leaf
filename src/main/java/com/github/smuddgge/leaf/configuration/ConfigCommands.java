@@ -100,6 +100,6 @@ public class ConfigCommands extends YamlConfiguration {
      * @return True if the command is enabled.
      */
     public static boolean isCommandEnabled(String identifier) {
-        return ConfigCommands.getCommand(identifier).getBoolean("enabled", true);
+        return ConfigCommands.getCommand(identifier).getBoolean("enabled", false);
     }
 }

@@ -29,7 +29,7 @@ public class MessageManager {
      * Used to convert a message to a component with colour.
      *
      * @param message The message to convert.
-     * @param user The user context to convert placeholders with.
+     * @param user    The user context to convert placeholders with.
      * @return The requested component.
      */
     public static Component convert(String message, User user) {
@@ -54,6 +54,15 @@ public class MessageManager {
     }
 
     /**
+     * Used to log information into the console.
+     *
+     * @param component The component.
+     */
+    public static void log(Component component) {
+        Leaf.getServer().getConsoleCommandSource().sendMessage(component);
+    }
+
+    /**
      * Used to log a warning in the console with converted colours.
      *
      * @param message The message to send.
@@ -73,7 +82,7 @@ public class MessageManager {
                 "&a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\\n" +
                 "&a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/\n" +
                 "\n" +
-                "    &7By Smudge    Version &e" + Leaf.class.getAnnotation(Plugin.class).version();;
+                "    &7By Smudge    Version &e" + Leaf.class.getAnnotation(Plugin.class).version();
 
         MessageManager.log(message);
     }
