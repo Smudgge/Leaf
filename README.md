@@ -9,4 +9,8 @@
 # Author : Smudge
 
 Status: In development
+
+Support:
+- https://github.com/smuddgge/Leaf/wiki
+- https://discord.gg/ZxCnrJfk7Z
 ```
