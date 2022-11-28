@@ -1,7 +1,3 @@
-Velocity Proxy Server Plugin
-
-`In development`
-
 ```yaml
 #  __         ______     ______     ______
 # /\ \       /\  ___\   /\  __ \   /\  ___\
