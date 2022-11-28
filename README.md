@@ -9,5 +9,8 @@ Velocity Proxy Server Plugin
 #  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
+# Velocity Proxy Server Plugin
 # Author : Smudge
+
+Status: In development
 ```
