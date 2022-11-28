@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.commands.CommandHandler;
+import com.github.smuddgge.leaf.commands.commands.Alert;
 import com.github.smuddgge.leaf.commands.commands.Reload;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
@@ -48,6 +49,9 @@ public class Leaf {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
 
+        // Log header
+        MessageManager.logHeader();
+
         // Register placeholders
         PlaceholderManager.register(new ServerPlaceholder());
         PlaceholderManager.register(new VanishedPlaceholder());
@@ -61,6 +65,7 @@ public class Leaf {
         Leaf.commandHandler = new CommandHandler();
 
         Leaf.commandHandler.append(new Reload());
+        Leaf.commandHandler.append(new Alert());
 
         Leaf.commandHandler.register();
 

@@ -11,6 +11,14 @@ commands:
   reload:
     enabled: true
     name: "leafreload"
-
     permission: "leaf.reload"
+
     message: "{message} Reloaded all configs! <3"
+
+  alert:
+    enabled: true
+    name: "alert"
+    permission: "leaf.alert"
+
+    # %message% returns the command argument
+    message: "&8&l[&f&lAlert&8&l]&r &a%message%"

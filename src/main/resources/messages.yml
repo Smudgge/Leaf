@@ -15,7 +15,7 @@ placeholders:
 
   # Simple placeholder.
   message: "&8&l[&f&lServer&8&l]&a"
-  error: "&7&l>&7"
+  error_colour: "&7"
 
   # Conditional placeholder.
   # Conditions are listed in the wiki.
@@ -36,3 +36,7 @@ placeholders:
     options:
       Default: "&f"
       admin: "&a"
+
+messages:
+
+  invalid_arguments: "{error_colour}Incorrect arguments. %command%"

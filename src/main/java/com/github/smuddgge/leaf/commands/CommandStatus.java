@@ -6,16 +6,15 @@ package com.github.smuddgge.leaf.commands;
  */
 public class CommandStatus {
 
-    private boolean hasRequiredArguments = true;
+    private boolean hasIncorrectArguments = false;
 
     /**
-     * Used to set required arguments to false.
+     * Used to set incorrect arguments to true.
      *
      * @return This instance.
      */
-    public CommandStatus setInvalidArguments() {
-        this.hasRequiredArguments = false;
-
+    public CommandStatus incorrectArguments() {
+        this.hasIncorrectArguments = true;
         return this;
     }
 
@@ -25,7 +24,7 @@ public class CommandStatus {
      *
      * @return False if the arguments are invalid.
      */
-    public boolean getRequiredArguments() {
-        return this.hasRequiredArguments;
+    public boolean hasIncorrectArguments() {
+        return this.hasIncorrectArguments;
     }
 }

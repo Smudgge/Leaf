@@ -1,6 +1,8 @@
 package com.github.smuddgge.leaf.commands;
 
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
@@ -21,6 +23,13 @@ public abstract class Command implements SimpleCommand {
      * @return Commands identifier.
      */
     public abstract String getIdentifier();
+
+    /**
+     * Used to get the command's syntax.
+     *
+     * @return The command's syntax.
+     */
+    public abstract String getSyntax();
 
     /**
      * Used to get the name of the command.
@@ -80,15 +89,31 @@ public abstract class Command implements SimpleCommand {
         CommandSource source = invocation.source();
 
         if (source instanceof Player) {
-            this.onPlayerRun(invocation.arguments(), new User((Player) source));
+            User user = new User((Player) source);
+            CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
+
+            if (status.hasIncorrectArguments()) {
+                user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
+                        .replace("[name]", this.getName()));
+            }
+
             return;
         }
 
-        this.onConsoleRun(invocation.arguments());
+        CommandStatus status = this.onConsoleRun(invocation.arguments());
+
+        if (status.hasIncorrectArguments()) {
+            MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
+                    .replace("[name]", this.getName()));
+        }
     }
 
     @Override
     public boolean hasPermission(final Invocation invocation) {
+        String permission = this.getPermission();
+
+        if (permission == null) return true;
+
         return invocation.source().hasPermission(this.getPermission());
     }
 
@@ -97,6 +122,7 @@ public abstract class Command implements SimpleCommand {
         CommandSource source = invocation.source();
 
         if (source instanceof Player) {
+
             this.onPlayerRun(invocation.arguments(), new User((Player) source));
 
             List<String> list = new ArrayList<>();

@@ -90,4 +90,16 @@ public class ConfigMessages extends YamlConfiguration {
     public static ConfigMessages get() {
         return ConfigMessages.config;
     }
+
+    /**
+     * Used to get the incorrect argument message.
+     *
+     * @param commandSyntax The command's syntax.
+     * @return The incorrect argument message.
+     */
+    public static String getIncorrectArguments(String commandSyntax) {
+        return ConfigMessages.config.getSection("messages")
+                .getString("invalid_arguments", "{error} Incorrect arguments. %command%")
+                .replace("%command%", commandSyntax);
+    }
 }

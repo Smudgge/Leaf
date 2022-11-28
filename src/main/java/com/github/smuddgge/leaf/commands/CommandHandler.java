@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.velocitypowered.api.command.CommandManager;
 
@@ -34,6 +35,13 @@ public class CommandHandler {
         for (Command command : this.commands) {
             // Check if command is enabled
             if (!ConfigCommands.isCommandEnabled(command.getIdentifier())) continue;
+
+            // Check if the command is valid
+            if (command.getName() == null) {
+                MessageManager.warn("&eUnregistering command &f[command]. &eCommand name not specified in the configuration file."
+                        .replace("[command]", command.getIdentifier()));
+                continue;
+            }
 
             // Register main command name
             manager.register(manager.metaBuilder(command.getName()).build(), command);

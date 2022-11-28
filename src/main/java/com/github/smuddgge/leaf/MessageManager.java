@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.velocitypowered.api.plugin.Plugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
@@ -62,5 +63,18 @@ public class MessageManager {
         for (String string : message.split("\n")) {
             Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convert(string));
         }
+    }
+
+    public static void logHeader() {
+        String message = "\n" +
+                "&a __         ______     ______     ______\n" +
+                "&a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\\n" +
+                "&a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\\n" +
+                "&a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\\n" +
+                "&a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/\n" +
+                "\n" +
+                "    &7By Smudge    Version &e" + Leaf.class.getAnnotation(Plugin.class).version();;
+
+        MessageManager.log(message);
     }
 }

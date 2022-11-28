@@ -21,6 +21,11 @@ public class Reload extends Command {
     }
 
     @Override
+    public String getSyntax() {
+        return "/[name]";
+    }
+
+    @Override
     public Suggestions getSuggestions(User user) {
         return null;
     }
@@ -35,7 +40,7 @@ public class Reload extends Command {
 
         MessageManager.log(message);
 
-        return null;
+        return new CommandStatus();
     }
 
     @Override
@@ -55,6 +60,8 @@ public class Reload extends Command {
      * Used to reload the plugin.
      */
     private void reloadAll() {
+        MessageManager.log("&f&lReloading");
+
         // Unregister the commands
         Leaf.getCommandHandler().unregister();
 
@@ -64,5 +71,7 @@ public class Reload extends Command {
 
         // Register the new commands
         Leaf.getCommandHandler().register();
+
+        MessageManager.log("&f&lReloaded successfully");
     }
 }
