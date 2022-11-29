@@ -44,6 +44,12 @@ commands:
     # %message% returns the command argument
     message: "&8&l[&f&lAlert&8&l]&r &a%message%"
 
+  alertraw:
+    type: "alertraw"
+    enabled: true
+    name: "alertraw"
+    permission: "leaf.alertraw"
+
   find:
     type: "find"
     enabled: true
@@ -65,3 +71,22 @@ commands:
     # %player% : The players name.
     # %message% : The message the player has sent.
     format: "{server_formatted} {rank_colour}%player% &7: {vanish_colour}%message%"
+
+  list:
+    type: "list"
+    enable: true
+    name: "staff"
+    permission: "staff"
+
+    header: "&8&m&l-----&r &6&lStaff List &8&m&l-----'"
+    footer: "&8&m&l---------------------"
+
+    list:
+
+      # The order of the list
+      admin:
+        permission: "leaf.rank.admin"
+        header: '&7[&f%amount%&7] &c&lAdmins'
+
+        # Placeholders will parse in terms of the player.
+        section: '&7- &f%player% {server}'
