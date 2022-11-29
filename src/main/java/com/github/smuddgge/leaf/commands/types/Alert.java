@@ -1,24 +1,22 @@
-package com.github.smuddgge.leaf.commands.commands;
+package com.github.smuddgge.leaf.commands.types;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
+import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
 /**
- * Represents the alert command.
- * <ul>
- *     <li>Used to alert all online players with a given message.</li>
- * </ul>
+ * Represents the alert command type.
  */
-public class Alert extends Command {
+public class Alert implements CommandType {
 
     @Override
-    public String getIdentifier() {
+    public String getName() {
         return "alert";
     }
 
@@ -33,10 +31,10 @@ public class Alert extends Command {
     }
 
     @Override
-    public CommandStatus onConsoleRun(String[] arguments) {
+    public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
-        String message = ConfigCommands.getCommand(this.getIdentifier()).getString("message")
+        String message = section.getString("message")
                 .replace("%message%", String.join(" ", arguments));
 
         for (Player player : Leaf.getServer().getAllPlayers()) {
@@ -49,7 +47,7 @@ public class Alert extends Command {
     }
 
     @Override
-    public CommandStatus onPlayerRun(String[] arguments, User user) {
-        return this.onConsoleRun(arguments);
+    public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+        return this.onConsoleRun(section, arguments);
     }
 }

@@ -1,25 +1,23 @@
-package com.github.smuddgge.leaf.commands.commands;
+package com.github.smuddgge.leaf.commands.types;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
+import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 /**
- * Represents the alert raw command.
- * <ul>
- *     <li>Used to alert all online players with a json message.</li>
- * </ul>
+ * Represents the alert raw command type.
  */
-public class AlertRaw extends Command {
+public class AlertRaw implements CommandType {
 
     @Override
-    public String getIdentifier() {
+    public String getName() {
         return "alertraw";
     }
 
@@ -34,7 +32,7 @@ public class AlertRaw extends Command {
     }
 
     @Override
-    public CommandStatus onConsoleRun(String[] arguments) {
+    public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         try {
@@ -56,7 +54,7 @@ public class AlertRaw extends Command {
     }
 
     @Override
-    public CommandStatus onPlayerRun(String[] arguments, User user) {
-        return this.onConsoleRun(arguments);
+    public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+        return this.onConsoleRun(section, arguments);
     }
 }

@@ -1,24 +1,22 @@
-package com.github.smuddgge.leaf.commands.commands;
+package com.github.smuddgge.leaf.commands.types;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
+import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 
 /**
- * Represents the reload command.
- * <ul>
- *     <li>Used to reload the plugins commands, configuration and placeholders.</li>
- * </ul>
+ * Represents the reload command type.
  */
-public class Reload extends Command {
+public class Reload implements CommandType {
 
     @Override
-    public String getIdentifier() {
+    public String getName() {
         return "reload";
     }
 
@@ -33,12 +31,10 @@ public class Reload extends Command {
     }
 
     @Override
-    public CommandStatus onConsoleRun(String[] arguments) {
+    public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         this.reloadAll();
 
-        String message = ConfigCommands
-                .getCommand(this.getIdentifier())
-                .getString("message", "{message} Message not configured for [/reload] command.");
+        String message = section.getString("message", "{message} Reloaded all configs! <3");
 
         MessageManager.log(message);
 
@@ -46,12 +42,10 @@ public class Reload extends Command {
     }
 
     @Override
-    public CommandStatus onPlayerRun(String[] arguments, User user) {
+    public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         this.reloadAll();
 
-        String message = ConfigCommands
-                .getCommand(this.getIdentifier())
-                .getString("message", "{message} Message not configured for [/reload] command.");
+        String message = section.getString("message", "{message} Reloaded all configs! <3");
 
         user.sendMessage(message);
 

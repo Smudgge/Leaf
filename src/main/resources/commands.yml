@@ -9,16 +9,26 @@
 # The permission used to check if a player is able to vanish.
 vanish_permission: "leaf.vanishable"
 
-# Standard commands
 commands:
 
   # I'd love if you kept this command on your server <3
   # Shows information about this plugin.
   info:
+    type: "info"
     enabled: true
     name: "leaf"
 
+    message:
+      - "&8&m&l------&r &a&lLeaf &8&m&l------"
+      - "&7"
+      - "&7Velocity Proxy Plugin"
+      - "&7Version &f<version>"
+      - "&7Author &fSmudge"
+      - "&7"
+      - "&8&m&l-----------------"
+
   reload:
+    type: "reload"
     enabled: true
     name: "leafreload"
     permission: "leaf.reload"
@@ -26,6 +36,7 @@ commands:
     message: "{message} Reloaded all configs! <3"
 
   alert:
+    type: "alert"
     enabled: true
     name: "alert"
     permission: "leaf.alert"
@@ -34,6 +45,7 @@ commands:
     message: "&8&l[&f&lAlert&8&l]&r &a%message%"
 
   find:
+    type: "find"
     enabled: true
     name: "find"
     permission: "leaf.find"
@@ -43,14 +55,13 @@ commands:
     # Placeholders will parse in terms of the player to find.
     found: "{message} Player was found on {server_formatted}"
 
-chats:
-
-  staff:
+  staffchat:
+    type: "chat"
     enabled: true
     name: "staffchat"
-    aliases: ["sc"]
+    aliases: [ "sc" ]
     permission: "leaf.staffchat"
 
     # %player% : The players name.
     # %message% : The message the player has sent.
-    format: '{server_formatted} {rank_colour}%player% &7: {vanish_colour}%message%'
+    format: "{server_formatted} {rank_colour}%player% &7: {vanish_colour}%message%"

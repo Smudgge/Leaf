@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.commands;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
@@ -13,25 +14,31 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Represents a command.
- * <ul>
- *     <li>Defaults to a standard command from the configuration file.</li>
- * </ul>
  */
-public abstract class Command implements SimpleCommand {
+public class Command implements SimpleCommand {
+
+    private final String identifier;
+
+    private final CommandType commandType;
 
     /**
-     * Used to get the command's identifier.
+     * Used to create a command.
      *
-     * @return Commands identifier.
+     * @param identifier The command's identifier in the configuration.
      */
-    public abstract String getIdentifier();
+    public Command(String identifier, CommandType commandType) {
+        this.identifier = identifier;
+        this.commandType = commandType;
+    }
 
     /**
      * Used to get the command's syntax.
      *
      * @return The command's syntax.
      */
-    public abstract String getSyntax();
+    public String getSyntax() {
+        return this.commandType.getSyntax();
+    }
 
     /**
      * Used to get the tab suggestions.
@@ -39,7 +46,9 @@ public abstract class Command implements SimpleCommand {
      * @param user The user completing the command.
      * @return The command's argument suggestions.
      */
-    public abstract CommandSuggestions getSuggestions(User user);
+    public CommandSuggestions getSuggestions(User user) {
+        return this.commandType.getSuggestions(user);
+    }
 
     /**
      * Executed when the command is run in the console.
@@ -47,7 +56,9 @@ public abstract class Command implements SimpleCommand {
      * @param arguments The arguments given in the command.
      * @return The command's status.
      */
-    public abstract CommandStatus onConsoleRun(String[] arguments);
+    public CommandStatus onConsoleRun(String[] arguments) {
+        return this.commandType.onConsoleRun(this.getSection(), arguments);
+    }
 
     /**
      * Executed when a player runs the command.
@@ -56,7 +67,27 @@ public abstract class Command implements SimpleCommand {
      * @param user      The instance of the user running the command.
      * @return The command's status.
      */
-    public abstract CommandStatus onPlayerRun(String[] arguments, User user);
+    public CommandStatus onPlayerRun(String[] arguments, User user) {
+        return this.commandType.onPlayerRun(this.getSection(), arguments, user);
+    }
+
+    /**
+     * Used to get the command's identifier.
+     *
+     * @return Commands identifier.
+     */
+    public String getIdentifier() {
+        return this.identifier;
+    }
+
+    /**
+     * Used to get the command's configuration section.
+     *
+     * @return The configuration section.
+     */
+    public ConfigurationSection getSection() {
+        return ConfigCommands.getCommand(this.identifier);
+    }
 
     /**
      * Used to get the name of the command.

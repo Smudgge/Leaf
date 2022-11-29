@@ -6,23 +6,49 @@ import com.velocitypowered.api.command.CommandManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents the command handler.
  */
 public class CommandHandler {
 
-    private final List<Command> commands = new ArrayList<>();
+    private List<Command> commands = new ArrayList<>();
 
-    private final List<String> registeredCommands = new ArrayList<>();
+    private final List<CommandType> commandTypes = new ArrayList<>();
+
+    private List<String> registeredCommands = new ArrayList<>();
 
     /**
-     * Used to append a command to the command handler.
+     * Used to append a command type to the command handler.
      *
      * @param command The command to append.
      */
     public void append(Command command) {
         this.commands.add(command);
+    }
+
+    /**
+     * Used to add a type of command to the list.
+     *
+     * @param commandType Instance of the command type.
+     */
+    public void addType(CommandType commandType) {
+        this.commandTypes.add(commandType);
+    }
+
+    /**
+     * Used to get a command type.
+     *
+     * @param name The name of the command type to get.
+     * @return The command type instance.
+     */
+    public CommandType getType(String name) {
+        for (CommandType commandType : this.commandTypes) {
+            if (Objects.equals(commandType.getName(), name)) return commandType;
+        }
+
+        return null;
     }
 
     /**
@@ -73,5 +99,8 @@ public class CommandHandler {
             // Unregister the command
             manager.unregister(commandName);
         }
+
+        this.registeredCommands = new ArrayList<>();
+        this.commands = new ArrayList<>();
     }
 }

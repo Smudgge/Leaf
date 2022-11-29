@@ -1,14 +1,11 @@
 package com.github.smuddgge.leaf;
 
-import com.github.smuddgge.leaf.commands.ChatCommand;
+import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandHandler;
-import com.github.smuddgge.leaf.commands.commands.Alert;
-import com.github.smuddgge.leaf.commands.commands.Find;
-import com.github.smuddgge.leaf.commands.commands.Info;
-import com.github.smuddgge.leaf.commands.commands.Reload;
+import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -36,14 +33,12 @@ import java.nio.file.Path;
 public class Leaf {
 
     private static ProxyServer server;
-    private static Logger logger;
 
     private static CommandHandler commandHandler;
 
     @Inject
-    public void SmUtility(ProxyServer server, Logger logger, @DataDirectory final Path folder) {
+    public void SmUtility(ProxyServer server, @DataDirectory final Path folder) {
         Leaf.server = server;
-        Leaf.logger = logger;
 
         // Setup configuration files
         ConfigCommands.initialise(folder.toFile());
@@ -68,7 +63,16 @@ public class Leaf {
         // Reload configuration to load custom placeholders
         ConfigMessages.reload();
 
-        // Reload all commands
+        // Append all command types
+        Leaf.commandHandler = new CommandHandler();
+
+        Leaf.commandHandler.addType(new Alert());
+        Leaf.commandHandler.addType(new AlertRaw());
+        Leaf.commandHandler.addType(new Chat());
+        Leaf.commandHandler.addType(new Find());
+        Leaf.commandHandler.addType(new Info());
+        Leaf.commandHandler.addType(new Reload());
+
         Leaf.reloadCommands();
     }
 
@@ -79,15 +83,6 @@ public class Leaf {
      */
     public static ProxyServer getServer() {
         return Leaf.server;
-    }
-
-    /**
-     * Used to get the logger instance.
-     *
-     * @return The logger.
-     */
-    public static Logger getLogger() {
-        return Leaf.logger;
     }
 
     /**
@@ -103,16 +98,18 @@ public class Leaf {
      * Used to reload the commands.
      */
     public static void reloadCommands() {
-        Leaf.commandHandler = new CommandHandler();
+        Leaf.commandHandler.unregister();
 
-        Leaf.commandHandler.append(new Info());
-        Leaf.commandHandler.append(new Reload());
-        Leaf.commandHandler.append(new Alert());
-        Leaf.commandHandler.append(new Find());
+        for (String identifier : ConfigCommands.get().getSection("commands").getKeys()) {
+            String commandTypeName = ConfigCommands.get().getSection("commands").getSection(identifier).getString("type");
+            CommandType commandType = Leaf.commandHandler.getType(commandTypeName);
 
-        for (String identifier : ConfigCommands.get().getSection("chats").getKeys()) {
-            ConfigurationSection section = ConfigCommands.get().getSection("chats").getSection(identifier);
-            Leaf.commandHandler.append(new ChatCommand(identifier, section));
+            if (commandType == null) {
+                MessageManager.warn("Invalid command type for : " + identifier);
+                continue;
+            }
+
+            Leaf.commandHandler.append(new Command(identifier, commandType));
         }
 
         Leaf.commandHandler.register();

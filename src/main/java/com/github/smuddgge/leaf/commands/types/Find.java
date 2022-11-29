@@ -1,24 +1,18 @@
-package com.github.smuddgge.leaf.commands.commands;
+package com.github.smuddgge.leaf.commands.types;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
-/**
- * Represents the find command.
- * <ul>
- *     <li>Used to find a player and get information on them.</li>
- * </ul>
- */
-public class Find extends Command {
+public class Find implements CommandType {
 
     @Override
-    public String getIdentifier() {
+    public String getName() {
         return "find";
     }
 
@@ -29,17 +23,16 @@ public class Find extends Command {
 
     @Override
     public CommandSuggestions getSuggestions(User user) {
-        return new CommandSuggestions().appendPlayers();
+        return null;
     }
 
     @Override
-    public CommandStatus onConsoleRun(String[] arguments) {
-
+    public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
 
-            String notFound = ConfigCommands.getCommand(this.getIdentifier()).getString("not_found");
+            String notFound = section.getString("not_found");
 
             MessageManager.log(notFound);
 
@@ -48,7 +41,7 @@ public class Find extends Command {
 
         User user = new User(Leaf.getServer().getPlayer(arguments[0]).get());
 
-        String found = ConfigCommands.getCommand(this.getIdentifier()).getString("found");
+        String found = section.getString("found");
 
         MessageManager.log(PlaceholderManager.parse(found, null, user));
 
@@ -56,13 +49,12 @@ public class Find extends Command {
     }
 
     @Override
-    public CommandStatus onPlayerRun(String[] arguments, User user) {
-
+    public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
 
-            String notFound = ConfigCommands.getCommand(this.getIdentifier()).getString("not_found");
+            String notFound = section.getString("not_found");
 
             user.sendMessage(notFound);
 
@@ -71,7 +63,7 @@ public class Find extends Command {
 
         User foundUser = new User(Leaf.getServer().getPlayer(arguments[0]).get());
 
-        String found = ConfigCommands.getCommand(this.getIdentifier()).getString("found");
+        String found = section.getString("found");
 
         user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
