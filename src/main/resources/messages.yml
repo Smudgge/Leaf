@@ -39,4 +39,4 @@ placeholders:
 
 messages:
 
-  invalid_arguments: "{error_colour}Incorrect arguments. %command%"
+  incorrect_arguments: "{error_colour}Incorrect arguments. %command%"

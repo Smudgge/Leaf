@@ -35,7 +35,7 @@ public record User(Player player) {
      * @return True if they are vanished.
      */
     public boolean isVanished() {
-        // TODO check if the user is vanished
+        // TODO: check if the user is vanished
         return false;
     }
 
