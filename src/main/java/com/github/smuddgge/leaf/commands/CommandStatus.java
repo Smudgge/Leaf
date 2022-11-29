@@ -2,7 +2,7 @@ package com.github.smuddgge.leaf.commands;
 
 /**
  * Represents a command's status.
- * Returned after executed.
+ * Returned after a command is executed.
  */
 public class CommandStatus {
 

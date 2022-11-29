@@ -4,11 +4,17 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
-import com.github.smuddgge.leaf.commands.Suggestions;
+import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
+/**
+ * Represents the find command.
+ * <ul>
+ *     <li>Used to find a player and get information on them.</li>
+ * </ul>
+ */
 public class Find extends Command {
 
     @Override
@@ -22,8 +28,8 @@ public class Find extends Command {
     }
 
     @Override
-    public Suggestions getSuggestions(User user) {
-        return new Suggestions().appendPlayers();
+    public CommandSuggestions getSuggestions(User user) {
+        return new CommandSuggestions().appendPlayers();
     }
 
     @Override

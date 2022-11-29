@@ -6,6 +6,9 @@
 #
 # Author : Smudge
 
+# The permission used to check if a player is able to vanish.
+vanish_permission: "leaf.vanishable"
+
 # Standard commands
 commands:
 

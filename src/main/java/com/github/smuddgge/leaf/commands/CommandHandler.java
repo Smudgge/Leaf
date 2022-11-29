@@ -2,7 +2,6 @@ package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.velocitypowered.api.command.CommandManager;
 
 import java.util.ArrayList;
@@ -39,7 +38,7 @@ public class CommandHandler {
                 continue;
             }
 
-            // Log
+            // Log enable message
             MessageManager.log("&aEnabling &7command : " + command.getName());
 
             // Check if the command is valid
@@ -64,8 +63,8 @@ public class CommandHandler {
     }
 
     /**
-     * Used to unregister all the commands by this plugin
-     * in the proxy server.
+     * Used to unregister all the commands by
+     * this plugin in the proxy server.
      */
     public void unregister() {
         CommandManager manager = Leaf.getServer().getCommandManager();

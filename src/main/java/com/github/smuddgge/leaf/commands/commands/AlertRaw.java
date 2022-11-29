@@ -4,12 +4,18 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
-import com.github.smuddgge.leaf.commands.Suggestions;
+import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
+/**
+ * Represents the alert raw command.
+ * <ul>
+ *     <li>Used to alert all online players with a json message.</li>
+ * </ul>
+ */
 public class AlertRaw extends Command {
 
     @Override
@@ -23,7 +29,7 @@ public class AlertRaw extends Command {
     }
 
     @Override
-    public Suggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(User user) {
         return null;
     }
 

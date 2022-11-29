@@ -3,10 +3,15 @@ package com.github.smuddgge.leaf.commands.commands;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
-import com.github.smuddgge.leaf.commands.Suggestions;
+import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
-import com.velocitypowered.api.plugin.Plugin;
 
+/**
+ * Represents the info command.
+ * <ul>
+ *     <li>Used to get information about the plugin.</li>
+ * </ul>
+ */
 public class Info extends Command {
 
     @Override
@@ -20,7 +25,7 @@ public class Info extends Command {
     }
 
     @Override
-    public Suggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(User user) {
         return null;
     }
 
@@ -47,8 +52,9 @@ public class Info extends Command {
 
                 &7Velocity Proxy Plugin
                 &7Version &f<version>
+                &7Author &fSmudge
 
-                &8&m&l---------------------""";
+                &8&m&l-----------------""";
 
         user.sendMessage(message);
 

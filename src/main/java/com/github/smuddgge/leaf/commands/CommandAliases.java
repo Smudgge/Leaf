@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a set of command aliases.
+ * Represents a list of command aliases.
  */
-public class Aliases {
+public class CommandAliases {
 
     private final List<String> aliases = new ArrayList<>();
 
@@ -16,7 +16,7 @@ public class Aliases {
      * @param alias The name of the command alias.
      * @return The instance of the aliases.
      */
-    public Aliases append(String alias) {
+    public CommandAliases append(String alias) {
         this.aliases.add(alias);
 
         return this;
@@ -28,7 +28,7 @@ public class Aliases {
      * @param aliases A list of aliases.
      * @return The instance of the aliases.
      */
-    public Aliases append(List<String> aliases) {
+    public CommandAliases append(List<String> aliases) {
         this.aliases.addAll(aliases);
 
         return this;

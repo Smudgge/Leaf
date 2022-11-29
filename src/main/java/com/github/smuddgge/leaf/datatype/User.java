@@ -1,6 +1,8 @@
 package com.github.smuddgge.leaf.datatype;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
@@ -35,8 +37,33 @@ public record User(Player player) {
      * @return True if they are vanished.
      */
     public boolean isVanished() {
-        // Check if the user is vanished
-        return false;
+        // If they are unable to vanish return false
+        if (!this.isVanishable()) return false;
+
+        ProxyServerInterface proxyServerInterface = new ProxyServerInterface(Leaf.getServer());
+        RegisteredServer server = this.getConnectedServer();
+
+        // If they are not connected to a server they are vanished
+        if (server == null) return true;
+
+        Player unableToVanishPlayer = proxyServerInterface.getNotVanishablePlayer(server);
+
+        // If there are no players online that can not vanish
+        // we assume they are vanished.
+        if (unableToVanishPlayer == null) return true;
+
+        // Check if this player can be seen on the tab list by
+        // players that can not vanish.
+        return !unableToVanishPlayer.getTabList().containsEntry(this.player.getUniqueId());
+    }
+
+    /**
+     * Used to check if a user is able to vanish.
+     *
+     * @return True if the player is able to vanish.
+     */
+    public boolean isVanishable() {
+        return this.hasPermission(ConfigCommands.getVanishablePermission());
     }
 
     /**

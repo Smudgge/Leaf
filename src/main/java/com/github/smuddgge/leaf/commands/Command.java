@@ -12,7 +12,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Represents a command
+ * Represents a command.
+ * <ul>
+ *     <li>Defaults to a standard command from the configuration file.</li>
+ * </ul>
  */
 public abstract class Command implements SimpleCommand {
 
@@ -31,6 +34,31 @@ public abstract class Command implements SimpleCommand {
     public abstract String getSyntax();
 
     /**
+     * Used to get the tab suggestions.
+     *
+     * @param user The user completing the command.
+     * @return The command's argument suggestions.
+     */
+    public abstract CommandSuggestions getSuggestions(User user);
+
+    /**
+     * Executed when the command is run in the console.
+     *
+     * @param arguments The arguments given in the command.
+     * @return The command's status.
+     */
+    public abstract CommandStatus onConsoleRun(String[] arguments);
+
+    /**
+     * Executed when a player runs the command.
+     *
+     * @param arguments The arguments given in the command.
+     * @param user      The instance of the user running the command.
+     * @return The command's status.
+     */
+    public abstract CommandStatus onPlayerRun(String[] arguments, User user);
+
+    /**
      * Used to get the name of the command.
      *
      * @return The name of the command.
@@ -45,17 +73,9 @@ public abstract class Command implements SimpleCommand {
      *
      * @return The list of aliases.
      */
-    public Aliases getAliases() {
+    public CommandAliases getAliases() {
         return ConfigCommands.getCommandAliases(this.getIdentifier());
     }
-
-    /**
-     * Used to get the tab suggestions.
-     *
-     * @param user The user completing the command.
-     * @return The command's argument suggestions.
-     */
-    public abstract Suggestions getSuggestions(User user);
 
     /**
      * Used to get the permission to execute the command.
@@ -74,23 +94,6 @@ public abstract class Command implements SimpleCommand {
     public boolean isEnabled() {
         return ConfigCommands.isCommandEnabled(this.getIdentifier());
     }
-
-    /**
-     * Executed when the command is run in the console.
-     *
-     * @param arguments The arguments given in the command.
-     * @return The command's status.
-     */
-    public abstract CommandStatus onConsoleRun(String[] arguments);
-
-    /**
-     * Executed when a player runs the command.
-     *
-     * @param arguments The arguments given in the command.
-     * @param user      The instance of the user running the command.
-     * @return The command's status.
-     */
-    public abstract CommandStatus onPlayerRun(String[] arguments, User user);
 
     @Override
     public void execute(final Invocation invocation) {

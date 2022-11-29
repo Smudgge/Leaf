@@ -4,11 +4,17 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
-import com.github.smuddgge.leaf.commands.Suggestions;
+import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
+/**
+ * Represents the alert command.
+ * <ul>
+ *     <li>Used to alert all online players with a given message.</li>
+ * </ul>
+ */
 public class Alert extends Command {
 
     @Override
@@ -22,7 +28,7 @@ public class Alert extends Command {
     }
 
     @Override
-    public Suggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(User user) {
         return null;
     }
 

@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.configuration;
 
-import com.github.smuddgge.leaf.commands.Aliases;
+import com.github.smuddgge.leaf.commands.CommandAliases;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
 
@@ -50,6 +50,15 @@ public class ConfigCommands extends YamlConfiguration {
     }
 
     /**
+     * Used to get the permission used to check if a player is able to vanish.
+     *
+     * @return The vanishable permission.
+     */
+    public static String getVanishablePermission() {
+        return ConfigCommands.config.getString("vanish_permission", "leaf.vanishable");
+    }
+
+    /**
      * Used to get a command's section from the configuration file.
      *
      * @param identifier The identifier of the command.
@@ -75,8 +84,8 @@ public class ConfigCommands extends YamlConfiguration {
      * @param identifier The identifier of the command.
      * @return The commands list of aliases.
      */
-    public static Aliases getCommandAliases(String identifier) {
-        Aliases aliases = new Aliases();
+    public static CommandAliases getCommandAliases(String identifier) {
+        CommandAliases aliases = new CommandAliases();
 
         aliases.append(ConfigCommands.getCommand(identifier).getListString("aliases"));
 

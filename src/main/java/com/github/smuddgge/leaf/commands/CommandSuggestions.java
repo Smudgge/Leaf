@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Represents the tab suggestions for a command.
  */
-public class Suggestions {
+public class CommandSuggestions {
 
     private final List<List<String>> data = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class Suggestions {
      *
      * @return This instance.
      */
-    public Suggestions appendPlayers() {
+    public CommandSuggestions appendPlayers() {
         List<String> players = new ArrayList<>();
 
         for (Player player : Leaf.getServer().getAllPlayers()) {

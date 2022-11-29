@@ -37,6 +37,7 @@ public class MatchCondition implements PlaceholderCondition {
 
             return section.getSection("options").getString(key);
         }
+
         return null;
     }
 

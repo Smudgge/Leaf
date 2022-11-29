@@ -4,13 +4,16 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
-import com.github.smuddgge.leaf.commands.Suggestions;
+import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.datatype.User;
 
 /**
  * Represents the reload command.
+ * <ul>
+ *     <li>Used to reload the plugins commands, configuration and placeholders.</li>
+ * </ul>
  */
 public class Reload extends Command {
 
@@ -25,7 +28,7 @@ public class Reload extends Command {
     }
 
     @Override
-    public Suggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(User user) {
         return null;
     }
 

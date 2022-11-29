@@ -5,6 +5,12 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
+/**
+ * Represents a chat command.
+ * <ul>
+ *     <li>Used to send a message in the chat.</li>
+ * </ul>
+ */
 public class ChatCommand extends Command {
 
     private final String identifier;
@@ -33,8 +39,8 @@ public class ChatCommand extends Command {
     }
 
     @Override
-    public Aliases getAliases() {
-        return new Aliases().append(this.section.getListString("aliases"));
+    public CommandAliases getAliases() {
+        return new CommandAliases().append(this.section.getListString("aliases"));
     }
 
     @Override
@@ -43,7 +49,7 @@ public class ChatCommand extends Command {
     }
 
     @Override
-    public Suggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(User user) {
         return null;
     }
 

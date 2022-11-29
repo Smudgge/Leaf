@@ -11,6 +11,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the messages configuration file.
+ */
 public class ConfigMessages extends YamlConfiguration {
 
     private static final List<String> registeredPlaceholders = new ArrayList<>();
