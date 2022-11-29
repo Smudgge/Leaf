@@ -1,3 +1,5 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/smuddgge/leaf/badge)](https://www.codefactor.io/repository/github/smuddgge/leaf)
+
 ```yaml
 #  __         ______     ______     ______
 # /\ \       /\  ___\   /\  __ \   /\  ___\
