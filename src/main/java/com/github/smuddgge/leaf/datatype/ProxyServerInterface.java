@@ -36,8 +36,8 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
      *                        include vanished players.
      * @return List of filtered players.
      */
-    public List<Player> getFilteredPlayers(String permission, boolean includeVanished) {
-        List<Player> players = new ArrayList<>();
+    public List<User> getFilteredPlayers(String permission, boolean includeVanished) {
+        List<User> players = new ArrayList<>();
 
         for (Player player : this.proxyServer.getAllPlayers()) {
             User user = new User(player);
@@ -48,7 +48,7 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
             // If includes vanished players and they are not vanished
             if (!includeVanished && user.isVanished()) continue;
 
-            players.add(player);
+            players.add(user);
         }
 
         return players;

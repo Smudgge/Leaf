@@ -78,7 +78,7 @@ commands:
     name: "staff"
     permission: "staff"
 
-    header: "&8&m&l-----&r &6&lStaff List &8&m&l-----'"
+    header: "&8&m&l-----&r &a&lStaff List &8&m&l-----'"
     footer: "&8&m&l---------------------"
 
     list:

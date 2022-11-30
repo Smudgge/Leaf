@@ -19,7 +19,6 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
@@ -71,6 +70,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Chat());
         Leaf.commandHandler.addType(new Find());
         Leaf.commandHandler.addType(new Info());
+        Leaf.commandHandler.addType(new List());
         Leaf.commandHandler.addType(new Reload());
 
         Leaf.reloadCommands();
