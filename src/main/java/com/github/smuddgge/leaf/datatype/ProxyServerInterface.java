@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.datatype;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -52,5 +53,20 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
         }
 
         return players;
+    }
+
+    /**
+     * Used to get a list of registered server names.
+     *
+     * @return The list of server names.
+     */
+    public List<String> getServerNames() {
+        List<String> servers = new ArrayList<>();
+
+        for (RegisteredServer server : Leaf.getServer().getAllServers()) {
+            servers.add(server.getServerInfo().getName());
+        }
+
+        return servers;
     }
 }
