@@ -59,11 +59,11 @@ commands:
       - "&7"
       - "&8&m&l-----------------"
 
-  list:
+  stafflist:
     type: "list"
     enable: true
-    name: "staff"
-    permission: "staff"
+    name: "stafflist"
+    permission: "leaf.stafflist"
     header: "&8&m&l-----&r &a&lStaff List &8&m&l-----'"
     footer: "&8&m&l---------------------"
     list:
@@ -86,7 +86,7 @@ commands:
     name: "report"
     permission: "leaf.report.use"
     see_report: "leaf.report.see"
-    message: "&f%player% {server} &chas reported &7: &f%message%"
+    message: "&f%player% {server_formatted} &chas reported &7: &f%message%"
 
   send:
     type: "send"
@@ -94,3 +94,19 @@ commands:
     name: "send"
     permission: "leaf.send"
     message: "{message} Sending %from% to %to%"
+
+  servers:
+    type: "servers"
+    enable: true
+    name: "servers"
+    permission: "leaf.servers"
+
+    order:
+      - name_of_a_server
+      - testing1
+      - testing2
+
+    header: '&8&m&l------&r &a&lServers &8&m&l------'
+    # Placeholders registered in context of the server.
+    server: '{server_formatted} &f%online% &7Online Players'
+    footer: '&8&m&l---------------------'

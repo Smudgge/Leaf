@@ -9,7 +9,18 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 /**
  * Represents a user connected to one of the servers.
  */
-public record User(Player player) {
+public class User {
+
+    private final Player player;
+
+    /**
+     * Used to create a user.
+     *
+     * @param player The player instance.
+     */
+    public User(Player player) {
+        this.player = player;
+    }
 
     /**
      * Used to get what server the user is connected to.
@@ -28,6 +39,7 @@ public record User(Player player) {
      * @return True if they have the permission.
      */
     public boolean hasPermission(String permission) {
+        if (permission == null) return true;
         return this.player.hasPermission(permission);
     }
 

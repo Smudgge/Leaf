@@ -23,7 +23,7 @@ public class Find implements CommandType {
 
     @Override
     public CommandSuggestions getSuggestions(User user) {
-        return null;
+        return new CommandSuggestions().appendPlayers();
     }
 
     @Override

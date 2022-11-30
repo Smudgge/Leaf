@@ -47,7 +47,10 @@ public class Info implements CommandType {
             builder.append(string).append("\n");
         }
 
-        MessageManager.log(builder.toString());
+        String toSend = builder.toString();
+        toSend = toSend.substring(0, toSend.length() - 2);
+
+        MessageManager.log(toSend);
 
         return new CommandStatus();
     }
@@ -70,7 +73,10 @@ public class Info implements CommandType {
             builder.append(string).append("\n");
         }
 
-        user.sendMessage(builder.toString());
+        String toSend = builder.toString();
+        toSend = toSend.substring(0, toSend.length() - 2);
+
+        user.sendMessage(toSend);
 
         return new CommandStatus();
     }
