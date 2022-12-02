@@ -17,7 +17,7 @@ public class PlayerNamePlaceholder extends StandardPlaceholder {
     @Override
     public String getValue(User user) {
         if (user == null) return null;
-        return (String) user.getName();
+        return user.getName();
     }
 
     @Override

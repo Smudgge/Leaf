@@ -30,7 +30,7 @@ public class User {
      * Used to create a user.
      *
      * @param server The server the user is connected to.
-     * @param name The name of the user.
+     * @param name   The name of the user.
      */
     public User(RegisteredServer server, String name) {
         this.player = null;
