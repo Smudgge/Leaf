@@ -20,7 +20,7 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
         for (Player player : registeredServer.getPlayersConnected()) {
             User user = new User(player);
 
-            if (!user.isVanishable()) return player;
+            if (user.isNotVanishable()) return player;
         }
 
         return null;
@@ -61,7 +61,7 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
      *     <li>Filters players with the permission.</li>
      * </ul>
      *
-     * @param server The instance of a server.
+     * @param server          The instance of a server.
      * @param permission      The permission to filter.
      * @param includeVanished If the filtered players should
      *                        include vanished players.

@@ -12,6 +12,8 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 public class User {
 
     private final Player player;
+    private final RegisteredServer server;
+    private final String name;
 
     /**
      * Used to create a user.
@@ -20,6 +22,20 @@ public class User {
      */
     public User(Player player) {
         this.player = player;
+        this.server = null;
+        this.name = null;
+    }
+
+    /**
+     * Used to create a user.
+     *
+     * @param server The server the user is connected to.
+     * @param name The name of the user.
+     */
+    public User(RegisteredServer server, String name) {
+        this.player = null;
+        this.server = server;
+        this.name = name;
     }
 
     /**
@@ -28,7 +44,9 @@ public class User {
      * @return The registered server.
      */
     public RegisteredServer getConnectedServer() {
+        if (this.player == null) return this.server;
         if (this.player.getCurrentServer().isEmpty()) return null;
+
         return this.player.getCurrentServer().get().getServer();
     }
 
@@ -39,7 +57,9 @@ public class User {
      * @return True if they have the permission.
      */
     public boolean hasPermission(String permission) {
+        if (this.player == null) return true;
         if (permission == null) return true;
+
         return this.player.hasPermission(permission);
     }
 
@@ -49,8 +69,10 @@ public class User {
      * @return True if they are vanished.
      */
     public boolean isVanished() {
+        if (this.player == null) return false;
+
         // If they are unable to vanish return false
-        if (!this.isVanishable()) return false;
+        if (this.isNotVanishable()) return false;
 
         ProxyServerInterface proxyServerInterface = new ProxyServerInterface(Leaf.getServer());
         RegisteredServer server = this.getConnectedServer();
@@ -74,8 +96,8 @@ public class User {
      *
      * @return True if the player is able to vanish.
      */
-    public boolean isVanishable() {
-        return this.hasPermission(ConfigCommands.getVanishablePermission());
+    public boolean isNotVanishable() {
+        return !this.hasPermission(ConfigCommands.getVanishablePermission());
     }
 
     /**
@@ -85,6 +107,8 @@ public class User {
      * @param message The message to send.
      */
     public void sendMessage(String message) {
+        if (this.player == null) return;
+
         this.player.sendMessage(MessageManager.convert(message, this));
     }
 
@@ -93,7 +117,9 @@ public class User {
      *
      * @return The users name.
      */
-    public CharSequence getName() {
+    public String getName() {
+        if (this.player == null) return this.name;
+
         return this.player.getGameProfile().getName();
     }
 }
