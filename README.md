@@ -13,7 +13,7 @@
 # Velocity Proxy Server Plugin
 # Author : Smudge
 
-Status: In development
+Status: Version 1.0.0
 
 Support:
 - https://github.com/smuddgge/Leaf/wiki
