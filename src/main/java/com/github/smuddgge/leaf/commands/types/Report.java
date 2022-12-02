@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands.types;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
@@ -8,6 +9,8 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
+
+import java.util.Objects;
 
 /**
  * Represents the report command type.
@@ -34,15 +37,18 @@ public class Report implements CommandType {
 
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
+        String message = section.getString("message")
+                .replace("%message%", String.join(" ", arguments));
+
+        message = PlaceholderManager.parse(message, null, new User(null, "Console"));
+
         for (Player player : Leaf.getServer().getAllPlayers()) {
             User user = new User(player);
 
-            String message = section.getString("message")
-                    .replace("%player%", user.getName())
-                    .replace("%message%", String.join(" ", arguments));
-
             user.sendMessage(message);
         }
+
+        MessageManager.log(message);
 
         return new CommandStatus();
     }
@@ -52,15 +58,21 @@ public class Report implements CommandType {
 
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
+        String message = section.getString("message")
+                .replace("%message%", String.join(" ", arguments));
+
+        message = PlaceholderManager.parse(message, null, user);
+
         for (Player player : Leaf.getServer().getAllPlayers()) {
             User toSend = new User(player);
 
-            String message = section.getString("message")
-                    .replace("%player%", user.getName())
-                    .replace("%message%", String.join(" ", arguments));
+            if (Objects.equals(toSend.getName(), user.getName())) continue;
 
             toSend.sendMessage(PlaceholderManager.parse(message, null, user));
         }
+
+        user.sendMessage(message);
+        MessageManager.log(message);
 
         return new CommandStatus();
     }
