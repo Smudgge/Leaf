@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
 
 /**
@@ -34,8 +35,9 @@ public class Chat implements CommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         String message = section.getString("format")
-                .replace("%player%", "Console")
                 .replace("%message%", String.join(" ", arguments));
+
+        message = PlaceholderManager.parse(message, null, new User(null, "Console"));
 
         String permission = section.getString("permission");
 
@@ -56,8 +58,9 @@ public class Chat implements CommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         String message = section.getString("format")
-                .replace("%player%", user.getName())
                 .replace("%message%", String.join(" ", arguments));
+
+        message = PlaceholderManager.parse(message, null, user);
 
         String permission = section.getString("permission");
 
