@@ -6,7 +6,6 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.datatype.FakeUser;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
@@ -66,7 +65,7 @@ public class Servers implements CommandType {
 
             if (server.isEmpty()) continue;
 
-            String parsed = PlaceholderManager.parse(section.getString("server"), null, new FakeUser(server.get()));
+            String parsed = PlaceholderManager.parse(section.getString("server"), null, new User(server.get(), null));
 
             int online = proxyServerInterface.getFilteredPlayers(server.get(), null, false).size();
 
