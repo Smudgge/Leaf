@@ -165,11 +165,14 @@ public class Command implements SimpleCommand {
 
         if (source instanceof Player) {
 
-            int index = invocation.arguments().length;
+            int index = invocation.arguments().length - 1;
+            if (index == -1) index = 0;
 
             CommandSuggestions suggestions = this.getSuggestions(new User((Player) source));
 
-            if (suggestions == null || suggestions.get() == null) return CompletableFuture.completedFuture(List.of());
+            if (suggestions == null) return CompletableFuture.completedFuture(List.of());
+            if (suggestions.get() == null) return CompletableFuture.completedFuture(List.of());
+            if (suggestions.get().size() <= index) return CompletableFuture.completedFuture(List.of());
 
             List<String> list = suggestions.get().get(index);
 
