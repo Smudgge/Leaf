@@ -16,7 +16,7 @@ commands:
     enabled: true
     name: "alert"
     permission: "leaf.alert"
-    # %message% returns the command argument
+    # %message% : The alert message.
     message: "&8&l[&f&lAlert&8&l]&r &a%message%"
 
   alertraw:
@@ -31,9 +31,8 @@ commands:
     name: "staffchat"
     aliases: [ "sc" ]
     permission: "leaf.staffchat"
-    # %player% : The players name.
-    # %message% : The message the player has sent.
-    format: "{server_formatted} {rank_colour}%player% &7: {vanish_colour}%message%"
+    # %message% : The players message.
+    format: "{server_formatted} {rank_colour}<player> &7: {vanish_colour}%message%"
 
   find:
     type: "find"
@@ -41,7 +40,7 @@ commands:
     name: "find"
     permission: "leaf.find"
     not_found: "{error_colour}Player could not be found."
-    # Placeholders will parse in terms of the player to find.
+    # Placeholders will parse in terms of the player.
     found: "{message} Player was found on {server_formatted}"
 
   info:
@@ -51,27 +50,27 @@ commands:
     enabled: true
     name: "leaf"
     message:
-      - "&8&m&l------&r &a&lLeaf &8&m&l------"
+      - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
       - "&7"
       - "&7Velocity Proxy Plugin"
       - "&7Version &f<version>"
       - "&7Author &fSmudge"
       - "&7"
-      - "&8&m&l-----------------"
+      - "&8&m&l--------------------"
 
   stafflist:
     type: "list"
     enable: true
     name: "stafflist"
     permission: "leaf.stafflist"
-    header: "&8&m&l-----&r &a&lStaff List &8&m&l-----'"
-    footer: "&8&m&l---------------------"
+    header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
+    footer: "&8&m&l--------------------"
     list:
       admin:
         permission: "leaf.rank.admin"
         header: '&7[&f%amount%&7] &c&lAdmins'
         # Placeholders will parse in terms of the player.
-        section: '&7- &f%player% {server}'
+        section: '&7- &f<player> {server_formatted}'
 
   reload:
     type: "reload"
@@ -86,14 +85,20 @@ commands:
     name: "report"
     permission: "leaf.report.use"
     see_report: "leaf.report.see"
-    message: "&f%player% {server_formatted} &chas reported &7: &f%message%"
+    # %message% : The players message.
+    message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
 
   send:
     type: "send"
     enable: true
     name: "send"
     permission: "leaf.send"
-    message: "{message} Sending %from% to %to%"
+    # %from% : From command argument.
+    # %to% : To command argument.
+    # %amount% : Amount of players successfully sent.
+    message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
+    server_not_found: "{error_colour}Server not found."
+    server_offline: "{error_colour}Server requested is offline."
 
   servers:
     type: "servers"
