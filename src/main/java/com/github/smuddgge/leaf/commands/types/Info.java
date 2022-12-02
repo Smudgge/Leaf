@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class Info implements CommandType {
 
         if (message == null) {
             String messageString = section.getString("message", "null");
-            MessageManager.log(messageString);
+            MessageManager.log(PlaceholderManager.parse(messageString, null, new User(null, "Console")));
 
             return new CommandStatus();
         }
@@ -50,7 +51,7 @@ public class Info implements CommandType {
         String toSend = builder.toString();
         toSend = toSend.substring(0, toSend.length() - 2);
 
-        MessageManager.log(toSend);
+        MessageManager.log(PlaceholderManager.parse(toSend, null, new User(null, "Console")));
 
         return new CommandStatus();
     }
