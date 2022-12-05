@@ -73,6 +73,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Find());
         Leaf.commandHandler.addType(new Info());
         Leaf.commandHandler.addType(new List());
+        Leaf.commandHandler.addType(new Message());
         Leaf.commandHandler.addType(new Reload());
         Leaf.commandHandler.addType(new Report());
         Leaf.commandHandler.addType(new Send());

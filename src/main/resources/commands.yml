@@ -119,6 +119,8 @@ commands:
     enable: true
     name: "globalmessage"
     aliases: ["gmsg"]
+    not_found: "{error_colour}Player is not online."
+    message_self: "{error_colour}You cannot message yourself."
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
@@ -129,5 +131,5 @@ commands:
     name: "globalreply"
     aliases: [ "gr" ]
     # Placeholders will parse in terms of the other player.
-    to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
-    from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+    to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
+    from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
