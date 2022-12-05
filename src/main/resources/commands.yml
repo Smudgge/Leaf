@@ -105,13 +105,29 @@ commands:
     enable: true
     name: "servers"
     permission: "leaf.servers"
-
     order:
       - name_of_a_server
       - testing1
       - testing2
-
     header: '&8&m&l------&r &a&lServers &8&m&l------'
     # Placeholders registered in context of the server.
     server: '{server_formatted} &f%online% &7Online Players'
     footer: '&8&m&l---------------------'
+
+  message:
+    type: "message"
+    enable: true
+    name: "globalmessage"
+    aliases: ["gmsg"]
+    # Placeholders will parse in terms of the other player.
+    to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
+    from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+
+  reply:
+    type: "reply"
+    enable: true
+    name: "globalreply"
+    aliases: [ "gr" ]
+    # Placeholders will parse in terms of the other player.
+    to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
+    from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
