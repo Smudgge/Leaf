@@ -2,9 +2,13 @@ package com.github.smuddgge.leaf.datatype;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.commands.types.Message;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Represents a user connected to one of the servers.
@@ -121,5 +125,39 @@ public class User {
         if (this.player == null) return this.name;
 
         return this.player.getGameProfile().getName();
+    }
+
+    /**
+     * Used to get who this user last messaged.
+     *
+     * @return Instance of a user this user last messaged.
+     *         Return null if the player doesn't exist.
+     */
+    public User getLastMessaged() {
+        if (this.player == null) return null;
+        if (this.player.getUniqueId() == null) return null;
+
+        UUID uuidLastMessaged = Message.getLastMessaged(this.player.getUniqueId());
+
+        if (uuidLastMessaged == null) return null;
+
+        Optional<Player> request = Leaf.getServer().getPlayer(uuidLastMessaged);
+
+        if (request.isEmpty()) {
+            Message.removeLastMessaged(player.getUniqueId());
+            return null;
+        }
+
+        return new User(request.get());
+    }
+
+    /**
+     * Used to get the users unique id.
+     *
+     * @return The users unique id.
+     */
+    public UUID getUniqueId() {
+        if (player == null) return null;
+        return player.getUniqueId();
     }
 }
