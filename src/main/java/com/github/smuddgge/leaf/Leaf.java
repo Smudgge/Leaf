@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -89,6 +90,15 @@ public class Leaf {
      */
     public static ProxyServer getServer() {
         return Leaf.server;
+    }
+
+    /**
+     * Used to get the proxy server interface.
+     *
+     * @return The proxy interface.
+     */
+    public static ProxyServerInterface getInterface() {
+        return new ProxyServerInterface(Leaf.server);
     }
 
     /**
