@@ -6,10 +6,47 @@ import com.velocitypowered.api.plugin.Plugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 /**
  * Represents the message manager.
  */
 public class MessageManager {
+
+    /**
+     * List of players and who they last messaged.
+     */
+    private static final HashMap<UUID, UUID> lastMessaged = new HashMap<UUID, UUID>();
+
+    /**
+     * Used to set who a player last messaged.
+     *
+     * @param player       Player that sent the message.
+     * @param lastMessaged Player the message was sent to.
+     */
+    public static void setLastMessaged(UUID player, UUID lastMessaged) {
+        MessageManager.lastMessaged.put(player, lastMessaged);
+        MessageManager.lastMessaged.put(lastMessaged, player);
+    }
+
+    /**
+     * Used to remove a player from the last messaged list.
+     *
+     * @param player The player to remove.
+     */
+    public static void removeLastMessaged(UUID player) {
+        MessageManager.lastMessaged.remove(player);
+    }
+
+    /**
+     * Used to get who is messaging a player.
+     *
+     * @param player Player to get.
+     */
+    public static UUID getLastMessaged(UUID player) {
+        return MessageManager.lastMessaged.get(player);
+    }
 
     /**
      * Used to convert a message to a component with colour.

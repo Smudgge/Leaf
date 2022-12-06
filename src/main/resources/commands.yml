@@ -130,6 +130,7 @@ commands:
     enable: true
     name: "globalreply"
     aliases: [ "gr" ]
+    not_found: "{error_colour}You have no conversation to reply to."
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"

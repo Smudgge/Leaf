@@ -76,6 +76,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new List());
         Leaf.commandHandler.addType(new Message());
         Leaf.commandHandler.addType(new Reload());
+        Leaf.commandHandler.addType(new Reply());
         Leaf.commandHandler.addType(new Report());
         Leaf.commandHandler.addType(new Send());
         Leaf.commandHandler.addType(new Servers());
