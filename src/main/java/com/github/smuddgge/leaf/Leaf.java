@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.data.ConfigPlayers;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
@@ -48,6 +49,7 @@ public class Leaf {
         // Setup configuration files
         ConfigCommands.initialise(folder.toFile());
         ConfigMessages.initialise(folder.toFile());
+        ConfigPlayers.initialise(folder.toFile());
     }
 
     @Subscribe

@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.data.ConfigPlayers;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 
@@ -64,6 +65,7 @@ public class Reload implements CommandType {
         // Reload configs
         ConfigCommands.reload();
         ConfigMessages.reload();
+        ConfigPlayers.reload();
 
         // Reload the commands and re-register them
         Leaf.reloadCommands();
