@@ -22,12 +22,16 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "1.0.0",
+        version = "1.2.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
