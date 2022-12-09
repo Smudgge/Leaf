@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.commands.CommandHandler;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
@@ -28,6 +29,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
+import java.io.File;
 import java.nio.file.Path;
 
 @Plugin(
@@ -51,19 +53,10 @@ public class Leaf {
         // Set up the configuration files
         ConfigCommands.initialise(folder.toFile());
         ConfigMessages.initialise(folder.toFile());
+        ConfigDatabase.initialise(folder.toFile());
 
         // Set up the database
-        Leaf.database = new SQLiteDatabase(folder.toFile(), "database");
-        boolean successful = Leaf.database.setup();
-
-        if (!successful) {
-            MessageManager.warn("[Database] Unable to load database.");
-            return;
-        }
-
-        // Set up the tables
-        Leaf.database.createTable(new PlayerTable(Leaf.database));
-        Leaf.database.createTable(new HistoryTable(Leaf.database));
+        Leaf.setupDatabase(folder.toFile());
     }
 
     @Subscribe
@@ -148,6 +141,31 @@ public class Leaf {
      */
     public static SQLiteDatabase getDatabase() {
         return Leaf.database;
+    }
+
+    /**
+     * Used to set up the database.
+     *
+     * @param folder The plugin's folder.
+     */
+    public static void setupDatabase(File folder) {
+        // Set up the database
+        if (!ConfigDatabase.get().getBoolean("enabled", true)) {
+            Leaf.database = null;
+            return;
+        }
+
+        Leaf.database = new SQLiteDatabase(folder.toFile(), "database");
+        boolean successful = Leaf.database.setup();
+
+        if (!successful) {
+            MessageManager.warn("[Database] Unable to load database.");
+            return;
+        }
+
+        // Set up the tables
+        Leaf.database.createTable(new PlayerTable(Leaf.database));
+        Leaf.database.createTable(new HistoryTable(Leaf.database));
     }
 
     /**
