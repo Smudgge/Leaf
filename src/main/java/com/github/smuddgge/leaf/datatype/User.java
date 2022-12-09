@@ -3,7 +3,11 @@ package com.github.smuddgge.leaf.datatype;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.database.tables.HistoryTable;
+import com.github.smuddgge.leaf.database.tables.PlayerTable;
+import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import java.util.Optional;
@@ -158,5 +162,26 @@ public class User {
     public UUID getUniqueId() {
         if (player == null) return null;
         return player.getUniqueId();
+    }
+
+    /**
+     * Used to update this user in the database.
+     */
+    public void updateDatabase() {
+        PlayerTable table = (PlayerTable) Leaf.getDatabase().getTable("Player");
+        if (table == null) return;
+        table.updatePlayer(this);
+    }
+
+    /**
+     * Used to add player history to the database.
+     *
+     * @param server The server to append.
+     * @param playerHistoryEventType The type of history to append.
+     */
+    public void addHistory(RegisteredServer server, PlayerHistoryEventType playerHistoryEventType) {
+        HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
+        if (historyTable == null) return;
+        historyTable.insertHistory(this.getUniqueId().toString(), server.getServerInfo().getName(), playerHistoryEventType);
     }
 }

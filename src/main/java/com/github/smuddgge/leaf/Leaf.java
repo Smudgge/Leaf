@@ -6,7 +6,11 @@ import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
+import com.github.smuddgge.leaf.database.tables.HistoryTable;
+import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
+import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -17,6 +21,8 @@ import com.github.smuddgge.leaf.placeholders.standard.VanishedPlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
@@ -36,14 +42,28 @@ public class Leaf {
     private static ProxyServer server;
 
     private static CommandHandler commandHandler;
+    private static SQLiteDatabase database;
 
     @Inject
     public void SmUtility(ProxyServer server, @DataDirectory final Path folder) {
         Leaf.server = server;
 
-        // Setup configuration files
+        // Set up the configuration files
         ConfigCommands.initialise(folder.toFile());
         ConfigMessages.initialise(folder.toFile());
+
+        // Set up the database
+        Leaf.database = new SQLiteDatabase(folder.toFile(), "database");
+        boolean successful = Leaf.database.setup();
+
+        if (!successful) {
+            MessageManager.warn("[Database] Unable to load database.");
+            return;
+        }
+
+        // Set up the tables
+        Leaf.database.createTable(new PlayerTable(Leaf.database));
+        Leaf.database.createTable(new HistoryTable(Leaf.database));
     }
 
     @Subscribe
@@ -84,6 +104,16 @@ public class Leaf {
         Leaf.reloadCommands();
     }
 
+    @Subscribe
+    public void onPlayerJoin(ServerPostConnectEvent event) {
+        EventManager.onPlayerJoin(event);
+    }
+
+    @Subscribe
+    public void onPlayerLeave(DisconnectEvent event) {
+        EventManager.onPlayerLeave(event);
+    }
+
     /**
      * Used to get the proxy server instance.
      *
@@ -109,6 +139,15 @@ public class Leaf {
      */
     public static CommandHandler getCommandHandler() {
         return Leaf.commandHandler;
+    }
+
+    /**
+     * Used to get the database.
+     *
+     * @return The instance of the database.
+     */
+    public static SQLiteDatabase getDatabase() {
+        return Leaf.database;
     }
 
     /**
