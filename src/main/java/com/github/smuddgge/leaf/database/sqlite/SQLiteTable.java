@@ -30,6 +30,13 @@ public abstract class SQLiteTable implements Table {
         this.database = database;
     }
 
+    /**
+     * Used to get the instance of an empty record
+     *
+     * @return Instance of an empty record
+     */
+    public abstract Record getRecord();
+
     @Override
     public abstract String getName();
 
@@ -70,13 +77,6 @@ public abstract class SQLiteTable implements Table {
 
         return this.updateRecord(record);
     }
-
-    /**
-     * Used to get the instance of an empty record
-     *
-     * @return Instance of an empty record
-     */
-    public abstract Record getRecord();
 
     /**
      * Used to add a record to the table using INSERT
