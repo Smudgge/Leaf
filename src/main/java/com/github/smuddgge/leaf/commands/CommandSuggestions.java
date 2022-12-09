@@ -18,18 +18,22 @@ public class CommandSuggestions {
      * Used to append the next suggestion list.
      *
      * @param list Instance of a list.
+     * @return This instance.
      */
-    public void append(List<String> list) {
+    public CommandSuggestions append(List<String> list) {
         this.data.add(list);
+        return this;
     }
 
     /**
      * Used to append the next suggestion list.
      *
      * @param list Instance of a string array.
+     * @return This instance.
      */
-    public void append(String[] list) {
+    public CommandSuggestions append(String[] list) {
         this.data.add(new ArrayList<>(Arrays.stream(list).toList()));
+        return this;
     }
 
     /**
@@ -54,7 +58,6 @@ public class CommandSuggestions {
         }
 
         this.data.add(players);
-
         return this;
     }
 }

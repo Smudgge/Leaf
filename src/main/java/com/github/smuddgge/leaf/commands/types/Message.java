@@ -11,6 +11,9 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
 import java.util.Objects;
 
+/**
+ * Represents the message command type.
+ */
 public class Message implements CommandType {
 
     @Override

@@ -134,3 +134,21 @@ commands:
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+
+  history:
+    type: "history"
+    enable: true
+    name: "history"
+    not_found: "{error_colour}Player could not be found."
+    # Amount of sections on a page.
+    page_size: 5
+    # %page% : The number of the page the player is currently viewing.
+    # %page_amount% : The amount of pages they can see.
+    header: '&8&m&l------&r &a&l<player>''s History &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
+    # %event% : The history event.
+    # %server% : The server involved in the history.
+    # %date% : The date and time it occurred.
+    section: '&7- %event%&r %server%&r &7%date%'
+    # %page% : The number of the page the player is currently viewing.
+    # %page_amount% : The amount of pages they can see.Trfor (int i = 0; i< n;i++){
+    footer: '&8&m&l---------------------'

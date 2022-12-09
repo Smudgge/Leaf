@@ -148,6 +148,9 @@ public class Command implements SimpleCommand {
             MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
                     .replace("[name]", this.getName()));
         }
+
+        if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseError());
+        if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
     }
 
     @Override

@@ -226,4 +226,13 @@ public class SQLiteDatabase implements Database {
         if (fieldValueType == FieldValueType.STRING) return "text";
         return null;
     }
+
+    /**
+     * Used to check if the database is disabled.
+     *
+     * @return True if the database is disabled.
+     */
+    public boolean isDisabled() {
+        return !this.usingDatabase;
+    }
 }

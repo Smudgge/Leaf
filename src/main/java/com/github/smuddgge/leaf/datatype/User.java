@@ -7,7 +7,6 @@ import com.github.smuddgge.leaf.database.tables.HistoryTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import java.util.Optional;
@@ -168,20 +167,26 @@ public class User {
      * Used to update this user in the database.
      */
     public void updateDatabase() {
+        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return;
+
         PlayerTable table = (PlayerTable) Leaf.getDatabase().getTable("Player");
         if (table == null) return;
+
         table.updatePlayer(this);
     }
 
     /**
      * Used to add player history to the database.
      *
-     * @param server The server to append.
+     * @param server                 The server to append.
      * @param playerHistoryEventType The type of history to append.
      */
     public void addHistory(RegisteredServer server, PlayerHistoryEventType playerHistoryEventType) {
+        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return;
+
         HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
         if (historyTable == null) return;
+
         historyTable.insertHistory(this.getUniqueId().toString(), server.getServerInfo().getName(), playerHistoryEventType);
     }
 }

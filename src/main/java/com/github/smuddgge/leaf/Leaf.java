@@ -85,6 +85,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new AlertRaw());
         Leaf.commandHandler.addType(new Chat());
         Leaf.commandHandler.addType(new Find());
+        Leaf.commandHandler.addType(new History());
         Leaf.commandHandler.addType(new Info());
         Leaf.commandHandler.addType(new List());
         Leaf.commandHandler.addType(new Message());
@@ -155,7 +156,7 @@ public class Leaf {
             return;
         }
 
-        Leaf.database = new SQLiteDatabase(folder.toFile(), "database");
+        Leaf.database = new SQLiteDatabase(folder, "database");
         boolean successful = Leaf.database.setup();
 
         if (!successful) {

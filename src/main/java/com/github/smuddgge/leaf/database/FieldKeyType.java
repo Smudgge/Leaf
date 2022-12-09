@@ -7,5 +7,5 @@ package com.github.smuddgge.leaf.database;
  * A default key type would be FIELD
  */
 public enum FieldKeyType {
-    PRIMARY, FOREIGN, FIELD;
+    PRIMARY, FOREIGN, FIELD
 }

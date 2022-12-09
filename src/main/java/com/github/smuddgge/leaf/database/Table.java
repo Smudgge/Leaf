@@ -31,6 +31,12 @@ public interface Table {
      */
     ArrayList<Record> getRecord(String key, Object value);
 
+
+    /**
+     * Used to get all the records in the database.
+     */
+    ArrayList<Record> getAllRecords();
+
     /**
      * Used to insert a record into the table
      * if the record already exists it will be overwritten
@@ -39,6 +45,15 @@ public interface Table {
      * @return True if inserted successfully
      */
     boolean insertRecord(Record record);
+
+    /**
+     * Used to remove records from the table.
+     *
+     * @param key   The key of a record to match.
+     * @param value The value of a record to match.
+     * @return True if removed successfully.
+     */
+    boolean removeRecord(String key, Object value);
 
     /**
      * Used to get the fields that are a specific

@@ -8,6 +8,9 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
+/**
+ * Represents the reply command type.
+ */
 public class Reply implements CommandType {
 
     @Override

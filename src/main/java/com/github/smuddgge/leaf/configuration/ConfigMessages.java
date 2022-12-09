@@ -107,4 +107,24 @@ public class ConfigMessages extends YamlConfiguration {
                 .getString("incorrect_arguments", "{error} Incorrect arguments. %command%")
                 .replace("%command%", commandSyntax);
     }
+
+    /**
+     * Used to get the database error message.
+     *
+     * @return The database error message.
+     */
+    public static String getDatabaseError() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("database_error", "{error_colour}Database error occurred.");
+    }
+
+    /**
+     * Used to get the database empty message.
+     *
+     * @return The database empty message.
+     */
+    public static String getDatabaseEmpty() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("database_empty", "{error_colour}There are no records in the database.");
+    }
 }

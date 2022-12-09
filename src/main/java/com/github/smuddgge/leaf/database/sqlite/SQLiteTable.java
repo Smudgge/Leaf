@@ -39,8 +39,31 @@ public abstract class SQLiteTable implements Table {
 
     @Override
     public ArrayList<Record> getRecord(String key, Object value) {
-
         String statement = "SELECT * FROM `" + this.getName() + "` WHERE " + key + " = '" + value + "'";
+
+        ResultSet results = this.database.executeQuery(statement);
+        if (results == null) return null;
+
+        ArrayList<Record> records = new ArrayList<>();
+
+        try {
+            while (results.next()) {
+                Record record = this.getRecord();
+                record.appendResult(results);
+                records.add(record);
+            }
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+
+        return records;
+    }
+
+    @Override
+    public ArrayList<Record> getAllRecords() {
+
+        String statement = "SELECT * FROM `" + this.getName() + "`;";
 
         ResultSet results = this.database.executeQuery(statement);
         if (results == null) return null;
@@ -76,6 +99,12 @@ public abstract class SQLiteTable implements Table {
         }
 
         return this.updateRecord(record);
+    }
+
+    @Override
+    public boolean removeRecord(String key, Object value) {
+        String statement = "DELETE FROM `" + this.getName() + "` WHERE " + key + " = '" + value + "'";
+        return this.database.executeStatement(statement);
     }
 
     /**
@@ -139,26 +168,5 @@ public abstract class SQLiteTable implements Table {
         builder.append(record.getPrimaryKey().getValueFormatted()).append(";");
 
         return this.database.executeStatement(builder.toString());
-    }
-
-    /**
-     * Used to sum field values.
-     *
-     * @param field The field to sum.
-     * @return The value of the summed up fields.
-     */
-    public int sum(String field) {
-        String statement = "SELECT SUM(" + field + ")" +
-                " FROM " + this.getName();
-
-        ResultSet set = this.database.executeQuery(statement);
-
-        try {
-            return set.getInt("sum(" + field + ")");
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return -1;
     }
 }

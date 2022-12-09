@@ -9,6 +9,9 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
+/**
+ * Represents the find command type.
+ */
 public class Find implements CommandType {
 
     @Override
