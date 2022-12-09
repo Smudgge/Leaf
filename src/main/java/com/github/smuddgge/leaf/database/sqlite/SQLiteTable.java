@@ -33,13 +33,6 @@ public abstract class SQLiteTable implements Table {
     @Override
     public abstract String getName();
 
-    /**
-     * Used to get the instance of an empty record
-     *
-     * @return Instance of an empty record
-     */
-    public abstract Record getRecord();
-
     @Override
     public ArrayList<Field> getFields() {
         return this.getRecord().getFields();
@@ -77,6 +70,13 @@ public abstract class SQLiteTable implements Table {
 
         return this.updateRecord(record);
     }
+
+    /**
+     * Used to get the instance of an empty record
+     *
+     * @return Instance of an empty record
+     */
+    public abstract Record getRecord();
 
     /**
      * Used to add a record to the table using INSERT
