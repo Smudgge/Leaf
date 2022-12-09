@@ -49,7 +49,8 @@ public class History implements CommandType {
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
+        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled())
+            return new CommandStatus().databaseDisabled();
 
         String message = this.getMessage(section, arguments);
 
@@ -61,7 +62,8 @@ public class History implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
+        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled())
+            return new CommandStatus().databaseDisabled();
 
         String message = this.getMessage(section, arguments);
 
@@ -99,7 +101,9 @@ public class History implements CommandType {
 
         // Get the page information
         int pageSize = section.getInteger("page_size", 5);
-        int amountOfPages = historyRecords.size() / section.getInteger("page_size", 5);
+        int historySize = (historyRecords.size() - 1);
+        if (historySize < 0) historySize = 0;
+        int amountOfPages = (historySize / section.getInteger("page_size", 5)) + 1;
         int page = 1;
         if (arguments.length > 1) {
             try {

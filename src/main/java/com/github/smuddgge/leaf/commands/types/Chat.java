@@ -71,7 +71,7 @@ public class Chat implements CommandType {
             new User(player).sendMessage(message);
         }
 
-        MessageManager.log(message);
+        if (section.getBoolean("log", true)) MessageManager.log(message);
 
         return new CommandStatus();
     }
