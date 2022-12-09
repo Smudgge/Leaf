@@ -38,14 +38,6 @@ public abstract class SQLiteTable implements Table {
     public abstract Record getRecord();
 
     @Override
-    public abstract String getName();
-
-    @Override
-    public ArrayList<Field> getFields() {
-        return this.getRecord().getFields();
-    }
-
-    @Override
     public ArrayList<Record> getRecord(String key, Object value) {
 
         String statement = "SELECT * FROM `" + this.getName() + "` WHERE " + key + " = '" + value + "'";
@@ -67,6 +59,14 @@ public abstract class SQLiteTable implements Table {
         }
 
         return records;
+    }
+
+    @Override
+    public abstract String getName();
+
+    @Override
+    public ArrayList<Field> getFields() {
+        return this.getRecord().getFields();
     }
 
     @Override
