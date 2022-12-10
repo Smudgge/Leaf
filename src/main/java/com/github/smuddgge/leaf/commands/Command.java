@@ -139,6 +139,9 @@ public class Command implements SimpleCommand {
                         .replace("[name]", this.getName()));
             }
 
+            if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseError());
+            if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
+
             return;
         }
 
