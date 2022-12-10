@@ -87,14 +87,14 @@ public class History implements CommandType {
 
         // Get database information
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        if (playerTable == null) return ConfigMessages.getDatabaseError();
+        if (playerTable == null) return ConfigMessages.getDatabaseDisabled();
 
         ArrayList<Record> playerRecords = playerTable.getRecord("name", playerName);
         if (playerRecords.isEmpty()) return ConfigMessages.getDatabaseEmpty();
         PlayerRecord playerRecord = (PlayerRecord) playerRecords.get(0);
 
         HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
-        if (historyTable == null) return ConfigMessages.getDatabaseError();
+        if (historyTable == null) return ConfigMessages.getDatabaseDisabled();
 
         ArrayList<HistoryRecord> historyRecords = historyTable.getRecordOrdered("playerUuid", playerRecord.uuid);
         if (historyRecords.size() == 0) return ConfigMessages.getDatabaseEmpty();

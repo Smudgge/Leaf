@@ -113,9 +113,9 @@ public class ConfigMessages extends YamlConfiguration {
      *
      * @return The database error message.
      */
-    public static String getDatabaseError() {
+    public static String getDatabaseDisabled() {
         return ConfigMessages.config.getSection("messages")
-                .getString("database_error", "{error_colour}Database error occurred.");
+                .getString("database_disabled", "{error_colour}Database Disabled.");
     }
 
     /**

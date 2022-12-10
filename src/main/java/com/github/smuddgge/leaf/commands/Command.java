@@ -139,7 +139,7 @@ public class Command implements SimpleCommand {
                         .replace("[name]", this.getName()));
             }
 
-            if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseError());
+            if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
             if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
 
             return;
@@ -152,7 +152,7 @@ public class Command implements SimpleCommand {
                     .replace("[name]", this.getName()));
         }
 
-        if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseError());
+        if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
         if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
     }
 

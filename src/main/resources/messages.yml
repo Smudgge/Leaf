@@ -40,5 +40,5 @@ placeholders:
 messages:
 
   incorrect_arguments: "{error_colour}Incorrect arguments. %command%"
-  database_error: "{error_colour}Database error occurred."
+  database_disabled: "{error_colour}Database disabled."
   database_empty: "{error_colour}There are no records in the database."
