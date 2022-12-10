@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.ArrayList;
@@ -54,6 +55,10 @@ public class CommandSuggestions {
         List<String> players = new ArrayList<>();
 
         for (Player player : Leaf.getServer().getAllPlayers()) {
+            User user = new User(player);
+
+            if (user.isVanished()) continue;
+
             players.add(player.getGameProfile().getName());
         }
 

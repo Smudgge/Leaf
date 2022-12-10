@@ -7,6 +7,7 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public record ProxyServerInterface(ProxyServer proxyServer) {
 
@@ -33,11 +34,12 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
      * </ul>
      *
      * @param permission      The permission to filter.
+     * @param permissions     The possible permissions to filter.
      * @param includeVanished If the filtered players should
      *                        include vanished players.
      * @return List of filtered players.
      */
-    public List<User> getFilteredPlayers(String permission, boolean includeVanished) {
+    public List<User> getFilteredPlayers(String permission, List<String> permissions, boolean includeVanished) {
         List<User> players = new ArrayList<>();
 
         for (Player player : this.proxyServer.getAllPlayers()) {
@@ -45,6 +47,9 @@ public record ProxyServerInterface(ProxyServer proxyServer) {
 
             // If the player has the permission node
             if (!user.hasPermission(permission)) continue;
+
+            // Check if it's there the highest permission
+            if (!Objects.equals(user.getHighestPermission(permissions), permission)) continue;
 
             // If includes vanished players and they are not vanished
             if (!includeVanished && user.isVanished()) continue;

@@ -34,14 +34,15 @@ public class List implements CommandType {
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
-        java.util.List<String> permissions = new ArrayList<>();
+        ArrayList<String> possiblePermissions = new ArrayList<>();
+
 
         for (String key : section.getSection("list").getKeys()) {
             String permission = section.getSection("list").getSection(key).getString("permission");
-            permissions.add(permission);
+            possiblePermissions.add(permission);
         }
 
-        String message = this.getFormatted(section, permissions);
+            String message = this.getFormatted(section, possiblePermissions, possiblePermissions);
         MessageManager.log(message);
 
         return new CommandStatus();
@@ -49,24 +50,35 @@ public class List implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        java.util.List<String> permissions = new ArrayList<>();
+        ArrayList<String> possiblePermissions = new ArrayList<>();
+        ArrayList<String> sendersPermissions = new ArrayList<>();
 
         for (String key : section.getSection("list").getKeys()) {
             String permission = section.getSection("list").getSection(key).getString("permission");
 
+            possiblePermissions.add(permission);
+
             if (!user.hasPermission(permission)) continue;
 
-            permissions.add(permission);
+            sendersPermissions.add(permission);
         }
 
-        String message = this.getFormatted(section, permissions);
+        String message = this.getFormatted(section, sendersPermissions, possiblePermissions);
 
         user.sendMessage(message);
 
         return new CommandStatus();
     }
 
-    private String getFormatted(ConfigurationSection section, java.util.List<String> permissions) {
+    /**
+     * Used to get the formatted message.
+     *
+     * @param section The section of configuration the command is from.
+     * @param permissions The list of permissions the player has.
+     * @param possiblePermissions The list of the commands possible permissions.
+     * @return The formatted message.
+     */
+    private String getFormatted(ConfigurationSection section, java.util.List<String> permissions, java.util.List<String> possiblePermissions) {
         ProxyServerInterface proxyServerInterface = new ProxyServerInterface(Leaf.getServer());
 
         StringBuilder builder = new StringBuilder();
@@ -80,7 +92,7 @@ public class List implements CommandType {
 
             // Get the filtered list of players.
             // If permissions include permission include vanished players in the list.
-            java.util.List<User> players = proxyServerInterface.getFilteredPlayers(permission, permissions.contains(permission));
+            java.util.List<User> players = proxyServerInterface.getFilteredPlayers(permission, possiblePermissions, permissions.contains(permission));
 
             if (players.size() == 0) continue;
 

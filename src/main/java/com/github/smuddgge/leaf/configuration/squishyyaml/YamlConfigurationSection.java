@@ -1,9 +1,6 @@
 package com.github.smuddgge.leaf.configuration.squishyyaml;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a yaml configuration section
@@ -178,7 +175,7 @@ public class YamlConfigurationSection implements ConfigurationSection {
 
         // Get the section and return it
         Map<?, ?> unknownMap = (Map<?, ?>) this.get(path);
-        Map<String, Object> knownMap = new HashMap<>();
+        Map<String, Object> knownMap = new LinkedHashMap<>();
 
         for (Map.Entry<?, ?> entry : unknownMap.entrySet()) {
             knownMap.put(entry.getKey().toString(), entry.getValue());

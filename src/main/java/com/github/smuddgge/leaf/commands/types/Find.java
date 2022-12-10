@@ -34,15 +34,18 @@ public class Find implements CommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
-
             String notFound = section.getString("not_found");
-
             MessageManager.log(notFound);
-
             return new CommandStatus();
         }
 
         User user = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+
+        if (user.isVanished()) {
+            String notFound = section.getString("not_found");
+            MessageManager.log(notFound);
+            return new CommandStatus();
+        }
 
         String found = section.getString("found");
 
@@ -56,15 +59,18 @@ public class Find implements CommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
-
             String notFound = section.getString("not_found");
-
             user.sendMessage(notFound);
-
             return new CommandStatus();
         }
 
         User foundUser = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+
+        if (foundUser.isVanished()) {
+            String notFound = section.getString("not_found");
+            user.sendMessage(notFound);
+            return new CommandStatus();
+        }
 
         String found = section.getString("found");
 

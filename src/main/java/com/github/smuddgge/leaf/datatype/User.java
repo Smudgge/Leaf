@@ -9,6 +9,7 @@ import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -188,5 +189,20 @@ public class User {
         if (historyTable == null) return;
 
         historyTable.insertHistory(this.getUniqueId().toString(), server.getServerInfo().getName(), playerHistoryEventType);
+    }
+
+    /**
+     * Used to get the highest permission this user
+     * has in a list of permissions.
+     *
+     * @param permissions Permissions to check.
+     * @return The highest permission.
+     */
+    public String getHighestPermission(List<String> permissions) {
+        if (this.player == null) return null;
+        for (String permission : permissions) {
+            if (this.player.hasPermission(permission)) return permission;
+        }
+        return null;
     }
 }

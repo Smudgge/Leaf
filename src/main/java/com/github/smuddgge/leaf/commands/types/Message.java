@@ -44,6 +44,12 @@ public class Message implements CommandType {
         String message = String.join(" ", arguments).substring(arguments[0].length());
         User user = new User(Leaf.getServer().getPlayer(arguments[0]).get());
 
+        if (user.isVanished()) {
+            String notFound = section.getString("not_found", "{error_colour}Player is not online.");
+            MessageManager.log(notFound);
+            return new CommandStatus();
+        }
+
         // Send messages
         user.sendMessage(PlaceholderManager.parse(section.getString("from")
                 .replace("%message%", message), null, new User(null, "Console")));
@@ -60,7 +66,7 @@ public class Message implements CommandType {
 
         // Check if the player is online
         if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
-            MessageManager.log(section.getString("not_found", "{error_colour}Player is not online."));
+            user.sendMessage(section.getString("not_found", "{error_colour}Player is not online."));
             return new CommandStatus();
         }
 
@@ -72,6 +78,12 @@ public class Message implements CommandType {
 
         String message = String.join(" ", arguments).substring(arguments[0].length()).trim();
         User recipient = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+
+        if (recipient.isVanished()) {
+            String notFound = section.getString("not_found", "{error_colour}Player is not online.");
+            user.sendMessage(notFound);
+            return new CommandStatus();
+        }
 
         // Send messages
         recipient.sendMessage(PlaceholderManager.parse(section.getString("from")

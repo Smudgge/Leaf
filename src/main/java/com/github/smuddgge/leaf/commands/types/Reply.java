@@ -45,6 +45,11 @@ public class Reply implements CommandType {
             return new CommandStatus();
         }
 
+        if (recipient.isVanished()) {
+            user.sendMessage(section.getString("not_found", "{error_colour}You have no conversation to reply to."));
+            return new CommandStatus();
+        }
+
         String message = String.join(" ", arguments).trim();
 
         // Send messages
