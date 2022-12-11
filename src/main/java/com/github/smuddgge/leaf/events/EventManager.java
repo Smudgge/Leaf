@@ -29,6 +29,12 @@ public class EventManager {
         // Get server connecting to
         RegisteredServer server = user.getConnectedServer();
 
+        // Check if the server is null
+        if (server == null) return;
+
+        // Check if the user is vanished
+        if (user.isVanished()) return;
+
         // Add history
         user.addHistory(server, PlayerHistoryEventType.JOIN);
     }
@@ -53,6 +59,9 @@ public class EventManager {
 
         // Check if the server is null
         if (server == null) return;
+
+        // Check if the user is vanished
+        if (user.isVanished()) return;
 
         // Add history
         user.addHistory(server, PlayerHistoryEventType.LEAVE);
