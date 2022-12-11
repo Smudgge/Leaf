@@ -9,6 +9,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -184,7 +185,18 @@ public class Command implements SimpleCommand {
 
             if (list == null) return CompletableFuture.completedFuture(List.of());
 
-            return CompletableFuture.completedFuture(list);
+            List<String> parsedList = new ArrayList<>();
+
+            String argument = "";
+            if (!(invocation.arguments().length - 1 < 0)) {
+                argument = invocation.arguments()[invocation.arguments().length - 1].trim();
+            }
+
+            for (String item : list) {
+                if (argument.equals("") || item.contains(argument)) parsedList.add(item);
+            }
+
+            return CompletableFuture.completedFuture(parsedList);
 
         }
 
