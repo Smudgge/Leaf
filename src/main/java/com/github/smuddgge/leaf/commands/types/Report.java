@@ -39,11 +39,14 @@ public class Report implements CommandType {
 
         String message = section.getString("message")
                 .replace("%message%", String.join(" ", arguments));
-
         message = PlaceholderManager.parse(message, null, new User(null, "Console"));
+
+        String permission = section.getString("see_report", null);
 
         for (Player player : Leaf.getServer().getAllPlayers()) {
             User user = new User(player);
+
+            if (permission != null && !user.hasPermission(permission)) continue;
 
             user.sendMessage(message);
         }
@@ -60,13 +63,16 @@ public class Report implements CommandType {
 
         String message = section.getString("message")
                 .replace("%message%", String.join(" ", arguments));
-
         message = PlaceholderManager.parse(message, null, user);
+
+        String permission = section.getString("see_report", null);
 
         for (Player player : Leaf.getServer().getAllPlayers()) {
             User toSend = new User(player);
 
             if (Objects.equals(toSend.getName(), user.getName())) continue;
+
+            if (permission != null && !toSend.hasPermission(permission)) continue;
 
             toSend.sendMessage(PlaceholderManager.parse(message, null, user));
         }
