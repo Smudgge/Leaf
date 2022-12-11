@@ -3,7 +3,6 @@ package com.github.smuddgge.leaf.events;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
-import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
@@ -51,6 +50,9 @@ public class EventManager {
 
         // Get server connecting to
         RegisteredServer server = user.getConnectedServer();
+
+        // Check if the server is null
+        if (server == null) return;
 
         // Add history
         user.addHistory(server, PlayerHistoryEventType.LEAVE);
