@@ -4,13 +4,17 @@
   <groupId>com.github.smuddgge</groupId>
   <artifactId>Leaf</artifactId>
   <name>Leaf</name>
-  <version>1.2.1</version>
+  <version>1.2.4</version>
   <description>A velocity utility plugin</description>
   <build>
     <resources>
       <resource>
         <filtering>true</filtering>
         <directory>${project.basedir}/src/main/resources</directory>
+      </resource>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
       </resource>
     </resources>
     <plugins>

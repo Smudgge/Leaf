@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.4</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -77,6 +77,10 @@
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -177,6 +181,12 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-model</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-api</artifactId>

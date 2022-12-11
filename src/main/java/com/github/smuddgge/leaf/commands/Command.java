@@ -194,7 +194,8 @@ public class Command implements SimpleCommand {
             }
 
             for (String item : list) {
-                if (argument.equals("") || item.toLowerCase(Locale.ROOT).contains(argument.toLowerCase(Locale.ROOT))) parsedList.add(item);
+                if (argument.equals("") || item.toLowerCase(Locale.ROOT).contains(argument.toLowerCase(Locale.ROOT)))
+                    parsedList.add(item);
             }
 
             return CompletableFuture.completedFuture(parsedList);
