@@ -42,7 +42,7 @@ public class List implements CommandType {
             possiblePermissions.add(permission);
         }
 
-            String message = this.getFormatted(section, possiblePermissions, possiblePermissions);
+        String message = this.getFormatted(section, possiblePermissions, possiblePermissions);
         MessageManager.log(message);
 
         return new CommandStatus();
@@ -73,8 +73,8 @@ public class List implements CommandType {
     /**
      * Used to get the formatted message.
      *
-     * @param section The section of configuration the command is from.
-     * @param permissions The list of permissions the player has.
+     * @param section             The section of configuration the command is from.
+     * @param permissions         The list of permissions the player has.
      * @param possiblePermissions The list of the commands possible permissions.
      * @return The formatted message.
      */
