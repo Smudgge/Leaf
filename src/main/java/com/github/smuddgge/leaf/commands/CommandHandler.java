@@ -15,7 +15,7 @@ public class CommandHandler {
 
     private List<Command> commands = new ArrayList<>();
 
-    private final List<CommandType> commandTypes = new ArrayList<>();
+    private final List<BaseCommandType> commandTypes = new ArrayList<>();
 
     private List<String> registeredCommands = new ArrayList<>();
 
@@ -33,7 +33,7 @@ public class CommandHandler {
      *
      * @param commandType Instance of the command type.
      */
-    public void addType(CommandType commandType) {
+    public void addType(BaseCommandType commandType) {
         this.commandTypes.add(commandType);
     }
 
@@ -43,8 +43,8 @@ public class CommandHandler {
      * @param name The name of the command type to get.
      * @return The command type instance.
      */
-    public CommandType getType(String name) {
-        for (CommandType commandType : this.commandTypes) {
+    public BaseCommandType getType(String name) {
+        for (BaseCommandType commandType : this.commandTypes) {
             if (Objects.equals(commandType.getName(), name)) return commandType;
         }
 

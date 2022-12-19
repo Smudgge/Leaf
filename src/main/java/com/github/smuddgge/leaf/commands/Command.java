@@ -12,6 +12,7 @@ import com.velocitypowered.api.proxy.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -21,14 +22,14 @@ public class Command implements SimpleCommand {
 
     private final String identifier;
 
-    private final CommandType commandType;
+    private final BaseCommandType commandType;
 
     /**
      * Used to create a command.
      *
      * @param identifier The command's identifier in the configuration.
      */
-    public Command(String identifier, CommandType commandType) {
+    public Command(String identifier, BaseCommandType commandType) {
         this.identifier = identifier;
         this.commandType = commandType;
     }
@@ -59,6 +60,16 @@ public class Command implements SimpleCommand {
      * @return The command's status.
      */
     public CommandStatus onConsoleRun(String[] arguments) {
+        if (this.commandType.getSubCommandTypes().isEmpty() || arguments.length <= 0)
+            return this.commandType.onConsoleRun(this.getSection(), arguments);
+
+        for (CommandType commandType : this.commandType.getSubCommandTypes()) {
+            String name = arguments[0];
+
+            if (Objects.equals(commandType.getName(), name))
+                return commandType.onConsoleRun(this.getSection(), arguments);
+        }
+
         return this.commandType.onConsoleRun(this.getSection(), arguments);
     }
 
@@ -70,6 +81,16 @@ public class Command implements SimpleCommand {
      * @return The command's status.
      */
     public CommandStatus onPlayerRun(String[] arguments, User user) {
+        if (this.commandType.getSubCommandTypes().isEmpty() || arguments.length <= 0)
+            return this.commandType.onPlayerRun(this.getSection(), arguments, user);
+
+        for (CommandType commandType : this.commandType.getSubCommandTypes()) {
+            String name = arguments[0];
+
+            if (Objects.equals(commandType.getName(), name))
+                return commandType.onPlayerRun(this.getSection(), arguments, user);
+        }
+
         return this.commandType.onPlayerRun(this.getSection(), arguments, user);
     }
 
@@ -177,6 +198,16 @@ public class Command implements SimpleCommand {
             if (index == -1) index = 0;
 
             CommandSuggestions suggestions = this.getSuggestions(new User((Player) source));
+
+            if (!this.commandType.getSubCommandTypes().isEmpty()) {
+                for (CommandType commandType : this.commandType.getSubCommandTypes()) {
+                    suggestions.appendBase(commandType.getName());
+
+                    if (Objects.equals(invocation.arguments()[0].toLowerCase(Locale.ROOT), commandType.getName().toLowerCase(Locale.ROOT))) {
+                        suggestions.combineSubType(commandType.getSuggestions(new User((Player) source)));
+                    }
+                }
+            }
 
             if (suggestions == null) return CompletableFuture.completedFuture(List.of());
             if (suggestions.get() == null) return CompletableFuture.completedFuture(List.of());

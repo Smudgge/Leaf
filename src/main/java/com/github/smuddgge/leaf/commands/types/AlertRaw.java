@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
@@ -14,7 +14,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 /**
  * Represents the alert raw command type.
  */
-public class AlertRaw implements CommandType {
+public class AlertRaw extends BaseCommandType {
 
     @Override
     public String getName() {

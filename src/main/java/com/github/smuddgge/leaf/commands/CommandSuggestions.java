@@ -38,6 +38,19 @@ public class CommandSuggestions {
     }
 
     /**
+     * Append something to the first tab item.
+     * 
+     * @param string The string
+     */
+    public void appendBase(String string) {
+        if (this.data.isEmpty()) {
+            this.data.add(new ArrayList<>(Arrays.stream(new String[]{string}).toList()));
+        }
+        
+        this.data.get(0).add(string);
+    }
+
+    /**
      * Used to get the suggestions.
      *
      * @return The suggestions as a 3D list.
@@ -64,5 +77,23 @@ public class CommandSuggestions {
 
         this.data.add(players);
         return this;
+    }
+
+    /**
+     * Used to combine a sub command types suggestions.
+     *
+     * @param suggestions Suggestions to combine
+     */
+    public void combineSubType(CommandSuggestions suggestions) {
+        int index = 1;
+        for (List<String> list : suggestions.get()) {
+            if (this.data.size() >= index) {
+                this.data.get(index).addAll(list);
+            } else {
+                this.data.add(list);
+            }
+
+            index ++;
+        }
     }
 }

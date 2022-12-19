@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
@@ -18,7 +18,7 @@ import java.util.Optional;
 /**
  * Represents the server command type.
  */
-public class Servers implements CommandType {
+public class Servers extends BaseCommandType {
 
     @Override
     public String getName() {

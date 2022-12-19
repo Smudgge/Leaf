@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
@@ -12,7 +12,7 @@ import com.velocitypowered.api.proxy.Player;
 /**
  * Represents the alert command type.
  */
-public class Alert implements CommandType {
+public class Alert extends BaseCommandType {
 
     @Override
     public String getName() {

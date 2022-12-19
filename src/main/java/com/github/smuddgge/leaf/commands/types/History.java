@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Represents the history command type.
  */
-public class History implements CommandType {
+public class History extends BaseCommandType {
 
     @Override
     public String getName() {

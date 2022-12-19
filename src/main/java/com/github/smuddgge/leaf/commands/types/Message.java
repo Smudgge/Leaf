@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * Represents the message command type.
  */
-public class Message implements CommandType {
+public class Message extends BaseCommandType {
 
     @Override
     public String getName() {
