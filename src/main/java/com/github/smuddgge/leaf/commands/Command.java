@@ -198,10 +198,13 @@ public class Command implements SimpleCommand {
             if (index == -1) index = 0;
 
             CommandSuggestions suggestions = this.getSuggestions(new User((Player) source));
+            if (suggestions == null) suggestions = new CommandSuggestions();
 
             if (!this.commandType.getSubCommandTypes().isEmpty()) {
                 for (CommandType commandType : this.commandType.getSubCommandTypes()) {
                     suggestions.appendBase(commandType.getName());
+
+                    if (index == 0) continue;
 
                     if (Objects.equals(invocation.arguments()[0].toLowerCase(Locale.ROOT), commandType.getName().toLowerCase(Locale.ROOT))) {
                         suggestions.combineSubType(commandType.getSuggestions(new User((Player) source)));
@@ -209,8 +212,8 @@ public class Command implements SimpleCommand {
                 }
             }
 
-            if (suggestions == null) return CompletableFuture.completedFuture(List.of());
             if (suggestions.get() == null) return CompletableFuture.completedFuture(List.of());
+            if (suggestions.get().isEmpty()) return CompletableFuture.completedFuture(List.of());
             if (suggestions.get().size() <= index) return CompletableFuture.completedFuture(List.of());
 
             List<String> list = suggestions.get().get(index);
