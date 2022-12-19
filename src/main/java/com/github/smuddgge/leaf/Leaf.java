@@ -2,12 +2,14 @@ package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandHandler;
-import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
+import com.github.smuddgge.leaf.database.tables.FriendMailTable;
+import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
@@ -35,7 +37,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "1.2.4",
+        version = "1.2.4-DEV",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -94,6 +96,9 @@ public class Leaf {
         Leaf.commandHandler.addType(new Report());
         Leaf.commandHandler.addType(new Send());
         Leaf.commandHandler.addType(new Servers());
+
+        // Experimental
+        Leaf.commandHandler.addType(new Friends());
 
         Leaf.reloadCommands();
     }
@@ -167,6 +172,8 @@ public class Leaf {
         // Set up the tables
         Leaf.database.createTable(new PlayerTable(Leaf.database));
         Leaf.database.createTable(new HistoryTable(Leaf.database));
+        Leaf.database.createTable(new FriendTable(Leaf.database));
+        Leaf.database.createTable(new FriendMailTable(Leaf.database));
     }
 
     /**
@@ -177,7 +184,7 @@ public class Leaf {
 
         for (String identifier : ConfigCommands.get().getSection("commands").getKeys()) {
             String commandTypeName = ConfigCommands.get().getSection("commands").getSection(identifier).getString("type");
-            CommandType commandType = Leaf.commandHandler.getType(commandTypeName);
+            BaseCommandType commandType = Leaf.commandHandler.getType(commandTypeName);
 
             if (commandType == null) {
                 MessageManager.warn("Invalid command type for : " + identifier);
