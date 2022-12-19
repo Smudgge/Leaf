@@ -19,3 +19,6 @@ Support:
 - https://github.com/smuddgge/Leaf/wiki
 - https://discord.gg/ZxCnrJfk7Z
 ```
+
+- [builtbybit.com](https://builtbybit.com/resources/leaf-velocity-plugin.26200/)
+- [forums.papermc.io](https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/)
