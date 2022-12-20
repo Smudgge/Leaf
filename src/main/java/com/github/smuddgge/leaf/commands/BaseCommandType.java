@@ -1,5 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
+import com.github.smuddgge.leaf.MessageManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,15 @@ public abstract class BaseCommandType implements CommandType {
      */
     public void addSubCommandType(CommandType subCommandType) {
         this.subCommandTypes.add(subCommandType);
+    }
+
+    /**
+     * Used to log the sub commands in console.
+     */
+    public void logSubCommands() {
+        for (CommandType commandType : this.subCommandTypes) {
+            MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());
+        }
     }
 
     /**

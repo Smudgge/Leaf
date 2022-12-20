@@ -154,3 +154,22 @@ commands:
     # %page% : The number of the page the player is currently viewing.
     # %page_amount% : The amount of pages they can see.Trfor (int i = 0; i< n;i++){
     footer: '&8&m&l---------------------'
+
+  friends:
+    type: "friends"
+    enabled: true
+    name: "friends"
+
+    list:
+      # %name% : Formatted name.
+      # %date% : Date they started being friends
+      # %last_mail% : The last mail that was sent.
+      # %mail_status% : If the mail was read or not.
+      displayName: "%name%"
+      lore:
+        - "&8&m&l------------"
+        - "&7Last Mail Sent"
+        - "&f%last_mail%"
+        - "&7- &f%mail_status%"
+        - "&7"
+        - "&7Friends since %date%"

@@ -66,6 +66,7 @@ public class CommandHandler {
 
             // Log enable message
             MessageManager.log("&aEnabling &7command : " + command.getName());
+            command.getBaseCommandType().logSubCommands();
 
             // Check if the command is valid
             if (command.getName() == null) {

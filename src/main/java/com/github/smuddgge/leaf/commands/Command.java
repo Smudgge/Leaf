@@ -141,6 +141,15 @@ public class Command implements SimpleCommand {
     }
 
     /**
+     * Used to get the base command type.
+     *
+     * @return The base command type.
+     */
+    public BaseCommandType getBaseCommandType() {
+        return this.commandType;
+    }
+
+    /**
      * Used to get if the command is enabled.
      *
      * @return True if the command is enabled.

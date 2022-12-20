@@ -4,7 +4,7 @@
   <groupId>com.github.smuddgge</groupId>
   <artifactId>Leaf</artifactId>
   <name>Leaf</name>
-  <version>1.2.4</version>
+  <version>1.2.4-DEV</version>
   <description>A velocity utility plugin</description>
   <build>
     <resources>
@@ -144,6 +144,10 @@
       <id>papermc-repo</id>
       <url>https://repo.papermc.io/repository/maven-public/</url>
     </repository>
+    <repository>
+      <id>exceptionflug</id>
+      <url>https://mvn.exceptionflug.de/repository/exceptionflug-public/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -171,6 +175,12 @@
           <groupId>org.apiguardian</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>dev.simplix</groupId>
+      <artifactId>protocolize-api</artifactId>
+      <version>2.2.3</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <reporting>
