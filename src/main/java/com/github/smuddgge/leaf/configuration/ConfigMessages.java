@@ -127,4 +127,9 @@ public class ConfigMessages extends YamlConfiguration {
         return ConfigMessages.config.getSection("messages")
                 .getString("database_empty", "{error_colour}There are no records in the database.");
     }
+
+    public static String getPlayerCommand() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("player_command", "{error_colour}This command can only be run by the player.");
+    }
 }

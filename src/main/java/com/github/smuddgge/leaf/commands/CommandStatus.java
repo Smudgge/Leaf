@@ -9,6 +9,7 @@ public class CommandStatus {
     private boolean hasIncorrectArguments = false;
     private boolean hasDatabaseDisabled = false;
     private boolean hasDatabaseEmpty = false;
+    private boolean hasPlayerCommand = false;
 
     /**
      * Used to set incorrect arguments to true.
@@ -41,6 +42,16 @@ public class CommandStatus {
     }
 
     /**
+     * Used to set player command to true.
+     *
+     * @return This instance.
+     */
+    public CommandStatus playerCommand() {
+        this.hasPlayerCommand = true;
+        return this;
+    }
+
+    /**
      * Used to get if the command sender has provided
      * the correct arguments.
      *
@@ -66,5 +77,14 @@ public class CommandStatus {
      */
     public boolean hasDatabaseEmpty() {
         return this.hasDatabaseEmpty;
+    }
+
+    /**
+     * Used to get if the command is only for the player to run.
+     *
+     * @return True if it's a player only command.
+     */
+    public boolean hasPlayerCommand() {
+        return this.hasPlayerCommand;
     }
 }

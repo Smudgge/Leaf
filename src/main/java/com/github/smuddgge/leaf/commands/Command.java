@@ -186,6 +186,7 @@ public class Command implements SimpleCommand {
 
         if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
         if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
+        if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
     }
 
     @Override
