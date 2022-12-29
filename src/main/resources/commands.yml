@@ -166,7 +166,7 @@ commands:
       # %date% : Date they started being friends
       # %last_mail% : The last mail that was sent.
       # %mail_status% : If the mail was read or not.
-      displayName: "%name%"
+      displayName: "&6&l%name%"
       lore:
         - "&8&m&l------------"
         - "&7Last Mail Sent"
@@ -182,3 +182,16 @@ commands:
       sent: "{message} You have sent a friend request to &f<name>"
       # Placeholders will parse in terms of the player that sent the request.
       from: "{message} You have received a friend request from &f<name>. &7To accept run the command &e/friends requests"
+
+    requests:
+      enabled: true
+      # %name% : Formatted name of the player that is requesting.
+      displayName: "&6&l%name%"
+      lore:
+        - "&7Click to &accept &7friend request."
+      # Placeholders will parse in terms of the player that sent the request.
+      # Message is sent to the friend accepter.
+      from: "{message} You are now friends with &f<name>"
+      # Placeholders will parse in terms of the player that accepted the friend request.
+      # Message is sent to the requester.
+      sent: "{message} You are now friends with &f<name>"

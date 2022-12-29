@@ -8,10 +8,7 @@ import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
-import com.github.smuddgge.leaf.database.tables.FriendMailTable;
-import com.github.smuddgge.leaf.database.tables.FriendTable;
-import com.github.smuddgge.leaf.database.tables.HistoryTable;
-import com.github.smuddgge.leaf.database.tables.PlayerTable;
+import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
@@ -87,6 +84,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new AlertRaw());
         Leaf.commandHandler.addType(new Chat());
         Leaf.commandHandler.addType(new Find());
+        Leaf.commandHandler.addType(new Friends());
         Leaf.commandHandler.addType(new History());
         Leaf.commandHandler.addType(new Info());
         Leaf.commandHandler.addType(new List());
@@ -96,9 +94,6 @@ public class Leaf {
         Leaf.commandHandler.addType(new Report());
         Leaf.commandHandler.addType(new Send());
         Leaf.commandHandler.addType(new Servers());
-
-        // Experimental
-        Leaf.commandHandler.addType(new Friends());
 
         Leaf.reloadCommands();
     }
@@ -174,6 +169,7 @@ public class Leaf {
         Leaf.database.createTable(new HistoryTable(Leaf.database));
         Leaf.database.createTable(new FriendTable(Leaf.database));
         Leaf.database.createTable(new FriendMailTable(Leaf.database));
+        Leaf.database.createTable(new FriendRequestTable(Leaf.database));
     }
 
     /**

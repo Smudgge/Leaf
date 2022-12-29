@@ -51,6 +51,8 @@ public class FriendListInventory extends InventoryInterface {
 
         int index = 0;
         for (Record record : friendRecords) {
+            if (index >= 54) return;
+
             FriendRecord friendRecord = (FriendRecord) record;
             PlayerRecord friendPlayerRecord = (PlayerRecord) playerTable.getRecord("uuid", friendRecord.friendPlayerUuid).get(0);
             FriendMailRecord latestMail = friendMailTable.getLatest(user.getUniqueId().toString(), friendPlayerRecord.uuid);
@@ -62,7 +64,7 @@ public class FriendListInventory extends InventoryInterface {
             // Create the item
             ItemStack itemStack = new ItemStack(ItemType.PLAYER_HEAD);
 
-            itemStack.displayName(this.section.getString("displayName", "%name%")
+            itemStack.displayName(this.section.getString("displayName", "&6&l%name%")
                     .replace("%name%", friendRecord.friendNameFormatted)
                     .replace("%date%", friendRecord.dateCreated)
                     .replace("%last_mail%", latestMail.message)
