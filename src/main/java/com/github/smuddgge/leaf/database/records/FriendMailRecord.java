@@ -24,5 +24,19 @@ public class FriendMailRecord extends Record {
 
     @FieldAnnotation(fieldKeyType = FieldKeyType.FOREIGN)
     @ForeignKey(tableReferenceName = "Friend", tableReferenceValue = "uuid")
-    public String friendUuid;
+    public String friendFromUuid;
+
+    @FieldAnnotation(fieldKeyType = FieldKeyType.FOREIGN)
+    @ForeignKey(tableReferenceName = "Friend", tableReferenceValue = "uuid")
+    public String friendToUuid;
+
+    /**
+     * Used to get the status of the mail.
+     *
+     * @return viewed or sent.
+     */
+    public String getStatus() {
+        if (Boolean.parseBoolean(viewedBoolean)) return "viewed";
+        return "sent";
+    }
 }

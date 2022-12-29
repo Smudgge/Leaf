@@ -5,6 +5,9 @@ import com.github.smuddgge.leaf.database.records.FriendMailRecord;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class FriendMailTable extends SQLiteTable {
 
     /**
@@ -25,5 +28,23 @@ public class FriendMailTable extends SQLiteTable {
     @Override
     public String getName() {
         return "FriendMail";
+    }
+
+    /**
+     * Used to get the latest mail sent.
+     *
+     * @param fromUuid The uuid of the player sending the mail.
+     * @param toUuid The uuid of the player the mail was sent to.
+     * @return Null if there are none.
+     */
+    public FriendMailRecord getLatest(String fromUuid, String toUuid) {
+        for (Record record : this.getRecord("friendFromUuid", fromUuid)) {
+            FriendMailRecord friendMailRecord = (FriendMailRecord) record;
+
+            if (!Objects.equals(friendMailRecord.friendToUuid, toUuid)) continue;
+
+            return friendMailRecord;
+        }
+        return null;
     }
 }

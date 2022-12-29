@@ -1,38 +1,22 @@
-package com.github.smuddgge.leaf.commands.types;
+package com.github.smuddgge.leaf.commands.subtypes.friends;
 
-import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.BaseCommandType;
-import com.github.smuddgge.leaf.commands.subtypes.friends.Request;
+import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.FriendListInventory;
-import dev.simplix.protocolize.api.Protocolize;
-import dev.simplix.protocolize.api.inventory.Inventory;
-import dev.simplix.protocolize.api.item.ItemStack;
-import dev.simplix.protocolize.api.player.ProtocolizePlayer;
-import dev.simplix.protocolize.data.ItemType;
-import dev.simplix.protocolize.data.inventory.InventoryType;
 
-public class Friends extends BaseCommandType {
-
-    /**
-     * Used to initialise friends command type.
-     * Used to initialise the sub command types.
-     */
-    public Friends() {
-        this.addSubCommandType(new Request());
-    }
+public class List implements CommandType {
 
     @Override
     public String getName() {
-        return "friends";
+        return "list";
     }
 
     @Override
     public String getSyntax() {
-        return "/[name] <optional argument>";
+        return "/[parent] [name]";
     }
 
     @Override
@@ -42,7 +26,7 @@ public class Friends extends BaseCommandType {
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
-        return new CommandStatus();
+        return new CommandStatus().playerCommand();
     }
 
     @Override

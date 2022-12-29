@@ -17,6 +17,9 @@ public class FriendRecord extends Record {
     public String timeStampCreated;
 
     @FieldAnnotation
+    public String dateCreated;
+
+    @FieldAnnotation
     public String friendNameFormatted;
 
     @FieldAnnotation
