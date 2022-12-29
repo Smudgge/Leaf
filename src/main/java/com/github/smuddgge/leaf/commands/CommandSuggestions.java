@@ -1,8 +1,11 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.database.Record;
+import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,14 +42,14 @@ public class CommandSuggestions {
 
     /**
      * Append something to the first tab item.
-     * 
+     *
      * @param string The string
      */
     public void appendBase(String string) {
         if (this.data.isEmpty()) {
             this.data.add(new ArrayList<>(Arrays.stream(new String[]{string}).toList()));
         }
-        
+
         this.data.get(0).add(string);
     }
 
@@ -80,6 +83,25 @@ public class CommandSuggestions {
     }
 
     /**
+     * Used to append all the players that are registered in the database.
+     *
+     * @return This instance
+     */
+    public CommandSuggestions appendDatabasePlayers() {
+        List<String> players = new ArrayList<>();
+
+        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return this;
+
+        for (Record record : Leaf.getDatabase().getTable("Player").getAllRecords()) {
+            PlayerRecord playerRecord = (PlayerRecord) record;
+            players.add(playerRecord.name);
+        }
+
+        this.data.add(players);
+        return this;
+    }
+
+    /**
      * Used to combine a sub command types suggestions.
      *
      * @param suggestions Suggestions to combine
@@ -93,7 +115,7 @@ public class CommandSuggestions {
                 this.data.add(list);
             }
 
-            index ++;
+            index++;
         }
     }
 }

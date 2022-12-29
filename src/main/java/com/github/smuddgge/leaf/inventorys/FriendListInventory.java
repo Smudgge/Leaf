@@ -1,7 +1,6 @@
 package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.commands.types.Friends;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendMailRecord;
@@ -14,21 +13,19 @@ import com.github.smuddgge.leaf.datatype.User;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
-import net.querz.nbt.io.NBTUtil;
 import net.querz.nbt.tag.CompoundTag;
-import net.querz.nbt.tag.Tag;
 
 import java.util.ArrayList;
 
 public class FriendListInventory extends InventoryInterface {
 
-    private ConfigurationSection section;
+    private final ConfigurationSection section;
 
     /**
      * Used to create an inventory interface.
      *
-     * @param user The instance of the user.
-     *             This user will be used to load the list of friends.
+     * @param user    The instance of the user.
+     *                This user will be used to load the list of friends.
      * @param section The list configuration section
      */
     public FriendListInventory(User user, ConfigurationSection section) {
@@ -84,7 +81,7 @@ public class FriendListInventory extends InventoryInterface {
 
             this.inventory.item(index, itemStack);
 
-            index ++;
+            index++;
         }
     }
 }

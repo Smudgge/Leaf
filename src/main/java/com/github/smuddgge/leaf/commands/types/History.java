@@ -2,9 +2,9 @@ package com.github.smuddgge.leaf.commands.types;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
@@ -35,16 +35,7 @@ public class History extends BaseCommandType {
 
     @Override
     public CommandSuggestions getSuggestions(User user) {
-        java.util.List<String> players = new ArrayList<>();
-
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return null;
-
-        for (Record record : Leaf.getDatabase().getTable("Player").getAllRecords()) {
-            PlayerRecord playerRecord = (PlayerRecord) record;
-            players.add(playerRecord.name);
-        }
-
-        return new CommandSuggestions().append(players);
+        return new CommandSuggestions().appendDatabasePlayers();
     }
 
     @Override

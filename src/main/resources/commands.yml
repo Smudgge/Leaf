@@ -174,3 +174,11 @@ commands:
         - "&7- &f%mail_status%"
         - "&7"
         - "&7Friends since %date%"
+
+    request:
+      enabled: true
+      not_found: "{error_colour}Player has never played on this server."
+      # Placeholders will parse in terms of the other player.
+      sent: "{message} You have sent a friend request to &f<name>"
+      # Placeholders will parse in terms of the player that sent the request.
+      from: "{message} You have received a friend request from &f<name>. &7To accept run the command &e/friends requests"
