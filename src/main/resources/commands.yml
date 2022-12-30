@@ -162,6 +162,7 @@ commands:
 
     list:
       name: "list"
+      aliases: ["friends"]
       enabled: true
       # %name% : Formatted name.
       # %date% : Date they started being friends
