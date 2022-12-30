@@ -161,6 +161,7 @@ commands:
     name: "friends"
 
     list:
+      name: "list"
       enabled: true
       # %name% : Formatted name.
       # %date% : Date they started being friends
@@ -176,6 +177,7 @@ commands:
         - "&7Friends since %date%"
 
     request:
+      name: "request"
       enabled: true
       not_found: "{error_colour}Player has never played on this server."
       self: "{error_colour}You can not be friends with your self."
@@ -185,6 +187,7 @@ commands:
       from: "{message} You have received a friend request from &f<player>. &7To accept run the command &e/friends requests"
 
     requests:
+      name: "requests"
       enabled: true
       # %name% : Formatted name of the player that is requesting.
       displayName: "&6&l%name%"

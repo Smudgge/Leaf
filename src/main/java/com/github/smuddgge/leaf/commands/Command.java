@@ -66,7 +66,11 @@ public class Command implements SimpleCommand {
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
             String name = arguments[0];
 
-            if (Objects.equals(commandType.getName(), name))
+            List<String> subCommandNames = new ArrayList<>();
+            subCommandNames.add(this.getSection().getSection(commandType.getName()).getString("name", commandType.getName()));
+            subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
+
+            if (subCommandNames.contains(name))
                 return commandType.onConsoleRun(this.getSection(), arguments);
         }
 
@@ -87,7 +91,11 @@ public class Command implements SimpleCommand {
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
             String name = arguments[0];
 
-            if (Objects.equals(commandType.getName(), name))
+            List<String> subCommandNames = new ArrayList<>();
+            subCommandNames.add(this.getSection().getSection(commandType.getName()).getString("name", commandType.getName()));
+            subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
+
+            if (subCommandNames.contains(name))
                 return commandType.onPlayerRun(this.getSection(), arguments, user);
         }
 
@@ -213,6 +221,13 @@ public class Command implements SimpleCommand {
             if (!this.commandType.getSubCommandTypes().isEmpty()) {
                 for (CommandType commandType : this.commandType.getSubCommandTypes()) {
                     suggestions.appendBase(commandType.getName());
+                    String name = this.getSection().getSection(commandType.getName()).getString("name", commandType.getName());
+                    List<String> aliases = this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>());
+
+                    suggestions.appendBase(name);
+                    for (String temp : aliases) {
+                        suggestions.appendBase(temp);
+                    }
 
                     if (index == 0) continue;
 
