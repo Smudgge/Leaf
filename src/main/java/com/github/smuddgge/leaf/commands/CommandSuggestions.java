@@ -108,7 +108,7 @@ public class CommandSuggestions {
     public void combineSubType(CommandSuggestions suggestions) {
         int index = 1;
         for (List<String> list : suggestions.get()) {
-            if (this.data.size() >= index) {
+            if (this.data.size() >= index + 1) {
                 this.data.get(index).addAll(list);
             } else {
                 this.data.add(list);

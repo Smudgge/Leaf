@@ -78,6 +78,16 @@ public class MessageManager {
     }
 
     /**
+     * Used to convert standard messages into legacy messages.
+     *
+     * @param message The message to convert.
+     * @return The requested string.
+     */
+    public static String convertToLegacy(String message) {
+        return message.replace("&", "§");
+    }
+
+    /**
      * Used to log information into the console with converted colours.
      *
      * @param message The message to send.

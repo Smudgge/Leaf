@@ -32,7 +32,8 @@ public class Requests implements CommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        new FriendRequestInventory(user, section.getSection("requests"));
+        FriendRequestInventory friendRequestInventory = new FriendRequestInventory(section.getSection("requests"));
+        friendRequestInventory.loadAndOpen(user);
 
         return new CommandStatus();
     }

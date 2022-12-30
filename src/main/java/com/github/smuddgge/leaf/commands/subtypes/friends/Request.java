@@ -14,6 +14,7 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Optional;
 
 public class Request implements CommandType {
@@ -43,6 +44,11 @@ public class Request implements CommandType {
         if (arguments.length < 2) return new CommandStatus().incorrectArguments();
 
         String playerNameToRequest = arguments[1];
+
+        if (user.getName().toLowerCase(Locale.ROOT).equals(playerNameToRequest.toLowerCase(Locale.ROOT))) {
+            user.sendMessage(section.getSection("request").getString("self", "{error_colour}You can not be friends with your self."));
+            return new CommandStatus();
+        }
 
         if (Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
 

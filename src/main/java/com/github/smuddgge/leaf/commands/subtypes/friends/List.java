@@ -33,7 +33,8 @@ public class List implements CommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
         // Open friend list inventory.
-        new FriendListInventory(user, section.getSection("list"));
+        FriendListInventory friendListInventory = new FriendListInventory(section.getSection("list"));
+        friendListInventory.loadAndOpen(user);
 
         return new CommandStatus();
     }

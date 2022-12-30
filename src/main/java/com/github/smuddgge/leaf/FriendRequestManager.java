@@ -5,10 +5,10 @@ import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendRequestTable;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
+import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.utility.DateAndTime;
 
-import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -45,6 +45,10 @@ public class FriendRequestManager {
 
         FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+
+        PlayerRecord playerFrom = playerTable.getPlayer(requestRecord.playerFromUuid);
+        PlayerRecord playerTo = playerTable.getPlayer(requestRecord.playerToUuid);
 
         friendRequestTable.removeRecord("uuid", requestRecord.uuid);
 
@@ -55,6 +59,7 @@ public class FriendRequestManager {
         friendRecord.toggleProxyJoin = "false";
         friendRecord.toggleProxyLeave = "false";
         friendRecord.toggleServerChange = "false";
+        friendRecord.friendNameFormatted = playerTo.name;
         friendRecord.playerUuid = requestRecord.playerFromUuid;
         friendRecord.friendPlayerUuid = requestRecord.playerToUuid;
 
@@ -67,6 +72,7 @@ public class FriendRequestManager {
         friendRecord2.toggleProxyJoin = "false";
         friendRecord2.toggleProxyLeave = "false";
         friendRecord2.toggleServerChange = "false";
+        friendRecord2.friendNameFormatted = playerFrom.name;
         friendRecord2.playerUuid = requestRecord.playerToUuid;
         friendRecord2.friendPlayerUuid = requestRecord.playerFromUuid;
 

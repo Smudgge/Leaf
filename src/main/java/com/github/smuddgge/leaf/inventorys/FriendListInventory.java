@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendMailRecord;
@@ -24,13 +25,9 @@ public class FriendListInventory extends InventoryInterface {
     /**
      * Used to create an inventory interface.
      *
-     * @param user    The instance of the user.
-     *                This user will be used to load the list of friends.
      * @param section The list configuration section
      */
-    public FriendListInventory(User user, ConfigurationSection section) {
-        super(user);
-
+    public FriendListInventory(ConfigurationSection section) {
         this.section = section;
     }
 
@@ -40,11 +37,16 @@ public class FriendListInventory extends InventoryInterface {
     }
 
     @Override
+    public String getTitle() {
+        return "&8&lFriend List";
+    }
+
+    @Override
     protected void load(User user) {
         if (Leaf.getDatabase().isDisabled()) return;
 
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        FriendMailTable friendMailTable = (FriendMailTable) Leaf.getDatabase().getTable("FriendMailTable");
+        FriendMailTable friendMailTable = (FriendMailTable) Leaf.getDatabase().getTable("FriendMail");
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
 
         ArrayList<Record> friendRecords = friendTable.getRecord("playerUuid", user.getUniqueId());
@@ -57,6 +59,12 @@ public class FriendListInventory extends InventoryInterface {
             PlayerRecord friendPlayerRecord = (PlayerRecord) playerTable.getRecord("uuid", friendRecord.friendPlayerUuid).get(0);
             FriendMailRecord latestMail = friendMailTable.getLatest(user.getUniqueId().toString(), friendPlayerRecord.uuid);
 
+            if (latestMail == null) {
+                latestMail = new FriendMailRecord();
+                latestMail.message = "none";
+                latestMail.viewedBoolean = "false";
+            }
+
             // Get NBT to set
             CompoundTag compoundTag = new CompoundTag();
             compoundTag.putString("SkullOwner", friendPlayerRecord.name);
@@ -64,19 +72,20 @@ public class FriendListInventory extends InventoryInterface {
             // Create the item
             ItemStack itemStack = new ItemStack(ItemType.PLAYER_HEAD);
 
-            itemStack.displayName(this.section.getString("displayName", "&6&l%name%")
+            itemStack.displayName(MessageManager.convertToLegacy(this.section.getString("displayName", "&6&l%name%")
                     .replace("%name%", friendRecord.friendNameFormatted)
                     .replace("%date%", friendRecord.dateCreated)
                     .replace("%last_mail%", latestMail.message)
-                    .replace("%mail_status%", latestMail.getStatus()));
+                    .replace("%mail_status%", latestMail.getStatus())
+            ));
 
             for (String item : this.section.getListString("lore")) {
-                itemStack.addToLore(item
+                itemStack.addToLore(MessageManager.convertToLegacy(item
                         .replace("%name%", friendRecord.friendNameFormatted)
                         .replace("%date%", friendRecord.dateCreated)
                         .replace("%last_mail%", latestMail.message)
                         .replace("%mail_status%", latestMail.getStatus())
-                );
+                ));
             }
 
             itemStack.nbtData(compoundTag);

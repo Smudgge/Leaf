@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,5 +35,28 @@ public abstract class BaseCommandType implements CommandType {
      */
     public List<CommandType> getSubCommandTypes() {
         return this.subCommandTypes;
+    }
+
+    /**
+     * Used to load the commands subcommands.
+     */
+    public abstract void loadSubCommands();
+
+    /**
+     * Used to remove disabled sub commands.
+     *
+     * @param section The base command types configuration section.
+     */
+    public void initialiseSubCommands(ConfigurationSection section) {
+        for (CommandType commandType : this.subCommandTypes) {
+            if (!section.getKeys().contains(commandType.getName())) {
+                MessageManager.log("&7↳ &eDisabling &7sub command (No configuration) : " + commandType.getName());
+            }
+            if (!section.getSection(commandType.getName()).getBoolean("enabled", true)) {
+                MessageManager.log("&7↳ &eDisabling &7sub command (Disabled) : " + commandType.getName());
+            }
+
+            MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());
+        }
     }
 }

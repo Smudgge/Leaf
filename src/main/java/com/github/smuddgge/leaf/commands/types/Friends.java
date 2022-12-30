@@ -11,11 +11,8 @@ import com.github.smuddgge.leaf.inventorys.FriendListInventory;
 
 public class Friends extends BaseCommandType {
 
-    /**
-     * Used to initialise friends command type.
-     * Used to initialise the sub command types.
-     */
-    public Friends() {
+    @Override
+    public void loadSubcommands() {
         this.addSubCommandType(new List());
         this.addSubCommandType(new Request());
         this.addSubCommandType(new Requests());
@@ -45,7 +42,8 @@ public class Friends extends BaseCommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
         // Open friend list inventory.
-        new FriendListInventory(user, section.getSection("list"));
+        FriendListInventory friendListInventory = new FriendListInventory(section.getSection("list"));
+        friendListInventory.loadAndOpen(user);
 
         return new CommandStatus();
     }

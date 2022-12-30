@@ -50,4 +50,16 @@ public class PlayerTable extends SQLiteTable {
 
         this.insertRecord(playerRecord);
     }
+
+    /**
+     * Used to get a player record given there uuid.
+     *
+     * @param uuid The players uuid.
+     * @return The requested record.
+     */
+    public PlayerRecord getPlayer(String uuid) {
+        ArrayList<Record> result = this.getRecord("uuid", uuid);
+        if (result.isEmpty()) return null;
+        return (PlayerRecord) result.get(0);
+    }
 }
