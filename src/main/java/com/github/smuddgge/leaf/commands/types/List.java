@@ -113,4 +113,9 @@ public class List extends BaseCommandType {
 
         return builder.toString();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

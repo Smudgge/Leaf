@@ -81,4 +81,9 @@ public class Info extends BaseCommandType {
 
         return new CommandStatus();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

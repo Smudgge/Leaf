@@ -75,4 +75,9 @@ public class Chat extends BaseCommandType {
 
         return new CommandStatus();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

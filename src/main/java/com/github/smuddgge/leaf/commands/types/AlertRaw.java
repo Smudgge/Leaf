@@ -57,4 +57,9 @@ public class AlertRaw extends BaseCommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         return this.onConsoleRun(section, arguments);
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

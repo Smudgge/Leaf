@@ -139,4 +139,9 @@ public class History extends BaseCommandType {
 
         return builder.toString();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

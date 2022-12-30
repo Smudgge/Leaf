@@ -82,4 +82,9 @@ public class Report extends BaseCommandType {
 
         return new CommandStatus();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

@@ -12,13 +12,6 @@ import com.github.smuddgge.leaf.inventorys.FriendListInventory;
 public class Friends extends BaseCommandType {
 
     @Override
-    public void loadSubcommands() {
-        this.addSubCommandType(new List());
-        this.addSubCommandType(new Request());
-        this.addSubCommandType(new Requests());
-    }
-
-    @Override
     public String getName() {
         return "friends";
     }
@@ -46,5 +39,12 @@ public class Friends extends BaseCommandType {
         friendListInventory.loadAndOpen(user);
 
         return new CommandStatus();
+    }
+
+    @Override
+    public void loadSubCommands() {
+        this.addSubCommandType(new List());
+        this.addSubCommandType(new Request());
+        this.addSubCommandType(new Requests());
     }
 }

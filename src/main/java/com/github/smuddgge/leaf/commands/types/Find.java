@@ -78,4 +78,9 @@ public class Find extends BaseCommandType {
 
         return new CommandStatus();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

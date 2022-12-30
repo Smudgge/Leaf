@@ -64,4 +64,9 @@ public class Reply extends BaseCommandType {
 
         return new CommandStatus();
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

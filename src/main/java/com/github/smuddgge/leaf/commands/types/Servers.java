@@ -78,4 +78,9 @@ public class Servers extends BaseCommandType {
 
         return builder.toString();
     }
+
+    @Override
+    public void loadSubCommands() {
+        
+    }
 }

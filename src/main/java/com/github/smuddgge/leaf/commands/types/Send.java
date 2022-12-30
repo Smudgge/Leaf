@@ -155,4 +155,9 @@ public class Send extends BaseCommandType {
 
         return amount;
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }

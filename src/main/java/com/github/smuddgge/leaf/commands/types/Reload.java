@@ -72,4 +72,9 @@ public class Reload extends BaseCommandType {
 
         MessageManager.log("&f&lReloaded successfully");
     }
+
+    @Override
+    public void loadSubCommands() {
+
+    }
 }
