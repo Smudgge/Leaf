@@ -12,12 +12,14 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
+import dev.simplix.protocolize.api.item.BaseItemStack;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 import net.querz.nbt.tag.CompoundTag;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 
 public class FriendRequestInventory extends InventoryInterface {
@@ -99,6 +101,12 @@ public class FriendRequestInventory extends InventoryInterface {
                         this.section.getString("sent", "{message} You are now friends with &f<name>"),
                         null, user
                 ));
+
+                for (Map.Entry<Integer, BaseItemStack> entry : this.inventory.items().entrySet()) {
+                    this.inventory.removeItem(entry.getKey());
+                }
+
+                this.load(user);
             });
 
             index++;

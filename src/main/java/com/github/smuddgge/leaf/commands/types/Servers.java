@@ -81,6 +81,6 @@ public class Servers extends BaseCommandType {
 
     @Override
     public void loadSubCommands() {
-        
+
     }
 }

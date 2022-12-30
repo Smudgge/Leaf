@@ -56,6 +56,7 @@ public class FriendRequestManager {
         friendRecord.uuid = UUID.randomUUID().toString();
         friendRecord.timeStampCreated = String.valueOf(System.currentTimeMillis());
         friendRecord.dateCreated = DateAndTime.getNow();
+        friendRecord.staredBoolean = "false";
         friendRecord.toggleProxyJoin = "false";
         friendRecord.toggleProxyLeave = "false";
         friendRecord.toggleServerChange = "false";
@@ -69,6 +70,7 @@ public class FriendRequestManager {
         friendRecord2.uuid = UUID.randomUUID().toString();
         friendRecord2.timeStampCreated = friendRecord.timeStampCreated;
         friendRecord2.dateCreated = friendRecord.dateCreated;
+        friendRecord2.staredBoolean = "false";
         friendRecord2.toggleProxyJoin = "false";
         friendRecord2.toggleProxyLeave = "false";
         friendRecord2.toggleServerChange = "false";

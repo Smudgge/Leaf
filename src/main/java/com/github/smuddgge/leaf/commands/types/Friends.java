@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.commands.types;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
+import com.github.smuddgge.leaf.commands.subtypes.friends.List;
 import com.github.smuddgge.leaf.commands.subtypes.friends.Request;
 import com.github.smuddgge.leaf.commands.subtypes.friends.Requests;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;

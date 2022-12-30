@@ -106,6 +106,8 @@ public class CommandSuggestions {
      * @param suggestions Suggestions to combine
      */
     public void combineSubType(CommandSuggestions suggestions) {
+        if (suggestions == null) return;
+
         int index = 1;
         for (List<String> list : suggestions.get()) {
             if (this.data.size() >= index + 1) {

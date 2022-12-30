@@ -20,6 +20,9 @@ public class FriendRecord extends Record {
     public String dateCreated;
 
     @FieldAnnotation
+    public String staredBoolean;
+
+    @FieldAnnotation
     public String friendNameFormatted;
 
     @FieldAnnotation
@@ -44,4 +47,13 @@ public class FriendRecord extends Record {
     @FieldAnnotation(fieldKeyType = FieldKeyType.FOREIGN)
     @ForeignKey(tableReferenceName = "Player", tableReferenceValue = "uuid")
     public String friendPlayerUuid;
+
+    /**
+     * Used to get if this friend is stared.
+     *
+     * @return True if stared.
+     */
+    public boolean isStared() {
+        return Boolean.parseBoolean(this.staredBoolean);
+    }
 }

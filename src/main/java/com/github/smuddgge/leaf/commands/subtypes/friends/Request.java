@@ -56,7 +56,7 @@ public class Request implements CommandType {
 
         ArrayList<Record> playerResults = playerTable.getRecord("name", playerNameToRequest);
         if (playerResults.size() == 0) {
-            section.getSection("request").getString("not_found", "{error_colour}Player has never played on this server.");
+            user.sendMessage(section.getSection("request").getString("not_found", "{error_colour}Player has never played on this server."));
             return new CommandStatus();
         }
 
