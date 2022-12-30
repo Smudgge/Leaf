@@ -8,6 +8,20 @@ import java.util.ArrayList;
 public interface Table {
 
     /**
+     * Used to get the name of the table
+     *
+     * @return The name of the table
+     */
+    String getName();
+
+    /**
+     * Used to get the fields the table has
+     *
+     * @return List of table fields
+     */
+    ArrayList<Field> getFields();
+
+    /**
      * Used to get the fields that are a specific
      * key type in the table.
      *
@@ -23,20 +37,6 @@ public interface Table {
 
         return fields;
     }
-
-    /**
-     * Used to get the name of the table
-     *
-     * @return The name of the table
-     */
-    String getName();
-
-    /**
-     * Used to get the fields the table has
-     *
-     * @return List of table fields
-     */
-    ArrayList<Field> getFields();
 
     /**
      * Used to get records from the database that
