@@ -1,14 +1,13 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents the tab suggestions for a command.
@@ -42,7 +41,7 @@ public class CommandSuggestions {
     /**
      * Append something to the first tab item.
      *
-     * @param string The string
+     * @param string The string.
      */
     public void appendBase(String string) {
         if (this.data.isEmpty()) {
@@ -50,6 +49,19 @@ public class CommandSuggestions {
         }
 
         this.data.get(0).add(string);
+    }
+
+    /**
+     * Append a list of suggestions to the first tab item.
+     *
+     * @param strings A list of strings.
+     */
+    public void appendBase(List<String> strings) {
+        if (this.data.isEmpty()) {
+            this.data.add(strings);
+        }
+
+        this.data.get(0).addAll(strings);
     }
 
     /**
@@ -118,5 +130,33 @@ public class CommandSuggestions {
 
             index++;
         }
+    }
+
+    public void appendSubCommandTypes(List<CommandType> subCommandTypes, ConfigurationSection section, String[] arguments, User user) {
+        for (CommandType commandType : subCommandTypes) {
+
+            ConfigurationSection commandSection = section.getSection(commandType.getName());
+
+            // Get the commands name.
+            String name = commandSection.getString("name", commandType.getName());
+
+            // Add all the aliases.
+            List<String> commandNames = new ArrayList<>(commandSection.getListString("aliases", new ArrayList<>()));
+
+            // Add the commands main name.
+            commandNames.add(name);
+
+            // Add the command names to the base.
+            this.appendBase(commandNames);
+
+            if (arguments.length == 0) continue;
+
+            // If the first argument references this command, add the sub commands suggestions.
+            for (String commandName : commandNames) {
+                if (!commandName.toLowerCase(Locale.ROOT).equals(arguments[0].toLowerCase(Locale.ROOT))) continue;
+                this.combineSubType(commandType.getSuggestions(user));
+            }
+        }
+
     }
 }

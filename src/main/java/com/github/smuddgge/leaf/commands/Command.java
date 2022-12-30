@@ -172,26 +172,29 @@ public class Command implements SimpleCommand {
 
         if (source instanceof Player) {
             User user = new User((Player) source);
+
+            // Run the command as a player.
             CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
 
             if (status.hasIncorrectArguments()) {
                 user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
                         .replace("[name]", this.getName()));
             }
-
             if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
             if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
+            if (status.hasPlayerCommand()) user.sendMessage(ConfigMessages.getPlayerCommand());
 
             return;
         }
 
+
+        // Run the command in console.
         CommandStatus status = this.onConsoleRun(invocation.arguments());
 
         if (status.hasIncorrectArguments()) {
             MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
                     .replace("[name]", this.getName()));
         }
-
         if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
         if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
         if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
@@ -210,57 +213,51 @@ public class Command implements SimpleCommand {
     public CompletableFuture<List<String>> suggestAsync(final Invocation invocation) {
         CommandSource source = invocation.source();
 
-        if (source instanceof Player) {
+        // If the command runner is not a player return empty suggestions.
+        if (!(source instanceof Player)) return CompletableFuture.completedFuture(List.of());
 
-            int index = invocation.arguments().length - 1;
-            if (index == -1) index = 0;
+        // Get the user
+        User user = new User((Player) source);
 
-            CommandSuggestions suggestions = this.getSuggestions(new User((Player) source));
-            if (suggestions == null) suggestions = new CommandSuggestions();
+        // Get the argument index. Example: [0, 1, 2...]
+        int index = invocation.arguments().length - 1;
+        if (index == -1) index = 0;
 
-            if (!this.commandType.getSubCommandTypes().isEmpty()) {
-                for (CommandType commandType : this.commandType.getSubCommandTypes()) {
-                    suggestions.appendBase(commandType.getName());
-                    String name = this.getSection().getSection(commandType.getName()).getString("name", commandType.getName());
-                    List<String> aliases = this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>());
+        // Get this commands suggestions.
+        CommandSuggestions suggestions = this.getSuggestions(new User((Player) source));
+        if (suggestions == null) suggestions = new CommandSuggestions();
 
-                    suggestions.appendBase(name);
-                    for (String temp : aliases) {
-                        suggestions.appendBase(temp);
-                    }
+        // Add sub command types.
+        suggestions.appendSubCommandTypes(this.commandType.getSubCommandTypes(), this.getSection(), invocation.arguments(), user);
 
-                    if (index == 0) continue;
+        // Check if there are no suggestions.
+        if (suggestions.get() == null) return CompletableFuture.completedFuture(List.of());
+        if (suggestions.get().isEmpty()) return CompletableFuture.completedFuture(List.of());
+        if (suggestions.get().size() <= index) return CompletableFuture.completedFuture(List.of());
 
-                    if (Objects.equals(invocation.arguments()[0].toLowerCase(Locale.ROOT), commandType.getName().toLowerCase(Locale.ROOT))) {
-                        suggestions.combineSubType(commandType.getSuggestions(new User((Player) source)));
-                    }
-                }
-            }
+        // Get the current suggestions as a list.
+        List<String> currentSuggestions = suggestions.get().get(index);
+        if (currentSuggestions == null) return CompletableFuture.completedFuture(List.of());
 
-            if (suggestions.get() == null) return CompletableFuture.completedFuture(List.of());
-            if (suggestions.get().isEmpty()) return CompletableFuture.completedFuture(List.of());
-            if (suggestions.get().size() <= index) return CompletableFuture.completedFuture(List.of());
-
-            List<String> list = suggestions.get().get(index);
-
-            if (list == null) return CompletableFuture.completedFuture(List.of());
-
-            List<String> parsedList = new ArrayList<>();
-
-            String argument = "";
-            if (!(invocation.arguments().length - 1 < 0)) {
-                argument = invocation.arguments()[invocation.arguments().length - 1].trim();
-            }
-
-            for (String item : list) {
-                if (argument.equals("") || item.toLowerCase(Locale.ROOT).contains(argument.toLowerCase(Locale.ROOT)))
-                    parsedList.add(item);
-            }
-
-            return CompletableFuture.completedFuture(parsedList);
-
+        // If there are no arguments.
+        if (invocation.arguments().length  == 0) {
+            return CompletableFuture.completedFuture(currentSuggestions);
         }
 
-        return CompletableFuture.completedFuture(List.of());
+        // Get the current argument.
+        String currentArgument = invocation.arguments()[index].trim();
+
+        if (currentArgument.equals("")) {
+            return CompletableFuture.completedFuture(currentSuggestions);
+        }
+
+        // Add items that contain the current argument to a list
+        List<String> parsedList = new ArrayList<>();
+        for (String item : currentSuggestions) {
+            if (!item.toLowerCase(Locale.ROOT).contains(currentArgument)) continue;
+            parsedList.add(item);
+        }
+
+        return CompletableFuture.completedFuture(parsedList);
     }
 }
