@@ -17,7 +17,7 @@ public class BottomSlotType implements SlotType {
             case GENERIC_9X2 -> new int[]{9, 10, 11, 12, 13, 14, 15, 16, 17};
             case GENERIC_9X3 -> new int[]{18, 19, 20, 21, 22, 23, 24, 25, 26};
             case GENERIC_9X4 -> new int[]{27, 28, 29, 30, 31, 32, 33, 34, 35};
-            case GENERIC_9X5 -> new int[]{36, 37 ,38, 39, 40, 41, 42, 43, 44};
+            case GENERIC_9X5 -> new int[]{36, 37, 38, 39, 40, 41, 42, 43, 44};
 
             case LOOM -> new int[]{2};
 

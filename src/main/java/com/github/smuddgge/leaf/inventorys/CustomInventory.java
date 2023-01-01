@@ -3,14 +3,24 @@ package com.github.smuddgge.leaf.inventorys;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 
+/**
+ * Represents a custom inventory
+ */
 public class CustomInventory extends InventoryInterface {
 
+    protected final ConfigurationSection section;
+
     /**
-     * The parent configuration section to the inventory.
+     * Used to create a custom inventory.
+     *
+     * @param section The parent configuration section to the inventory.
      */
-    private ConfigurationSection section;
+    public CustomInventory(ConfigurationSection section) {
+        this.section = section;
+    }
 
     @Override
     public InventoryType getInventoryType() {
@@ -31,11 +41,12 @@ public class CustomInventory extends InventoryInterface {
     protected void load(User user) {
         if (this.getInventorySection().getSection("content") == null) return;
 
-        for (String slot : this.getInventorySection().getSection("content").getKeys()) {
-            InventoryItem inventoryItem = new InventoryItem(this.getInventorySection().getSection("content").getSection(slot), slot);
+        for (String slotID : this.getInventorySection().getSection("content").getKeys()) {
+            InventoryItem inventoryItem = new InventoryItem(this.getInventorySection().getSection("content").getSection(slotID), slotID, user);
+            ItemStack item = inventoryItem.getItemStack();
 
-            for (int slots : inventoryItem.getSlots(this.getInventoryType())) {
-
+            for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
+                this.inventory.item(slot, item);
             }
         }
     }

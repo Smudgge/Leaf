@@ -11,6 +11,7 @@ import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.events.EventManager;
+import com.github.smuddgge.leaf.inventorys.SlotManager;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -34,7 +35,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "1.2.4-DEV",
+        version = "1.3.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -87,6 +88,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Friends());
         Leaf.commandHandler.addType(new History());
         Leaf.commandHandler.addType(new Info());
+        Leaf.commandHandler.addType(new Inventory());
         Leaf.commandHandler.addType(new List());
         Leaf.commandHandler.addType(new Message());
         Leaf.commandHandler.addType(new Reload());
@@ -96,6 +98,9 @@ public class Leaf {
         Leaf.commandHandler.addType(new Servers());
 
         Leaf.reloadCommands();
+
+        // Load slot types
+        SlotManager.setup();
     }
 
     @Subscribe
