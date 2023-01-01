@@ -5,7 +5,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.FriendListInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 
 public class List implements CommandType {
 

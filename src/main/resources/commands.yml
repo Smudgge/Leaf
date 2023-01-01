@@ -155,6 +155,23 @@ commands:
     # %page_amount% : The amount of pages they can see.Trfor (int i = 0; i< n;i++){
     footer: '&8&m&l---------------------'
 
+  inventory:
+    type: "inventory"
+    enabled: true
+    name: "menu"
+    inventory:
+      size: "GENERIC_9X6"
+      title: "&8&lMenu"
+      content:
+        "top,bottom":
+          material: "LIME_STAINED_GLASS_PANE"
+        "center0":
+          skull: "<player>"
+          name: "&a&l<player>"
+          lore:
+            - "&7You are amazing!"
+
+
   friends:
     type: "friends"
     enabled: true

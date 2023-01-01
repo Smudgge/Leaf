@@ -12,7 +12,6 @@ import com.velocitypowered.api.proxy.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -240,7 +239,7 @@ public class Command implements SimpleCommand {
         if (currentSuggestions == null) return CompletableFuture.completedFuture(List.of());
 
         // If there are no arguments.
-        if (invocation.arguments().length  == 0) {
+        if (invocation.arguments().length == 0) {
             return CompletableFuture.completedFuture(currentSuggestions);
         }
 

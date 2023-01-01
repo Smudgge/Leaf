@@ -1,4 +1,4 @@
-package com.github.smuddgge.leaf.inventorys;
+package com.github.smuddgge.leaf.inventorys.inventorys;
 
 import com.github.smuddgge.leaf.FriendRequestManager;
 import com.github.smuddgge.leaf.Leaf;
@@ -10,6 +10,7 @@ import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendRequestTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.inventorys.InventoryInterface;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.BaseItemStack;

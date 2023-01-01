@@ -7,7 +7,10 @@ import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Represents the tab suggestions for a command.

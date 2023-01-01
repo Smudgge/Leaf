@@ -1,4 +1,4 @@
-package com.github.smuddgge.leaf.inventorys;
+package com.github.smuddgge.leaf.inventorys.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
@@ -11,6 +11,7 @@ import com.github.smuddgge.leaf.database.tables.FriendMailTable;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.inventorys.InventoryInterface;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;

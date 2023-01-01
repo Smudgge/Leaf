@@ -8,7 +8,7 @@ import com.github.smuddgge.leaf.commands.subtypes.friends.Request;
 import com.github.smuddgge.leaf.commands.subtypes.friends.Requests;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.FriendListInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 
 public class Friends extends BaseCommandType {
 
