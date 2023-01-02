@@ -7,7 +7,7 @@ public class CenterSlotType implements SlotType {
 
     @Override
     public boolean match(String slot) {
-        return slot.matches("^center");
+        return slot.matches("^center[0-9]$");
     }
 
     @Override
@@ -16,7 +16,7 @@ public class CenterSlotType implements SlotType {
 
         try {
             int col = Integer.parseInt(argument);
-            return new int[]{4 + (col * 9) - 1};
+            return new int[]{4 + (col * 9)};
 
         } catch (NumberFormatException exception) {
             MessageManager.warn("Invalid center slot type : &f" + slot);

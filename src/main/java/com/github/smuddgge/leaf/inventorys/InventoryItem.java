@@ -46,7 +46,7 @@ public class InventoryItem {
 
         for (String argument : this.slot.split(",")) {
             // Check if it's an integer
-            if (argument.trim().matches("^[0-9]$")) {
+            if (argument.trim().matches("^[0-9]+$")) {
                 slots.add(Integer.parseInt(argument.trim()));
             }
 

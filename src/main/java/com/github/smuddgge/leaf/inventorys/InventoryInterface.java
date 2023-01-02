@@ -14,17 +14,9 @@ import java.util.HashMap;
  */
 public abstract class InventoryInterface {
 
-    protected final Inventory inventory;
+    protected Inventory inventory;
 
     private final HashMap<Integer, Runnable> actions = new HashMap<>();
-
-    /**
-     * Used to create an inventory interface.
-     */
-    public InventoryInterface() {
-        this.inventory = new Inventory(this.getInventoryType());
-        this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
-    }
 
     /**
      * Used to load the inventory and open it for the player.
@@ -33,6 +25,9 @@ public abstract class InventoryInterface {
      * @return This instance.
      */
     public InventoryInterface loadAndOpen(User user) {
+        this.inventory = new Inventory(this.getInventoryType());
+        this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
+
         this.load(user);
 
         ProtocolizePlayer player = Protocolize.playerProvider().player(user.getUniqueId());

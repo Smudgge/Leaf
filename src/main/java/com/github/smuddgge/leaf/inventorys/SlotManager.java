@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.inventorys;
 
-import com.github.smuddgge.leaf.inventorys.slots.SlotType;
+import com.github.smuddgge.leaf.inventorys.slots.*;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 
 import java.util.ArrayList;
@@ -16,7 +16,10 @@ public class SlotManager {
     private static final List<SlotType> slotTypeList = new ArrayList<>();
 
     public static void setup() {
-
+        SlotManager.slotTypeList.add(new BottomSlotType());
+        SlotManager.slotTypeList.add(new CenterSlotType());
+        SlotManager.slotTypeList.add(new RangeSlotType());
+        SlotManager.slotTypeList.add(new TopSlotType());
     }
 
     /**

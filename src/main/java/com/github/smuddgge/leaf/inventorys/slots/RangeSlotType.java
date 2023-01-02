@@ -9,7 +9,7 @@ public class RangeSlotType implements SlotType {
 
     @Override
     public boolean match(String slot) {
-        return slot.matches("^[0-9]-[0-9]$");
+        return slot.matches("^[0-9]+-[0-9]+$");
     }
 
     @Override
