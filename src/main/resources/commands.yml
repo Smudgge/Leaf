@@ -196,6 +196,31 @@ commands:
         - "&7- &f%mail_status%"
         - "&7"
         - "&7Friends since %date%"
+      # The inventory displaying the friend list.
+      inventory:
+        size: "GENERIC_9X6"
+        title: "&8&lFriends List"
+        content:
+          "top,bottom":
+            material: "LIME_STAINED_GLASS_PANE"
+          "row1,row2,row3,row4":
+            function:
+              type: "friend"
+          "45":
+            function:
+              type: "last_page"
+              always_show: false
+            name: "&a&lLast Page"
+            lore:
+              - "&7Click to go back a page"
+          "53":
+            function:
+              type: "next_page"
+              always_show: false
+            name: "&a&lNext Page"
+            lore:
+              - "&7Click to go to the next page"
+
 
     request:
       name: "request"
@@ -220,3 +245,29 @@ commands:
       # Placeholders will parse in terms of the player that accepted the friend request.
       # Message is sent to the requester.
       sent: "{message} You are now friends with &f<player>"
+      # The inventory displaying the friend requests list.
+      inventory:
+        size: "GENERIC_9X6"
+        title: "&8&lFriend Requests"
+        content:
+          "top,bottom":
+            material: "LIME_STAINED_GLASS_PANE"
+          "row1,row2,row3,row4":
+            function:
+              type: "friend"
+          "45":
+            function:
+              type: "last_page"
+              always_show: false
+            name: "&a&lLast Page"
+            material: YELLOW_STAINED_GLASS_PANE
+            lore:
+              - "&7Click to go back a page"
+          "53":
+            function:
+              type: "next_page"
+              always_show: false
+            name: "&a&lNext Page"
+            material: YELLOW_STAINED_GLASS_PANE
+            lore:
+              - "&7Click to go to the next page"
