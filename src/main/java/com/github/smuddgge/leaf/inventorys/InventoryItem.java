@@ -117,4 +117,22 @@ public class InventoryItem {
 
         return item;
     }
+
+    /**
+     * Used to check if the inventory item has a command type function.
+     *
+     * @return True if the item has a command type function.
+     */
+    public boolean isFunction() {
+        return this.section.getKeys().contains("function");
+    }
+
+    /**
+     * Used to get the function configuration section.
+     *
+     * @return The requested configuration section.
+     */
+    public ConfigurationSection getFunctionSection() {
+        return this.section.getSection("function");
+    }
 }

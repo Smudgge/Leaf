@@ -6,6 +6,8 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
+import com.github.smuddgge.leaf.inventorys.InventoryItem;
+import dev.simplix.protocolize.api.item.ItemStack;
 
 public class Inventory extends BaseCommandType {
 
@@ -37,7 +39,13 @@ public class Inventory extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        CustomInventory customInventory = new CustomInventory(section);
+        CustomInventory customInventory = new CustomInventory(section) {
+            @Override
+            public ItemStack onLoadItemWithFunction(InventoryItem inventoryItem) {
+                return inventoryItem.getItemStack();
+            }
+        };
+
         customInventory.loadAndOpen(user);
 
         return new CommandStatus();

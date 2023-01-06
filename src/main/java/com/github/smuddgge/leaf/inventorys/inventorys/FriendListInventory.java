@@ -1,99 +1,58 @@
 package com.github.smuddgge.leaf.inventorys.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
-import com.github.smuddgge.leaf.database.records.FriendMailRecord;
-import com.github.smuddgge.leaf.database.records.FriendRecord;
-import com.github.smuddgge.leaf.database.records.PlayerRecord;
-import com.github.smuddgge.leaf.database.tables.FriendMailTable;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
-import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.InventoryInterface;
+import com.github.smuddgge.leaf.inventorys.CustomInventory;
+import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import dev.simplix.protocolize.api.item.ItemStack;
-import dev.simplix.protocolize.data.ItemType;
-import dev.simplix.protocolize.data.inventory.InventoryType;
-import net.querz.nbt.tag.CompoundTag;
 
 import java.util.ArrayList;
 
-public class FriendListInventory extends InventoryInterface {
+public class FriendListInventory extends CustomInventory {
 
-    private final ConfigurationSection section;
+    private User user;
+    private int page;
+    private ArrayList<Record> friendRecords;
 
     /**
-     * Used to create an inventory interface.
+     * Used to create a {@link FriendListInventory}
      *
-     * @param section The list configuration section
+     * @param section The parent configuration section to the inventory.
+     * @param user The friend list will be in context of this user.
      */
-    public FriendListInventory(ConfigurationSection section) {
-        this.section = section;
-    }
+    public FriendListInventory(ConfigurationSection section, User user, int page) {
+        super(section);
 
-    @Override
-    public InventoryType getInventoryType() {
-        return InventoryType.GENERIC_9X6;
-    }
-
-    @Override
-    public String getTitle() {
-        return "&8&lFriend List";
-    }
-
-    @Override
-    protected void load(User user) {
         if (Leaf.getDatabase().isDisabled()) return;
 
+        this.user = user;
+        this.page = page;
+
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        FriendMailTable friendMailTable = (FriendMailTable) Leaf.getDatabase().getTable("FriendMail");
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+        this.friendRecords = friendTable.getRecord("playerUuid", this.user.getUniqueId());
+    }
 
-        ArrayList<Record> friendRecords = friendTable.getRecord("playerUuid", user.getUniqueId());
+    @Override
+    public ItemStack onLoadItemWithFunction(InventoryItem inventoryItem) {
+        if (Leaf.getDatabase().isDisabled()) return inventoryItem.getItemStack();
 
-        int index = 0;
-        for (Record record : friendRecords) {
-            if (index >= 54) return;
-
-            FriendRecord friendRecord = (FriendRecord) record;
-            PlayerRecord friendPlayerRecord = (PlayerRecord) playerTable.getRecord("uuid", friendRecord.friendPlayerUuid).get(0);
-            FriendMailRecord latestMail = friendMailTable.getLatest(user.getUniqueId().toString(), friendPlayerRecord.uuid);
-
-            if (latestMail == null) {
-                latestMail = new FriendMailRecord();
-                latestMail.message = "none";
-                latestMail.viewedBoolean = "false";
-            }
-
-            // Get NBT to set
-            CompoundTag compoundTag = new CompoundTag();
-            compoundTag.putString("SkullOwner", friendPlayerRecord.name);
-
-            // Create the item
-            ItemStack itemStack = new ItemStack(ItemType.PLAYER_HEAD);
-
-            itemStack.displayName(MessageManager.convertToLegacy(this.section.getString("displayName", "&6&l%name%")
-                    .replace("%name%", friendRecord.friendNameFormatted)
-                    .replace("%date%", friendRecord.dateCreated)
-                    .replace("%last_mail%", latestMail.message)
-                    .replace("%mail_status%", latestMail.getStatus())
-            ));
-
-            for (String item : this.section.getListString("lore")) {
-                itemStack.addToLore(MessageManager.convertToLegacy(item
-                        .replace("%name%", friendRecord.friendNameFormatted)
-                        .replace("%date%", friendRecord.dateCreated)
-                        .replace("%last_mail%", latestMail.message)
-                        .replace("%mail_status%", latestMail.getStatus())
-                ));
-            }
-
-            itemStack.nbtData(compoundTag);
-
-            this.inventory.item(index, itemStack);
-
-            index++;
+        switch (inventoryItem.getFunctionSection().getString("type")) {
+            default:
+                return onLoadPlayer(inventoryItem);
         }
+    }
+
+    /**
+     * Called when a player item is loaded.
+     *
+     * @param inventoryItem The instance of the inventory item.
+     * @return The updated item stack.
+     */
+    private ItemStack onLoadPlayer(InventoryItem inventoryItem) {
+
+        return null;
     }
 }

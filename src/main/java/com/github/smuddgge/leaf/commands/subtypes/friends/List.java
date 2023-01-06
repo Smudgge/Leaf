@@ -5,7 +5,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventoryBeta;
 
 public class List implements CommandType {
 
@@ -33,7 +33,7 @@ public class List implements CommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
         // Open friend list inventory.
-        FriendListInventory friendListInventory = new FriendListInventory(section.getSection("list"));
+        FriendListInventoryBeta friendListInventory = new FriendListInventoryBeta(section.getSection("list"));
         friendListInventory.loadAndOpen(user);
 
         return new CommandStatus();

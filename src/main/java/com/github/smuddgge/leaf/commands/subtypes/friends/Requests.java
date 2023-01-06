@@ -5,7 +5,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendRequestInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendRequestInventoryBeta;
 
 public class Requests implements CommandType {
 
@@ -32,7 +32,7 @@ public class Requests implements CommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        FriendRequestInventory friendRequestInventory = new FriendRequestInventory(section.getSection("requests"));
+        FriendRequestInventoryBeta friendRequestInventory = new FriendRequestInventoryBeta(section.getSection("requests"));
         friendRequestInventory.loadAndOpen(user);
 
         return new CommandStatus();

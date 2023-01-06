@@ -9,7 +9,7 @@ import dev.simplix.protocolize.data.inventory.InventoryType;
 /**
  * Represents a custom inventory
  */
-public class CustomInventory extends InventoryInterface {
+public abstract class CustomInventory extends InventoryInterface {
 
     protected final ConfigurationSection section;
 
@@ -21,6 +21,15 @@ public class CustomInventory extends InventoryInterface {
     public CustomInventory(ConfigurationSection section) {
         this.section = section;
     }
+
+    /**
+     * Called when an item is loaded and contains a function before adding to the inventory.
+     * A function are used as command type specific items.
+     *
+     * @param inventoryItem The instance of the inventory item.
+     * @return The item stack that will be used in the inventory instead.
+     */
+    public abstract ItemStack onLoadItemWithFunction(InventoryItem inventoryItem);
 
     @Override
     public InventoryType getInventoryType() {
@@ -44,6 +53,12 @@ public class CustomInventory extends InventoryInterface {
         for (String slotID : this.getInventorySection().getSection("content").getKeys()) {
             InventoryItem inventoryItem = new InventoryItem(this.getInventorySection().getSection("content").getSection(slotID), slotID, user);
             ItemStack item = inventoryItem.getItemStack();
+
+            if (inventoryItem.isFunction()) {
+                item = this.onLoadItemWithFunction(inventoryItem);
+            }
+
+            if (item == null) continue;
 
             for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
                 this.inventory.item(slot, item);

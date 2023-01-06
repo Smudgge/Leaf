@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
-public class FriendRequestInventory extends InventoryInterface {
+public class FriendRequestInventoryBeta extends InventoryInterface {
 
     private final ConfigurationSection section;
 
@@ -32,7 +32,7 @@ public class FriendRequestInventory extends InventoryInterface {
      *
      * @param section The list configuration section
      */
-    public FriendRequestInventory(ConfigurationSection section) {
+    public FriendRequestInventoryBeta(ConfigurationSection section) {
         this.section = section;
     }
 

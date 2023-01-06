@@ -8,7 +8,7 @@ import com.github.smuddgge.leaf.commands.subtypes.friends.Request;
 import com.github.smuddgge.leaf.commands.subtypes.friends.Requests;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventoryBeta;
 
 public class Friends extends BaseCommandType {
 
@@ -36,7 +36,7 @@ public class Friends extends BaseCommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
         // Open friend list inventory.
-        FriendListInventory friendListInventory = new FriendListInventory(section.getSection("list"));
+        FriendListInventoryBeta friendListInventory = new FriendListInventoryBeta(section.getSection("list"));
         friendListInventory.loadAndOpen(user);
 
         return new CommandStatus();

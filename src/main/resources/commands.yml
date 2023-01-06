@@ -205,7 +205,7 @@ commands:
             material: "LIME_STAINED_GLASS_PANE"
           "row1,row2,row3,row4":
             function:
-              type: "friend"
+              type: "player"
           "45":
             function:
               type: "last_page"
@@ -254,7 +254,7 @@ commands:
             material: "LIME_STAINED_GLASS_PANE"
           "row1,row2,row3,row4":
             function:
-              type: "friend"
+              type: "player"
           "45":
             function:
               type: "last_page"
