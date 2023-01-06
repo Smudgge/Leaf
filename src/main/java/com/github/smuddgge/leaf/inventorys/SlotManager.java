@@ -19,6 +19,7 @@ public class SlotManager {
         SlotManager.slotTypeList.add(new BottomSlotType());
         SlotManager.slotTypeList.add(new CenterSlotType());
         SlotManager.slotTypeList.add(new RangeSlotType());
+        SlotManager.slotTypeList.add(new RowSlotType());
         SlotManager.slotTypeList.add(new TopSlotType());
     }
 
