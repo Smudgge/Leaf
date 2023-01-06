@@ -20,7 +20,7 @@ public class Requests implements CommandType {
     }
 
     @Override
-    public CommandSuggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
         return null;
     }
 

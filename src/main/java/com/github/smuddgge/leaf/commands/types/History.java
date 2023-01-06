@@ -34,7 +34,7 @@ public class History extends BaseCommandType {
     }
 
     @Override
-    public CommandSuggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
         return new CommandSuggestions().appendDatabasePlayers();
     }
 

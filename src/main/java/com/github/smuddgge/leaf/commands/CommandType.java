@@ -22,10 +22,11 @@ public interface CommandType {
     /**
      * Used to get the tab suggestions.
      *
+     * @param section The configuration section.
      * @param user The user completing the command.
      * @return The command's argument suggestions.
      */
-    CommandSuggestions getSuggestions(User user);
+    CommandSuggestions getSuggestions(ConfigurationSection section, User user);
 
     /**
      * Executed when the command is run in the console.

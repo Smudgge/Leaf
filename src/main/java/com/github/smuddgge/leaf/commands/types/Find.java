@@ -25,8 +25,10 @@ public class Find extends BaseCommandType {
     }
 
     @Override
-    public CommandSuggestions getSuggestions(User user) {
-        return new CommandSuggestions().appendPlayers();
+    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
+        if (user.isNotVanishable()) return new CommandSuggestions().appendPlayers();
+        if (!section.getBoolean("vanishable_players", false)) return new CommandSuggestions().appendPlayers();
+        return new CommandSuggestions().appendPlayersRaw();
     }
 
     @Override
@@ -40,12 +42,6 @@ public class Find extends BaseCommandType {
         }
 
         User user = new User(Leaf.getServer().getPlayer(arguments[0]).get());
-
-        if (user.isVanished()) {
-            String notFound = section.getString("not_found");
-            MessageManager.log(notFound);
-            return new CommandStatus();
-        }
 
         String found = section.getString("found");
 
@@ -65,6 +61,15 @@ public class Find extends BaseCommandType {
         }
 
         User foundUser = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+
+        // If vanishable players can find vanishable players, and the user is vanishable
+        if (section.getBoolean("vanishable_players", false) && !user.isNotVanishable()) {
+            String found = section.getString("found");
+
+            user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
+
+            return new CommandStatus();
+        }
 
         if (foundUser.isVanished()) {
             String notFound = section.getString("not_found");

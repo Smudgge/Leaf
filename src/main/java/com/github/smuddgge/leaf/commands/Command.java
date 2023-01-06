@@ -45,11 +45,12 @@ public class Command implements SimpleCommand {
     /**
      * Used to get the tab suggestions.
      *
+     * @param section The configuration section.
      * @param user The user completing the command.
      * @return The command's argument suggestions.
      */
-    public CommandSuggestions getSuggestions(User user) {
-        return this.commandType.getSuggestions(user);
+    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
+        return this.commandType.getSuggestions(section, user);
     }
 
     /**
@@ -223,7 +224,7 @@ public class Command implements SimpleCommand {
         if (index == -1) index = 0;
 
         // Get this commands suggestions.
-        CommandSuggestions suggestions = this.getSuggestions(new User((Player) source));
+        CommandSuggestions suggestions = this.getSuggestions(this.getSection(), new User((Player) source));
         if (suggestions == null) suggestions = new CommandSuggestions();
 
         // Add sub command types.

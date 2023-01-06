@@ -27,8 +27,10 @@ public class Message extends BaseCommandType {
     }
 
     @Override
-    public CommandSuggestions getSuggestions(User user) {
-        return new CommandSuggestions().appendPlayers();
+    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
+        if (user.isNotVanishable()) return new CommandSuggestions().appendPlayers();
+        if (!section.getBoolean("vanishable_players", false)) return new CommandSuggestions().appendPlayers();
+        return new CommandSuggestions().appendPlayersRaw();
     }
 
     @Override
@@ -43,12 +45,6 @@ public class Message extends BaseCommandType {
 
         String message = String.join(" ", arguments).substring(arguments[0].length());
         User user = new User(Leaf.getServer().getPlayer(arguments[0]).get());
-
-        if (user.isVanished()) {
-            String notFound = section.getString("not_found", "{error_colour}Player is not online.");
-            MessageManager.log(notFound);
-            return new CommandStatus();
-        }
 
         // Send messages
         user.sendMessage(PlaceholderManager.parse(section.getString("from")
@@ -78,6 +74,20 @@ public class Message extends BaseCommandType {
 
         String message = String.join(" ", arguments).substring(arguments[0].length()).trim();
         User recipient = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+
+        if (section.getBoolean("vanishable_players", false) && !user.isNotVanishable()) {
+            // Send messages
+            recipient.sendMessage(PlaceholderManager.parse(section.getString("from")
+                    .replace("%message%", message), null, user));
+
+            user.sendMessage(PlaceholderManager.parse(section.getString("to")
+                    .replace("%message%", message), null, recipient));
+
+            // Log message interaction
+            MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());
+
+            return new CommandStatus();
+        }
 
         if (recipient.isVanished()) {
             String notFound = section.getString("not_found", "{error_colour}Player is not online.");

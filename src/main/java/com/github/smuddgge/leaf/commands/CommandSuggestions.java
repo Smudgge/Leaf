@@ -97,6 +97,22 @@ public class CommandSuggestions {
     }
 
     /**
+     * Used to append every player on the server.
+     * Even if the player is in vanish.
+     * @return This instance.
+     */
+    public CommandSuggestions appendPlayersRaw() {
+        List<String> players = new ArrayList<>();
+
+        for (Player player : Leaf.getServer().getAllPlayers()) {
+            players.add(player.getGameProfile().getName());
+        }
+
+        this.data.add(players);
+        return this;
+    }
+
+    /**
      * Used to append all the players that are registered in the database.
      *
      * @return This instance
@@ -160,6 +176,5 @@ public class CommandSuggestions {
                 this.combineSubType(commandType.getSuggestions(user));
             }
         }
-
     }
 }

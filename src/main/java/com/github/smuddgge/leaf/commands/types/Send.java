@@ -33,7 +33,7 @@ public class Send extends BaseCommandType {
     }
 
     @Override
-    public CommandSuggestions getSuggestions(User user) {
+    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
         List<String> servers = new ArrayList<>();
         for (RegisteredServer server : Leaf.getServer().getAllServers()) {
             servers.add(server.getServerInfo().getName());

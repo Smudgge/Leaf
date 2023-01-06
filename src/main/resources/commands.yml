@@ -44,6 +44,8 @@ commands:
     not_found: "{error_colour}Player could not be found."
     # Placeholders will parse in terms of the player.
     found: "{message} Player was found on {server_formatted}"
+    # Let vanishable players find vanishable players?
+    vanishable_players: false
 
   info:
     # I'd love if you kept this command on your server <3
@@ -126,6 +128,8 @@ commands:
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+    # Let vanishable players message other vanishable players?
+    vanishable_players: false
 
   reply:
     type: "reply"
