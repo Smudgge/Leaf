@@ -82,6 +82,7 @@ commands:
     name: "leafreload"
     permission: "leaf.reload"
     message: "{message} Reloaded all configs! <3"
+    error: "{error_colour}An error occurred and the reloading was aborted!"
 
   report:
     type: "report"
@@ -192,14 +193,9 @@ commands:
         skull: "%name%"
         name: "&6&l%name%"
         lore:
-          - "&8&m&l------------"
-          - "&7Last Mail Sent"
-          - "&f%last_mail%"
-          - "&7- &f%mail_status%"
-          - "&7"
           - "&7Friends since %date%"
       no_player:
-        material: LIGHT_GRAY_STAINED_GLASS
+        material: LIGHT_GRAY_STAINED_GLASS_PANE
       # The inventory displaying the friend list.
       inventory:
         size: GENERIC_9X6
@@ -236,10 +232,10 @@ commands:
       # Placeholders will parse in terms of the other player.
       sent: "{message} You have sent a friend request to &f<player>"
       # Placeholders will parse in terms of the player that sent the request.
-      from: "{message} You have received a friend request from &f<player>. &7To accept run the command &e/friends requests"
+      from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
 
     requests:
-      name: "requests"
+      name: "accept"
       enabled: true
       # Placeholders will parse in terms of the player that sent the request.
       # Message is sent to the friend accepter.
@@ -249,11 +245,12 @@ commands:
       sent: "{message} You are now friends with &f<player>"
       # %name% : Formatted name of the player that is requesting.
       player:
+        skull: "%name%"
         name: "&6&l%name%"
         lore:
           - "&7Click to &aaccept &7friend request."
       no_player:
-        material: LIGHT_GRAY_STAINED_GLASS
+        material: LIGHT_GRAY_STAINED_GLASS_PANE
       # The inventory displaying the friend requests list.
       inventory:
         size: GENERIC_9X6

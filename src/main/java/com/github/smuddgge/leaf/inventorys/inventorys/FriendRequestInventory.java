@@ -14,6 +14,7 @@ import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
+import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
 
@@ -59,7 +60,6 @@ public class FriendRequestInventory extends CustomInventory {
     }
 
     private ItemStack onLoadPlayer(InventoryItem inventoryItem) {
-        ItemStack item = this.appendPlayerItemStack(inventoryItem);
         Map<Integer, String> mockInventory = this.getInventoryOf("player");
 
         int requestsPerPage = this.getInventoryOf("player").size();
@@ -68,36 +68,41 @@ public class FriendRequestInventory extends CustomInventory {
         for (Integer slot : mockInventory.keySet()) {
 
             // Check if the record exists.
-            if (this.requestRecords.size() - 1 < recordIndex) return null;
+            if (this.requestRecords.size() - 1 < recordIndex) {
+                ItemStack item = this.appendNoPlayerItemStack(inventoryItem);
+                this.inventory.item(slot, item);
+                this.addAction(slot, () -> {});
+            } else {
+                FriendRequestRecord requestRecord = (FriendRequestRecord) this.requestRecords.get(recordIndex);
+                PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+                String acceptedPlayerName = playerTable.getPlayer(requestRecord.playerFromUuid).name;
 
-            FriendRequestRecord requestRecord = (FriendRequestRecord) this.requestRecords.get(recordIndex);
-            PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-            String acceptedPlayerName = playerTable.getPlayer(requestRecord.playerFromUuid).name;
+                // Add the item to the inventory.
+                ItemStack item = this.appendPlayerItemStack(inventoryItem);
+                this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));
 
-            // Add the item to the inventory.
-            this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));
+                this.addAction(slot, () -> {
+                    FriendRequestManager.acceptRequest(requestRecord);
 
-            this.addAction(slot, () -> {
-                FriendRequestManager.acceptRequest(requestRecord);
+                    user.sendMessage(PlaceholderManager.parse(
+                            this.section.getString("from", "{message} You are now friends with &f<name>"),
+                            null, new User(null, acceptedPlayerName)
+                    ));
 
-                user.sendMessage(PlaceholderManager.parse(
-                        this.section.getString("from", "{message} You are now friends with &f<name>"),
-                        null, new User(null, acceptedPlayerName)
-                ));
+                    Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(acceptedPlayerName);
+                    if (optionalPlayer.isEmpty()) return;
 
-                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(acceptedPlayerName);
-                if (optionalPlayer.isEmpty()) return;
+                    User userSentTo = new User(optionalPlayer.get());
 
-                User userSentTo = new User(optionalPlayer.get());
+                    userSentTo.sendMessage(PlaceholderManager.parse(
+                            this.section.getString("sent", "{message} You are now friends with &f<name>"),
+                            null, user
+                    ));
 
-                userSentTo.sendMessage(PlaceholderManager.parse(
-                        this.section.getString("sent", "{message} You are now friends with &f<name>"),
-                        null, user
-                ));
-
-                this.requestRecords.remove(requestRecord);
-                this.load();
-            });
+                    this.requestRecords.remove(requestRecord);
+                    this.load();
+                });
+            }
 
             // Increase record index.
             recordIndex++;
@@ -118,6 +123,17 @@ public class FriendRequestInventory extends CustomInventory {
     }
 
     /**
+     * Used to get the no player item stack.
+     *
+     * @param inventoryItem The current inventory item.
+     * @return The requested item stack.
+     */
+    private ItemStack appendNoPlayerItemStack(InventoryItem inventoryItem) {
+        if (!this.section.getKeys().contains("no_player")) return inventoryItem.getItemStack();
+        return inventoryItem.append(this.section.getSection("no_player")).getItemStack();
+    }
+
+    /**
      * Used to parse placeholders on an item for a request record.
      *
      * @param item   The item to parse.
@@ -128,21 +144,25 @@ public class FriendRequestInventory extends CustomInventory {
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
         String name = playerTable.getPlayer(record.playerFromUuid).name;
 
-        item.displayName(MessageManager.convertToLegacy(item.displayName(true))
-                .replace("%name%", name));
+        String tempName = item.displayName(true);
+        item.displayName(MessageManager.convert(tempName
+                .replace("%name%", name)));
 
-        List<String> lore = new ArrayList<>();
-        for (Object line : item.lore()) {
-            lore.add(MessageManager.convertToLegacy((String) line)
-                    .replace("%name%", name));
+        List<Component> lore = new ArrayList<>();
+        for (Object line : item.lore(true)) {
+            String tempLine = (String) line;
+            lore.add(MessageManager.convert(tempLine
+                    .replace("%name%", name)));
         }
-        item.lore(lore, true);
+        item.lore(lore, false);
 
         CompoundTag compoundTag = item.nbtData();
         CompoundTag toAdd = new CompoundTag();
         for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {
-            toAdd.putString(tag.getKey(), tag.getValue().toString()
-                    .replace("%name%", name));
+            toAdd.putString(tag.getKey(), tag.getValue().valueToString()
+                    .replace("%name%", name)
+                    .replace("\"", "")
+                    .replace("\\", ""));
         }
         item.nbtData(toAdd);
 

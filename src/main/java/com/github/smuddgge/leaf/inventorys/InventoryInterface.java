@@ -17,7 +17,7 @@ public abstract class InventoryInterface {
     protected Inventory inventory;
     protected User user;
 
-    private final HashMap<Integer, Runnable> actions = new HashMap<>();
+    private HashMap<Integer, Runnable> actions = new HashMap<>();
 
     /**
      * Used to create an inventory interface.
@@ -78,5 +78,12 @@ public abstract class InventoryInterface {
      */
     public void addAction(int index, Runnable runnable) {
         this.actions.put(index, runnable);
+    }
+
+    /**
+     * Used to reset the actions the inventory contains.
+     */
+    protected void resetActions() {
+        this.actions = new HashMap<>();
     }
 }

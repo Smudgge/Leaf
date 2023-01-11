@@ -62,6 +62,8 @@ public abstract class CustomInventory extends InventoryInterface {
     protected void load() {
         if (this.getInventorySection().getSection("content") == null) return;
 
+        this.resetActions();
+
         for (InventoryItem inventoryItem : this.getInventoryItems()) {
             ItemStack item = inventoryItem.getItemStack();
 
@@ -142,7 +144,12 @@ public abstract class CustomInventory extends InventoryInterface {
         int recordIndex = (perPage * page) - perPage - 1;
 
         if (recordsSize - 1 < recordIndex) {
-            if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) return null;
+            if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) {
+                for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
+                    this.addAction(slot, () -> {});
+                }
+                return null;
+            }
         } else {
             for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
                 this.addAction(slot, () -> {
@@ -163,7 +170,12 @@ public abstract class CustomInventory extends InventoryInterface {
      */
     protected ItemStack onLastPage(InventoryItem inventoryItem) {
         if (page <= 1) {
-            if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) return null;
+            if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) {
+                for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
+                    this.addAction(slot, () -> {});
+                }
+                return null;
+            }
         } else {
             for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
                 this.addAction(slot, () -> {

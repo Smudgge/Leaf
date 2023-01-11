@@ -44,7 +44,10 @@ public class Reload extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        this.reloadAll();
+        if (!this.reloadAll()) {
+            user.sendMessage(section.getString("error", "{error_colour}An error occurred and the reloading was aborted!"));
+            return new CommandStatus();
+        }
 
         String message = section.getString("message", "{message} Reloaded all configs! <3");
 
@@ -56,21 +59,29 @@ public class Reload extends BaseCommandType {
     /**
      * Used to reload the plugin.
      */
-    private void reloadAll() {
+    private boolean reloadAll() {
         MessageManager.log("&f&lReloading");
+
+        try {
+            // Reload configs
+            ConfigCommands.reload();
+            ConfigMessages.reload();
+            ConfigDatabase.reload();
+
+        } catch (Exception exception) {
+            MessageManager.warn("Error occurred when reloading configs and aborted the reload.");
+            exception.printStackTrace();
+            return false;
+        }
 
         // Unregister the commands
         Leaf.getCommandHandler().unregister();
-
-        // Reload configs
-        ConfigCommands.reload();
-        ConfigMessages.reload();
-        ConfigDatabase.reload();
 
         // Reload the commands and re-register them
         Leaf.reloadCommands();
 
         MessageManager.log("&f&lReloaded successfully");
+        return true;
     }
 
     @Override

@@ -11,10 +11,13 @@ import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
+import com.github.smuddgge.leaf.utility.DateAndTime;
 import dev.simplix.protocolize.api.item.ItemStack;
+import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,19 +65,21 @@ public class FriendListInventory extends CustomInventory {
      * @return The updated item stack.
      */
     private ItemStack onLoadPlayer(InventoryItem inventoryItem) {
-        ItemStack item = this.appendPlayerItemStack(inventoryItem);
         Map<Integer, String> mockInventory = this.getInventoryOf("player");
 
         int friendsPerPage = this.getInventoryOf("player").size();
-        int recordIndex = (friendsPerPage * page) - friendsPerPage;
+        int recordIndex = (friendsPerPage * this.page) - friendsPerPage;
 
         for (Integer slot : mockInventory.keySet()) {
 
             // Check if the record exists.
-            if (this.friendRecords.size() - 1 < recordIndex) return null;
-
-            // Add the item to the inventory.
-            this.inventory.item(slot, this.parseCustomPlaceholders(item, (FriendRecord) this.friendRecords.get(recordIndex)));
+            if (this.friendRecords.size() - 1 < recordIndex) {
+                ItemStack item = this.appendNoPlayerItemStack(inventoryItem);
+                this.inventory.item(slot, item);
+            } else {
+                ItemStack item = this.appendPlayerItemStack(inventoryItem);
+                this.inventory.item(slot, this.parseCustomPlaceholders(item, (FriendRecord) this.friendRecords.get(recordIndex)));
+            }
 
             // Increase record index.
             recordIndex++;
@@ -95,6 +100,17 @@ public class FriendListInventory extends CustomInventory {
     }
 
     /**
+     * Used to get the no player item stack.
+     *
+     * @param inventoryItem The current inventory item.
+     * @return The requested item stack.
+     */
+    private ItemStack appendNoPlayerItemStack(InventoryItem inventoryItem) {
+        if (!this.section.getKeys().contains("no_player")) return inventoryItem.getItemStack();
+        return inventoryItem.append(this.section.getSection("no_player")).getItemStack();
+    }
+
+    /**
      * Used to parse placeholders on an item for a friend record.
      *
      * @param item   The item to parse.
@@ -105,30 +121,41 @@ public class FriendListInventory extends CustomInventory {
         FriendMailTable friendMailTable = (FriendMailTable) Leaf.getDatabase().getTable("FriendMail");
         FriendMailRecord friendMailRecord = friendMailTable.getLatest(record.playerUuid, record.friendPlayerUuid);
 
-        item.displayName(MessageManager.convertToLegacy(item.displayName(true))
-                .replace("%name%", record.friendNameFormatted)
-                .replace("%date%", record.dateCreated)
-                .replace("%last_mail%", friendMailRecord.message)
-                .replace("%mail_status%", friendMailRecord.getStatus()));
-
-        List<String> lore = new ArrayList<>();
-        for (Object line : item.lore()) {
-            lore.add(MessageManager.convertToLegacy((String) line)
-                    .replace("%name%", record.friendNameFormatted)
-                    .replace("%date%", record.dateCreated)
-                    .replace("%last_mail%", friendMailRecord.message)
-                    .replace("%mail_status%", friendMailRecord.getStatus()));
+        if (friendMailRecord == null) {
+            friendMailRecord = new FriendMailRecord();
+            friendMailRecord.message = "None";
+            friendMailRecord.viewedBoolean = "true";
         }
-        item.lore(lore, true);
+
+        String tempName = item.displayName(true);
+        item.displayName(MessageManager.convert(tempName
+                .replace("%name%", record.friendNameFormatted)
+                .replace("%date%", DateAndTime.convert(record.dateCreated))
+                .replace("%last_mail%", friendMailRecord.message)
+                .replace("%mail_status%", friendMailRecord.getStatus())));
+
+        List<Component> lore = new ArrayList<>();
+        for (Object line : item.lore(true)) {
+            String tempLine = (String) line;
+            lore.add(MessageManager.convert(tempLine
+                    .replace("%name%", record.friendNameFormatted)
+                    .replace("%date%", DateAndTime.convert(record.dateCreated))
+                    .replace("%last_mail%", friendMailRecord.message)
+                    .replace("%mail_status%", friendMailRecord.getStatus())
+            ));
+        }
+        item.lore(lore, false);
 
         CompoundTag compoundTag = item.nbtData();
         CompoundTag toAdd = new CompoundTag();
         for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {
-            toAdd.putString(tag.getKey(), tag.getValue().toString()
+            toAdd.putString(tag.getKey(), tag.getValue().valueToString()
                     .replace("%name%", record.friendNameFormatted)
-                    .replace("%date%", record.dateCreated)
+                    .replace("%date%", DateAndTime.convert(record.dateCreated))
                     .replace("%last_mail%", friendMailRecord.message)
-                    .replace("%mail_status%", friendMailRecord.getStatus()));
+                    .replace("%mail_status%", friendMailRecord.getStatus())
+                    .replace("\"", "")
+                    .replace("\\", ""));
         }
         item.nbtData(toAdd);
 

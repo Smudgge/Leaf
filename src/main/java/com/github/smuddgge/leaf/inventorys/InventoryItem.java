@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
+import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import dev.simplix.protocolize.api.item.ItemStack;
@@ -10,6 +11,7 @@ import dev.simplix.protocolize.data.inventory.InventoryType;
 import net.querz.nbt.tag.CompoundTag;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -36,17 +38,22 @@ public class InventoryItem {
     }
 
     /**
-     * Append an inventory item configuration section to the item.
-     * This section will override values in this item.
+     * Get an inventory item with the section combined to this
+     * item's configuration section.
      *
      * @param section The instance of the configuration section.
-     * @return This instance.
+     * @return A new inventory item instance.
      */
     public InventoryItem append(ConfigurationSection section) {
+        ConfigurationSection clone = new YamlConfigurationSection(new HashMap<>());
         for (String key : section.getKeys()) {
-            this.section.setInSection(key, section.get(key));
+            clone.setInSection(key, section.get(key));
         }
-        return this;
+        for (String key : this.section.getKeys()) {
+            clone.setInSection(key, section.get(key));
+        }
+
+        return new InventoryItem(clone, this.slot, this.user);
     }
 
     /**
@@ -157,5 +164,14 @@ public class InventoryItem {
      */
     public ConfigurationSection getFunctionSection() {
         return this.section.getSection("function");
+    }
+
+    /**
+     * Used to get the item's configuration section.
+     *
+     * @return The requested configuration section.
+     */
+    public ConfigurationSection getSection() {
+        return this.section;
     }
 }
