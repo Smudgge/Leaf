@@ -63,7 +63,7 @@ public class FriendRequestInventory extends CustomInventory {
         Map<Integer, String> mockInventory = this.getInventoryOf("player");
 
         int requestsPerPage = this.getInventoryOf("player").size();
-        int recordIndex = (requestsPerPage * page) - requestsPerPage - 1;
+        int recordIndex = (requestsPerPage * page) - requestsPerPage;
 
         for (Integer slot : mockInventory.keySet()) {
 
