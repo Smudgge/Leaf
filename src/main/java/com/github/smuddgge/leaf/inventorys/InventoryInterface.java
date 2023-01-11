@@ -15,22 +15,30 @@ import java.util.HashMap;
 public abstract class InventoryInterface {
 
     protected Inventory inventory;
+    protected User user;
 
     private final HashMap<Integer, Runnable> actions = new HashMap<>();
 
     /**
+     * Used to create an inventory interface.
+     *
+     * @param user The user that will open the inventory.
+     */
+    public InventoryInterface(User user) {
+        this.user = user;
+    }
+
+    /**
      * Used to load the inventory and open it for the player.
      *
-     * @param user User to open for.
      * @return This instance.
      */
-    public InventoryInterface loadAndOpen(User user) {
+    public InventoryInterface open() {
         this.inventory = new Inventory(this.getInventoryType());
         this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
+        this.load();
 
-        this.load(user);
-
-        ProtocolizePlayer player = Protocolize.playerProvider().player(user.getUniqueId());
+        ProtocolizePlayer player = Protocolize.playerProvider().player(this.user.getUniqueId());
         player.openInventory(this.inventory);
 
         this.inventory.onClick(click -> {
@@ -59,10 +67,8 @@ public abstract class InventoryInterface {
 
     /**
      * Used to create the inventory.
-     *
-     * @param user The instance of the user
      */
-    protected abstract void load(User user);
+    protected abstract void load();
 
     /**
      * Used to add a action when a slot is clicked.

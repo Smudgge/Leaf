@@ -173,7 +173,7 @@ public class CommandSuggestions {
             // If the first argument references this command, add the sub commands suggestions.
             for (String commandName : commandNames) {
                 if (!commandName.toLowerCase(Locale.ROOT).equals(arguments[0].toLowerCase(Locale.ROOT))) continue;
-                this.combineSubType(commandType.getSuggestions(user));
+                this.combineSubType(commandType.getSuggestions(section, user));
             }
         }
     }

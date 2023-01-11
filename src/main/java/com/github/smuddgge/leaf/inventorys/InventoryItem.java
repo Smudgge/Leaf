@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.commands.types.Inventory;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
@@ -33,6 +34,20 @@ public class InventoryItem {
         this.section = section;
         this.slot = slot;
         this.user = user;
+    }
+
+    /**
+     * Append an inventory item configuration section to the item.
+     * This section will override values in this item.
+     *
+     * @param section The instance of the configuration section.
+     * @return This instance.
+     */
+    public InventoryItem append(ConfigurationSection section) {
+        for (String key : section.getKeys()) {
+            this.section.setInSection(key, section.get(key));
+        }
+        return this;
     }
 
     /**
@@ -72,12 +87,12 @@ public class InventoryItem {
     }
 
     /**
-     * Used to get this inventory item as an item stack.
+     * Used to get this inventory item as an item stack
+     * given a base item stack.
      *
      * @return The requested item stack.
      */
-    public ItemStack getItemStack() {
-        ItemStack item = this.getDefaultItemStack();
+    public ItemStack getItemStack(ItemStack item) {
         CompoundTag compoundTag = new CompoundTag();
 
         // Set the material of the item.
@@ -116,6 +131,15 @@ public class InventoryItem {
         item.nbtData(compoundTag);
 
         return item;
+    }
+
+    /**
+     * Used to get this inventory item as an item stack.
+     *
+     * @return The requested item stack.
+     */
+    public ItemStack getItemStack() {
+        return this.getItemStack(this.getDefaultItemStack());
     }
 
     /**

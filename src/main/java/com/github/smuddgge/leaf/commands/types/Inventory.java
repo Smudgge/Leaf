@@ -39,14 +39,14 @@ public class Inventory extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        CustomInventory customInventory = new CustomInventory(section) {
+        CustomInventory customInventory = new CustomInventory(section, user) {
             @Override
             public ItemStack onLoadItemWithFunction(InventoryItem inventoryItem) {
                 return inventoryItem.getItemStack();
             }
         };
 
-        customInventory.loadAndOpen(user);
+        customInventory.open();
 
         return new CommandStatus();
     }
