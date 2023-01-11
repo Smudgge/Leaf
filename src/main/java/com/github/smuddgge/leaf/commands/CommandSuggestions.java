@@ -99,6 +99,7 @@ public class CommandSuggestions {
     /**
      * Used to append every player on the server.
      * Even if the player is in vanish.
+     *
      * @return This instance.
      */
     public CommandSuggestions appendPlayersRaw() {

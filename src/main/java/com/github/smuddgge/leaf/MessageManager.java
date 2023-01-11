@@ -84,7 +84,7 @@ public class MessageManager {
      * @return The requested string.
      */
     public static String convertToLegacy(String message) {
-        return message.replace("&", "§");
+        return "§r" + message.replace("&", "§");
     }
 
     /**

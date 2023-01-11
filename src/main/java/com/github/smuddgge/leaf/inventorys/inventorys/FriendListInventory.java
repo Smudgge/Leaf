@@ -31,7 +31,7 @@ public class FriendListInventory extends CustomInventory {
      * The first page is page 0.
      *
      * @param section The parent configuration section to the inventory.
-     * @param user The user that is opening the inventory.
+     * @param user    The user that is opening the inventory.
      */
     public FriendListInventory(ConfigurationSection section, User user) {
         super(section, user);
@@ -77,7 +77,7 @@ public class FriendListInventory extends CustomInventory {
             this.inventory.item(slot, this.parseCustomPlaceholders(item, (FriendRecord) this.friendRecords.get(recordIndex)));
 
             // Increase record index.
-            recordIndex ++;
+            recordIndex++;
         }
 
         return null;
@@ -97,7 +97,7 @@ public class FriendListInventory extends CustomInventory {
     /**
      * Used to parse placeholders on an item for a friend record.
      *
-     * @param item The item to parse.
+     * @param item   The item to parse.
      * @param record The record to parse in context of.
      * @return The requested item stack.
      */

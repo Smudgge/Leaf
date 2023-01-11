@@ -214,6 +214,7 @@ commands:
             function:
               type: "last_page"
               always_show: false
+            material: YELLOW_STAINED_GLASS_PANE
             name: "&a&lLast Page"
             lore:
               - "&7Click to go back a page"
@@ -221,6 +222,7 @@ commands:
             function:
               type: "next_page"
               always_show: false
+            material: YELLOW_STAINED_GLASS_PANE
             name: "&a&lNext Page"
             lore:
               - "&7Click to go to the next page"
@@ -266,15 +268,15 @@ commands:
             function:
               type: "last_page"
               always_show: false
-            name: "&a&lLast Page"
             material: YELLOW_STAINED_GLASS_PANE
+            name: "&a&lLast Page"
             lore:
               - "&7Click to go back a page"
           "53":
             function:
               type: "next_page"
               always_show: false
-            name: "&a&lNext Page"
             material: YELLOW_STAINED_GLASS_PANE
+            name: "&a&lNext Page"
             lore:
               - "&7Click to go to the next page"

@@ -20,7 +20,7 @@ public abstract class CustomInventory extends InventoryInterface {
      * Used to create a custom inventory.
      *
      * @param section The parent configuration section to the inventory.
-     * @param user The user that will open the inventory.
+     * @param user    The user that will open the inventory.
      */
     public CustomInventory(ConfigurationSection section, User user) {
         super(user);

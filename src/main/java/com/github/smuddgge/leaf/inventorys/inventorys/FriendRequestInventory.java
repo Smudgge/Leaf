@@ -13,7 +13,6 @@ import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
-import dev.simplix.protocolize.api.item.BaseItemStack;
 import dev.simplix.protocolize.api.item.ItemStack;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
@@ -101,7 +100,7 @@ public class FriendRequestInventory extends CustomInventory {
             });
 
             // Increase record index.
-            recordIndex ++;
+            recordIndex++;
         }
 
         return null;
@@ -121,7 +120,7 @@ public class FriendRequestInventory extends CustomInventory {
     /**
      * Used to parse placeholders on an item for a request record.
      *
-     * @param item The item to parse.
+     * @param item   The item to parse.
      * @param record The record to parse in context of.
      * @return The requested item stack.
      */
