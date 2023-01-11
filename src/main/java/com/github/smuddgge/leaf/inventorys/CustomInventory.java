@@ -30,6 +30,7 @@ public abstract class CustomInventory extends InventoryInterface {
         // Check if the inventory is empty
         if (this.getInventorySection().getKeys().size() == 0) {
             MessageManager.log("&eInventory section found empty in configuration!");
+            MessageManager.log(section.getData().toString());
         }
     }
 
