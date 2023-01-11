@@ -13,7 +13,7 @@ import java.util.*;
  */
 public abstract class CustomInventory extends InventoryInterface {
 
-    protected int page = 0;
+    protected int page = 1;
     protected final ConfigurationSection section;
 
     /**
@@ -162,7 +162,7 @@ public abstract class CustomInventory extends InventoryInterface {
      * @return The requested item stack.
      */
     protected ItemStack onLastPage(InventoryItem inventoryItem) {
-        if (page <= 0) {
+        if (page <= 1) {
             if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) return null;
         } else {
             for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {

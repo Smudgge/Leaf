@@ -38,7 +38,7 @@ public class Friends extends BaseCommandType {
 
         // Open friend list inventory.
         try {
-            FriendListInventory friendListInventory = new FriendListInventory(section, user);
+            FriendListInventory friendListInventory = new FriendListInventory(section.getSection("list"), user);
             friendListInventory.open();
         } catch (Exception exception) {
             MessageManager.warn("Exception occurred when opening a friend list inventory!");
