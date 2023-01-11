@@ -66,7 +66,7 @@ public class FriendListInventory extends CustomInventory {
         Map<Integer, String> mockInventory = this.getInventoryOf("player");
 
         int friendsPerPage = this.getInventoryOf("player").size();
-        int recordIndex = (friendsPerPage * page) - friendsPerPage - 1;
+        int recordIndex = (friendsPerPage * page) - friendsPerPage;
 
         for (Integer slot : mockInventory.keySet()) {
 
