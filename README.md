@@ -14,11 +14,14 @@
 # Author : Smudge
 
 Status: Version 1.2.4
-
-Support:
-- https://github.com/smuddgge/Leaf/wiki
-- https://discord.gg/ZxCnrJfk7Z
 ```
 
+### Wiki
+https://smuddgge.gitbook.io/leaf
+
+### Support
+https://discord.gg/ZxCnrJfk7Z
+
+### Forms
 - [builtbybit.com](https://builtbybit.com/resources/leaf-velocity-plugin.26200/)
 - [forums.papermc.io](https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/)
