@@ -146,7 +146,8 @@ public abstract class CustomInventory extends InventoryInterface {
         if (recordsSize - 1 < recordIndex) {
             if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) {
                 for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
-                    this.addAction(slot, () -> {});
+                    this.addAction(slot, () -> {
+                    });
                 }
                 return null;
             }
@@ -172,7 +173,8 @@ public abstract class CustomInventory extends InventoryInterface {
         if (page <= 1) {
             if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) {
                 for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
-                    this.addAction(slot, () -> {});
+                    this.addAction(slot, () -> {
+                    });
                 }
                 return null;
             }

@@ -8,7 +8,6 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 import dev.simplix.protocolize.api.item.ItemStack;
 
 public class Inventory extends BaseCommandType {
