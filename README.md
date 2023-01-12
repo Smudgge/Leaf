@@ -1,5 +1,5 @@
 <div >
-  <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download dependencys.png" width="190"></a>
+  <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/field?field=dependencies"><img src="./graphics/download dependencys.png" width="190"></a>
 </div>
 
 [![CodeFactor](https://www.codefactor.io/repository/github/smuddgge/leaf/badge)](https://www.codefactor.io/repository/github/smuddgge/leaf)
