@@ -3,6 +3,12 @@
 [![GitHub issues](https://img.shields.io/github/issues/smuddgge/leaf.svg)](https://github.com/smuddgge/leaf/issues) 
 [![GitHub pulls](https://img.shields.io/github/issues-pr/smuddgge/leaf.svg)](https://github.com/smuddgge/leaf/pulls)
 
+<div align=center>
+    <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download.png" width="512"></a>
+    <a href="https://smuddgge.gitbook.io/leaf"><img src="./graphics/wiki.png" width="512"></a>
+    <a href="https://discord.com/invite/ZxCnrJfk7Z"><img src="./graphics/Discord.png" width="512"></a>
+</div>
+
 ```yaml
 #  __         ______     ______     ______
 # /\ \       /\  ___\   /\  __ \   /\  ___\
@@ -16,12 +22,7 @@
 Status: Version 1.3.0
 ```
 
-### Wiki
-https://smuddgge.gitbook.io/leaf
-
-### Support
-https://discord.gg/ZxCnrJfk7Z
-
-### Forms
-- [builtbybit.com](https://builtbybit.com/resources/leaf-velocity-plugin.26200/)
-- [forums.papermc.io](https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/)
+<div>
+    <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/"><img src="./graphics/builtbybit.png" width="200"></a>
+    <a href="https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/"><img src="./graphics/paper.png" width="200"></a>
+</div>
