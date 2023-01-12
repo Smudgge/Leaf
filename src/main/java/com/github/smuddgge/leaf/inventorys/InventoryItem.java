@@ -10,6 +10,8 @@ import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 import net.querz.nbt.tag.CompoundTag;
+import net.querz.nbt.tag.ListTag;
+import net.querz.nbt.tag.Tag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,18 +129,58 @@ public class InventoryItem {
 
         // Set the display name.
         String name = this.section.getString("name", "&7");
-        item.displayName(MessageManager.convertToLegacy(PlaceholderManager.parse(name, null, this.user)));
+        item.displayName(MessageManager.convert(PlaceholderManager.parse(name, null, this.user)));
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
-            item.addToLore(MessageManager.convertToLegacy(PlaceholderManager.parse(line, null, this.user)));
+            item.addToLore(MessageManager.convert(PlaceholderManager.parse(line, null, this.user)));
         }
 
         if (this.section.getKeys().contains("durability")) {
             item.durability((short) this.section.getInteger("durability"));
         }
 
+        // Item amount
         item.amount((byte) this.section.getInteger("amount", 1));
+
+        // Items enchants
+        if (this.section.getKeys().contains("enchants")) {
+            ListTag<CompoundTag> enchants = new ListTag<>(CompoundTag.class);
+
+            for (String key : this.section.getSection("enchants").getKeys()) {
+                CompoundTag enchant = new CompoundTag();
+
+                int value = this.section.getSection("enchants").getInteger(key);
+
+                enchant.putString("id", key.toLowerCase(Locale.ROOT));
+                enchant.putShort("lvl", (short) value);
+
+                enchants.add(enchant);
+            }
+
+            compoundTag.put("Enchantments", enchants);
+        }
+
+        // Item enchanted
+        if (this.section.getBoolean("enchanted", false)) {
+            ListTag<CompoundTag> enchants = new ListTag<>(CompoundTag.class);
+
+            CompoundTag enchant = new CompoundTag();
+            enchant.putString("id", "unbreaking");
+            enchant.putShort("lvl", (short) 1);
+            enchants.add(enchant);
+
+            compoundTag.put("Enchantments", enchants);
+
+            item.itemFlag(ItemFlag.HIDE_ENCHANTMENTS, true);
+        }
+
+        // Item flags
+        if (this.section.getKeys().contains("flags")) {
+            for (String flag : this.section.getListString("flags", new ArrayList<>())) {
+                item.itemFlag(ItemFlag.valueOf(flag.toUpperCase(Locale.ROOT)), true);
+            }
+        }
 
         // Add the nbt data.
         item.nbtData(compoundTag);
