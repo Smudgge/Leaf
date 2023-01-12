@@ -46,8 +46,10 @@ public class Leaf {
     private static CommandHandler commandHandler;
     private static SQLiteDatabase database;
 
+    private final Metrics.Factory metricsFactory;
+
     @Inject
-    public void SmUtility(ProxyServer server, @DataDirectory final Path folder) {
+    public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         Leaf.server = server;
 
         // Set up the configuration files
@@ -57,10 +59,17 @@ public class Leaf {
 
         // Set up the database
         Leaf.setupDatabase(folder.toFile());
+
+        // Set up b stats
+        this.metricsFactory = metricsFactory;
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
+
+        // Set up b stats
+        int pluginId = 17381;
+        Metrics metrics = this.metricsFactory.make(this, pluginId);
 
         // Log header
         MessageManager.logHeader();
