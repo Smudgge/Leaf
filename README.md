@@ -1,5 +1,5 @@
 <div >
-  <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download dependencys.png" width="200"></a>
+  <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download dependencys.png" width="190"></a>
 </div>
 
 [![CodeFactor](https://www.codefactor.io/repository/github/smuddgge/leaf/badge)](https://www.codefactor.io/repository/github/smuddgge/leaf)
