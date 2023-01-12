@@ -53,9 +53,9 @@ public class FriendRequestInventory extends CustomInventory {
         if (Leaf.getDatabase().isDisabled()) return inventoryItem.getItemStack();
 
         return switch (inventoryItem.getFunctionSection().getString("type")) {
-            default -> this.onLoadPlayer(inventoryItem);
             case "last_page" -> this.onLastPage(inventoryItem);
             case "next_page" -> this.onNextPage(inventoryItem, this.requestRecords.size());
+            default -> this.onLoadPlayer(inventoryItem);
         };
     }
 

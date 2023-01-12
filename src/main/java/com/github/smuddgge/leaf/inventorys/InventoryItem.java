@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import dev.simplix.protocolize.api.item.ItemFlag;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
@@ -132,6 +133,12 @@ public class InventoryItem {
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
             item.addToLore(MessageManager.convertToLegacy(PlaceholderManager.parse(line, null, this.user)));
         }
+
+        if (this.section.getKeys().contains("durability")) {
+            item.durability((short) this.section.getInteger("durability"));
+        }
+
+        item.amount((byte) this.section.getInteger("amount", 1));
 
         // Add the nbt data.
         item.nbtData(compoundTag);
