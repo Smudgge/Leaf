@@ -173,31 +173,47 @@ public class Command implements SimpleCommand {
         if (source instanceof Player) {
             User user = new User((Player) source);
 
-            // Run the command as a player.
-            CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
+            try {
+                // Run the command as a player.
+                CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
+
+                if (status.hasIncorrectArguments()) {
+                    user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
+                            .replace("[name]", this.getName()));
+                }
+
+                if (status.hasError()) user.sendMessage(ConfigMessages.getError());
+                if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
+                if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
+                if (status.hasPlayerCommand()) user.sendMessage(ConfigMessages.getPlayerCommand());
+
+                return;
+            } catch (Exception exception) {
+                user.sendMessage(ConfigMessages.getError());
+                MessageManager.warn("Error occurred while running command : " + this.getName());
+                exception.printStackTrace();
+            }
+        }
+
+
+        try {
+            // Run the command in console.
+            CommandStatus status = this.onConsoleRun(invocation.arguments());
 
             if (status.hasIncorrectArguments()) {
-                user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
+                MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
                         .replace("[name]", this.getName()));
             }
-            if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
-            if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
-            if (status.hasPlayerCommand()) user.sendMessage(ConfigMessages.getPlayerCommand());
 
-            return;
+            if (status.hasError()) MessageManager.log(ConfigMessages.getError());
+            if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
+            if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
+            if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
+            
+        } catch (Exception exception) {
+            MessageManager.warn("Error occurred while running command : " + this.getName());
+            exception.printStackTrace();
         }
-
-
-        // Run the command in console.
-        CommandStatus status = this.onConsoleRun(invocation.arguments());
-
-        if (status.hasIncorrectArguments()) {
-            MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
-                    .replace("[name]", this.getName()));
-        }
-        if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
-        if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
-        if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
     }
 
     @Override

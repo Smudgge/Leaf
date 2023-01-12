@@ -164,6 +164,7 @@ commands:
     type: "inventory"
     enabled: true
     name: "menu"
+    error: "{error_colour}Error occurred when opening inventory."
     inventory:
       size: GENERIC_9X6
       title: "&8&lMenu"
@@ -185,6 +186,7 @@ commands:
     list:
       name: "list"
       enabled: true
+      error: "{error_colour}Error occurred when opening inventory."
       # %name% : Formatted name.
       # %date% : Date they started being friends
       # %last_mail% : The last mail that was sent.
@@ -237,6 +239,7 @@ commands:
     requests:
       name: "accept"
       enabled: true
+      error: "{error_colour}Error occurred when opening inventory."
       # Placeholders will parse in terms of the player that sent the request.
       # Message is sent to the friend accepter.
       from: "{message} You are now friends with &f<player>"

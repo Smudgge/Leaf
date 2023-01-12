@@ -38,6 +38,8 @@ public class List implements CommandType {
             FriendListInventory friendListInventory = new FriendListInventory(section.getSection(this.getName()), user);
             friendListInventory.open();
         } catch (Exception exception) {
+            user.sendMessage(section.getSection("list").getString("error", "{error_colour}Error occurred when opening inventory."));
+
             MessageManager.warn("Exception occurred when opening a friend list inventory!");
             exception.printStackTrace();
         }

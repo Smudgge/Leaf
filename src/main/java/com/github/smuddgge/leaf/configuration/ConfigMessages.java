@@ -128,8 +128,24 @@ public class ConfigMessages extends YamlConfiguration {
                 .getString("database_empty", "{error_colour}There are no records in the database.");
     }
 
+    /**
+     * Used to get the error message that is sent
+     * when console runs a player online command.
+     *
+     * @return The requested player command message.
+     */
     public static String getPlayerCommand() {
         return ConfigMessages.config.getSection("messages")
                 .getString("player_command", "{error_colour}This command can only be run by the player.");
+    }
+
+    /**
+     * Used to get the message sent when an error occurs.
+     *
+     * @return The requested error message.
+     */
+    public static String getError() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("error", "{error_colour}Error occurred while running command.");
     }
 }

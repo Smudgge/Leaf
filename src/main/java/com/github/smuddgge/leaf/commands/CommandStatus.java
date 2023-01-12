@@ -6,10 +6,21 @@ package com.github.smuddgge.leaf.commands;
  */
 public class CommandStatus {
 
+    private boolean hasError = false;
     private boolean hasIncorrectArguments = false;
     private boolean hasDatabaseDisabled = false;
     private boolean hasDatabaseEmpty = false;
     private boolean hasPlayerCommand = false;
+
+    /**
+     * Used to set error to true.
+     *
+     * @return This instance.
+     */
+    public CommandStatus error() {
+        this.hasError = true;
+        return this;
+    }
 
     /**
      * Used to set incorrect arguments to true.
@@ -49,6 +60,16 @@ public class CommandStatus {
     public CommandStatus playerCommand() {
         this.hasPlayerCommand = true;
         return this;
+    }
+
+    /**
+     * Used to get if an error occurred and an error
+     * message should be sent.
+     *
+     * @return True if an error occurred.
+     */
+    public boolean hasError() {
+        return this.hasError;
     }
 
     /**

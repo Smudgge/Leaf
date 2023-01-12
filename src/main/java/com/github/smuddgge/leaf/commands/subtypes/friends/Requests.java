@@ -38,6 +38,7 @@ public class Requests implements CommandType {
             FriendRequestInventory friendRequestInventory = new FriendRequestInventory(section.getSection(this.getName()), user);
             friendRequestInventory.open();
         } catch (Exception exception) {
+            user.sendMessage(section.getSection("requests").getString("error", "{error_colour}Error occurred when opening inventory."));
             MessageManager.warn("Exception occurred when opening a friend request inventory!");
             exception.printStackTrace();
         }
