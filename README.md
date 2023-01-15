@@ -30,3 +30,5 @@ Status: Version 1.3.0
     <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/"><img src="./graphics/builtbybit.png" width="200"></a>
     <a href="https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/"><img src="./graphics/paper.png" width="200"></a>
 </div>
+
+[![BStats](https://bstats.org/signatures/velocity/Leaf.svg)](https://bstats.org/plugin/velocity/Leaf/17381)
