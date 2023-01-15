@@ -43,7 +43,27 @@ public class FriendListInventory extends CustomInventory {
 
         // Load all the friend records.
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        this.friendRecords = friendTable.getRecord("playerUuid", this.user.getUniqueId());
+        this.friendRecords = friendTable.getRecord("playerUuid", user.getUniqueId());
+    }
+
+    /**
+     * Used to create a {@link FriendListInventory} open on the first page.
+     * The first page is 0.
+     * The friend list will be in context of the list context user.
+     *
+     * @param section             The parent configuration section to the inventory.
+     * @param user                The user that is opening the inventory.
+     * @param listContextUserUuid The user whose friend list should be shown.
+     */
+    public FriendListInventory(ConfigurationSection section, User user, String listContextUserUuid) {
+        super(section, user);
+
+        // Check if the database is disabled.
+        if (Leaf.getDatabase().isDisabled()) return;
+
+        // Load all the friend records in terms of the list context.
+        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        this.friendRecords = friendTable.getRecord("playerUuid", listContextUserUuid);
     }
 
     @Override
