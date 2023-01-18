@@ -205,4 +205,16 @@ public class User {
         }
         return null;
     }
+
+    /**
+     * Used to teleport the player to a registered server.
+     *
+     * @param connectedServer The server to teleport them to.
+     * @return If it was successful.
+     */
+    public boolean teleport(RegisteredServer connectedServer) {
+        if (this.player == null) return false;
+        this.player.createConnectionRequest(connectedServer).connectWithIndication();
+        return true;
+    }
 }

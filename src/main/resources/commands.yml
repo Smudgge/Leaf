@@ -177,6 +177,15 @@ commands:
           lore:
             - "&7You are amazing!"
 
+  teleport:
+    type: "teleport"
+    enabled: true
+    name: "go"
+    # Let vanishable players teleport to other vanishable players.
+    vanishable_players: false
+    not_found: "{error_colour}Player could not be found."
+    message: "{message} Teleporting..."
+
 
   friends:
     type: "friends"

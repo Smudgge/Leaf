@@ -105,6 +105,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Report());
         Leaf.commandHandler.addType(new Send());
         Leaf.commandHandler.addType(new Servers());
+        Leaf.commandHandler.addType(new Teleport());
 
         Leaf.reloadCommands();
 
