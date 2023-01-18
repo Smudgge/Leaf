@@ -239,6 +239,13 @@ commands:
       # Placeholders will parse in terms of the player that sent the request.
       from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
 
+    unfriend:
+      name: "unfriend"
+      enabled: true
+      not_found: "{error_colour}Invalid player name."
+      # Placeholders will register in terms of the friend.
+      message: "{message} You are no longer friends with <player>"
+
     requests:
       name: "accept"
       enabled: true

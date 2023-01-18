@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Represents the friend request manager.
  */
-public class FriendRequestManager {
+public class FriendManager {
 
     /**
      * Used to send a friend request though the database.
@@ -79,5 +79,16 @@ public class FriendRequestManager {
         friendRecord2.friendPlayerUuid = requestRecord.playerFromUuid;
 
         friendTable.insertRecord(friendRecord2);
+    }
+
+    public static void unFriend(String playerUuid, String friendUuid) {
+        if (Leaf.getDatabase().isDisabled()) return;
+
+        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        FriendRecord friendRecord1 = friendTable.getFriend(playerUuid, friendUuid);
+        FriendRecord friendRecord2 = friendTable.getFriend(friendUuid, playerUuid);
+
+        friendTable.removeRecord("uuid", friendRecord1.uuid);
+        friendTable.removeRecord("uuid", friendRecord2.uuid);
     }
 }

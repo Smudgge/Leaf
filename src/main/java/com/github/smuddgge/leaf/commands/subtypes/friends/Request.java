@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.commands.subtypes.friends;
 
-import com.github.smuddgge.leaf.FriendRequestManager;
+import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
@@ -62,7 +62,7 @@ public class Request implements CommandType {
 
         PlayerRecord playerRecordToRequest = (PlayerRecord) playerResults.get(0);
 
-        boolean success = FriendRequestManager.sendRequest(user, playerRecordToRequest);
+        boolean success = FriendManager.sendRequest(user, playerRecordToRequest);
 
         if (!success) return new CommandStatus().databaseEmpty();
 

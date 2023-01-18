@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.inventorys.inventorys;
 
-import com.github.smuddgge.leaf.FriendRequestManager;
+import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
@@ -83,7 +83,7 @@ public class FriendRequestInventory extends CustomInventory {
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));
 
                 this.addAction(slot, () -> {
-                    FriendRequestManager.acceptRequest(requestRecord);
+                    FriendManager.acceptRequest(requestRecord);
 
                     user.sendMessage(PlaceholderManager.parse(
                             this.section.getString("from", "{message} You are now friends with &f<name>"),

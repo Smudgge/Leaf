@@ -69,7 +69,7 @@ public class Leaf {
 
         // Set up b stats
         int pluginId = 17381;
-        Metrics metrics = this.metricsFactory.make(this, pluginId);
+        this.metricsFactory.make(this, pluginId);
 
         // Log header
         MessageManager.logHeader();
