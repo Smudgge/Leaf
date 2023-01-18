@@ -59,6 +59,15 @@ public class ConfigCommands extends YamlConfiguration {
     }
 
     /**
+     * Used to get if vanishable players can allways see vanishable players.
+     *
+     * @return False if not defined.
+     */
+    public static boolean canVanishableSeeVanishable() {
+        return ConfigCommands.config.getBoolean("vanishable_can_see_vanishable", false);
+    }
+
+    /**
      * Used to get a command's section from the configuration file.
      *
      * @param identifier The identifier of the command.

@@ -26,9 +26,7 @@ public class Teleport extends BaseCommandType {
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        if (user.isNotVanishable()) return new CommandSuggestions().appendPlayers();
-        if (!section.getBoolean("vanishable_players", false)) return new CommandSuggestions().appendPlayers();
-        return new CommandSuggestions().appendPlayersRaw();
+        return new CommandSuggestions().appendPlayers(user);
     }
 
     @Override

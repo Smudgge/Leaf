@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
@@ -94,6 +95,20 @@ public class CommandSuggestions {
 
         this.data.add(players);
         return this;
+    }
+
+    /**
+     * Used to add the list of online players to the list.
+     * If vanishable players are able to see vanishable players this
+     * will also be checked in this method.
+     *
+     * @param user The user to check if they are able to vanish.
+     * @return This instance
+     */
+    public CommandSuggestions appendPlayers(User user) {
+        if (user.isNotVanishable()) return this.appendPlayers();
+        if (ConfigCommands.canVanishableSeeVanishable()) return this.appendPlayersRaw();
+        return this.appendPlayers();
     }
 
     /**
