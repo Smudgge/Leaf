@@ -185,6 +185,7 @@ public class Leaf {
         Leaf.database.createTable(new FriendTable(Leaf.database));
         Leaf.database.createTable(new FriendMailTable(Leaf.database));
         Leaf.database.createTable(new FriendRequestTable(Leaf.database));
+        Leaf.database.createTable(new FriendSettingsTable(Leaf.database));
     }
 
     /**
