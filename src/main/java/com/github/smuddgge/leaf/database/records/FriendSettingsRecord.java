@@ -14,19 +14,19 @@ public class FriendSettingsRecord extends Record {
     public String uuid;
 
     @FieldAnnotation
-    public String toggleProxyJoin;
+    public String toggleProxyJoin = "false";
 
     @FieldAnnotation
-    public String toggleProxyLeave;
+    public String toggleProxyLeave = "false";
 
     @FieldAnnotation
-    public String toggleServerChange;
+    public String toggleServerChange = "false";
 
     @FieldAnnotation
-    public String toggleRequests;
+    public String toggleRequests = "true";
 
     @FieldAnnotation
-    public String toggleMail;
+    public String toggleMail = "true";
 
     @FieldAnnotation(fieldKeyType = FieldKeyType.FOREIGN)
     @ForeignKey(tableReferenceName = "Player", tableReferenceValue = "uuid")

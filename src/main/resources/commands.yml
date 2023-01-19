@@ -296,7 +296,76 @@ commands:
             name: "&a&lNext Page"
             lore:
               - "&7Click to go to the next page"
-              -
+
+    settings:
+      name: "settings"
+      enabled: true
+      error: "{error_colour}Error occurred when opening inventory."
+      inventory:
+        size: GENERIC_9X3
+        title: "&8&lFriend Requests"
+        content:
+          "0":
+            function:
+              type: "toggleProxyJoin"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Join Messages"
+            lore:
+              - "&7Click to toggle join messages"
+              - "&6Currently &f%toggleProxyJoin%"
+          "1":
+            function:
+              type: "toggleProxyLeave"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Leave Messages"
+            lore:
+              - "&7Click to toggle leave messages"
+              - "&6Currently &f%toggleProxyLeave%"
+          "2":
+            function:
+              type: "toggleServerChange"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Server Change Messages"
+            lore:
+              - "&7Click to toggle server change messages"
+              - "&6Currently &f%toggleServerChange%"
+          "3":
+            function:
+              type: "toggleMail"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Mail"
+            lore:
+              - "&7Click to toggle mail"
+              - "&6Currently &f%toggleMail%"
+          "4":
+            function:
+              type: "toggleRequests"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Friend Requests"
+            lore:
+              - "&7Click to toggle friend requests"
+              - "&6Currently &f%toggleRequests%"
+
     unfriend:
       name: "unfriend"
       enabled: true
