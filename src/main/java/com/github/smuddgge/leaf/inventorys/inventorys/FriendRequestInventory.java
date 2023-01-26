@@ -1,6 +1,5 @@
 package com.github.smuddgge.leaf.inventorys.inventorys;
 
-import com.github.smuddgge.leaf.FriendRequestManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
@@ -11,8 +10,6 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
-import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
-import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
@@ -21,7 +18,6 @@ import net.querz.nbt.tag.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Represents the friend requests inventory.
@@ -38,7 +34,7 @@ public class FriendRequestInventory extends CustomInventory {
      * @param user    The user that will open the inventory.
      */
     public FriendRequestInventory(ConfigurationSection section, User user) {
-        super(section, user);
+        super(section, user, "inventory");
 
         // Check if the database is disabled.
         if (Leaf.getDatabase().isDisabled()) return;
@@ -83,25 +79,10 @@ public class FriendRequestInventory extends CustomInventory {
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));
 
                 this.addAction(slot, () -> {
-                    FriendRequestManager.acceptRequest(requestRecord);
-
-                    user.sendMessage(PlaceholderManager.parse(
-                            this.section.getString("from", "{message} You are now friends with &f<name>"),
-                            null, new User(null, acceptedPlayerName)
-                    ));
-
-                    Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(acceptedPlayerName);
-                    if (optionalPlayer.isEmpty()) return;
-
-                    User userSentTo = new User(optionalPlayer.get());
-
-                    userSentTo.sendMessage(PlaceholderManager.parse(
-                            this.section.getString("sent", "{message} You are now friends with &f<name>"),
-                            null, user
-                    ));
-
-                    this.requestRecords.remove(requestRecord);
-                    this.load();
+                    FriendRequestOptionsInventory friendAcceptInventory = new FriendRequestOptionsInventory(
+                            this.section, this.user, requestRecord, acceptedPlayerName
+                    );
+                    friendAcceptInventory.open();
                 });
             }
 

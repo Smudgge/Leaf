@@ -62,4 +62,15 @@ public class PlayerTable extends SQLiteTable {
         if (result.isEmpty()) return null;
         return (PlayerRecord) result.get(0);
     }
+
+    /**
+     * Used to check if the player table contains a player name.
+     *
+     * @param playerName The players name to check for.
+     * @return True if the player exists in the database.
+     */
+    public boolean contains(String playerName) {
+        ArrayList<Record> result = this.getRecord("name", playerName);
+        return !result.isEmpty();
+    }
 }

@@ -9,6 +9,16 @@
 # The permission used to check if a player is able to vanish.
 vanish_permission: "leaf.vanishable"
 
+# Sometimes a vanishable player will be on an empty server.
+# Unfortunately we can not check if the player is vanished or not.
+# Because of this we assume the player is vanished.
+#
+# Setting this to true will let other vanishable players see
+# vanishable players regardless of the rank.
+#
+# Defaults to false.
+vanishable_can_see_vanishable: true
+
 commands:
 
   alert:
@@ -44,8 +54,6 @@ commands:
     not_found: "{error_colour}Player could not be found."
     # Placeholders will parse in terms of the player.
     found: "{message} Player was found on {server_formatted}"
-    # Let vanishable players find vanishable players?
-    vanishable_players: false
 
   info:
     # I'd love if you kept this command on your server <3
@@ -129,8 +137,6 @@ commands:
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
-    # Let vanishable players message other vanishable players?
-    vanishable_players: false
 
   reply:
     type: "reply"
@@ -177,15 +183,29 @@ commands:
           lore:
             - "&7You are amazing!"
 
+  teleport:
+    type: "teleport"
+    enabled: true
+    name: "go"
+    not_found: "{error_colour}Player could not be found."
+    message: "{message} Teleporting..."
+
 
   friends:
     type: "friends"
     enabled: true
     name: "friends"
 
+    proxy_join: "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}"
+    proxy_leave: "&8[&c-&8] &7Your friend &c<player> &7left the network"
+    server_change: "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}"
+
     list:
       name: "list"
       enabled: true
+      # Lets you see other players friend lists.
+      permission_see_any: "leaf.friends.see"
+      not_found: "{error_colour}Player could not be found."
       error: "{error_colour}Error occurred when opening inventory."
       # %name% : Formatted name.
       # %date% : Date they started being friends
@@ -230,16 +250,19 @@ commands:
       name: "request"
       enabled: true
       not_found: "{error_colour}Player has never played on this server."
+      requests_off: "{error_colour}This player has there friend requests off."
       self: "{error_colour}You can not be friends with your self."
       # Placeholders will parse in terms of the other player.
       sent: "{message} You have sent a friend request to &f<player>"
       # Placeholders will parse in terms of the player that sent the request.
       from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
 
-    requests:
+    accept:
       name: "accept"
       enabled: true
       error: "{error_colour}Error occurred when opening inventory."
+      requests_off: "{error_colour}This player has there friend requests off."
+      already_requested: "{error_colour}You have already requested to be friends with this player."
       # Placeholders will parse in terms of the player that sent the request.
       # Message is sent to the friend accepter.
       from: "{message} You are now friends with &f<player>"
@@ -251,7 +274,7 @@ commands:
         skull: "%name%"
         name: "&6&l%name%"
         lore:
-          - "&7Click to &aaccept &7friend request."
+          - "&7Click to open request options."
       no_player:
         material: LIGHT_GRAY_STAINED_GLASS_PANE
       # The inventory displaying the friend requests list.
@@ -280,3 +303,100 @@ commands:
             name: "&a&lNext Page"
             lore:
               - "&7Click to go to the next page"
+      options:
+        size: GENERIC_9X3
+        title: "&8&lFriend Request"
+        content:
+          "0-2,9-11,18-20":
+            function:
+              type: "deny"
+            material: RED_STAINED_GLASS_PANE
+            name: "&c&lDeny"
+            lore:
+              - "&7Anonymously remove this player"
+              - "&7from your requests."
+          "6-8,15-17,24-26":
+            function:
+              type: "accept"
+            material: LIME_STAINED_GLASS_PANE
+            name: "&a&lAccept"
+            lore:
+              - "Click to &aaccept &7friend request."
+
+    settings:
+      name: "settings"
+      enabled: true
+      error: "{error_colour}Error occurred when opening inventory."
+      inventory:
+        size: GENERIC_9X3
+        title: "&8&lFriend Requests"
+        content:
+          "row0,row2":
+            material: GRAY_STAINED_GLASS_PANE
+          "10":
+            function:
+              type: "toggleProxyJoin"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Join Messages"
+            lore:
+              - "&7Click to toggle join messages"
+              - "&6Currently &f%toggleProxyJoin%"
+          "11":
+            function:
+              type: "toggleProxyLeave"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Leave Messages"
+            lore:
+              - "&7Click to toggle leave messages"
+              - "&6Currently &f%toggleProxyLeave%"
+          "12":
+            function:
+              type: "toggleServerChange"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Server Change Messages"
+            lore:
+              - "&7Click to toggle server change messages"
+              - "&6Currently &f%toggleServerChange%"
+          "15":
+            function:
+              type: "toggleMail"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Mail"
+            lore:
+              - "&7Click to toggle mail"
+              - "&6Currently &f%toggleMail%"
+          "16":
+            function:
+              type: "toggleRequests"
+              # When true what should the item be overridden with
+              true:
+                material: LIME_STAINED_GLASS_PANE
+            # Default item
+            material: RED_STAINED_GLASS_PANE
+            name: "&6&lToggle Friend Requests"
+            lore:
+              - "&7Click to toggle friend requests"
+              - "&6Currently &f%toggleRequests%"
+
+    unfriend:
+      name: "unfriend"
+      enabled: true
+      not_found: "{error_colour}Invalid player name."
+      # Placeholders will register in terms of the friend.
+      message: "{message} You are no longer friends with <player>"

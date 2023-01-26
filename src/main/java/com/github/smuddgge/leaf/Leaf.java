@@ -35,7 +35,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "1.3.0",
+        version = "1.4.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -69,7 +69,7 @@ public class Leaf {
 
         // Set up b stats
         int pluginId = 17381;
-        Metrics metrics = this.metricsFactory.make(this, pluginId);
+        this.metricsFactory.make(this, pluginId);
 
         // Log header
         MessageManager.logHeader();
@@ -105,6 +105,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Report());
         Leaf.commandHandler.addType(new Send());
         Leaf.commandHandler.addType(new Servers());
+        Leaf.commandHandler.addType(new Teleport());
 
         Leaf.reloadCommands();
 
@@ -184,6 +185,7 @@ public class Leaf {
         Leaf.database.createTable(new FriendTable(Leaf.database));
         Leaf.database.createTable(new FriendMailTable(Leaf.database));
         Leaf.database.createTable(new FriendRequestTable(Leaf.database));
+        Leaf.database.createTable(new FriendSettingsTable(Leaf.database));
     }
 
     /**

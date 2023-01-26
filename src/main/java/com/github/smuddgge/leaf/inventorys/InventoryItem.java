@@ -12,10 +12,7 @@ import dev.simplix.protocolize.data.inventory.InventoryType;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Represents a custom inventory item.
@@ -25,6 +22,8 @@ public class InventoryItem {
     private final ConfigurationSection section;
     private final String slot;
     private final User user;
+
+    private Map<String, String> placeholders = new HashMap<>();
 
     /**
      * Used to create an inventory item.
@@ -47,15 +46,31 @@ public class InventoryItem {
      * @return A new inventory item instance.
      */
     public InventoryItem append(ConfigurationSection section) {
-        ConfigurationSection clone = new YamlConfigurationSection(new HashMap<>());
-        for (String key : section.getKeys()) {
-            clone.setInSection(key, section.get(key));
-        }
+        ConfigurationSection cloneSection = new YamlConfigurationSection(new HashMap<>());
         for (String key : this.section.getKeys()) {
-            clone.setInSection(key, section.get(key));
+            cloneSection.setInSection(key, this.section.get(key));
+        }
+        for (String key : section.getKeys()) {
+            cloneSection.setInSection(key, section.get(key));
         }
 
-        return new InventoryItem(clone, this.slot, this.user);
+        InventoryItem clone = new InventoryItem(cloneSection, this.slot, this.user);
+        clone.placeholders = this.placeholders;
+
+        return clone;
+    }
+
+    /**
+     * Used to parse item placeholders on a string.
+     *
+     * @param string The string to parse.
+     * @return The requested string.
+     */
+    private String parsePlaceholders(String string) {
+        for (Map.Entry<String, String> entry : this.placeholders.entrySet()) {
+            string = string.replace(entry.getKey(), entry.getValue());
+        }
+        return string;
     }
 
     /**
@@ -115,24 +130,28 @@ public class InventoryItem {
         if (this.section.getKeys().contains("skull")) {
             item.itemType(ItemType.PLAYER_HEAD);
             String message = this.section.getString("skull", "Steve");
-            compoundTag.putString("SkullOwner", PlaceholderManager.parse(message, null, this.user));
+            compoundTag.putString("SkullOwner", this.parsePlaceholders(PlaceholderManager.parse(message, null, this.user)));
         }
 
         // If the item has nbt values.
         if (this.section.getKeys().contains("nbt")) {
             for (String key : this.section.getSection("nbt").getKeys()) {
                 String message = this.section.getSection("nbt").getString(key);
-                compoundTag.putString(key, PlaceholderManager.parse(message, null, this.user));
+                compoundTag.putString(key, this.parsePlaceholders(PlaceholderManager.parse(message, null, this.user)));
             }
         }
 
         // Set the display name.
         String name = this.section.getString("name", "&7");
-        item.displayName(MessageManager.convert(PlaceholderManager.parse(name, null, this.user)));
+        item.displayName(MessageManager.convert(MessageManager.convertToLegacy(
+                this.parsePlaceholders(PlaceholderManager.parse(name, null, this.user))
+        )));
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
-            item.addToLore(MessageManager.convert(PlaceholderManager.parse(line, null, this.user)));
+            item.addToLore(MessageManager.convert(MessageManager.convertToLegacy(
+                    this.parsePlaceholders(PlaceholderManager.parse(line, null, this.user))
+            )));
         }
 
         if (this.section.getKeys().contains("durability")) {
@@ -221,5 +240,15 @@ public class InventoryItem {
      */
     public ConfigurationSection getSection() {
         return this.section;
+    }
+
+    /**
+     * Used to add a placeholder that will get parsed in the item.
+     *
+     * @param key   The key to replace.
+     * @param value The value to replace with.
+     */
+    public void addPlaceholder(String key, String value) {
+        this.placeholders.put(key, value);
     }
 }

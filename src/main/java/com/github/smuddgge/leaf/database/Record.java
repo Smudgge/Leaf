@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents a record in a database
@@ -59,6 +60,19 @@ public class Record {
     }
 
     /**
+     * Used to get a field.
+     *
+     * @param fieldKey The fields key.
+     * @return The requested field.
+     */
+    public Field getField(String fieldKey) {
+        for (Field field : this.getFields()) {
+            if (Objects.equals(field.getKey(), fieldKey)) return field;
+        }
+        return null;
+    }
+
+    /**
      * Used to get the primary key
      *
      * @return null if there are no primary keys
@@ -91,6 +105,21 @@ public class Record {
             }
 
             index++;
+        }
+    }
+
+    /**
+     * Used to toggle a boolean in a record.
+     *
+     * @param fieldKey The key of a field.
+     */
+    public void toggleBoolean(String fieldKey) throws NoSuchFieldException, IllegalAccessException {
+        Field field = this.getField(fieldKey);
+        if (field.getValue().equals("false")) {
+            this.getClass().getField(fieldKey).set(this, "true");
+        }
+        if (field.getValue().equals("true")) {
+            this.getClass().getField(fieldKey).set(this, "false");
         }
     }
 }

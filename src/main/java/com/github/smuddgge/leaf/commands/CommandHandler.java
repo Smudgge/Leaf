@@ -104,6 +104,11 @@ public class CommandHandler {
             manager.unregister(commandName);
         }
 
+        for (Command command : this.commands) {
+            // Remove subcommands
+            command.getBaseCommandType().removeSubCommands();
+        }
+
         this.registeredCommands = new ArrayList<>();
         this.commands = new ArrayList<>();
     }

@@ -6,13 +6,18 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendRequestInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendSettingsInventory;
 
-public class Requests implements CommandType {
+/**
+ * <h1>Friend Settings Subcommand Type</h1>
+ * Opens a {@link com.github.smuddgge.leaf.inventorys.InventoryInterface}
+ * containing the players global friend settings.
+ */
+public class FriendSettings implements CommandType {
 
     @Override
     public String getName() {
-        return "requests";
+        return "settings";
     }
 
     @Override
@@ -33,16 +38,16 @@ public class Requests implements CommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        // Open friend requests inventory.
+        // Open the players friend settings inventory.
         try {
-            FriendRequestInventory friendRequestInventory = new FriendRequestInventory(section.getSection(this.getName()), user);
-            friendRequestInventory.open();
+            FriendSettingsInventory friendSettingsInventory = new FriendSettingsInventory(section.getSection(this.getName()), user);
+            friendSettingsInventory.open();
+
         } catch (Exception exception) {
-            user.sendMessage(section.getSection("requests").getString("error", "{error_colour}Error occurred when opening inventory."));
-            MessageManager.warn("Exception occurred when opening a friend request inventory!");
+            user.sendMessage(section.getSection(this.getName()).getString("error", "{error_colour}Error occurred when opening inventory."));
+            MessageManager.warn("Exception occurred when opening a friend list inventory!");
             exception.printStackTrace();
         }
-
         return new CommandStatus();
     }
 }

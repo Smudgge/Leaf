@@ -1,13 +1,15 @@
 package com.github.smuddgge.leaf.commands.subtypes.friends;
 
-import com.github.smuddgge.leaf.FriendRequestManager;
+import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
+import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
+import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
@@ -15,9 +17,14 @@ import com.velocitypowered.api.proxy.Player;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
-public class Request implements CommandType {
+/**
+ * <h1>Friend Request Subcommand Type</h1>
+ * Used to create a friend request to a player.
+ */
+public class FriendRequest implements CommandType {
 
     @Override
     public String getName() {
@@ -26,7 +33,7 @@ public class Request implements CommandType {
 
     @Override
     public String getSyntax() {
-        return "/[parent] [name] [player] <optional message>";
+        return "/[parent] [name] [player]";
     }
 
     @Override
@@ -43,29 +50,51 @@ public class Request implements CommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (arguments.length < 2) return new CommandStatus().incorrectArguments();
 
+        // Get the request configuration section.
+        ConfigurationSection requestSection = section.getSection("request");
+
+        // Get the given argument.
         String playerNameToRequest = arguments[1];
 
+        // Check if they are creating a request to them self.
         if (user.getName().toLowerCase(Locale.ROOT).equals(playerNameToRequest.toLowerCase(Locale.ROOT))) {
-            user.sendMessage(section.getSection("request").getString("self", "{error_colour}You can not be friends with your self."));
+            user.sendMessage(requestSection.getString("self", "{error_colour}You can not be friends with your self."));
             return new CommandStatus();
         }
 
+        // Check if the database is disabled.
         if (Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
-
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
 
+        // Get player to requests information.
         ArrayList<Record> playerResults = playerTable.getRecord("name", playerNameToRequest);
         if (playerResults.size() == 0) {
-            user.sendMessage(section.getSection("request").getString("not_found", "{error_colour}Player has never played on this server."));
+            user.sendMessage(requestSection.getString("not_found", "{error_colour}Player has never played on this server."));
+            return new CommandStatus();
+        }
+        PlayerRecord playerToRequestRecord = (PlayerRecord) playerResults.get(0);
+
+        // Get the settings of the player to request.
+        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+        FriendSettingsRecord playerToRequestSettings = friendSettingsTable.getSettings(playerToRequestRecord.uuid);
+
+        // Check if they have their friend requests toggled false.
+        if (Objects.equals(playerToRequestSettings.toggleRequests, "false")) {
+            user.sendMessage(section.getSection("request").getString("requests_off", "{error_colour}This player has there friend requests off."));
             return new CommandStatus();
         }
 
-        PlayerRecord playerRecordToRequest = (PlayerRecord) playerResults.get(0);
+        // Check if the player has already sent a friend request to this player.
+        if (FriendManager.hasRequested(user.getUniqueId(), playerToRequestRecord.uuid)) {
+            user.sendMessage(section.getSection("request").getString("already_requested", "{error_colour}You have already requested to be friends with this player."));
+            return new CommandStatus();
+        }
 
-        boolean success = FriendRequestManager.sendRequest(user, playerRecordToRequest);
-
+        // Send a friend request anonymously.
+        boolean success = FriendManager.sendRequest(user, playerToRequestRecord);
         if (!success) return new CommandStatus().databaseEmpty();
 
+        // Send the players a message.
         user.sendMessage(PlaceholderManager.parse(
                 section.getSection("request").getString("sent"),
                 null, new User(null, playerNameToRequest)

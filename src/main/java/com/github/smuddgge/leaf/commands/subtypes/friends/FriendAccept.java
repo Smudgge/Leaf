@@ -6,13 +6,18 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendRequestInventory;
 
-public class List implements CommandType {
+/**
+ * <h1>Friend Accept Subcommand Type</h1>
+ * Opens a {@link com.github.smuddgge.leaf.inventorys.InventoryInterface}
+ * containing the players friend requests.
+ */
+public class FriendAccept implements CommandType {
 
     @Override
     public String getName() {
-        return "list";
+        return "accept";
     }
 
     @Override
@@ -33,14 +38,14 @@ public class List implements CommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        // Open friend list inventory.
+        // Open the players friend requests inventory.
         try {
-            FriendListInventory friendListInventory = new FriendListInventory(section.getSection(this.getName()), user);
-            friendListInventory.open();
-        } catch (Exception exception) {
-            user.sendMessage(section.getSection("list").getString("error", "{error_colour}Error occurred when opening inventory."));
+            FriendRequestInventory friendRequestInventory = new FriendRequestInventory(section.getSection(this.getName()), user);
+            friendRequestInventory.open();
 
-            MessageManager.warn("Exception occurred when opening a friend list inventory!");
+        } catch (Exception exception) {
+            user.sendMessage(section.getSection(this.getName()).getString("error", "{error_colour}Error occurred when opening inventory."));
+            MessageManager.warn("Exception occurred when opening a friend request inventory!");
             exception.printStackTrace();
         }
 
