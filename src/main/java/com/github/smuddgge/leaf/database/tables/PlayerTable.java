@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
 import com.github.smuddgge.leaf.datatype.User;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Represents the player table in the database.
@@ -39,16 +40,24 @@ public class PlayerTable extends SQLiteTable {
      */
     public void updatePlayer(User user) {
         ArrayList<Record> playerRecords = this.getRecord("uuid", user.getUniqueId().toString());
-        PlayerRecord playerRecord = new PlayerRecord();
 
+        // Check if the player record does not exist.
         if (playerRecords.isEmpty()) {
+            PlayerRecord playerRecord = new PlayerRecord();
             playerRecord.uuid = user.getUniqueId().toString();
             playerRecord.name = user.getName();
-        } else {
-            playerRecord = (PlayerRecord) playerRecords.get(0);
+            this.insertRecord(playerRecord);
+            return;
         }
 
-        this.insertRecord(playerRecord);
+        // Get the player record.
+        PlayerRecord playerRecord = (PlayerRecord) playerRecords.get(0);
+
+        // Check if the player has changed there name.
+        if (!Objects.equals(playerRecord.name, user.getName())) {
+            playerRecord.name = user.getName();
+            this.insertRecord(playerRecord);
+        }
     }
 
     /**
