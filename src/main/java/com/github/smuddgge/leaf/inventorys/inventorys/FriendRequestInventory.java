@@ -61,24 +61,31 @@ public class FriendRequestInventory extends CustomInventory {
         int requestsPerPage = this.getInventoryOf("player").size();
         int recordIndex = (requestsPerPage * page) - requestsPerPage;
 
+        // Get tables.
+        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
+        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+
         for (Integer slot : mockInventory.keySet()) {
 
-            // Check if the record exists.
+            // Check if a record for this slot.
             if (this.requestRecords.size() - 1 < recordIndex) {
                 ItemStack item = this.appendNoPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, item);
-                this.addAction(slot, () -> {
-                });
+                this.addAction(slot, () -> {});
             } else {
                 FriendRequestRecord requestRecord = (FriendRequestRecord) this.requestRecords.get(recordIndex);
-                PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
                 String acceptedPlayerName = playerTable.getPlayer(requestRecord.playerFromUuid).name;
+
+                // Check that the record still exists in the database.
+                ArrayList<Record> results = friendRequestTable.getRecord("uuid", requestRecord.uuid);
+                if (results.isEmpty()) continue;
 
                 // Add the item to the inventory.
                 ItemStack item = this.appendPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));
 
                 this.addAction(slot, () -> {
+                    this.close();
                     FriendRequestOptionsInventory friendAcceptInventory = new FriendRequestOptionsInventory(
                             this.section, this.user, requestRecord, acceptedPlayerName
                     );

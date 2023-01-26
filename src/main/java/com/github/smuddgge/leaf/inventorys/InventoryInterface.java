@@ -52,6 +52,16 @@ public abstract class InventoryInterface {
     }
 
     /**
+     * Used to close the inventory the player has open.
+     * @return This instance.
+     */
+    public InventoryInterface close() {
+        ProtocolizePlayer player = Protocolize.playerProvider().player(this.user.getUniqueId());
+        player.closeInventory();
+        return this;
+    }
+
+    /**
      * Used to get the inventory type.
      *
      * @return The type of inventory.

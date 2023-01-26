@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.inventorys.inventorys;
 import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
+import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
 import com.github.smuddgge.leaf.database.tables.FriendRequestTable;
 import com.github.smuddgge.leaf.datatype.User;
@@ -12,6 +13,7 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -84,6 +86,8 @@ public class FriendRequestOptionsInventory extends CustomInventory {
                 this.section.getString("sent", "{message} You are now friends with &f<name>"),
                 null, user
         ));
+
+        this.close();
 
         FriendRequestInventory friendRequestInventory = new FriendRequestInventory(this.section, this.user);
         friendRequestInventory.open();
