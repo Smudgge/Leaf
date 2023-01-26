@@ -196,6 +196,10 @@ commands:
     enabled: true
     name: "friends"
 
+    proxy_join: "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}"
+    proxy_leave: "&8[&c-&8] &7Your friend &c<player> &7left the network"
+    server_change: "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}"
+
     list:
       name: "list"
       enabled: true
@@ -246,16 +250,19 @@ commands:
       name: "request"
       enabled: true
       not_found: "{error_colour}Player has never played on this server."
+      requests_off: "{error_colour}This player has there friend requests off."
       self: "{error_colour}You can not be friends with your self."
       # Placeholders will parse in terms of the other player.
       sent: "{message} You have sent a friend request to &f<player>"
       # Placeholders will parse in terms of the player that sent the request.
       from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
 
-    requests:
+    accept:
       name: "accept"
       enabled: true
       error: "{error_colour}Error occurred when opening inventory."
+      requests_off: "{error_colour}This player has there friend requests off."
+      already_requested: "{error_colour}You have already requested to be friends with this player."
       # Placeholders will parse in terms of the player that sent the request.
       # Message is sent to the friend accepter.
       from: "{message} You are now friends with &f<player>"
@@ -267,7 +274,7 @@ commands:
         skull: "%name%"
         name: "&6&l%name%"
         lore:
-          - "&7Click to &aaccept &7friend request."
+          - "&7Click to open request options."
       no_player:
         material: LIGHT_GRAY_STAINED_GLASS_PANE
       # The inventory displaying the friend requests list.
@@ -296,6 +303,25 @@ commands:
             name: "&a&lNext Page"
             lore:
               - "&7Click to go to the next page"
+      options:
+        size: GENERIC_9X3
+        title: "&8&lFriend Request"
+        content:
+          "0-2,9-11,18-20":
+            function:
+              type: "deny"
+            material: RED_STAINED_GLASS_PANE
+            name: "&c&lDeny"
+            lore:
+              - "&7Anonymously remove this player"
+              - "&7from your requests."
+          "6-8,15-17,24-26":
+            function:
+              type: "accept"
+            material: LIME_STAINED_GLASS_PANE
+            name: "&a&lAccept"
+            lore:
+              - "Click to &aaccept &7friend request."
 
     settings:
       name: "settings"
@@ -305,7 +331,9 @@ commands:
         size: GENERIC_9X3
         title: "&8&lFriend Requests"
         content:
-          "0":
+          "row0,row2":
+            material: GRAY_STAINED_GLASS_PANE
+          "10":
             function:
               type: "toggleProxyJoin"
               # When true what should the item be overridden with
@@ -317,7 +345,7 @@ commands:
             lore:
               - "&7Click to toggle join messages"
               - "&6Currently &f%toggleProxyJoin%"
-          "1":
+          "11":
             function:
               type: "toggleProxyLeave"
               # When true what should the item be overridden with
@@ -329,7 +357,7 @@ commands:
             lore:
               - "&7Click to toggle leave messages"
               - "&6Currently &f%toggleProxyLeave%"
-          "2":
+          "12":
             function:
               type: "toggleServerChange"
               # When true what should the item be overridden with
@@ -341,7 +369,7 @@ commands:
             lore:
               - "&7Click to toggle server change messages"
               - "&6Currently &f%toggleServerChange%"
-          "3":
+          "15":
             function:
               type: "toggleMail"
               # When true what should the item be overridden with
@@ -353,7 +381,7 @@ commands:
             lore:
               - "&7Click to toggle mail"
               - "&6Currently &f%toggleMail%"
-          "4":
+          "16":
             function:
               type: "toggleRequests"
               # When true what should the item be overridden with

@@ -12,12 +12,10 @@ import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import dev.simplix.protocolize.api.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FriendSettingsInventory extends CustomInventory {
 
     private final FriendSettingsRecord friendSettingsRecord;
-    private String toggleProxyJoin;
 
     /**
      * Used to create a custom inventory.
@@ -26,7 +24,7 @@ public class FriendSettingsInventory extends CustomInventory {
      * @param user    The user that will open the inventory.
      */
     public FriendSettingsInventory(ConfigurationSection section, User user) {
-        super(section, user);
+        super(section, user, "inventory");
 
         FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
         ArrayList<Record> result = friendSettingsTable.getRecord("playerUuid", user.getUniqueId());
@@ -50,7 +48,15 @@ public class FriendSettingsInventory extends CustomInventory {
 
         for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
             this.addAction(slot, () -> {
-                this.friendSettingsRecord.toggleBoolean(functionType);
+                try {
+                    this.friendSettingsRecord.toggleBoolean(functionType);
+                } catch (NoSuchFieldException | IllegalAccessException exception) {
+                    exception.printStackTrace();
+                }
+
+                FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+                friendSettingsTable.insertRecord(this.friendSettingsRecord);
+
                 this.load();
             });
         }

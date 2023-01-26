@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * Represents the command configuration file.
@@ -119,5 +120,22 @@ public class ConfigCommands extends YamlConfiguration {
      */
     public static boolean isCommandEnabled(String identifier) {
         return ConfigCommands.getCommand(identifier).getBoolean("enabled", true);
+    }
+
+    /**
+     * Used to get the first command with a certain
+     * command type.
+     *
+     * @param commandType The command type name.
+     * @return An instance of a command configuration
+     * section with the specified type.
+     */
+    public static ConfigurationSection getCommandType(String commandType) {
+        for (String key : ConfigCommands.config.getSection("commands").getKeys()) {
+            ConfigurationSection section = ConfigCommands.config.getSection("commands").getSection(key);
+            String type = section.getString("type");
+            if (Objects.equals(commandType, type)) return section;
+        }
+        return null;
     }
 }

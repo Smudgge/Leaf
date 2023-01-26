@@ -4,7 +4,9 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
+import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
+import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
@@ -144,6 +146,28 @@ public class CommandSuggestions {
         }
 
         this.data.add(players);
+        return this;
+    }
+
+    /**
+     * Used to append a users list of friends.
+     *
+     * @param user The instance of the user.
+     * @return This instance.
+     */
+    public CommandSuggestions appendFriends(User user) {
+        if (Leaf.getDatabase().isDisabled()) return this;
+
+        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        ArrayList<Record> friends = friendTable.getRecord("playerUuid", user.getUniqueId());
+
+        List<String> friendList = new ArrayList<>();
+        for (Record record : friends) {
+            FriendRecord friendRecord = (FriendRecord) record;
+            friendList.add(friendRecord.friendNameFormatted);
+        }
+
+        this.data.add(friendList);
         return this;
     }
 

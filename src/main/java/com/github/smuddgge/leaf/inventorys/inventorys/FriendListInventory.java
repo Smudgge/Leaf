@@ -36,7 +36,7 @@ public class FriendListInventory extends CustomInventory {
      * @param user    The user that is opening the inventory.
      */
     public FriendListInventory(ConfigurationSection section, User user) {
-        super(section, user);
+        super(section, user, "inventory");
 
         // Check if the database is disabled.
         if (Leaf.getDatabase().isDisabled()) return;
@@ -56,7 +56,7 @@ public class FriendListInventory extends CustomInventory {
      * @param listContextUserUuid The user whose friend list should be shown.
      */
     public FriendListInventory(ConfigurationSection section, User user, String listContextUserUuid) {
-        super(section, user);
+        super(section, user, "inventory");
 
         // Check if the database is disabled.
         if (Leaf.getDatabase().isDisabled()) return;

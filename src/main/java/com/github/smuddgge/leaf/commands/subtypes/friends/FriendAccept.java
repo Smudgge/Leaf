@@ -1,22 +1,23 @@
 package com.github.smuddgge.leaf.commands.subtypes.friends;
 
-import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.records.PlayerRecord;
-import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendSettingsInventory;
+import com.github.smuddgge.leaf.inventorys.inventorys.FriendRequestInventory;
 
-public class Settings implements CommandType {
+/**
+ * <h1>Friend Accept Subcommand Type</h1>
+ * Opens a {@link com.github.smuddgge.leaf.inventorys.InventoryInterface}
+ * containing the players friend requests.
+ */
+public class FriendAccept implements CommandType {
 
     @Override
     public String getName() {
-        return "settings";
+        return "accept";
     }
 
     @Override
@@ -37,18 +38,17 @@ public class Settings implements CommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        // Open friends settings inventory.
+        // Open the players friend requests inventory.
         try {
-
-            FriendSettingsInventory friendSettingsInventory = new FriendSettingsInventory(section.getSection(this.getName()), user);
-            friendSettingsInventory.open();
+            FriendRequestInventory friendRequestInventory = new FriendRequestInventory(section.getSection(this.getName()), user);
+            friendRequestInventory.open();
 
         } catch (Exception exception) {
             user.sendMessage(section.getSection(this.getName()).getString("error", "{error_colour}Error occurred when opening inventory."));
-
-            MessageManager.warn("Exception occurred when opening a friend list inventory!");
+            MessageManager.warn("Exception occurred when opening a friend request inventory!");
             exception.printStackTrace();
         }
+
         return new CommandStatus();
     }
 }

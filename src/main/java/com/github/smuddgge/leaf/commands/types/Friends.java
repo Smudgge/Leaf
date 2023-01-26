@@ -5,7 +5,6 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.subtypes.friends.*;
-import com.github.smuddgge.leaf.commands.subtypes.friends.List;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
@@ -51,11 +50,10 @@ public class Friends extends BaseCommandType {
 
     @Override
     public void loadSubCommands() {
-        this.addSubCommandType(new List());
-        this.addSubCommandType(new Mail());
-        this.addSubCommandType(new Request());
-        this.addSubCommandType(new Requests());
-        this.addSubCommandType(new Settings());
-        this.addSubCommandType(new UnFriend());
+        this.addSubCommandType(new FriendList());
+        this.addSubCommandType(new FriendRequest());
+        this.addSubCommandType(new FriendAccept());
+        this.addSubCommandType(new FriendSettings());
+        this.addSubCommandType(new FriendUnfriend());
     }
 }

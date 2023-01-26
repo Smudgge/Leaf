@@ -5,6 +5,8 @@ import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class FriendTable extends SQLiteTable {
@@ -42,5 +44,19 @@ public class FriendTable extends SQLiteTable {
             if (Objects.equals(friendRecord.friendPlayerUuid, friendUuid)) return friendRecord;
         }
         return null;
+    }
+
+    /**
+     * Used to get a players friend list.
+     *
+     * @param playerUuid The players uuid.
+     * @return The requested list of friend records.
+     */
+    public List<FriendRecord> getFriendList(String playerUuid) {
+        List<FriendRecord> friendRecords = new ArrayList<>();
+        for (Record record : this.getRecord("playerUuid", playerUuid)) {
+            friendRecords.add((FriendRecord) record);
+        }
+        return friendRecords;
     }
 }

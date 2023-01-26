@@ -5,6 +5,9 @@ import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
 import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class FriendSettingsTable extends SQLiteTable {
 
     /**
@@ -25,5 +28,23 @@ public class FriendSettingsTable extends SQLiteTable {
     @Override
     public String getName() {
         return "FriendSettings";
+    }
+
+    /**
+     * Used to get a players friend settings.
+     *
+     * @param playerUuid The players uuid.
+     * @return The instance of the friend settings.
+     */
+    public FriendSettingsRecord getSettings(String playerUuid) {
+        ArrayList<Record> result = this.getRecord("playerUuid", playerUuid);
+        if (result.isEmpty()) {
+            FriendSettingsRecord friendSettingsRecord = new FriendSettingsRecord();
+            friendSettingsRecord.playerUuid = playerUuid;
+            friendSettingsRecord.uuid = UUID.randomUUID().toString();
+            this.insertRecord(friendSettingsRecord);
+            return friendSettingsRecord;
+        }
+        return (FriendSettingsRecord) result.get(0);
     }
 }

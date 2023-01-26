@@ -15,9 +15,12 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class UnFriend implements CommandType {
+/**
+ * <h1>Friend Accept Subcommand Type</h1>
+ * Used to unfriend a player in there friend list.
+ */
+public class FriendUnfriend implements CommandType {
 
     @Override
     public String getName() {
@@ -31,18 +34,7 @@ public class UnFriend implements CommandType {
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        if (Leaf.getDatabase().isDisabled()) return null;
-
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        ArrayList<Record> friends = friendTable.getRecord("playerUuid", user.getUniqueId());
-
-        List<String> friendList = new ArrayList<>();
-        for (Record record : friends) {
-            FriendRecord friendRecord = (FriendRecord) record;
-            friendList.add(friendRecord.friendNameFormatted);
-        }
-
-        return new CommandSuggestions().append(friendList);
+        return new CommandSuggestions().appendFriends(user);
     }
 
     @Override
@@ -53,37 +45,41 @@ public class UnFriend implements CommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
-
         if (arguments.length <= 1) return new CommandStatus().incorrectArguments();
 
-        // Get the player name to unfriend.
-        String playerName = arguments[1];
+        // Get the unfriend configuration section.
+        ConfigurationSection unfriendSection = section.getSection(this.getName());
 
+        // Get the player name to unfriend.
+        String unfriendPlayerName = arguments[1];
+
+        // Get database tables.
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
 
-        // Player has never logged on.
-        if (!playerTable.contains(playerName)) {
-            user.sendMessage(section.getString("not_found", "{error_colour}Invalid player name."));
+        // Get the unfriend players information.
+        ArrayList<Record> results = playerTable.getRecord("name", unfriendPlayerName);
+        if (results.isEmpty()) {
+            user.sendMessage(unfriendSection.getString("not_found", "{error_colour}Invalid player name."));
             return new CommandStatus();
         }
+        PlayerRecord unfriendPlayerRecord = (PlayerRecord) results.get(0);
 
-        ArrayList<Record> results = playerTable.getRecord("name", user.getName());
-        PlayerRecord playerRecord = (PlayerRecord) results.get(0);
+        // Get the friend record of the two players.
+        FriendRecord friendRecord = friendTable.getFriend(user.getUniqueId().toString(), unfriendPlayerRecord.uuid);
 
-        FriendRecord friendRecord = friendTable.getFriend(user.getUniqueId().toString(), playerRecord.uuid);
-
-        // Player is not their friend.
+        // Check if the player is not a friend.
         if (friendRecord == null) {
             user.sendMessage(section.getString("not_found", "{error_colour}Invalid player name."));
             return new CommandStatus();
         }
 
         // Unfriend player.
-        FriendManager.unFriend(user.getUniqueId().toString(), playerRecord.uuid);
+        FriendManager.unFriend(user.getUniqueId().toString(), unfriendPlayerRecord.uuid);
 
+        // Send the user a message.
         String message = section.getString("message", "{message} You are no longer friends with <player>");
-        user.sendMessage(PlaceholderManager.parse(message, null, new User(null, playerRecord.name)));
+        user.sendMessage(PlaceholderManager.parse(message, null, new User(null, unfriendPlayerRecord.name)));
 
         return new CommandStatus();
     }

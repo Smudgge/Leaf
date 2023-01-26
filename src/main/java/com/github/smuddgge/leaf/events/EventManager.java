@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.events;
 
+import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -35,6 +36,9 @@ public class EventManager {
         // Check if the user is vanished
         if (user.isVanished()) return;
 
+        if (event.getPreviousServer() == null) FriendManager.onProxyJoin(user);
+        else FriendManager.onChangeServer(user);
+
         // Add history
         user.addHistory(server, PlayerHistoryEventType.JOIN);
     }
@@ -62,6 +66,8 @@ public class EventManager {
 
         // Check if the user is vanished
         if (user.isVanished()) return;
+
+        FriendManager.onProxyLeave(user);
 
         // Add history
         user.addHistory(server, PlayerHistoryEventType.LEAVE);

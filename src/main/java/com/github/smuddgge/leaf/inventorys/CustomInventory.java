@@ -15,17 +15,20 @@ public abstract class CustomInventory extends InventoryInterface {
 
     protected int page = 1;
     protected final ConfigurationSection section;
+    protected final String inventoryID;
 
     /**
      * Used to create a custom inventory.
      *
-     * @param section The parent configuration section to the inventory.
-     * @param user    The user that will open the inventory.
+     * @param section     The parent configuration section to the inventory.
+     * @param user        The user that will open the inventory.
+     * @param inventoryID The identifier if the inventory in the configuration section.
      */
-    public CustomInventory(ConfigurationSection section, User user) {
+    public CustomInventory(ConfigurationSection section, User user, String inventoryID) {
         super(user);
 
         this.section = section;
+        this.inventoryID = inventoryID;
 
         // Check if the inventory is empty
         if (this.getInventorySection().getKeys().size() == 0) {
@@ -88,7 +91,7 @@ public abstract class CustomInventory extends InventoryInterface {
      * @return The requested inventory configuration section.
      */
     public ConfigurationSection getInventorySection() {
-        return this.section.getSection("inventory");
+        return this.section.getSection(this.inventoryID);
     }
 
     /**

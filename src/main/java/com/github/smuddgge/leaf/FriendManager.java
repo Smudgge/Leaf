@@ -1,14 +1,24 @@
 package com.github.smuddgge.leaf;
 
+import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
+import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
+import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendRequestTable;
+import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
+import com.velocitypowered.api.proxy.Player;
 
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -40,6 +50,11 @@ public class FriendManager {
         return true;
     }
 
+    /**
+     * Used to accept a friend request.
+     *
+     * @param requestRecord The instance of the request record.
+     */
     public static void acceptRequest(FriendRequestRecord requestRecord) {
         if (Leaf.getDatabase().isDisabled()) return;
 
@@ -81,6 +96,12 @@ public class FriendManager {
         friendTable.insertRecord(friendRecord2);
     }
 
+    /**
+     * Used to unfriend a player.
+     *
+     * @param playerUuid The players uuid.
+     * @param friendUuid THe friends uuid.
+     */
     public static void unFriend(String playerUuid, String friendUuid) {
         if (Leaf.getDatabase().isDisabled()) return;
 
@@ -90,5 +111,108 @@ public class FriendManager {
 
         friendTable.removeRecord("uuid", friendRecord1.uuid);
         friendTable.removeRecord("uuid", friendRecord2.uuid);
+    }
+
+    /**
+     * Used to check if a player has already requested a player.
+     *
+     * @param playerFrom Player uuid the request was sent from.
+     * @param playerTo   Player uuid the request was sent to.
+     * @return True if they have already requested.
+     */
+    public static boolean hasRequested(UUID playerFrom, String playerTo) {
+        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
+        ArrayList<Record> results = friendRequestTable.getRecord("playerFromUuid", playerFrom);
+
+        for (Record record : results) {
+            FriendRequestRecord friendRequestRecord = (FriendRequestRecord) record;
+            if (Objects.equals(friendRequestRecord.playerToUuid, playerTo)) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Called when a user joins the proxy and is able to be seen.
+     *
+     * @param user The instance of the user.
+     */
+    public static void onProxyJoin(User user) {
+        ConfigurationSection section = ConfigCommands.getCommandType("friends");
+
+        if (section == null) return;
+
+        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+
+        String message = section.getString("proxy_join", "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}");
+
+        for (FriendRecord friendRecord : friendTable.getFriendList(user.getUniqueId().toString())) {
+            Optional<Player> optional = Leaf.getServer().getPlayer(friendRecord.friendNameFormatted);
+            if (optional.isEmpty()) continue;
+            Player player = optional.get();
+
+            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendRecord.friendPlayerUuid);
+
+            if (Objects.equals(settings.toggleProxyJoin, "false")) continue;
+
+            new User(player).sendMessage(PlaceholderManager.parse(message, null, user));
+        }
+    }
+
+    /**
+     * Called when a user leaves the proxy and is able to be seen.
+     *
+     * @param user The instance of the user.
+     */
+    public static void onProxyLeave(User user) {
+        ConfigurationSection section = ConfigCommands.getCommandType("friends");
+
+        if (section == null) return;
+
+        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+
+        String message = section.getString("proxy_leave", "&8[&c-&8] &7Your friend &c<player> &7left the network");
+
+        for (FriendRecord friendRecord : friendTable.getFriendList(user.getUniqueId().toString())) {
+            Optional<Player> optional = Leaf.getServer().getPlayer(friendRecord.friendNameFormatted);
+            if (optional.isEmpty()) continue;
+            Player player = optional.get();
+
+            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendRecord.friendPlayerUuid);
+
+            if (Objects.equals(settings.toggleProxyLeave, "false")) continue;
+
+            new User(player).sendMessage(PlaceholderManager.parse(message, null, user));
+        }
+    }
+
+    /**
+     * Called when a user changes server and is able to be seen.
+     *
+     * @param user The instance of the user.
+     */
+    public static void onChangeServer(User user) {
+        ConfigurationSection section = ConfigCommands.getCommandType("friends");
+
+        if (section == null) return;
+
+        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+
+        String message = section.getString("server_change", "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}");
+
+        for (FriendRecord friendRecord : friendTable.getFriendList(user.getUniqueId().toString())) {
+            Optional<Player> optional = Leaf.getServer().getPlayer(friendRecord.friendNameFormatted);
+            if (optional.isEmpty()) continue;
+            Player player = optional.get();
+
+            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendRecord.friendPlayerUuid);
+
+            if (Objects.equals(settings.toggleServerChange, "false")) continue;
+
+            new User(player).sendMessage(PlaceholderManager.parse(message, null, user));
+        }
     }
 }

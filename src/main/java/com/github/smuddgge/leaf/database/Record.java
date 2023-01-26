@@ -113,9 +113,13 @@ public class Record {
      *
      * @param fieldKey The key of a field.
      */
-    public void toggleBoolean(String fieldKey) {
+    public void toggleBoolean(String fieldKey) throws NoSuchFieldException, IllegalAccessException {
         Field field = this.getField(fieldKey);
-        if (field.getValue().equals("false")) field.setValue("true");
-        if (field.getValue().equals("true")) field.setValue("false");
+        if (field.getValue().equals("false")) {
+            this.getClass().getField(fieldKey).set(this, "true");
+        }
+        if (field.getValue().equals("true")) {
+            this.getClass().getField(fieldKey).set(this, "false");
+        }
     }
 }

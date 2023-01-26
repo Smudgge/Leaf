@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class BaseCommandType implements CommandType {
 
-    private final List<CommandType> subCommandTypes = new ArrayList<>();
+    private List<CommandType> subCommandTypes = new ArrayList<>();
 
     /**
      * Used to add a sub command type.
@@ -58,5 +58,12 @@ public abstract class BaseCommandType implements CommandType {
 
             MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());
         }
+    }
+
+    /**
+     * Used to remove sub commands.
+     */
+    public void removeSubCommands() {
+        this.subCommandTypes = new ArrayList<>();
     }
 }
