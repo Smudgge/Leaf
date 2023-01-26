@@ -57,9 +57,11 @@ public class FriendRequestOptionsInventory extends CustomInventory {
     public void deny() {
         if (Leaf.getDatabase().isDisabled()) return;
 
+        // Remove the record
         FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
         friendRequestTable.removeRecord("uuid", requestRecord.uuid);
 
+        // Re-open the inventory
         FriendRequestInventory friendRequestInventory = new FriendRequestInventory(this.section, this.user);
         friendRequestInventory.open();
     }
@@ -70,13 +72,23 @@ public class FriendRequestOptionsInventory extends CustomInventory {
     public void accept() {
         if (Leaf.getDatabase().isDisabled()) return;
 
+        // Close the inventory to stop friend duplication errors.
+        this.close();
+
+        // Accept the friend request.
         FriendManager.acceptRequest(requestRecord);
 
+        // Message the user.
         user.sendMessage(PlaceholderManager.parse(
                 this.section.getString("from", "{message} You are now friends with &f<name>"),
                 null, new User(null, acceptedPlayerName)
         ));
 
+        // Open a new friend request inventory.
+        FriendRequestInventory friendRequestInventory = new FriendRequestInventory(this.section, this.user);
+        friendRequestInventory.open();
+
+        // Message the other player if they are online.
         Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(acceptedPlayerName);
         if (optionalPlayer.isEmpty()) return;
 
@@ -86,10 +98,5 @@ public class FriendRequestOptionsInventory extends CustomInventory {
                 this.section.getString("sent", "{message} You are now friends with &f<name>"),
                 null, user
         ));
-
-        this.close();
-
-        FriendRequestInventory friendRequestInventory = new FriendRequestInventory(this.section, this.user);
-        friendRequestInventory.open();
     }
 }
