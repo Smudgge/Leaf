@@ -8,9 +8,13 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.velocitypowered.api.proxy.Player;
+
+import java.util.Optional;
 
 /**
- * Represents the find command type.
+ * <h1>Find Command Type</h1>
+ * Used to get information on a online player.
  */
 public class Find extends BaseCommandType {
 
@@ -33,16 +37,21 @@ public class Find extends BaseCommandType {
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
-        if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
+        // Get the player.
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(arguments[0]);
+
+        // Check if the player doesn't exist.
+        if (optionalPlayer.isEmpty()) {
             String notFound = section.getString("not_found");
             MessageManager.log(notFound);
             return new CommandStatus();
         }
 
-        User user = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+        // Get the player as a user.
+        User user = new User(optionalPlayer.get());
 
+        // Log the result message.
         String found = section.getString("found");
-
         MessageManager.log(PlaceholderManager.parse(found, null, user));
 
         return new CommandStatus();
@@ -52,38 +61,41 @@ public class Find extends BaseCommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
-        if (Leaf.getServer().getPlayer(arguments[0]).isEmpty()) {
+        // Get the player.
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(arguments[0]);
+
+        // Check if the player doesn't exist.
+        if (optionalPlayer.isEmpty()) {
             String notFound = section.getString("not_found");
             user.sendMessage(notFound);
             return new CommandStatus();
         }
 
-        User foundUser = new User(Leaf.getServer().getPlayer(arguments[0]).get());
+        // Get the player as a user.
+        User foundUser = new User(optionalPlayer.get());
 
         // If vanishable players can find vanishable players, and the user is vanishable
-        if (section.getBoolean("vanishable_players", false) && !user.isNotVanishable()) {
-            String found = section.getString("found");
+        if (section.getBoolean("vanishable_players", false)
+                && !user.isNotVanishable()) {
 
+            // Send the result message to the player.
+            String found = section.getString("found");
             user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
             return new CommandStatus();
         }
 
+        // Check if the user is vanished.
         if (foundUser.isVanished()) {
             String notFound = section.getString("not_found");
             user.sendMessage(notFound);
             return new CommandStatus();
         }
 
+        // Send the result message to the player.
         String found = section.getString("found");
-
         user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
         return new CommandStatus();
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

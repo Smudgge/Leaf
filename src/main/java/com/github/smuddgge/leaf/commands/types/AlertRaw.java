@@ -12,7 +12,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 
 /**
- * Represents the alert raw command type.
+ * <h1>Alert Raw Command Type</h1>
+ * Used to alert all online players with a message.
+ * This message will be formatted with JSON.
  */
 public class AlertRaw extends BaseCommandType {
 
@@ -35,18 +37,22 @@ public class AlertRaw extends BaseCommandType {
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
+        // Attempt to send the JSON message.
         try {
-
             GsonComponentSerializer gsonComponentSerializer = GsonComponentSerializer.gson();
             Component component = gsonComponentSerializer.deserialize(String.join(" ", arguments));
 
-            for (Player temp : Leaf.getServer().getAllPlayers()) {
-                temp.sendMessage(component);
+            // Send the message to all players
+            for (Player player : Leaf.getServer().getAllPlayers()) {
+                player.sendMessage(component);
             }
 
+            // Log the message in console.
             MessageManager.log(component);
 
         } catch (Exception exception) {
+            MessageManager.log("Incorrect arguments for alert raw command type : ");
+            MessageManager.log(exception.getMessage());
             return new CommandStatus().incorrectArguments();
         }
 
@@ -56,10 +62,5 @@ public class AlertRaw extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         return this.onConsoleRun(section, arguments);
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

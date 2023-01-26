@@ -10,7 +10,8 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
 
 /**
- * Represents the alert command type.
+ * <h1>Alert Command Type</h1>
+ * Used to alert all online players with a message.
  */
 public class Alert extends BaseCommandType {
 
@@ -33,13 +34,16 @@ public class Alert extends BaseCommandType {
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
+        // Get the message.
         String message = section.getString("message")
                 .replace("%message%", String.join(" ", arguments));
 
+        // Send the message to all online players.
         for (Player player : Leaf.getServer().getAllPlayers()) {
             new User(player).sendMessage(message);
         }
 
+        // Log the message in console.
         MessageManager.log(message);
 
         return new CommandStatus();
@@ -48,10 +52,5 @@ public class Alert extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         return this.onConsoleRun(section, arguments);
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }
