@@ -6,8 +6,10 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendMailRecord;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
+import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendMailTable;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
+import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
@@ -140,6 +142,10 @@ public class FriendListInventory extends CustomInventory {
         FriendMailTable friendMailTable = (FriendMailTable) Leaf.getDatabase().getTable("FriendMail");
         FriendMailRecord friendMailRecord = friendMailTable.getLatest(record.playerUuid, record.friendPlayerUuid);
 
+        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+        PlayerRecord friendPlayerRecord = playerTable.getPlayer(record.friendPlayerUuid);
+        String friendsName = friendPlayerRecord.name;
+
         if (friendMailRecord == null) {
             friendMailRecord = new FriendMailRecord();
             friendMailRecord.message = "None";
@@ -148,7 +154,7 @@ public class FriendListInventory extends CustomInventory {
 
         String tempName = item.displayName(true);
         item.displayName(MessageManager.convert(tempName
-                .replace("%name%", record.friendNameFormatted)
+                .replace("%name%", friendsName)
                 .replace("%date%", DateAndTime.convert(record.dateCreated))
                 .replace("%last_mail%", friendMailRecord.message)
                 .replace("%mail_status%", friendMailRecord.getStatus())));
@@ -157,7 +163,7 @@ public class FriendListInventory extends CustomInventory {
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
             lore.add(MessageManager.convert(tempLine
-                    .replace("%name%", record.friendNameFormatted)
+                    .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))
                     .replace("%last_mail%", friendMailRecord.message)
                     .replace("%mail_status%", friendMailRecord.getStatus())
@@ -169,7 +175,7 @@ public class FriendListInventory extends CustomInventory {
         CompoundTag toAdd = new CompoundTag();
         for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {
             toAdd.putString(tag.getKey(), tag.getValue().valueToString()
-                    .replace("%name%", record.friendNameFormatted)
+                    .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))
                     .replace("%last_mail%", friendMailRecord.message)
                     .replace("%mail_status%", friendMailRecord.getStatus())
