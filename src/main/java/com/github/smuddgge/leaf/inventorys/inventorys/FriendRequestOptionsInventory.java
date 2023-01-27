@@ -55,7 +55,7 @@ public class FriendRequestOptionsInventory extends CustomInventory {
      * Used to deny a request.
      */
     public void deny() {
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Remove the record
         FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
@@ -70,7 +70,7 @@ public class FriendRequestOptionsInventory extends CustomInventory {
      * Used to accept the friend request.
      */
     public void accept() {
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Close the inventory to stop friend duplication errors.
         this.close();

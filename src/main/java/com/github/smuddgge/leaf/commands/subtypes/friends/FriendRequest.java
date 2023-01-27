@@ -63,7 +63,7 @@ public class FriendRequest implements CommandType {
         }
 
         // Check if the database is disabled.
-        if (Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
+        if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
 
         // Get player to requests information.

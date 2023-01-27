@@ -44,7 +44,7 @@ public class FriendUnfriend implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        if (Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
+        if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
         if (arguments.length <= 1) return new CommandStatus().incorrectArguments();
 
         // Get the unfriend configuration section.

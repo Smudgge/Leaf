@@ -9,6 +9,11 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 
+/**
+ * <h1>Friends Command Type</h1>
+ * Used to execute the list sub command.
+ * Also acts as a parent command for the friend subcommands.
+ */
 public class Friends extends BaseCommandType {
 
     @Override
@@ -34,13 +39,13 @@ public class Friends extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
-        // Open friend list inventory.
+        // Open the friend list inventory for the user.
         try {
             FriendListInventory friendListInventory = new FriendListInventory(section.getSection("list"), user);
             friendListInventory.open();
+
         } catch (Exception exception) {
             user.sendMessage(section.getSection("list").getString("error", "{error_colour}Error occurred when opening inventory."));
-
             MessageManager.warn("Exception occurred when opening a friend list inventory! [/friends]");
             exception.printStackTrace();
         }

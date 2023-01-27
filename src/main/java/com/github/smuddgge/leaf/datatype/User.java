@@ -168,7 +168,7 @@ public class User {
      * Used to update this user in the database.
      */
     public void updateDatabase() {
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         PlayerTable table = (PlayerTable) Leaf.getDatabase().getTable("Player");
         if (table == null) return;
@@ -183,7 +183,7 @@ public class User {
      * @param playerHistoryEventType The type of history to append.
      */
     public void addHistory(RegisteredServer server, PlayerHistoryEventType playerHistoryEventType) {
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
         if (historyTable == null) return;

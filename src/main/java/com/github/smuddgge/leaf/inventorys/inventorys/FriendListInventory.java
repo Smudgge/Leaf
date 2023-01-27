@@ -41,7 +41,7 @@ public class FriendListInventory extends CustomInventory {
         super(section, user, "inventory");
 
         // Check if the database is disabled.
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Load all the friend records.
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
@@ -61,7 +61,7 @@ public class FriendListInventory extends CustomInventory {
         super(section, user, "inventory");
 
         // Check if the database is disabled.
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Load all the friend records in terms of the list context.
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
@@ -70,7 +70,7 @@ public class FriendListInventory extends CustomInventory {
 
     @Override
     public ItemStack onLoadItemWithFunction(InventoryItem inventoryItem) {
-        if (Leaf.getDatabase().isDisabled()) return inventoryItem.getItemStack();
+        if (Leaf.isDatabaseDisabled()) return inventoryItem.getItemStack();
 
         return switch (inventoryItem.getFunctionSection().getString("type")) {
             case "last_page" -> this.onLastPage(inventoryItem);

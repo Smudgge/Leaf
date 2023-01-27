@@ -138,7 +138,7 @@ public class CommandSuggestions {
     public CommandSuggestions appendDatabasePlayers() {
         List<String> players = new ArrayList<>();
 
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return this;
+        if (Leaf.isDatabaseDisabled()) return this;
 
         for (Record record : Leaf.getDatabase().getTable("Player").getAllRecords()) {
             PlayerRecord playerRecord = (PlayerRecord) record;
@@ -156,7 +156,7 @@ public class CommandSuggestions {
      * @return This instance.
      */
     public CommandSuggestions appendFriends(User user) {
-        if (Leaf.getDatabase().isDisabled()) return this;
+        if (Leaf.isDatabaseDisabled()) return this;
 
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
         ArrayList<Record> friends = friendTable.getRecord("playerUuid", user.getUniqueId());

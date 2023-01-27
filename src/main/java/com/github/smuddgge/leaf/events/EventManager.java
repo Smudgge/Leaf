@@ -19,7 +19,7 @@ public class EventManager {
      */
     public static void onPlayerJoin(ServerPostConnectEvent event) {
         // Check if we are connected to the database
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Get the user
         User user = new User(event.getPlayer());
@@ -50,7 +50,7 @@ public class EventManager {
      */
     public static void onPlayerLeave(DisconnectEvent event) {
         // Check if we are connected to the database
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Get the user
         User user = new User(event.getPlayer());

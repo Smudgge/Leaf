@@ -19,7 +19,9 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import java.util.ArrayList;
 
 /**
- * Represents the history command type.
+ * <h1>History Command Type</h1>
+ * Used to execute the list sub command.
+ * Also acts as a parent command for the friend subcommands.
  */
 public class History extends BaseCommandType {
 
@@ -40,12 +42,15 @@ public class History extends BaseCommandType {
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled())
-            return new CommandStatus().databaseDisabled();
+        if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
 
+        // Get the history message.
         String message = this.getMessage(section, arguments);
 
+        // Check if the message is null.
         if (message == null) return new CommandStatus().incorrectArguments();
+
+        // Log the message in console.
         MessageManager.log(message);
 
         return new CommandStatus();
@@ -53,12 +58,15 @@ public class History extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        if (Leaf.getDatabase() == null || Leaf.getDatabase().isDisabled())
-            return new CommandStatus().databaseDisabled();
+        if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
 
+        // Get the history message.
         String message = this.getMessage(section, arguments);
 
+        // Check if the message is null.
         if (message == null) return new CommandStatus().incorrectArguments();
+
+        // Send the user the message.
         user.sendMessage(message);
 
         return new CommandStatus();
@@ -73,19 +81,20 @@ public class History extends BaseCommandType {
      * Null if there were incorrect arguments.
      */
     public String getMessage(ConfigurationSection section, String[] arguments) {
+        // Make sure they have provided an argument.
         if (arguments.length == 0) return null;
+
+        // Get the first argument.
         String playerName = arguments[0];
 
-        // Get database information
+        // Get database tables.
         PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        if (playerTable == null) return ConfigMessages.getDatabaseDisabled();
+        HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
 
+        // Get the player's information.
         ArrayList<Record> playerRecords = playerTable.getRecord("name", playerName);
         if (playerRecords.isEmpty()) return ConfigMessages.getDatabaseEmpty();
         PlayerRecord playerRecord = (PlayerRecord) playerRecords.get(0);
-
-        HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
-        if (historyTable == null) return ConfigMessages.getDatabaseDisabled();
 
         ArrayList<HistoryRecord> historyRecords = historyTable.getRecordOrdered("playerUuid", playerRecord.uuid);
         if (historyRecords.size() == 0) return ConfigMessages.getDatabaseEmpty();

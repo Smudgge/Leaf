@@ -37,7 +37,7 @@ public class FriendList implements CommandType {
                 && !user.hasPermission(listSection.getString("permission_see_any"))) return null;
 
         // Check if the database is disabled.
-        if (Leaf.getDatabase().isDisabled()) return null;
+        if (Leaf.isDatabaseDisabled()) return null;
 
         // Return all players in the database.
         return new CommandSuggestions().appendDatabasePlayers();
@@ -59,7 +59,7 @@ public class FriendList implements CommandType {
                 && user.hasPermission(listSection.getString("permission_see_any"))) {
 
             // Check if the database is disabled.
-            if (Leaf.getDatabase().isDisabled()) return new CommandStatus().databaseDisabled();
+            if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
             PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
 
             // Get the given argument.

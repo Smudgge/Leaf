@@ -34,7 +34,7 @@ public class FriendManager {
      * @param playerRecordTo The player to send the request to.
      */
     public static boolean sendRequest(User userFrom, PlayerRecord playerRecordTo) {
-        if (Leaf.getDatabase().isDisabled()) return false;
+        if (Leaf.isDatabaseDisabled()) return false;
 
         FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
 
@@ -56,7 +56,7 @@ public class FriendManager {
      * @param requestRecord The instance of the request record.
      */
     public static void acceptRequest(FriendRequestRecord requestRecord) {
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
@@ -103,7 +103,7 @@ public class FriendManager {
      * @param friendUuid THe friends uuid.
      */
     public static void unFriend(String playerUuid, String friendUuid) {
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
         FriendRecord friendRecord1 = friendTable.getFriend(playerUuid, friendUuid);

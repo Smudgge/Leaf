@@ -37,7 +37,7 @@ public class FriendRequestInventory extends CustomInventory {
         super(section, user, "inventory");
 
         // Check if the database is disabled.
-        if (Leaf.getDatabase().isDisabled()) return;
+        if (Leaf.isDatabaseDisabled()) return;
 
         // Load all the friend records.
         FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
@@ -46,7 +46,7 @@ public class FriendRequestInventory extends CustomInventory {
 
     @Override
     public ItemStack onLoadItemWithFunction(InventoryItem inventoryItem) {
-        if (Leaf.getDatabase().isDisabled()) return inventoryItem.getItemStack();
+        if (Leaf.isDatabaseDisabled()) return inventoryItem.getItemStack();
 
         return switch (inventoryItem.getFunctionSection().getString("type")) {
             case "last_page" -> this.onLastPage(inventoryItem);
