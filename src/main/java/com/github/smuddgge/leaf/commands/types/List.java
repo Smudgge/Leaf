@@ -13,7 +13,8 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import java.util.ArrayList;
 
 /**
- * Represents the list command type.
+ * <h1>List Command Type</h1>
+ * Used to show a list of online players.
  */
 public class List extends BaseCommandType {
 
@@ -36,15 +37,12 @@ public class List extends BaseCommandType {
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         ArrayList<String> possiblePermissions = new ArrayList<>();
 
-
         for (String key : section.getSection("list").getKeys()) {
             String permission = section.getSection("list").getSection(key).getString("permission");
             possiblePermissions.add(permission);
         }
 
-        String message = this.getFormatted(section, possiblePermissions, possiblePermissions);
-        MessageManager.log(message);
-
+        MessageManager.log(this.getFormatted(section, possiblePermissions, possiblePermissions));
         return new CommandStatus();
     }
 
@@ -63,10 +61,7 @@ public class List extends BaseCommandType {
             sendersPermissions.add(permission);
         }
 
-        String message = this.getFormatted(section, sendersPermissions, possiblePermissions);
-
-        user.sendMessage(message);
-
+        user.sendMessage(this.getFormatted(section, sendersPermissions, possiblePermissions));
         return new CommandStatus();
     }
 
@@ -81,19 +76,25 @@ public class List extends BaseCommandType {
     private String getFormatted(ConfigurationSection section, java.util.List<String> permissions, java.util.List<String> possiblePermissions) {
         ProxyServerInterface proxyServerInterface = new ProxyServerInterface(Leaf.getServer());
 
+        // Build the message.
         StringBuilder builder = new StringBuilder();
         builder.append(section.getString("header")).append("\n");
 
+        // For each rank in the list.
         for (String key : section.getSection("list").getKeys()) {
             ConfigurationSection innerSection = section.getSection("list").getSection(key);
 
+            // Get the permission.
             String permission = innerSection.getString("permission");
             if (permission == null) continue;
 
             // Get the filtered list of players.
-            // If permissions include permission include vanished players in the list.
-            java.util.List<User> players = proxyServerInterface.getFilteredPlayers(permission, possiblePermissions, permissions.contains(permission));
+            // If the players permissions include the permission add vanished players to the list.
+            java.util.List<User> players = proxyServerInterface.getFilteredPlayers(
+                    permission, possiblePermissions, permissions.contains(permission)
+            );
 
+            // Don't include the section if there are 0 players.
             if (players.size() == 0) continue;
 
             // Append the header
@@ -112,10 +113,5 @@ public class List extends BaseCommandType {
         builder.append("\n").append(section.getString("footer"));
 
         return builder.toString();
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

@@ -11,7 +11,8 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import java.util.List;
 
 /**
- * Represents the message command type.
+ * <h1>Info Command Type</h1>
+ * Used send infomation to players when executed.
  */
 public class Info extends BaseCommandType {
 
@@ -33,15 +34,18 @@ public class Info extends BaseCommandType {
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
 
+        // Get message as list.
+        // If the message is not a list it will return null.
         List<String> message = section.getListString("message");
 
+        // If null assume it's a string.
         if (message == null) {
             String messageString = section.getString("message", "null");
             MessageManager.log(PlaceholderManager.parse(messageString, null, new User(null, "Console")));
-
             return new CommandStatus();
         }
 
+        // Otherwise, it's a list.
         StringBuilder builder = new StringBuilder();
 
         for (String string : message) {
@@ -49,8 +53,11 @@ public class Info extends BaseCommandType {
         }
 
         String toSend = builder.toString();
+
+        // Get rid of the last '\n'.
         toSend = toSend.substring(0, toSend.length() - 2);
 
+        // Log the message.
         MessageManager.log(PlaceholderManager.parse(toSend, null, new User(null, "Console")));
 
         return new CommandStatus();
@@ -59,15 +66,18 @@ public class Info extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
+        // Get message as list.
+        // If the message is not a list it will return null.
         List<String> message = section.getListString("message");
 
+        // If null assume it's a string.
         if (message == null) {
             String messageString = section.getString("message", "null");
             user.sendMessage(messageString);
-
             return new CommandStatus();
         }
 
+        // Otherwise, it's a list.
         StringBuilder builder = new StringBuilder();
 
         for (String string : message) {
@@ -75,15 +85,13 @@ public class Info extends BaseCommandType {
         }
 
         String toSend = builder.toString();
+
+        // Get rid of the last '\n'.
         toSend = toSend.substring(0, toSend.length() - 2);
 
+        // Send the message to the user.
         user.sendMessage(toSend);
 
         return new CommandStatus();
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

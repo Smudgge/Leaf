@@ -10,12 +10,11 @@ import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import dev.simplix.protocolize.api.item.ItemStack;
 
+/**
+ * <h1>Inventory Command Type</h1>
+ * Used to open a custom inventory.
+ */
 public class Inventory extends BaseCommandType {
-
-    @Override
-    public void loadSubCommands() {
-
-    }
 
     @Override
     public String getName() {
@@ -40,6 +39,7 @@ public class Inventory extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
+        // Attempt to open the inventory.
         try {
             CustomInventory customInventory = new CustomInventory(section, user, "inventory") {
                 @Override
@@ -52,7 +52,6 @@ public class Inventory extends BaseCommandType {
 
         } catch (Exception exception) {
             user.sendMessage(section.getString("error", "{error_colour}Error occurred when opening inventory."));
-
             MessageManager.warn("Error occurred when opening inventory!");
             MessageManager.log("&6Command : &e" + section.getString("name", "Null"));
             exception.printStackTrace();

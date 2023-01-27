@@ -12,7 +12,10 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 
 /**
- * Represents the reload command type.
+ * <h1>Reload Command Type</h1>
+ * Used to reload this plugin.
+ * The command reloads the configuration files
+ * and the commands.
  */
 public class Reload extends BaseCommandType {
 
@@ -33,26 +36,33 @@ public class Reload extends BaseCommandType {
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
-        this.reloadAll();
+        // Reload the plugin.
+        // When aborted it will already log the message in console.
+        boolean success = this.reloadAll();
 
+        // Check if the reloading was aborted.
+        if (!success) return new CommandStatus();
+
+        // Get the message and log it in console.
         String message = section.getString("message", "{message} Reloaded all configs! <3");
-
         MessageManager.log(message);
-
         return new CommandStatus();
     }
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        if (!this.reloadAll()) {
+        // Attempt to reload the plugin.
+        boolean success = this.reloadAll();
+
+        // Check if the reloading was aborted.
+        if (!success) {
             user.sendMessage(section.getString("error", "{error_colour}An error occurred and the reloading was aborted!"));
             return new CommandStatus();
         }
 
+        // Get the message and send it to the user.
         String message = section.getString("message", "{message} Reloaded all configs! <3");
-
         user.sendMessage(message);
-
         return new CommandStatus();
     }
 
@@ -63,6 +73,7 @@ public class Reload extends BaseCommandType {
         MessageManager.log("&f&lReloading");
 
         try {
+
             // Reload configs
             ConfigCommands.reload();
             ConfigMessages.reload();
@@ -82,10 +93,5 @@ public class Reload extends BaseCommandType {
 
         MessageManager.log("&f&lReloaded successfully");
         return true;
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

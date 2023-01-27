@@ -28,7 +28,6 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -162,6 +161,7 @@ public class Leaf {
 
     /**
      * Used to quickly check if the database is disabled.
+     *
      * @return True if the database is disabled.
      */
     public static boolean isDatabaseDisabled() {

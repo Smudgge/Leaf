@@ -96,15 +96,19 @@ public class History extends BaseCommandType {
         if (playerRecords.isEmpty()) return ConfigMessages.getDatabaseEmpty();
         PlayerRecord playerRecord = (PlayerRecord) playerRecords.get(0);
 
+        // Get the player's history.
         ArrayList<HistoryRecord> historyRecords = historyTable.getRecordOrdered("playerUuid", playerRecord.uuid);
         if (historyRecords.size() == 0) return ConfigMessages.getDatabaseEmpty();
 
-        // Get the page information
+        // Get the page information.
         int pageSize = section.getInteger("page_size", 5);
         int historySize = (historyRecords.size() - 1);
         if (historySize < 0) historySize = 0;
+
         int amountOfPages = (historySize / section.getInteger("page_size", 5)) + 1;
         int page = 1;
+
+        // Check if a page is specified.
         if (arguments.length > 1) {
             try {
                 page = Integer.parseInt(arguments[1]);
@@ -112,11 +116,14 @@ public class History extends BaseCommandType {
                 return null;
             }
         }
+
+        // Check if the page is out of range.
         if (page > amountOfPages || page < 1) page = 1;
 
         // Build the message
         StringBuilder builder = new StringBuilder();
 
+        // Get the header.
         String header = section.getString("header")
                 .replace("%page%", String.valueOf(page))
                 .replace("%page_amount%", String.valueOf(amountOfPages));
@@ -124,6 +131,7 @@ public class History extends BaseCommandType {
         builder.append(PlaceholderManager.parse(header, null, new User(null, playerName)));
         builder.append("\n\n");
 
+        // Get the records.
         int index = -1;
         for (HistoryRecord historyRecord : historyRecords) {
             index += 1;
@@ -140,6 +148,7 @@ public class History extends BaseCommandType {
         }
         builder.append("\n");
 
+        // Get the footer.
         String footer = section.getString("footer")
                 .replace("%page%", String.valueOf(page))
                 .replace("%page_amount%", String.valueOf(amountOfPages));
@@ -147,10 +156,5 @@ public class History extends BaseCommandType {
         builder.append(PlaceholderManager.parse(footer, null, new User(null, playerName)));
 
         return builder.toString();
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

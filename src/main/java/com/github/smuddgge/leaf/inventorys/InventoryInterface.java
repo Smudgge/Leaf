@@ -53,6 +53,7 @@ public abstract class InventoryInterface {
 
     /**
      * Used to close the inventory the player has open.
+     *
      * @return This instance.
      */
     public InventoryInterface close() {

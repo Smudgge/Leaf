@@ -18,7 +18,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Represents the send command type.
+ * <h1>Send Command Type</h1>
+ * Used to send a selection of players to a
+ * certain server.
  */
 public class Send extends BaseCommandType {
 
@@ -34,36 +36,38 @@ public class Send extends BaseCommandType {
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
+        // Get the list of online servers.
         List<String> servers = new ArrayList<>();
         for (RegisteredServer server : Leaf.getServer().getAllServers()) {
             servers.add(server.getServerInfo().getName());
         }
 
+        // Get the list of online players.
         List<String> players = new ArrayList<>();
         for (Player player : Leaf.getServer().getAllPlayers()) {
-            players.add(player.getGameProfile().getName());
+            User userToAdd = new User(player);
+            if (userToAdd.isVanished()) continue;
+            players.add(userToAdd.getName());
         }
 
+        // Create the selection list.
         List<String> from = new ArrayList<>();
         from.add("all");
         from.addAll(servers);
         from.addAll(players);
 
-        CommandSuggestions suggestions = new CommandSuggestions();
-
-        suggestions.append(from);
-        suggestions.append(servers);
-
-        return suggestions;
+        // Create the command suggestions.
+        return new CommandSuggestions().append(from).append(servers);
     }
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (arguments.length < 2) return new CommandStatus().incorrectArguments();
 
+        // Get the second argument, the server to send the players to.
         Optional<RegisteredServer> server = Leaf.getServer().getServer(arguments[1]);
 
-        // Check if the server exists
+        // Check if the server exists.
         if (server.isEmpty()) {
             MessageManager.log(section.getString("server_not_found", "{error_colour}Server not found."));
             return new CommandStatus();
@@ -72,13 +76,16 @@ public class Send extends BaseCommandType {
         // Check if the server is online
         try {
             server.get().ping().get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException ignored) {
             MessageManager.log(section.getString("server_offline", "{error_colour}Server requested is offline."));
             return new CommandStatus();
         }
 
+        // Send all the players.
+        // Get the amount of players that were sent.
         int amount = this.send(arguments[0], server.get());
 
+        // Log the message in console.
         MessageManager.log(section.getString("message")
                 .replace("%from%", arguments[0])
                 .replace("%to%", arguments[1])
@@ -91,24 +98,28 @@ public class Send extends BaseCommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (arguments.length < 2) return new CommandStatus().incorrectArguments();
 
+        // Get the second argument, the server to send the players to.
         Optional<RegisteredServer> server = Leaf.getServer().getServer(arguments[1]);
 
-        // Check if the server exists
+        // Check if the server exists.
         if (server.isEmpty()) {
             user.sendMessage(section.getString("server_not_found", "{error_colour}Server not found."));
             return new CommandStatus();
         }
 
-        // Check if the server is online
+        // Check if the server is online.
         try {
             server.get().ping().get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException ignored) {
             user.sendMessage(section.getString("server_offline", "{error_colour}Server requested is offline."));
             return new CommandStatus();
         }
 
+        // Send all the players.
+        // Get the amount of players that were sent.
         int amount = this.send(arguments[0], server.get());
 
+        // Send the message.
         user.sendMessage(section.getString("message")
                 .replace("%from%", arguments[0])
                 .replace("%to%", arguments[1])
@@ -125,28 +136,37 @@ public class Send extends BaseCommandType {
      * @return How many players were sent.
      */
     private int send(String from, RegisteredServer to) {
+        // The final list of players to send.
         List<Player> playersToSend = new ArrayList<>();
 
+        // Check if all players should be sent.
         if (Objects.equals(from, "all")) {
             playersToSend.addAll(Leaf.getServer().getAllPlayers());
         }
 
+        // Check if the argument was a server.
         if (Leaf.getServer().getServer(from).isPresent()) {
             playersToSend.addAll(Leaf.getServer().getServer(from).get().getPlayersConnected());
         }
 
+        // Check if the argument was a player.
         Optional<Player> playerFrom = Leaf.getServer().getPlayer(from);
         if (playersToSend.size() == 0 && playerFrom.isPresent()) {
             playersToSend.add(playerFrom.get());
         }
 
+        // Check if no players will be sent.
         if (playersToSend.size() == 0) return 0;
 
+        // Represents the amount of player that get sent.
         int amount = 0;
 
         for (Player player : playersToSend) {
+
+            // Send the player to the destination.
             CompletableFuture<Boolean> result = player.createConnectionRequest(to).connectWithIndication();
 
+            // Get the result.
             try {
                 if (result.get()) amount += 1;
             } catch (InterruptedException | ExecutionException ignored) {
@@ -154,10 +174,5 @@ public class Send extends BaseCommandType {
         }
 
         return amount;
-    }
-
-    @Override
-    public void loadSubCommands() {
-
     }
 }

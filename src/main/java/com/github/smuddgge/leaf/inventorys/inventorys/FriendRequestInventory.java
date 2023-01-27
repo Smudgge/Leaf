@@ -71,7 +71,8 @@ public class FriendRequestInventory extends CustomInventory {
             if (this.requestRecords.size() - 1 < recordIndex) {
                 ItemStack item = this.appendNoPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, item);
-                this.addAction(slot, () -> {});
+                this.addAction(slot, () -> {
+                });
             } else {
                 FriendRequestRecord requestRecord = (FriendRequestRecord) this.requestRecords.get(recordIndex);
                 String acceptedPlayerName = playerTable.getPlayer(requestRecord.playerFromUuid).name;

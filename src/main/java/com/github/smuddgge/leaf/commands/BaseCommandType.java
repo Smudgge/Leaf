@@ -40,7 +40,8 @@ public abstract class BaseCommandType implements CommandType {
     /**
      * Used to load the commands subcommands.
      */
-    public void loadSubCommands() {}
+    public void loadSubCommands() {
+    }
 
     /**
      * Used to remove disabled sub commands.
