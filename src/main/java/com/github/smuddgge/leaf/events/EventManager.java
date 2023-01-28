@@ -36,6 +36,9 @@ public class EventManager {
         // Check if the user is vanished
         if (user.isVanished()) return;
 
+        // Check if the user is vanishable
+        if (!user.isNotVanishable()) return;
+
         if (event.getPreviousServer() == null) FriendManager.onProxyJoin(user);
         else FriendManager.onChangeServer(user);
 
@@ -66,6 +69,9 @@ public class EventManager {
 
         // Check if the user is vanished
         if (user.isVanished()) return;
+
+        // Check if the user is vanishable
+        if (!user.isNotVanishable()) return;
 
         FriendManager.onProxyLeave(user);
 

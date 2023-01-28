@@ -15,26 +15,18 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Represents a command.
+ * <h1>Represents a custom command.</h1>
+ *
+ * @param identifier  The command's identifier in the configuration.
+ * @param commandType The base command type it will use.
  */
-public class Command implements SimpleCommand {
-
-    private final String identifier;
-
-    private final BaseCommandType commandType;
-
-    /**
-     * Used to create a command.
-     *
-     * @param identifier The command's identifier in the configuration.
-     */
-    public Command(String identifier, BaseCommandType commandType) {
-        this.identifier = identifier;
-        this.commandType = commandType;
-    }
+public record Command(String identifier,
+                      BaseCommandType commandType) implements SimpleCommand {
 
     /**
      * Used to get the command's syntax.
+     * This is to get the raw syntax where the placeholders
+     * have not been parsed.
      *
      * @return The command's syntax.
      */
@@ -60,18 +52,23 @@ public class Command implements SimpleCommand {
      * @return The command's status.
      */
     public CommandStatus onConsoleRun(String[] arguments) {
-        if (this.commandType.getSubCommandTypes().isEmpty() || arguments.length <= 0)
-            return this.commandType.onConsoleRun(this.getSection(), arguments);
+        // Check if there are no subcommands or there are no arguments.
+        if (this.commandType.getSubCommandTypes().isEmpty()
+                || arguments.length == 0) return this.commandType.onConsoleRun(this.getSection(), arguments);
 
+        // For each sub command.
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
             String name = arguments[0];
 
-            List<String> subCommandNames = new ArrayList<>();
-            subCommandNames.add(this.getSection().getSection(commandType.getName()).getString("name", commandType.getName()));
-            subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
+            // Get the sub command section.
+            ConfigurationSection subcommandSection = this.getSection().getSection(commandType.getName());
 
-            if (subCommandNames.contains(name))
-                return commandType.onConsoleRun(this.getSection(), arguments);
+            // Get the list of all the command names.
+            List<String> subCommandNames = new ArrayList<>();
+            subCommandNames.add(subcommandSection.getString("name", commandType.getName()));
+            subCommandNames.addAll(subcommandSection.getListString("aliases", new ArrayList<>()));
+
+            if (subCommandNames.contains(name)) return commandType.onConsoleRun(this.getSection(), arguments);
         }
 
         return this.commandType.onConsoleRun(this.getSection(), arguments);

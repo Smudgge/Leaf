@@ -6,8 +6,17 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <h1>Represents a base command.</h1>
+ * A base command is the first word typed after a slash.
+ * This type of command can have subcommand types.
+ */
 public abstract class BaseCommandType implements CommandType {
 
+    /**
+     * Represents the list of the sub command types
+     * the command can execute.
+     */
     private List<CommandType> subCommandTypes = new ArrayList<>();
 
     /**
@@ -17,15 +26,6 @@ public abstract class BaseCommandType implements CommandType {
      */
     public void addSubCommandType(CommandType subCommandType) {
         this.subCommandTypes.add(subCommandType);
-    }
-
-    /**
-     * Used to log the sub commands in console.
-     */
-    public void logSubCommands() {
-        for (CommandType commandType : this.subCommandTypes) {
-            MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());
-        }
     }
 
     /**
