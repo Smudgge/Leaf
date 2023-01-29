@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Represents the command handler.
+ * <h1>Represents the command handler.</h1>
+ * Handles registering and unregistering commands.
  */
 public class CommandHandler {
 
@@ -83,7 +84,7 @@ public class CommandHandler {
             this.registeredCommands.add(command.getName());
 
             // Register aliases if they exist
-            if (command.getAliases() == null) continue;
+            if (command.getAliases().get().size() == 0) continue;
 
             for (String alias : command.getAliases().get()) {
                 manager.register(manager.metaBuilder(alias).build(), command);

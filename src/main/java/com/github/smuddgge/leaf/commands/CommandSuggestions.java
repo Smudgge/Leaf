@@ -191,6 +191,15 @@ public class CommandSuggestions {
         }
     }
 
+    /**
+     * Used to add a subcommands names and suggestions to this
+     * commands suggestions.
+     *
+     * @param subCommandTypes The subcommand types of the command.
+     * @param section         The configuration section of the command.
+     * @param arguments       The arguments suggested.
+     * @param user            The instance of the user executing the command.
+     */
     public void appendSubCommandTypes(List<CommandType> subCommandTypes, ConfigurationSection section, String[] arguments, User user) {
         for (CommandType commandType : subCommandTypes) {
 

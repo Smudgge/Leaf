@@ -14,7 +14,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Represents a user connected to one of the servers.
+ * <h1>Represents a user connected to one of the servers.</h1>
+ * Adds more options onto the player class.
+ * Can also represent a fake player.
  */
 public class User {
 
@@ -115,7 +117,6 @@ public class User {
      */
     public void sendMessage(String message) {
         if (this.player == null) return;
-
         this.player.sendMessage(MessageManager.convert(message, this));
     }
 
@@ -126,7 +127,6 @@ public class User {
      */
     public String getName() {
         if (this.player == null) return this.name;
-
         return this.player.getGameProfile().getName();
     }
 

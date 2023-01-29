@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * <h1>Represents the proxy server interface.</h1>
+ * Adds more options onto the proxy server instance.
+ */
 public record ProxyServerInterface(ProxyServer proxyServer) {
 
     /**
