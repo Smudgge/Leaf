@@ -50,11 +50,17 @@ public abstract class BaseCommandType implements CommandType {
      */
     public void initialiseSubCommands(ConfigurationSection section) {
         for (CommandType commandType : this.subCommandTypes) {
+
+            // Check if the configuration does not exist.
             if (!section.getKeys().contains(commandType.getName())) {
                 MessageManager.log("&7↳ &eDisabling &7sub command (No configuration) : " + commandType.getName());
+                this.subCommandTypes.remove(commandType);
             }
+
+            // Check if the command is disabled.
             if (!section.getSection(commandType.getName()).getBoolean("enabled", true)) {
                 MessageManager.log("&7↳ &eDisabling &7sub command (Disabled) : " + commandType.getName());
+                this.subCommandTypes.remove(commandType);
             }
 
             MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());
