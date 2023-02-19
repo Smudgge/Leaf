@@ -113,6 +113,16 @@ public class ConfigCommands extends YamlConfiguration {
     }
 
     /**
+     * Used to get the commands sound from the configuration file.
+     *
+     * @param identifier The identifier of the command.
+     * @return The commands sound that is played when executed.
+     */
+    public static String getCommandSound(String identifier) {
+        return ConfigCommands.getCommand(identifier).getString("sound");
+    }
+
+    /**
      * Used to get if the command is enabled.
      *
      * @param identifier The identifier of the command.

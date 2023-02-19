@@ -98,6 +98,7 @@ commands:
     name: "report"
     permission: "leaf.report.use"
     see_report: "leaf.report.see"
+    see_sound: "BLOCK_BELL_RESONATE"
     # %message% : The players message.
     message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
 

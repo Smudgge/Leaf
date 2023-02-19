@@ -49,21 +49,29 @@ public abstract class BaseCommandType implements CommandType {
      * @param section The base command types configuration section.
      */
     public void initialiseSubCommands(ConfigurationSection section) {
+        List<CommandType> toRemove = new ArrayList<>();
+
         for (CommandType commandType : this.subCommandTypes) {
 
             // Check if the configuration does not exist.
             if (!section.getKeys().contains(commandType.getName())) {
                 MessageManager.log("&7↳ &eDisabling &7sub command (No configuration) : " + commandType.getName());
-                this.subCommandTypes.remove(commandType);
+                toRemove.add(commandType);
+                return;
             }
 
             // Check if the command is disabled.
             if (!section.getSection(commandType.getName()).getBoolean("enabled", true)) {
                 MessageManager.log("&7↳ &eDisabling &7sub command (Disabled) : " + commandType.getName());
-                this.subCommandTypes.remove(commandType);
+                toRemove.add(commandType);
+                return;
             }
 
             MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());
+        }
+
+        for (CommandType commandType : toRemove) {
+            this.subCommandTypes.remove(commandType);
         }
     }
 

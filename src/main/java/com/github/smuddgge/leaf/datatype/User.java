@@ -21,7 +21,7 @@ import java.util.UUID;
 public class User {
 
     private final Player player;
-    private final RegisteredServer server;
+    private RegisteredServer server;
     private final String name;
 
     /**
@@ -48,11 +48,20 @@ public class User {
     }
 
     /**
+     * Used to set the registered server.
+     * @param server The registered server.
+     */
+    public void setConnectedServer(RegisteredServer server) {
+        this.server = server;
+    }
+
+    /**
      * Used to get what server the user is connected to.
      *
      * @return The registered server.
      */
     public RegisteredServer getConnectedServer() {
+        if (this.server != null) return this.server;
         if (this.player == null) return this.server;
         if (this.player.getCurrentServer().isEmpty()) return null;
 

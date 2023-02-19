@@ -23,6 +23,7 @@ import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -35,7 +36,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "1.4.2",
+        version = "1.5.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -114,7 +115,7 @@ public class Leaf {
     }
 
     @Subscribe
-    public void onPlayerJoin(ServerPostConnectEvent event) {
+    public void onPlayerJoin(ServerConnectedEvent event) {
         EventManager.onPlayerJoin(event);
     }
 
