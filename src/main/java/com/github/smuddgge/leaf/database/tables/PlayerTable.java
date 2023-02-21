@@ -1,36 +1,21 @@
 package com.github.smuddgge.leaf.database.tables;
 
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * Represents the player table in the database.
  */
-public class PlayerTable extends SQLiteTable {
-
-    /**
-     * Used to register the table with a database.
-     *
-     * @param database The instance of the database.
-     */
-    public PlayerTable(SQLiteDatabase database) {
-        super(database);
-    }
+public class PlayerTable extends TableAdapter<PlayerRecord> {
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "Player";
-    }
-
-    @Override
-    public Record getRecord() {
-        return new PlayerRecord();
     }
 
     /**
@@ -39,37 +24,25 @@ public class PlayerTable extends SQLiteTable {
      * @param user User to update.
      */
     public void updatePlayer(User user) {
-        ArrayList<Record> playerRecords = this.getRecord("uuid", user.getUniqueId().toString());
+        PlayerRecord result = this.getFirstRecord(
+                new Query().match("uuid", user.getUniqueId().toString())
+        );
 
         // Check if the player record does not exist.
-        if (playerRecords.isEmpty()) {
+        if (result == null) {
             PlayerRecord playerRecord = new PlayerRecord();
             playerRecord.uuid = user.getUniqueId().toString();
             playerRecord.name = user.getName();
+
             this.insertRecord(playerRecord);
             return;
         }
 
-        // Get the player record.
-        PlayerRecord playerRecord = (PlayerRecord) playerRecords.get(0);
-
-        // Check if the player has changed there name.
-        if (!Objects.equals(playerRecord.name, user.getName())) {
-            playerRecord.name = user.getName();
-            this.insertRecord(playerRecord);
+        // Check if the player has changed their name.
+        if (!Objects.equals(result.name, user.getName())) {
+            result.name = user.getName();
+            this.insertRecord(result);
         }
-    }
-
-    /**
-     * Used to get a player record given there uuid.
-     *
-     * @param uuid The players uuid.
-     * @return The requested record.
-     */
-    public PlayerRecord getPlayer(String uuid) {
-        ArrayList<Record> result = this.getRecord("uuid", uuid);
-        if (result.isEmpty()) return null;
-        return (PlayerRecord) result.get(0);
     }
 
     /**
@@ -79,7 +52,7 @@ public class PlayerTable extends SQLiteTable {
      * @return True if the player exists in the database.
      */
     public boolean contains(String playerName) {
-        ArrayList<Record> result = this.getRecord("name", playerName);
-        return !result.isEmpty();
+        PlayerRecord playerRecord = this.getFirstRecord(new Query().match("name", playerName));
+        return playerRecord != null;
     }
 }

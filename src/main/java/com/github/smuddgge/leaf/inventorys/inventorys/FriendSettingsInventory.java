@@ -2,16 +2,14 @@ package com.github.smuddgge.leaf.inventorys.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Field;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
+import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.record.RecordField;
 import dev.simplix.protocolize.api.item.ItemStack;
-
-import java.util.ArrayList;
 
 public class FriendSettingsInventory extends CustomInventory {
 
@@ -26,15 +24,16 @@ public class FriendSettingsInventory extends CustomInventory {
     public FriendSettingsInventory(ConfigurationSection section, User user) {
         super(section, user, "inventory");
 
-        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
-        ArrayList<Record> result = friendSettingsTable.getRecord("playerUuid", user.getUniqueId());
+        FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
+        FriendSettingsRecord friendSettings = friendSettingsTable.getFirstRecord(new Query().match("playerUuid", user.getUniqueId()));
 
-        if (result.size() == 0) {
+        if (friendSettings == null) {
             this.friendSettingsRecord = new FriendSettingsRecord();
             this.friendSettingsRecord.playerUuid = user.getUniqueId().toString();
             return;
         }
-        this.friendSettingsRecord = (FriendSettingsRecord) result.get(0);
+
+        this.friendSettingsRecord = friendSettings;
     }
 
     @Override
@@ -42,21 +41,25 @@ public class FriendSettingsInventory extends CustomInventory {
         String functionType = inventoryItem.getFunctionSection().getString("type", null);
         if (functionType == null) return inventoryItem.getItemStack();
 
-        Field field = this.friendSettingsRecord.getField(functionType);
+        RecordField field = this.friendSettingsRecord.getField(functionType);
+        assert field != null;
+        assert field.getValue() != null;
 
         inventoryItem.addPlaceholder("%" + functionType + "%", (String) field.getValue());
 
         for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
             this.addAction(slot, () -> {
-                try {
-                    this.friendSettingsRecord.toggleBoolean(functionType);
-                } catch (NoSuchFieldException | IllegalAccessException exception) {
-                    exception.printStackTrace();
+                RecordField recordField = this.friendSettingsRecord.getField(functionType);
+                assert recordField != null;
+
+                if (recordField.getValue() == "true") {
+                    recordField.setValue("false");
+                } else {
+                    recordField.setValue("true");
                 }
 
-                FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+                FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
                 friendSettingsTable.insertRecord(this.friendSettingsRecord);
-
                 this.load();
             });
         }

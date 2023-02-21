@@ -5,7 +5,6 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 /**

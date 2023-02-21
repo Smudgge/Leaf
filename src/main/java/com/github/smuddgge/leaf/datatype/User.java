@@ -49,6 +49,7 @@ public class User {
 
     /**
      * Used to set the registered server.
+     *
      * @param server The registered server.
      */
     public void setConnectedServer(RegisteredServer server) {
@@ -178,11 +179,7 @@ public class User {
      */
     public void updateDatabase() {
         if (Leaf.isDatabaseDisabled()) return;
-
-        PlayerTable table = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        if (table == null) return;
-
-        table.updatePlayer(this);
+        Leaf.getDatabase().getTable(PlayerTable.class).updatePlayer(this);
     }
 
     /**
@@ -194,10 +191,13 @@ public class User {
     public void addHistory(RegisteredServer server, PlayerHistoryEventType playerHistoryEventType) {
         if (Leaf.isDatabaseDisabled()) return;
 
-        HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
-        if (historyTable == null) return;
+        HistoryTable historyTable = Leaf.getDatabase().getTable(HistoryTable.class);
 
-        historyTable.insertHistory(this.getUniqueId().toString(), server.getServerInfo().getName(), playerHistoryEventType);
+        historyTable.insertHistory(
+                this.getUniqueId().toString(),
+                server.getServerInfo().getName(),
+                playerHistoryEventType
+        );
     }
 
     /**

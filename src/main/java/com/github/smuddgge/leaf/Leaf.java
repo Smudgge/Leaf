@@ -7,7 +7,6 @@ import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.events.EventManager;
@@ -20,11 +19,13 @@ import com.github.smuddgge.leaf.placeholders.standard.PlayerNamePlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.ServerPlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.VanishedPlaceholder;
 import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
+import com.github.smuddgge.squishydatabase.DatabaseCredentials;
+import com.github.smuddgge.squishydatabase.DatabaseFactory;
+import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.event.player.ServerPostConnectEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
@@ -36,7 +37,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "1.5.0",
+        version = "2.0.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -45,7 +46,7 @@ public class Leaf {
     private static ProxyServer server;
 
     private static CommandHandler commandHandler;
-    private static SQLiteDatabase database;
+    private static Database database;
 
     private final Metrics.Factory metricsFactory;
 
@@ -156,7 +157,7 @@ public class Leaf {
      *
      * @return The instance of the database.
      */
-    public static SQLiteDatabase getDatabase() {
+    public static Database getDatabase() {
         return Leaf.database;
     }
 
@@ -182,21 +183,24 @@ public class Leaf {
             return;
         }
 
-        Leaf.database = new SQLiteDatabase(folder, "database");
-        boolean successful = Leaf.database.setup();
+        DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
 
-        if (!successful) {
+        Leaf.database = databaseFactory.create(new DatabaseCredentials()
+                .setPath(folder.getAbsolutePath() + File.separator + "database.sqlite3")
+        );
+
+        if (Leaf.database.isDisabled()) {
             MessageManager.warn("[Database] Unable to load database.");
             return;
         }
 
         // Set up the tables
-        Leaf.database.createTable(new PlayerTable(Leaf.database));
-        Leaf.database.createTable(new HistoryTable(Leaf.database));
-        Leaf.database.createTable(new FriendTable(Leaf.database));
-        Leaf.database.createTable(new FriendMailTable(Leaf.database));
-        Leaf.database.createTable(new FriendRequestTable(Leaf.database));
-        Leaf.database.createTable(new FriendSettingsTable(Leaf.database));
+        Leaf.database.createTable(new PlayerTable());
+        Leaf.database.createTable(new HistoryTable());
+        Leaf.database.createTable(new FriendTable());
+        Leaf.database.createTable(new FriendMailTable());
+        Leaf.database.createTable(new FriendRequestTable());
+        Leaf.database.createTable(new FriendSettingsTable());
     }
 
     /**

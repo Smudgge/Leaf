@@ -1,31 +1,14 @@
 package com.github.smuddgge.leaf.database.tables;
 
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendMailRecord;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
+import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
-public class FriendMailTable extends SQLiteTable {
-
-    /**
-     * Used to register the table with a database
-     * Note this does not create the table in the database
-     *
-     * @param database The instance of the database to query
-     */
-    public FriendMailTable(SQLiteDatabase database) {
-        super(database);
-    }
+public class FriendMailTable extends TableAdapter<FriendMailRecord> {
 
     @Override
-    public Record getRecord() {
-        return new FriendMailRecord();
-    }
-
-    @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "FriendMail";
     }
 
@@ -37,13 +20,9 @@ public class FriendMailTable extends SQLiteTable {
      * @return Null if there are none.
      */
     public FriendMailRecord getLatest(String fromUuid, String toUuid) {
-        for (Record record : this.getRecord("friendFromUuid", fromUuid)) {
-            FriendMailRecord friendMailRecord = (FriendMailRecord) record;
-
-            if (!Objects.equals(friendMailRecord.friendToUuid, toUuid)) continue;
-
-            return friendMailRecord;
-        }
-        return null;
+        return this.getRecordList(new Query()
+                .match("friendFromUuid", fromUuid)
+                .match("friendToUuid", toUuid)
+        ).get(0);
     }
 }

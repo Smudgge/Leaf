@@ -10,7 +10,6 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.proxy.Player;
-import dev.simplix.protocolize.data.Sound;
 
 import java.util.Objects;
 

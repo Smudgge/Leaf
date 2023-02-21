@@ -57,14 +57,14 @@ public abstract class BaseCommandType implements CommandType {
             if (!section.getKeys().contains(commandType.getName())) {
                 MessageManager.log("&7↳ &eDisabling &7sub command (No configuration) : " + commandType.getName());
                 toRemove.add(commandType);
-                return;
+                continue;
             }
 
             // Check if the command is disabled.
             if (!section.getSection(commandType.getName()).getBoolean("enabled", true)) {
                 MessageManager.log("&7↳ &eDisabling &7sub command (Disabled) : " + commandType.getName());
                 toRemove.add(commandType);
-                return;
+                continue;
             }
 
             MessageManager.log("&7↳ &aEnabling &7sub command : " + commandType.getName());

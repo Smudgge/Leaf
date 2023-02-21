@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the messages configuration file.
+ * Represents the message's configuration file.
  */
 public class ConfigMessages extends YamlConfiguration {
 

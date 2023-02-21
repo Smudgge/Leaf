@@ -10,6 +10,7 @@ import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
+import com.github.smuddgge.squishydatabase.Query;
 
 /**
  * <h1>Friend List Subcommand Type</h1>
@@ -60,40 +61,37 @@ public class FriendList implements CommandType {
 
             // Check if the database is disabled.
             if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
-            PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+            PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
 
             // Get the given argument.
             // This will be the owner of the friend list.
             String friendListOwnerName = arguments[1];
 
+            // Get the players details.
+            PlayerRecord playerRecord = playerTable.getFirstRecord(new Query().match("name", friendListOwnerName));
+
             // Check if the user exists in the database.
-            if (!playerTable.contains(friendListOwnerName)) {
+            if (playerRecord == null) {
                 user.sendMessage(section.getString("not_found", "{error_colour}Player could not be found."));
                 return new CommandStatus();
             }
 
-            // The owner's information.
-            PlayerRecord playerRecord = (PlayerRecord) playerTable.getRecord("name", friendListOwnerName).get(0);
-
-            // Try to open the friend list inventory.
             try {
-                FriendListInventory friendListInventory = new FriendListInventory(
-                        section.getSection(this.getName()), user, playerRecord.uuid
-                );
-                friendListInventory.open();
+                // Try to open the friend list inventory.
+                new FriendListInventory(section.getSection(this.getName()), user, playerRecord.uuid).open();
 
             } catch (Exception exception) {
                 user.sendMessage(listSection.getString("error", "{error_colour}Error occurred when opening inventory."));
                 MessageManager.warn("Exception occurred when opening a another players friend list as a inventory!");
                 exception.printStackTrace();
             }
+
             return new CommandStatus();
         }
 
-        // Try to open the friend list inventory.
         try {
-            FriendListInventory friendListInventory = new FriendListInventory(section.getSection(this.getName()), user);
-            friendListInventory.open();
+            // Try to open the friend list inventory.
+            new FriendListInventory(section.getSection(this.getName()), user).open();
 
         } catch (Exception exception) {
             user.sendMessage(listSection.getString("error", "{error_colour}Error occurred when opening inventory."));

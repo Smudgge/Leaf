@@ -56,12 +56,11 @@ public class FriendRequestOptionsInventory extends CustomInventory {
         if (Leaf.isDatabaseDisabled()) return;
 
         // Remove the record
-        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
-        friendRequestTable.removeRecord("uuid", requestRecord.uuid);
+        FriendRequestTable friendRequestTable = Leaf.getDatabase().getTable(FriendRequestTable.class);
+        friendRequestTable.removeRecord(requestRecord);
 
         // Re-open the inventory
-        FriendRequestInventory friendRequestInventory = new FriendRequestInventory(this.section, this.user);
-        friendRequestInventory.open();
+        new FriendRequestInventory(this.section, this.user).open();
     }
 
     /**

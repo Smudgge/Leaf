@@ -7,7 +7,6 @@ import dev.simplix.protocolize.api.player.ProtocolizePlayer;
 import dev.simplix.protocolize.data.Sound;
 
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -19,7 +18,7 @@ public class Sounds {
     /**
      * Used to play a sound for a player.
      *
-     * @param sound The sound to play.
+     * @param sound      The sound to play.
      * @param playerUuid The players uuid.
      */
     public static void play(Sound sound, UUID playerUuid) {
@@ -30,7 +29,7 @@ public class Sounds {
     /**
      * Used to play a sound for a player.
      *
-     * @param sound The sound as a string.
+     * @param sound      The sound as a string.
      * @param playerUuid The players uuid.
      */
     public static void play(String sound, UUID playerUuid) {

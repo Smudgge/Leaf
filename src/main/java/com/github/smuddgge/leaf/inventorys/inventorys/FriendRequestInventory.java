@@ -3,13 +3,14 @@ package com.github.smuddgge.leaf.inventorys.inventorys;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
+import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendRequestTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
+import com.github.smuddgge.squishydatabase.Query;
 import dev.simplix.protocolize.api.item.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
@@ -24,7 +25,7 @@ import java.util.Map;
  */
 public class FriendRequestInventory extends CustomInventory {
 
-    private ArrayList<Record> requestRecords;
+    private List<FriendRequestRecord> requestRecords;
 
     /**
      * Used to create a custom inventory.
@@ -40,8 +41,9 @@ public class FriendRequestInventory extends CustomInventory {
         if (Leaf.isDatabaseDisabled()) return;
 
         // Load all the friend records.
-        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
-        this.requestRecords = friendRequestTable.getRecord("playerToUuid", this.user.getUniqueId());
+        this.requestRecords = Leaf.getDatabase().getTable(FriendRequestTable.class).getRecordList(
+                new Query().match("playerToUuid", this.user.getUniqueId())
+        );
     }
 
     @Override
@@ -62,8 +64,8 @@ public class FriendRequestInventory extends CustomInventory {
         int recordIndex = (requestsPerPage * page) - requestsPerPage;
 
         // Get tables.
-        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+        FriendRequestTable friendRequestTable = Leaf.getDatabase().getTable(FriendRequestTable.class);
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
 
         for (Integer slot : mockInventory.keySet()) {
 
@@ -73,13 +75,17 @@ public class FriendRequestInventory extends CustomInventory {
                 this.inventory.item(slot, item);
                 this.addAction(slot, () -> {
                 });
+
             } else {
-                FriendRequestRecord requestRecord = (FriendRequestRecord) this.requestRecords.get(recordIndex);
-                String acceptedPlayerName = playerTable.getPlayer(requestRecord.playerFromUuid).name;
+                FriendRequestRecord requestRecord = this.requestRecords.get(recordIndex);
+                PlayerRecord playerRecord = playerTable.getFirstRecord(new Query().match("uuid", requestRecord.playerFromUuid));
+                assert playerRecord != null;
+
+                String acceptedPlayerName = playerRecord.name;
 
                 // Check that the record still exists in the database.
-                ArrayList<Record> results = friendRequestTable.getRecord("uuid", requestRecord.uuid);
-                if (results.isEmpty()) continue;
+                FriendRequestRecord result = friendRequestTable.getFirstRecord(new Query().match("uuid", requestRecord.uuid));
+                if (result == null) continue;
 
                 // Add the item to the inventory.
                 ItemStack item = this.appendPlayerItemStack(inventoryItem);
@@ -131,8 +137,10 @@ public class FriendRequestInventory extends CustomInventory {
      * @return The requested item stack.
      */
     private ItemStack parseCustomPlaceholders(ItemStack item, FriendRequestRecord record) {
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        String name = playerTable.getPlayer(record.playerFromUuid).name;
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
+        PlayerRecord playerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.playerFromUuid));
+        assert playerRecord != null;
+        String name = playerRecord.name;
 
         String tempName = item.displayName(true);
         item.displayName(MessageManager.convert(tempName
