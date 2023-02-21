@@ -163,13 +163,16 @@ public class Send extends BaseCommandType {
 
         for (Player player : playersToSend) {
 
-            // Send the player to the destination.
-            CompletableFuture<Boolean> result = player.createConnectionRequest(to).connectWithIndication();
-
-            // Get the result.
             try {
+                // Send the player to the destination.
+                CompletableFuture<Boolean> result = player.createConnectionRequest(to).connectWithIndication();
+
+                // Get the result.
+                if (result.isCancelled()) continue;
                 if (result.get()) amount += 1;
-            } catch (InterruptedException | ExecutionException ignored) {
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
 
