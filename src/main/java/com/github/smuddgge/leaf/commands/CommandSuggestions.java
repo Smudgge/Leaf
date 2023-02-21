@@ -3,11 +3,12 @@ package com.github.smuddgge.leaf.commands;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
+import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.ArrayList;
@@ -140,8 +141,7 @@ public class CommandSuggestions {
 
         if (Leaf.isDatabaseDisabled()) return this;
 
-        for (Record record : Leaf.getDatabase().getTable("Player").getAllRecords()) {
-            PlayerRecord playerRecord = (PlayerRecord) record;
+        for (PlayerRecord playerRecord : Leaf.getDatabase().getTable(PlayerTable.class).getRecordList()) {
             players.add(playerRecord.name);
         }
 
@@ -158,16 +158,15 @@ public class CommandSuggestions {
     public CommandSuggestions appendFriends(User user) {
         if (Leaf.isDatabaseDisabled()) return this;
 
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        ArrayList<Record> friends = friendTable.getRecord("playerUuid", user.getUniqueId());
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
+        List<FriendRecord> friends = friendTable.getRecordList(new Query().match("playerUuid", user.getUniqueId()));
 
-        List<String> friendList = new ArrayList<>();
-        for (Record record : friends) {
-            FriendRecord friendRecord = (FriendRecord) record;
-            friendList.add(friendRecord.friendNameFormatted);
+        List<String> friendNameList = new ArrayList<>();
+        for (FriendRecord friendRecord : friends) {
+            friendNameList.add(friendRecord.friendNameFormatted);
         }
 
-        this.data.add(friendList);
+        this.data.add(friendNameList);
         return this;
     }
 

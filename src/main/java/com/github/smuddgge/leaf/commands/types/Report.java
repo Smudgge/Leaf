@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Objects;
@@ -56,6 +57,12 @@ public class Report extends BaseCommandType {
 
             // Send the message.
             user.sendMessage(message);
+
+            // Play a sound if it exists.
+            String sound = section.getString("see_sound", null);
+            if (sound == null) continue;
+
+            Sounds.play(sound, user.getUniqueId());
         }
 
         // Log the message in console.
@@ -84,14 +91,26 @@ public class Report extends BaseCommandType {
             if (Objects.equals(toSend.getName(), user.getName())) continue;
 
             // Check if a permission is required and the player has the permission.
-            if (permissionSee != null && !user.hasPermission(permissionSee)) continue;
+            if (permissionSee != null && !toSend.hasPermission(permissionSee)) continue;
 
             // Send the message.
             toSend.sendMessage(message);
+
+            // Play a sound if it exists.
+            String sound = section.getString("see_sound", null);
+            if (sound == null) continue;
+
+            Sounds.play(sound, user.getUniqueId());
         }
 
         // Send the message to the sender.
         user.sendMessage(message);
+
+        // Play a sound if it exists.
+        String sound = section.getString("see_sound", null);
+        if (sound != null) {
+            Sounds.play(sound, user.getUniqueId());
+        }
 
         // Log the message.
         MessageManager.log(message);

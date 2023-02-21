@@ -6,16 +6,15 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
@@ -64,18 +63,17 @@ public class FriendRequest implements CommandType {
 
         // Check if the database is disabled.
         if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
 
         // Get player to requests information.
-        ArrayList<Record> playerResults = playerTable.getRecord("name", playerNameToRequest);
-        if (playerResults.size() == 0) {
+        PlayerRecord playerToRequestRecord = playerTable.getFirstRecord(new Query().match("name", playerNameToRequest));
+        if (playerToRequestRecord == null) {
             user.sendMessage(requestSection.getString("not_found", "{error_colour}Player has never played on this server."));
             return new CommandStatus();
         }
-        PlayerRecord playerToRequestRecord = (PlayerRecord) playerResults.get(0);
 
         // Get the settings of the player to request.
-        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+        FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
         FriendSettingsRecord playerToRequestSettings = friendSettingsTable.getSettings(playerToRequestRecord.uuid);
 
         // Check if they have their friend requests toggled false.

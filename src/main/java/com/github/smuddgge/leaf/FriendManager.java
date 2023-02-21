@@ -2,7 +2,6 @@ package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
@@ -14,9 +13,9 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
+import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class FriendManager {
     public static boolean sendRequest(User userFrom, PlayerRecord playerRecordTo) {
         if (Leaf.isDatabaseDisabled()) return false;
 
-        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
+        FriendRequestTable friendRequestTable = Leaf.getDatabase().getTable(FriendRequestTable.class);
 
         FriendRequestRecord requestRecord = new FriendRequestRecord();
         requestRecord.uuid = String.valueOf(UUID.randomUUID());
@@ -46,7 +45,6 @@ public class FriendManager {
         requestRecord.playerToUuid = playerRecordTo.uuid;
 
         friendRequestTable.insertRecord(requestRecord);
-
         return true;
     }
 
@@ -58,14 +56,16 @@ public class FriendManager {
     public static void acceptRequest(FriendRequestRecord requestRecord) {
         if (Leaf.isDatabaseDisabled()) return;
 
-        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
+        FriendRequestTable friendRequestTable = Leaf.getDatabase().getTable(FriendRequestTable.class);
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
 
-        PlayerRecord playerFrom = playerTable.getPlayer(requestRecord.playerFromUuid);
-        PlayerRecord playerTo = playerTable.getPlayer(requestRecord.playerToUuid);
+        PlayerRecord playerFrom = playerTable.getFirstRecord(new Query().match("uuid", requestRecord.playerFromUuid));
+        PlayerRecord playerTo = playerTable.getFirstRecord(new Query().match("uuid", requestRecord.playerToUuid));
+        assert playerTo != null;
+        assert playerFrom != null;
 
-        friendRequestTable.removeRecord("uuid", requestRecord.uuid);
+        friendRequestTable.removeRecord(requestRecord);
 
         FriendRecord friendRecord = new FriendRecord();
         friendRecord.uuid = UUID.randomUUID().toString();
@@ -105,12 +105,14 @@ public class FriendManager {
     public static void unFriend(String playerUuid, String friendUuid) {
         if (Leaf.isDatabaseDisabled()) return;
 
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
         FriendRecord friendRecord1 = friendTable.getFriend(playerUuid, friendUuid);
         FriendRecord friendRecord2 = friendTable.getFriend(friendUuid, playerUuid);
+        assert friendRecord1 != null;
+        assert friendRecord2 != null;
 
-        friendTable.removeRecord("uuid", friendRecord1.uuid);
-        friendTable.removeRecord("uuid", friendRecord2.uuid);
+        friendTable.removeRecord(friendRecord1);
+        friendTable.removeRecord(friendRecord2);
     }
 
     /**
@@ -121,15 +123,15 @@ public class FriendManager {
      * @return True if they have already requested.
      */
     public static boolean hasRequested(UUID playerFrom, String playerTo) {
-        FriendRequestTable friendRequestTable = (FriendRequestTable) Leaf.getDatabase().getTable("FriendRequest");
-        ArrayList<Record> results = friendRequestTable.getRecord("playerFromUuid", playerFrom);
+        FriendRequestTable friendRequestTable = Leaf.getDatabase().getTable(FriendRequestTable.class);
 
-        for (Record record : results) {
-            FriendRequestRecord friendRequestRecord = (FriendRequestRecord) record;
-            if (Objects.equals(friendRequestRecord.playerToUuid, playerTo)) return true;
-        }
+        FriendRequestRecord friendRequestRecord = friendRequestTable.getFirstRecord(
+                new Query()
+                        .match("playerFromUuid", playerFrom)
+                        .match("playerToUuid", playerTo)
+        );
 
-        return false;
+        return friendRequestRecord != null;
     }
 
     /**
@@ -142,8 +144,8 @@ public class FriendManager {
 
         if (section == null) return;
 
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
+        FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
 
         String message = section.getString("proxy_join", "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}");
 
@@ -170,8 +172,8 @@ public class FriendManager {
 
         if (section == null) return;
 
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
+        FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
 
         String message = section.getString("proxy_leave", "&8[&c-&8] &7Your friend &c<player> &7left the network");
 
@@ -198,8 +200,8 @@ public class FriendManager {
 
         if (section == null) return;
 
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        FriendSettingsTable friendSettingsTable = (FriendSettingsTable) Leaf.getDatabase().getTable("FriendSettings");
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
+        FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
 
         String message = section.getString("server_change", "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}");
 

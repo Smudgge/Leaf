@@ -1,33 +1,29 @@
 package com.github.smuddgge.leaf.database.records;
 
-import com.github.smuddgge.leaf.database.FieldAnnotation;
-import com.github.smuddgge.leaf.database.FieldKeyType;
-import com.github.smuddgge.leaf.database.ForeignKey;
-import com.github.smuddgge.leaf.database.Record;
+import com.github.smuddgge.squishydatabase.record.ForeignKeyAnnotation;
+import com.github.smuddgge.squishydatabase.record.Record;
+import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
+import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 
 public class FriendMailRecord extends Record {
 
-    @FieldAnnotation(fieldKeyType = FieldKeyType.PRIMARY)
+    @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
     public String uuid;
 
-    @FieldAnnotation
     public String message;
 
-    @FieldAnnotation
     public String viewedBoolean;
 
-    @FieldAnnotation
     public String sentDate;
 
-    @FieldAnnotation
     public String readDate;
 
-    @FieldAnnotation(fieldKeyType = FieldKeyType.FOREIGN)
-    @ForeignKey(tableReferenceName = "Friend", tableReferenceValue = "uuid")
+    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
+    @ForeignKeyAnnotation(table = "Player", field = "uuid")
     public String friendFromUuid;
 
-    @FieldAnnotation(fieldKeyType = FieldKeyType.FOREIGN)
-    @ForeignKey(tableReferenceName = "Friend", tableReferenceValue = "uuid")
+    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
+    @ForeignKeyAnnotation(table = "Player", field = "uuid")
     public String friendToUuid;
 
     /**

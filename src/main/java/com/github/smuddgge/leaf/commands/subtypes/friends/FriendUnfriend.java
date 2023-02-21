@@ -6,15 +6,13 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
-
-import java.util.ArrayList;
+import com.github.smuddgge.squishydatabase.Query;
 
 /**
  * <h1>Friend Accept Subcommand Type</h1>
@@ -54,16 +52,15 @@ public class FriendUnfriend implements CommandType {
         String unfriendPlayerName = arguments[1];
 
         // Get database tables.
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
 
         // Get the unfriend players information.
-        ArrayList<Record> results = playerTable.getRecord("name", unfriendPlayerName);
-        if (results.isEmpty()) {
+        PlayerRecord unfriendPlayerRecord = playerTable.getFirstRecord(new Query().match("name", unfriendPlayerName));
+        if (unfriendPlayerRecord == null) {
             user.sendMessage(unfriendSection.getString("not_found", "{error_colour}Invalid player name."));
             return new CommandStatus();
         }
-        PlayerRecord unfriendPlayerRecord = (PlayerRecord) results.get(0);
 
         // Get the friend record of the two players.
         FriendRecord friendRecord = friendTable.getFriend(user.getUniqueId().toString(), unfriendPlayerRecord.uuid);

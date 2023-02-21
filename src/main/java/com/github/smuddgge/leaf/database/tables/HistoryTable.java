@@ -1,38 +1,23 @@
 package com.github.smuddgge.leaf.database.tables;
 
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.HistoryRecord;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
 import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.utility.DateAndTime;
+import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
 /**
  * Represents the history table in the database.
  */
-public class HistoryTable extends SQLiteTable {
-
-    /**
-     * Used to register the table with a database
-     * Note this does not create the table in the database
-     *
-     * @param database The instance of the database to query
-     */
-    public HistoryTable(SQLiteDatabase database) {
-        super(database);
-    }
+public class HistoryTable extends TableAdapter<HistoryRecord> {
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "History";
-    }
-
-    @Override
-    public Record getRecord() {
-        return new HistoryRecord();
     }
 
     /**
@@ -65,13 +50,15 @@ public class HistoryTable extends SQLiteTable {
      * @param limit      The amount of history to limit to.
      */
     public void limitHistory(String playerUuid, int limit) {
-        ArrayList<Record> records = this.getRecord("playerUuid", playerUuid);
-        if (records.size() <= limit) return;
-        int toRemove = records.size() - limit;
+        List<HistoryRecord> historyRecordList = this.getRecordList(
+                new Query().match("playerUuid", playerUuid)
+        );
+
+        if (historyRecordList.size() <= limit) return;
+        int toRemove = historyRecordList.size() - limit;
 
         Map<Long, HistoryRecord> map = new TreeMap<>();
-        for (Record record : records) {
-            HistoryRecord historyRecord = (HistoryRecord) record;
+        for (HistoryRecord historyRecord : historyRecordList) {
             map.put(Long.parseLong(historyRecord.timeStamp), historyRecord);
         }
 
@@ -80,7 +67,7 @@ public class HistoryTable extends SQLiteTable {
             HistoryRecord historyRecord = map.get(key);
 
             map.remove(key);
-            this.removeRecord("uuid", historyRecord.uuid);
+            this.removeRecord(historyRecord);
         }
     }
 
@@ -93,8 +80,8 @@ public class HistoryTable extends SQLiteTable {
      */
     public ArrayList<HistoryRecord> getRecordOrdered(String key, Object value) {
         Map<Long, HistoryRecord> map = new TreeMap<>(Collections.reverseOrder());
-        for (Record record : this.getRecord(key, value)) {
-            HistoryRecord historyRecord = (HistoryRecord) record;
+
+        for (HistoryRecord historyRecord : this.getRecordList(new Query().match(key, value))) {
             map.put(Long.parseLong(historyRecord.timeStamp), historyRecord);
         }
 

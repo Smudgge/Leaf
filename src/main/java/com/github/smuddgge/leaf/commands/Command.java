@@ -5,13 +5,16 @@ import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
+import dev.simplix.protocolize.data.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -82,8 +85,19 @@ public record Command(String identifier,
      * @return The command's status.
      */
     public CommandStatus onPlayerRun(String[] arguments, User user) {
-        if (this.commandType.getSubCommandTypes().isEmpty() || arguments.length <= 0)
-            return this.commandType.onPlayerRun(this.getSection(), arguments, user);
+
+        // Play sound.
+        if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
+            try {
+                Sounds.play(Sound.valueOf(this.getSound().toUpperCase(Locale.ROOT)), user.getUniqueId());
+            } catch (IllegalArgumentException illegalArgumentException) {
+                MessageManager.warn("Invalid sound for command " + this.getName() + " : ");
+                illegalArgumentException.printStackTrace();
+            }
+        }
+
+        if (this.commandType.getSubCommandTypes().isEmpty()
+                || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user);
 
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
             String name = arguments[0];
@@ -143,6 +157,15 @@ public record Command(String identifier,
      */
     public String getPermission() {
         return ConfigCommands.getCommandPermission(this.getIdentifier());
+    }
+
+    /**
+     * Used to get the sound played when the command is executed.
+     *
+     * @return The sound to play as a string.
+     */
+    public String getSound() {
+        return ConfigCommands.getCommandSound(this.getIdentifier());
     }
 
     /**

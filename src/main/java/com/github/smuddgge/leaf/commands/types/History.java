@@ -7,7 +7,6 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.HistoryRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
@@ -15,6 +14,7 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishydatabase.Query;
 
 import java.util.ArrayList;
 
@@ -88,13 +88,12 @@ public class History extends BaseCommandType {
         String playerName = arguments[0];
 
         // Get database tables.
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
+        HistoryTable historyTable = Leaf.getDatabase().getTable(HistoryTable.class);
 
         // Get the player's information.
-        ArrayList<Record> playerRecords = playerTable.getRecord("name", playerName);
-        if (playerRecords.isEmpty()) return ConfigMessages.getDatabaseEmpty();
-        PlayerRecord playerRecord = (PlayerRecord) playerRecords.get(0);
+        PlayerRecord playerRecord = playerTable.getFirstRecord(new Query().match("name", playerName));
+        if (playerRecord == null) return ConfigMessages.getDatabaseEmpty();
 
         // Get the player's history.
         ArrayList<HistoryRecord> historyRecords = historyTable.getRecordOrdered("playerUuid", playerRecord.uuid);

@@ -3,7 +3,6 @@ package com.github.smuddgge.leaf.inventorys.inventorys;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendMailRecord;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
@@ -14,6 +13,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import com.github.smuddgge.leaf.utility.DateAndTime;
+import com.github.smuddgge.squishydatabase.Query;
 import dev.simplix.protocolize.api.item.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class FriendListInventory extends CustomInventory {
 
-    private ArrayList<Record> friendRecords;
+    private List<FriendRecord> friendRecords;
 
     /**
      * Used to create a {@link FriendListInventory} open on the first page.
@@ -44,8 +44,9 @@ public class FriendListInventory extends CustomInventory {
         if (Leaf.isDatabaseDisabled()) return;
 
         // Load all the friend records.
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        this.friendRecords = friendTable.getRecord("playerUuid", user.getUniqueId());
+        this.friendRecords = Leaf.getDatabase().getTable(FriendTable.class).getRecordList(
+                new Query().match("playerUuid", user.getUniqueId().toString())
+        );
     }
 
     /**
@@ -64,8 +65,9 @@ public class FriendListInventory extends CustomInventory {
         if (Leaf.isDatabaseDisabled()) return;
 
         // Load all the friend records in terms of the list context.
-        FriendTable friendTable = (FriendTable) Leaf.getDatabase().getTable("Friend");
-        this.friendRecords = friendTable.getRecord("playerUuid", listContextUserUuid);
+        this.friendRecords = Leaf.getDatabase().getTable(FriendTable.class).getRecordList(
+                new Query().match("playerUuid", listContextUserUuid)
+        );
     }
 
     @Override
@@ -99,7 +101,7 @@ public class FriendListInventory extends CustomInventory {
                 this.inventory.item(slot, item);
             } else {
                 ItemStack item = this.appendPlayerItemStack(inventoryItem);
-                this.inventory.item(slot, this.parseCustomPlaceholders(item, (FriendRecord) this.friendRecords.get(recordIndex)));
+                this.inventory.item(slot, this.parseCustomPlaceholders(item, this.friendRecords.get(recordIndex)));
             }
 
             // Increase record index.
@@ -139,11 +141,14 @@ public class FriendListInventory extends CustomInventory {
      * @return The requested item stack.
      */
     private ItemStack parseCustomPlaceholders(ItemStack item, FriendRecord record) {
-        FriendMailTable friendMailTable = (FriendMailTable) Leaf.getDatabase().getTable("FriendMail");
+        FriendMailTable friendMailTable = Leaf.getDatabase().getTable(FriendMailTable.class);
         FriendMailRecord friendMailRecord = friendMailTable.getLatest(record.playerUuid, record.friendPlayerUuid);
 
-        PlayerTable playerTable = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        PlayerRecord friendPlayerRecord = playerTable.getPlayer(record.friendPlayerUuid);
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
+        PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(
+                new Query().match("uuid", record.friendPlayerUuid)
+        );
+        assert friendPlayerRecord != null;
         String friendsName = friendPlayerRecord.name;
 
         if (friendMailRecord == null) {

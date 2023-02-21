@@ -131,7 +131,7 @@ commands:
     type: "message"
     enable: true
     name: "globalmessage"
-    aliases: ["gmsg"]
+    aliases: [ "gmsg" ]
     not_found: "{error_colour}Player is not online."
     message_self: "{error_colour}You cannot message yourself."
     # Placeholders will parse in terms of the other player.

@@ -21,7 +21,7 @@ import java.util.UUID;
 public class User {
 
     private final Player player;
-    private final RegisteredServer server;
+    private RegisteredServer server;
     private final String name;
 
     /**
@@ -48,11 +48,21 @@ public class User {
     }
 
     /**
+     * Used to set the registered server.
+     *
+     * @param server The registered server.
+     */
+    public void setConnectedServer(RegisteredServer server) {
+        this.server = server;
+    }
+
+    /**
      * Used to get what server the user is connected to.
      *
      * @return The registered server.
      */
     public RegisteredServer getConnectedServer() {
+        if (this.server != null) return this.server;
         if (this.player == null) return this.server;
         if (this.player.getCurrentServer().isEmpty()) return null;
 
@@ -169,11 +179,7 @@ public class User {
      */
     public void updateDatabase() {
         if (Leaf.isDatabaseDisabled()) return;
-
-        PlayerTable table = (PlayerTable) Leaf.getDatabase().getTable("Player");
-        if (table == null) return;
-
-        table.updatePlayer(this);
+        Leaf.getDatabase().getTable(PlayerTable.class).updatePlayer(this);
     }
 
     /**
@@ -185,10 +191,13 @@ public class User {
     public void addHistory(RegisteredServer server, PlayerHistoryEventType playerHistoryEventType) {
         if (Leaf.isDatabaseDisabled()) return;
 
-        HistoryTable historyTable = (HistoryTable) Leaf.getDatabase().getTable("History");
-        if (historyTable == null) return;
+        HistoryTable historyTable = Leaf.getDatabase().getTable(HistoryTable.class);
 
-        historyTable.insertHistory(this.getUniqueId().toString(), server.getServerInfo().getName(), playerHistoryEventType);
+        historyTable.insertHistory(
+                this.getUniqueId().toString(),
+                server.getServerInfo().getName(),
+                playerHistoryEventType
+        );
     }
 
     /**

@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
-import com.velocitypowered.api.event.player.ServerPostConnectEvent;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 /**
@@ -17,9 +17,12 @@ public class EventManager {
      *
      * @param event Post connection event.
      */
-    public static void onPlayerJoin(ServerPostConnectEvent event) {
+    public static void onPlayerJoin(ServerConnectedEvent event) {
         // Check if we are connected to the database
         if (Leaf.isDatabaseDisabled()) return;
+
+        // Check if the player is null.
+        if (event.getPlayer() == null) return;
 
         // Get the user
         User user = new User(event.getPlayer());
@@ -28,7 +31,7 @@ public class EventManager {
         user.updateDatabase();
 
         // Get server connecting to
-        RegisteredServer server = user.getConnectedServer();
+        RegisteredServer server = event.getServer();
 
         // Check if the server is null
         if (server == null) return;
@@ -36,10 +39,9 @@ public class EventManager {
         // Check if the user is vanished
         if (user.isVanished()) return;
 
-        // Check if the user is vanishable
-        if (!user.isNotVanishable()) return;
+        user.setConnectedServer(server);
 
-        if (event.getPreviousServer() == null) FriendManager.onProxyJoin(user);
+        if (event.getPreviousServer().isEmpty()) FriendManager.onProxyJoin(user);
         else FriendManager.onChangeServer(user);
 
         // Add history
@@ -55,6 +57,9 @@ public class EventManager {
         // Check if we are connected to the database
         if (Leaf.isDatabaseDisabled()) return;
 
+        // Check if the player is null.
+        if (event.getPlayer() == null) return;
+
         // Get the user
         User user = new User(event.getPlayer());
 
@@ -69,9 +74,6 @@ public class EventManager {
 
         // Check if the user is vanished
         if (user.isVanished()) return;
-
-        // Check if the user is vanishable
-        if (!user.isNotVanishable()) return;
 
         FriendManager.onProxyLeave(user);
 

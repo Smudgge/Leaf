@@ -1,50 +1,39 @@
 package com.github.smuddgge.leaf.database.tables;
 
-import com.github.smuddgge.leaf.database.Record;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteDatabase;
-import com.github.smuddgge.leaf.database.sqlite.SQLiteTable;
+import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
-public class FriendSettingsTable extends SQLiteTable {
-
-    /**
-     * Used to register the table with a database
-     * Note this does not create the table in the database
-     *
-     * @param database The instance of the database to query
-     */
-    public FriendSettingsTable(SQLiteDatabase database) {
-        super(database);
-    }
+public class FriendSettingsTable extends TableAdapter<FriendSettingsRecord> {
 
     @Override
-    public Record getRecord() {
-        return new FriendSettingsRecord();
-    }
-
-    @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "FriendSettings";
     }
 
     /**
      * Used to get a players friend settings.
+     * If the settings don't exist it will
+     * create a new record.
      *
      * @param playerUuid The players uuid.
      * @return The instance of the friend settings.
      */
-    public FriendSettingsRecord getSettings(String playerUuid) {
-        ArrayList<Record> result = this.getRecord("playerUuid", playerUuid);
-        if (result.isEmpty()) {
-            FriendSettingsRecord friendSettingsRecord = new FriendSettingsRecord();
-            friendSettingsRecord.playerUuid = playerUuid;
-            friendSettingsRecord.uuid = UUID.randomUUID().toString();
-            this.insertRecord(friendSettingsRecord);
-            return friendSettingsRecord;
+    public @NotNull FriendSettingsRecord getSettings(String playerUuid) {
+        FriendSettingsRecord result = this.getFirstRecord(new Query().match("playerUuid", playerUuid));
+
+        if (result == null) {
+            FriendSettingsRecord settings = new FriendSettingsRecord();
+            settings.uuid = UUID.randomUUID().toString();
+            settings.playerUuid = playerUuid;
+
+            this.insertRecord(settings);
+            return settings;
         }
-        return (FriendSettingsRecord) result.get(0);
+
+        return result;
     }
 }
