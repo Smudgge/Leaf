@@ -23,7 +23,7 @@
 # Velocity Proxy Server Plugin
 # Author : Smudge
 
-Status: Version 1.4.1
+Status: Version 2.0.0
 ```
 
 <div>
