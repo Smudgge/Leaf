@@ -37,7 +37,7 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "2.0.0",
+        version = "2.1.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
