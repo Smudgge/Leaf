@@ -226,4 +226,17 @@ public class User {
         this.player.createConnectionRequest(connectedServer).connectWithIndication();
         return true;
     }
+
+    /**
+     * Used to send the user to a server.
+     *
+     * @param server The server to send to.
+     */
+    public void send(RegisteredServer server) {
+        if (this.player == null) return;
+        try {
+            this.player.createConnectionRequest(server);
+        } catch (Exception ignored) {
+        }
+    }
 }

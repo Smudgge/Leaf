@@ -190,6 +190,14 @@ commands:
     not_found: "{error_colour}Player could not be found."
     message: "{message} Teleporting..."
 
+  join:
+    type: "join"
+    enabled: false
+    name: "survival"
+    # The name of the server to send the player to.
+    server: "survival"
+    no_server: "{error_colour}This server is offline"
+
 
   friends:
     type: "friends"
