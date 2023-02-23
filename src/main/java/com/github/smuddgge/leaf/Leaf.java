@@ -100,6 +100,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new History());
         Leaf.commandHandler.addType(new Info());
         Leaf.commandHandler.addType(new Inventory());
+        Leaf.commandHandler.addType(new Join());
         Leaf.commandHandler.addType(new List());
         Leaf.commandHandler.addType(new Message());
         Leaf.commandHandler.addType(new Reload());
