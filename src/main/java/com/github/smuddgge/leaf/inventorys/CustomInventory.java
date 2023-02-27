@@ -78,6 +78,10 @@ public abstract class CustomInventory extends InventoryInterface {
             // Check if the item is null.
             if (item == null) continue;
 
+            // Check if the item contains a command.
+            List<String> commands = inventoryItem.getSection().getListString("commands");
+            this.addCommandList(commands, inventoryItem);
+
             // For each slot, set the item.
             for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
                 this.inventory.item(slot, item);

@@ -2,7 +2,9 @@ package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.proxy.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,20 @@ public class CommandHandler {
             if (Objects.equals(commandType.getName(), name)) return commandType;
         }
 
+        return null;
+    }
+
+    /**
+     * Used to get a command given the command name.
+     *
+     * @param name The name of the command or alias.
+     * @return The requested command instance.
+     */
+    public Command getCommand(String name) {
+        for (Command command : this.commands) {
+            if (Objects.equals(command.getName(), name)) return command;
+            if (command.getAliases().get().contains(name)) return command;
+        }
         return null;
     }
 
@@ -112,5 +128,24 @@ public class CommandHandler {
 
         this.registeredCommands = new ArrayList<>();
         this.commands = new ArrayList<>();
+    }
+
+    /**
+     * Used to execute a command.
+     *
+     * @param commandName The command name to execute.
+     */
+    public void execute(Player player, String commandName) {
+        if (Objects.equals(commandName, "")) return;
+
+        // Get the identifier.
+        String name = commandName.split(" ")[0];
+        String[] arguments = commandName.substring(0, name.length()).split(" ");
+
+        // Get the instance of the command.
+        Command command = this.getCommand(name);
+
+        // Execute the command as a player.
+        command.onPlayerRun(arguments, new User(player));
     }
 }

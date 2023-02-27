@@ -239,4 +239,14 @@ public class User {
         } catch (Exception ignored) {
         }
     }
+
+    /**
+     * Used to execute a command in this plugin.
+     *
+     * @param command The command to execute.
+     */
+    public void executeCommand(String command) {
+        if (this.player == null) return;
+        Leaf.getCommandHandler().execute(this.player, command);
+    }
 }

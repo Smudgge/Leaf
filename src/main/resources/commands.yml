@@ -182,6 +182,11 @@ commands:
           name: "&a&l<player>"
           lore:
             - "&7You are amazing!"
+        "center1":
+          name: "&a&lRun Command &f/servers"
+          commands:
+            # Only works with commands registered with this plugin.
+            - "servers"
 
   teleport:
     type: "teleport"
