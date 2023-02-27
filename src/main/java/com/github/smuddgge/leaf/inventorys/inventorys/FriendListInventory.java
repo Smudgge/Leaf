@@ -12,8 +12,10 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
 import com.github.smuddgge.squishydatabase.Query;
+import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
@@ -22,6 +24,7 @@ import net.querz.nbt.tag.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents the friend list inventory.
@@ -141,32 +144,44 @@ public class FriendListInventory extends CustomInventory {
      * @return The requested item stack.
      */
     private ItemStack parseCustomPlaceholders(ItemStack item, FriendRecord record) {
+        // Get tables.
         FriendMailTable friendMailTable = Leaf.getDatabase().getTable(FriendMailTable.class);
-        FriendMailRecord friendMailRecord = friendMailTable.getLatest(record.playerUuid, record.friendPlayerUuid);
-
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
-        PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(
-                new Query().match("uuid", record.friendPlayerUuid)
-        );
-        assert friendPlayerRecord != null;
-        String friendsName = friendPlayerRecord.name;
 
+        // Get records.
+        FriendMailRecord friendMailRecord = friendMailTable.getLatest(record.playerUuid, record.friendPlayerUuid);
+        PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.friendPlayerUuid));
+        assert friendPlayerRecord != null;
+
+        // Get name and optional player.
+        String friendsName = friendPlayerRecord.name;
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.uuid);
+
+        // Create fake mail record if none exist.
         if (friendMailRecord == null) {
             friendMailRecord = new FriendMailRecord();
             friendMailRecord.message = "None";
             friendMailRecord.viewedBoolean = "true";
         }
 
+        // Parse display name.
         String tempName = item.displayName(true);
+        if (optionalPlayer.isPresent()) {
+            tempName = PlaceholderManager.parse(tempName, null, new User(optionalPlayer.get()));
+        }
         item.displayName(MessageManager.convert(tempName
                 .replace("%name%", friendsName)
                 .replace("%date%", DateAndTime.convert(record.dateCreated))
                 .replace("%last_mail%", friendMailRecord.message)
                 .replace("%mail_status%", friendMailRecord.getStatus())));
 
+        // Parse lore.
         List<Component> lore = new ArrayList<>();
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
+            if (optionalPlayer.isPresent()) {
+                tempLine = PlaceholderManager.parse(tempLine, null, new User(optionalPlayer.get()));
+            }
             lore.add(MessageManager.convert(tempLine
                     .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))
@@ -176,6 +191,7 @@ public class FriendListInventory extends CustomInventory {
         }
         item.lore(lore, false);
 
+        // Parse nbt.
         CompoundTag compoundTag = item.nbtData();
         CompoundTag toAdd = new CompoundTag();
         for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {

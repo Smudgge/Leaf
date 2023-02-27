@@ -10,7 +10,9 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishydatabase.Query;
+import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
@@ -19,6 +21,7 @@ import net.querz.nbt.tag.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents the friend requests inventory.
@@ -140,20 +143,32 @@ public class FriendRequestInventory extends CustomInventory {
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         PlayerRecord playerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.playerFromUuid));
         assert playerRecord != null;
-        String name = playerRecord.name;
 
+        // Get name and optional player.
+        String name = playerRecord.name;
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(playerRecord.uuid);
+
+        // Parse name.
         String tempName = item.displayName(true);
+        if (optionalPlayer.isPresent()) {
+            tempName = PlaceholderManager.parse(tempName, null, new User(optionalPlayer.get()));
+        }
         item.displayName(MessageManager.convert(tempName
                 .replace("%name%", name)));
 
+        // Parse lore.
         List<Component> lore = new ArrayList<>();
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
+            if (optionalPlayer.isPresent()) {
+                tempLine = PlaceholderManager.parse(tempLine, null, new User(optionalPlayer.get()));
+            }
             lore.add(MessageManager.convert(tempLine
                     .replace("%name%", name)));
         }
         item.lore(lore, false);
 
+        // Parse nbt.
         CompoundTag compoundTag = item.nbtData();
         CompoundTag toAdd = new CompoundTag();
         for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {
