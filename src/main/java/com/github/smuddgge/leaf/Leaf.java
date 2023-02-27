@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandHandler;
 import com.github.smuddgge.leaf.commands.subtypes.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.*;
+import com.github.smuddgge.leaf.commands.types.messages.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
@@ -110,6 +111,11 @@ public class Leaf {
         Leaf.commandHandler.addType(new Send());
         Leaf.commandHandler.addType(new Servers());
         Leaf.commandHandler.addType(new Teleport());
+        Leaf.commandHandler.addType(new Ignore());
+        Leaf.commandHandler.addType(new IgnoreList());
+        Leaf.commandHandler.addType(new ToggleMessage());
+        Leaf.commandHandler.addType(new ToggleSpy());
+        Leaf.commandHandler.addType(new UnIgnore());
 
         Leaf.reloadCommands();
 
@@ -187,9 +193,9 @@ public class Leaf {
 
         DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
 
-        Leaf.database = databaseFactory.create(new DatabaseCredentials()
-                .setPath(folder.getAbsolutePath() + File.separator + "database.sqlite3")
-        );
+        Leaf.database = databaseFactory.create(new DatabaseCredentials(
+                folder.getAbsolutePath() + File.separator + "database.sqlite3"
+        ));
 
         if (Leaf.database.isDisabled()) {
             MessageManager.warn("[Database] Unable to load database.");
@@ -203,6 +209,7 @@ public class Leaf {
         Leaf.database.createTable(new FriendMailTable());
         Leaf.database.createTable(new FriendRequestTable());
         Leaf.database.createTable(new FriendSettingsTable());
+        Leaf.database.createTable(new IgnoreTable());
     }
 
     /**

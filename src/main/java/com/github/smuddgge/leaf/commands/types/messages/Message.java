@@ -1,4 +1,4 @@
-package com.github.smuddgge.leaf.commands.types;
+package com.github.smuddgge.leaf.commands.types.messages;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
@@ -100,12 +100,39 @@ public class Message extends BaseCommandType {
         if ((allowVanishablePlayers && userIsVanishable)
                 || recipientNotVanished) {
 
+            // Check for ignoring.
+            if (user.isIgnoring(recipient.getUniqueId())) {
+                user.sendMessage(section.getString("ignoring", "{error_colour}You have ignored this player."));
+                return new CommandStatus();
+            }
+
+            if (recipient.isIgnoring(user.getUniqueId())) {
+                user.sendMessage(section.getString("recipient_ignoring", "{error_colour}This player has ignored you."));
+                return new CommandStatus();
+            }
+
+            // Check for toggles.
+            if (user.hasMessagesToggled()) {
+                user.sendMessage(section.getString("toggled", "{error_colour}You have your messages toggled."));
+                return new CommandStatus();
+            }
+
+            if (recipient.hasMessagesToggled()) {
+                user.sendMessage(section.getString("recipient_toggled", "{error_colour}This player has there messages toggled."));
+                return new CommandStatus();
+            }
+
             // Send messages
             recipient.sendMessage(PlaceholderManager.parse(section.getString("from")
                     .replace("%message%", message), null, user));
 
             user.sendMessage(PlaceholderManager.parse(section.getString("to")
                     .replace("%message%", message), null, recipient));
+
+            MessageManager.sendSpy(section.getString("spy_format", "&8&o%from% -> %to% : %message%")
+                    .replace("%from%", user.getName())
+                    .replace("%to%", recipient.getName())
+                    .replace("%message%", message));
 
             // Log message interaction
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());

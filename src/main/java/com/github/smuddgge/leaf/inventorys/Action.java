@@ -5,13 +5,13 @@ package com.github.smuddgge.leaf.inventorys;
  */
 public class Action {
 
-    private int slot;
-    private Runnable runnable;
+    private final int slot;
+    private final Runnable runnable;
 
     /**
      * Used to create an item action.
      *
-     * @param slot The slot number.
+     * @param slot     The slot number.
      * @param runnable The runnable.
      */
     public Action(int slot, Runnable runnable) {

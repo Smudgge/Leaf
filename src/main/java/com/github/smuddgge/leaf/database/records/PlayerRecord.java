@@ -13,4 +13,11 @@ public class PlayerRecord extends Record {
     public String uuid;
 
     public String name;
+
+    /**
+     * Added at version 2.2.0
+     */
+    public String toggleMessages = "false";
+
+    public String toggleSpy = "false";
 }

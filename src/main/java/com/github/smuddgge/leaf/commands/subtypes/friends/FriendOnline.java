@@ -9,7 +9,6 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendOnlineInventory;
 import com.github.smuddgge.squishydatabase.Query;
 

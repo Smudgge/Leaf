@@ -21,7 +21,7 @@ public class FriendOnlineInventory extends FriendListInventory {
      * Used to create a friend online inventory.
      *
      * @param section The instance of the configuration section.
-     * @param user The instance of the user.
+     * @param user    The instance of the user.
      */
     public FriendOnlineInventory(ConfigurationSection section, User user) {
         super(section, user);

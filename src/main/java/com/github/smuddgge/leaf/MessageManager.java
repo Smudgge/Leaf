@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
@@ -132,5 +133,16 @@ public class MessageManager {
                 "    &7By Smudge    Version &e" + Leaf.class.getAnnotation(Plugin.class).version();
 
         MessageManager.log(message);
+    }
+
+    /**
+     * Used to send a message to the players that can spy.
+     *
+     * @param message The message to send.
+     */
+    public static void sendSpy(String message) {
+        for (Player player : Leaf.getServer().getAllPlayers()) {
+            new User(player).sendMessage(message);
+        }
     }
 }

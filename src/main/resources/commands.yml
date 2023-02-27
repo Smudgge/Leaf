@@ -134,9 +134,15 @@ commands:
     aliases: [ "gmsg" ]
     not_found: "{error_colour}Player is not online."
     message_self: "{error_colour}You cannot message yourself."
+    ignoring: "{error_colour}You have ignored this player."
+    recipient_ignoring: "{error_colour}This player has ignored you."
+    toggled: "{error_colour}You have your messages toggled."
+    recipient_toggled: "{error_colour}This player has there messages toggled."
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+    # Spy is where other players can see messages.
+    spy_format: "&8&o%from% -> %to% : %message%"
 
   reply:
     type: "reply"
@@ -144,9 +150,52 @@ commands:
     name: "globalreply"
     aliases: [ "gr" ]
     not_found: "{error_colour}You have no conversation to reply to."
+    ignoring: "{error_colour}This player is ignoring you."
+    toggled: "{error_colour}You have your messages toggled."
+    recipient_toggled: "{error_colour}This player has there messages toggled."
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
     from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+    # Spy is where other players can see messages.
+    spy_format: "&8&o%from% -> %to% : %message%"
+
+togglemessages:
+  type: "togglemessages"
+  enable: true
+  name: "togglemessages"
+  # %toggle% will be replaced with true or false
+  message: "{message} Toggled messages %toggle%"
+
+togglespy:
+  type: "togglespys"
+  enable: true
+  name: "togglespy"
+  # %toggle% will be replaced with true or false
+  message: "{message} Toggled spy %toggle%"
+
+ignore:
+  type: "ignore"
+  enable: true
+  name: "ignore"
+  not_found: "{error_colour}Player is not online."
+  ignore_self: "{error_colour}You cannot ignore yourself."
+  message: "{message} You are now ignoring <player>"
+
+unignore:
+  type: "unignore"
+  enable: true
+  name: "unignore"
+  not_found: "{error_colour}You are not ignoring this player."
+  message: "{message} You are no longer ignoring <player>"
+
+ignorelist:
+  type: "ignorelist"
+  enable: true
+  name: "ignorelist"
+  message:
+    - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
+    - "%players%"
+    - "&8&m&l---------------------"
 
   history:
     type: "history"

@@ -3,13 +3,18 @@ package com.github.smuddgge.leaf.datatype;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.database.records.IgnoreRecord;
+import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
+import com.github.smuddgge.leaf.database.tables.IgnoreTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
+import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,12 +53,23 @@ public class User {
     }
 
     /**
-     * Used to set the registered server.
+     * Used to get the users name.
      *
-     * @param server The registered server.
+     * @return The users name.
      */
-    public void setConnectedServer(RegisteredServer server) {
-        this.server = server;
+    public String getName() {
+        if (this.player == null) return this.name;
+        return this.player.getGameProfile().getName();
+    }
+
+    /**
+     * Used to get the users unique id.
+     *
+     * @return The users unique id.
+     */
+    public UUID getUniqueId() {
+        if (player == null) return null;
+        return player.getUniqueId();
     }
 
     /**
@@ -70,6 +86,67 @@ public class User {
     }
 
     /**
+     * Used to get the players record from the database.
+     *
+     * @return The players record.
+     */
+    public PlayerRecord getRecord() {
+        if (this.player == null) return null;
+        if (Leaf.isDatabaseDisabled()) return null;
+
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
+        return playerTable.getFirstRecord(new Query().match("uuid", this.getUniqueId().toString()));
+    }
+
+    /**
+     * Used to get who this user last messaged.
+     *
+     * @return Instance of a user this user last messaged.
+     * Return null if the player doesn't exist.
+     */
+    public User getLastMessaged() {
+        if (this.player == null) return null;
+        if (this.player.getUniqueId() == null) return null;
+
+        UUID uuidLastMessaged = MessageManager.getLastMessaged(this.player.getUniqueId());
+
+        if (uuidLastMessaged == null) return null;
+
+        Optional<Player> request = Leaf.getServer().getPlayer(uuidLastMessaged);
+
+        if (request.isEmpty()) {
+            MessageManager.removeLastMessaged(player.getUniqueId());
+            return null;
+        }
+
+        return new User(request.get());
+    }
+
+    /**
+     * Used to get the highest permission this user
+     * has in a list of permissions.
+     *
+     * @param permissions Permissions to check.
+     * @return The highest permission.
+     */
+    public String getHighestPermission(List<String> permissions) {
+        if (this.player == null) return null;
+        for (String permission : permissions) {
+            if (this.player.hasPermission(permission)) return permission;
+        }
+        return null;
+    }
+
+    /**
+     * Used to set the registered server.
+     *
+     * @param server The registered server.
+     */
+    public void setConnectedServer(RegisteredServer server) {
+        this.server = server;
+    }
+
+    /**
      * Used to check if the user has a permission.
      *
      * @param permission Permission to check for.
@@ -80,6 +157,17 @@ public class User {
         if (permission == null) return true;
 
         return this.player.hasPermission(permission);
+    }
+
+    /**
+     * Used to check if the user has there messages toggled.
+     *
+     * @return True if their messages are toggled.
+     */
+    public boolean hasMessagesToggled() {
+        if (Leaf.isDatabaseDisabled()) return false;
+        if (this.player == null) return false;
+        return Boolean.parseBoolean(this.getRecord().toggleMessages);
     }
 
     /**
@@ -120,6 +208,27 @@ public class User {
     }
 
     /**
+     * Used to check if a user is ignoring another player.
+     *
+     * @param uuid The other players uuid.
+     * @return True if they are ignoring this player.
+     */
+    public boolean isIgnoring(UUID uuid) {
+        if (Leaf.isDatabaseDisabled()) return false;
+
+        IgnoreTable ignoreTable = Leaf.getDatabase().getTable(IgnoreTable.class);
+
+        // Check all records.
+        for (IgnoreRecord ignoreRecord : ignoreTable.getRecordList(
+                new Query().match("playerUuid", this.getUniqueId())
+        )) {
+            if (Objects.equals(ignoreRecord.ignoredPlayerUuid, uuid.toString())) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Used to send a user a message.
      * This will also convert the messages placeholders and colours.
      *
@@ -128,50 +237,6 @@ public class User {
     public void sendMessage(String message) {
         if (this.player == null) return;
         this.player.sendMessage(MessageManager.convert(message, this));
-    }
-
-    /**
-     * Used to get the users name.
-     *
-     * @return The users name.
-     */
-    public String getName() {
-        if (this.player == null) return this.name;
-        return this.player.getGameProfile().getName();
-    }
-
-    /**
-     * Used to get who this user last messaged.
-     *
-     * @return Instance of a user this user last messaged.
-     * Return null if the player doesn't exist.
-     */
-    public User getLastMessaged() {
-        if (this.player == null) return null;
-        if (this.player.getUniqueId() == null) return null;
-
-        UUID uuidLastMessaged = MessageManager.getLastMessaged(this.player.getUniqueId());
-
-        if (uuidLastMessaged == null) return null;
-
-        Optional<Player> request = Leaf.getServer().getPlayer(uuidLastMessaged);
-
-        if (request.isEmpty()) {
-            MessageManager.removeLastMessaged(player.getUniqueId());
-            return null;
-        }
-
-        return new User(request.get());
-    }
-
-    /**
-     * Used to get the users unique id.
-     *
-     * @return The users unique id.
-     */
-    public UUID getUniqueId() {
-        if (player == null) return null;
-        return player.getUniqueId();
     }
 
     /**
@@ -198,21 +263,6 @@ public class User {
                 server.getServerInfo().getName(),
                 playerHistoryEventType
         );
-    }
-
-    /**
-     * Used to get the highest permission this user
-     * has in a list of permissions.
-     *
-     * @param permissions Permissions to check.
-     * @return The highest permission.
-     */
-    public String getHighestPermission(List<String> permissions) {
-        if (this.player == null) return null;
-        for (String permission : permissions) {
-            if (this.player.hasPermission(permission)) return permission;
-        }
-        return null;
     }
 
     /**
