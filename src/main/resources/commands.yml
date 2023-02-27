@@ -183,6 +183,7 @@ commands:
           lore:
             - "&7You are amazing!"
         "center1":
+          material: "Paper"
           name: "&a&lRun Command &f/servers"
           commands:
             # Only works with commands registered with this plugin.
@@ -215,6 +216,51 @@ commands:
 
     list:
       name: "list"
+      enabled: true
+      # Lets you see other players friend lists.
+      permission_see_any: "leaf.friends.see"
+      not_found: "{error_colour}Player could not be found."
+      error: "{error_colour}Error occurred when opening inventory."
+      # %name% : Formatted name.
+      # %date% : Date they started being friends
+      # %last_mail% : The last mail that was sent.
+      # %mail_status% : If the mail was read or not.
+      player:
+        skull: "%name%"
+        name: "&6&l%name%"
+        lore:
+          - "&7Friends since %date%"
+      no_player:
+        material: LIGHT_GRAY_STAINED_GLASS_PANE
+      # The inventory displaying the friend list.
+      inventory:
+        size: GENERIC_9X6
+        title: "&8&lFriends List"
+        content:
+          "top,bottom":
+            material: LIME_STAINED_GLASS_PANE
+          "row1,row2,row3,row4":
+            function:
+              type: "player"
+          "45":
+            function:
+              type: "last_page"
+              always_show: false
+            material: YELLOW_STAINED_GLASS_PANE
+            name: "&a&lLast Page"
+            lore:
+              - "&7Click to go back a page"
+          "53":
+            function:
+              type: "next_page"
+              always_show: false
+            material: YELLOW_STAINED_GLASS_PANE
+            name: "&a&lNext Page"
+            lore:
+              - "&7Click to go to the next page"
+
+    online:
+      name: "online"
       enabled: true
       # Lets you see other players friend lists.
       permission_see_any: "leaf.friends.see"

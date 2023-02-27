@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandHandler;
+import com.github.smuddgge.leaf.commands.subtypes.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
@@ -96,7 +97,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new AlertRaw());
         Leaf.commandHandler.addType(new Chat());
         Leaf.commandHandler.addType(new Find());
-        Leaf.commandHandler.addType(new Friends());
+        Leaf.commandHandler.addType(new Friend());
         Leaf.commandHandler.addType(new History());
         Leaf.commandHandler.addType(new Info());
         Leaf.commandHandler.addType(new Inventory());

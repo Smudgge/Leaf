@@ -1,10 +1,9 @@
-package com.github.smuddgge.leaf.commands.types;
+package com.github.smuddgge.leaf.commands.subtypes.friends;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.commands.subtypes.friends.*;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
@@ -14,7 +13,7 @@ import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
  * Used to execute the list sub command.
  * Also acts as a parent command for the friend subcommands.
  */
-public class Friends extends BaseCommandType {
+public class Friend extends BaseCommandType {
 
     @Override
     public String getName() {
@@ -60,5 +59,6 @@ public class Friends extends BaseCommandType {
         this.addSubCommandType(new FriendAccept());
         this.addSubCommandType(new FriendSettings());
         this.addSubCommandType(new FriendUnfriend());
+        this.addSubCommandType(new FriendOnline());
     }
 }

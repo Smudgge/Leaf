@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 public class FriendListInventory extends CustomInventory {
 
-    private List<FriendRecord> friendRecords;
+    protected List<FriendRecord> friendRecords;
 
     /**
      * Used to create a {@link FriendListInventory} open on the first page.
