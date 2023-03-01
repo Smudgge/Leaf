@@ -71,12 +71,12 @@ public class Reply extends BaseCommandType {
             }
 
             // Check for toggles.
-            if (user.hasMessagesToggled()) {
+            if (user.canMessage()) {
                 user.sendMessage(section.getString("toggled", "{error_colour}You have your messages toggled."));
                 return new CommandStatus();
             }
 
-            if (recipient.hasMessagesToggled()) {
+            if (recipient.canMessage()) {
                 user.sendMessage(section.getString("recipient_toggled", "{error_colour}This player has there messages toggled."));
                 return new CommandStatus();
             }

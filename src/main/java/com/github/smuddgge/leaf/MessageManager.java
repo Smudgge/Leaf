@@ -8,6 +8,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -142,7 +143,9 @@ public class MessageManager {
      */
     public static void sendSpy(String message) {
         for (Player player : Leaf.getServer().getAllPlayers()) {
-            new User(player).sendMessage(message);
+            User user = new User(player);
+            if (Objects.equals(user.getRecord().toggleSeeSpy, "false")) continue;
+            user.sendMessage(message);
         }
     }
 }

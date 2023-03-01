@@ -46,4 +46,13 @@ public class ConfigDatabase extends YamlConfiguration {
     public static ConfigDatabase get() {
         return ConfigDatabase.config;
     }
+
+    /**
+     * Used to get weather the database should be in debug mode.
+     *
+     * @return False by default.
+     */
+    public static boolean isDebugMode() {
+        return ConfigDatabase.get().getBoolean("debugmode", false);
+    }
 }

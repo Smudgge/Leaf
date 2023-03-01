@@ -159,43 +159,44 @@ commands:
     # Spy is where other players can see messages.
     spy_format: "&8&o%from% -> %to% : %message%"
 
-togglemessages:
-  type: "togglemessages"
-  enable: true
-  name: "togglemessages"
-  # %toggle% will be replaced with true or false
-  message: "{message} Toggled messages %toggle%"
+  togglemessages:
+    type: "togglemessages"
+    enable: true
+    name: "togglemessages"
+    # %toggle% will be replaced with true or false
+    message: "{message} Toggled messages %toggle%"
 
-togglespy:
-  type: "togglespys"
-  enable: true
-  name: "togglespy"
-  # %toggle% will be replaced with true or false
-  message: "{message} Toggled spy %toggle%"
+  togglespy:
+    type: "togglespy"
+    enable: true
+    name: "togglespy"
+    permission: "leaf.togglespy"
+    # %toggle% will be replaced with true or false
+    message: "{message} Toggled spy %toggle%"
 
-ignore:
-  type: "ignore"
-  enable: true
-  name: "ignore"
-  not_found: "{error_colour}Player is not online."
-  ignore_self: "{error_colour}You cannot ignore yourself."
-  message: "{message} You are now ignoring <player>"
+  ignore:
+    type: "ignore"
+    enable: true
+    name: "ignore"
+    not_found: "{error_colour}Player is not online."
+    ignore_self: "{error_colour}You cannot ignore yourself."
+    message: "{message} You are now ignoring <player>"
 
-unignore:
-  type: "unignore"
-  enable: true
-  name: "unignore"
-  not_found: "{error_colour}You are not ignoring this player."
-  message: "{message} You are no longer ignoring <player>"
+  unignore:
+    type: "unignore"
+    enable: true
+    name: "unignore"
+    not_found: "{error_colour}You are not ignoring this player."
+    message: "{message} You are no longer ignoring <player>"
 
-ignorelist:
-  type: "ignorelist"
-  enable: true
-  name: "ignorelist"
-  message:
-    - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
-    - "%players%"
-    - "&8&m&l---------------------"
+  ignorelist:
+    type: "ignorelist"
+    enable: true
+    name: "ignorelist"
+    message:
+      - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
+      - "%players%"
+      - "&8&m&l---------------------"
 
   history:
     type: "history"

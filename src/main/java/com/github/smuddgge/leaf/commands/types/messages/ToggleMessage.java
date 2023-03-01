@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishydatabase.record.Record;
 
 /**
  * <h1>Toggle Messages Command Type</h1>
@@ -41,14 +42,16 @@ public class ToggleMessage extends BaseCommandType {
 
         // Toggle the players messages.
         PlayerRecord playerRecord = user.getRecord();
-        playerRecord.toggleBoolean("toggleMessages");
+        if (playerRecord.toggleCanMessage == null) playerRecord.toggleCanMessage = "true";
+
+        playerRecord.toggleCanMessage = (String) Record.getOpposite(playerRecord.toggleCanMessage);
 
         // Update in the database.
         Leaf.getDatabase().getTable(PlayerTable.class).insertRecord(playerRecord);
 
         // Send message.
         user.sendMessage(section.getString("message", "{message} Toggled messages %toggle%")
-                .replace("%toggle%", playerRecord.toggleMessages));
+                .replace("%toggle%", playerRecord.toggleCanMessage));
 
         return new CommandStatus();
     }

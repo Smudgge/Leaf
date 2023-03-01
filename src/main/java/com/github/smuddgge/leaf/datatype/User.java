@@ -164,10 +164,10 @@ public class User {
      *
      * @return True if their messages are toggled.
      */
-    public boolean hasMessagesToggled() {
+    public boolean canMessage() {
         if (Leaf.isDatabaseDisabled()) return false;
         if (this.player == null) return false;
-        return Boolean.parseBoolean(this.getRecord().toggleMessages);
+        return Boolean.parseBoolean(this.getRecord().toggleCanMessage);
     }
 
     /**

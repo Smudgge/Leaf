@@ -20,9 +20,9 @@ public class FriendMailTable extends TableAdapter<FriendMailRecord> {
      * @return Null if there are none.
      */
     public FriendMailRecord getLatest(String fromUuid, String toUuid) {
-        return this.getRecordList(new Query()
+        return this.getFirstRecord(new Query()
                 .match("friendFromUuid", fromUuid)
                 .match("friendToUuid", toUuid)
-        ).get(0);
+        );
     }
 }

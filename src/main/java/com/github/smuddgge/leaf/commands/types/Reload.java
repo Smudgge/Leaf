@@ -91,6 +91,9 @@ public class Reload extends BaseCommandType {
         // Reload the commands and re-register them
         Leaf.reloadCommands();
 
+        // Reload database.
+        Leaf.getDatabase().setDebugMode(ConfigDatabase.isDebugMode());
+
         MessageManager.log("&f&lReloaded successfully");
         return true;
     }

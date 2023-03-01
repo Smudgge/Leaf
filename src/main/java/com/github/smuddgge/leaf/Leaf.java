@@ -197,6 +197,10 @@ public class Leaf {
                 folder.getAbsolutePath() + File.separator + "database.sqlite3"
         ));
 
+        if (ConfigDatabase.isDebugMode()) {
+            Leaf.database.setDebugMode(true);
+        }
+
         if (Leaf.database.isDisabled()) {
             MessageManager.warn("[Database] Unable to load database.");
             return;

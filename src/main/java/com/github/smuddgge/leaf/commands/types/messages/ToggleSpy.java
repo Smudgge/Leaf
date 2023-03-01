@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishydatabase.record.Record;
 
 /**
  * <h1>Toggle Spy Command Type</h1>
@@ -41,14 +42,16 @@ public class ToggleSpy extends BaseCommandType {
 
         // Toggle the players messages.
         PlayerRecord playerRecord = user.getRecord();
-        playerRecord.toggleBoolean("toggleSpy");
+        if (playerRecord.toggleSeeSpy == null) playerRecord.toggleSeeSpy = "false";
+
+        playerRecord.toggleSeeSpy = (String) Record.getOpposite(playerRecord.toggleSeeSpy);
 
         // Update in the database.
         Leaf.getDatabase().getTable(PlayerTable.class).insertRecord(playerRecord);
 
         // Send message.
         user.sendMessage(section.getString("message", "{message} Toggled spy %toggle%")
-                .replace("%toggle%", playerRecord.toggleSpy));
+                .replace("%toggle%", playerRecord.toggleSeeSpy));
 
         return new CommandStatus();
     }

@@ -8,6 +8,7 @@
 
 # Changing this value requires a proxy restart.
 enabled: true
+debugmode: false
 
 # The maximum amount of history a player can have.
 player_history_limit: 20

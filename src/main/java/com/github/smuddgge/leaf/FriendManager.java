@@ -125,13 +125,12 @@ public class FriendManager {
     public static boolean hasRequested(UUID playerFrom, String playerTo) {
         FriendRequestTable friendRequestTable = Leaf.getDatabase().getTable(FriendRequestTable.class);
 
-        FriendRequestRecord friendRequestRecord = friendRequestTable.getFirstRecord(
-                new Query()
-                        .match("playerFromUuid", playerFrom)
-                        .match("playerToUuid", playerTo)
+        int amount = friendRequestTable.getAmountOfRecords(new Query()
+                .match("playerFromUuid", playerFrom.toString())
+                .match("playerToUuid", playerTo)
         );
 
-        return friendRequestRecord != null;
+        return amount > 0;
     }
 
     /**

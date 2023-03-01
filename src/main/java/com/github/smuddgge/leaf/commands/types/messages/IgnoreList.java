@@ -44,7 +44,6 @@ public class IgnoreList extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
-        if (arguments.length < 1) return new CommandStatus().incorrectArguments();
 
         IgnoreTable ignoreTable = Leaf.getDatabase().getTable(IgnoreTable.class);
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
@@ -65,7 +64,7 @@ public class IgnoreList extends BaseCommandType {
 
         String playerNamesString = String.join(", ", playerNames);
         String rawMessage = String.join("\n", section.getListString("message", new ArrayList<>()));
-        String formattedMessage = rawMessage.replace("%players%", playerNamesString);
+        String formattedMessage = rawMessage.replace("%players%", "&r&f" + playerNamesString);
 
         user.sendMessage(formattedMessage);
         return new CommandStatus();
