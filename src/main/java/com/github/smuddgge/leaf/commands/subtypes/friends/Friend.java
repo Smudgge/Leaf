@@ -60,5 +60,7 @@ public class Friend extends BaseCommandType {
         this.addSubCommandType(new FriendSettings());
         this.addSubCommandType(new FriendUnfriend());
         this.addSubCommandType(new FriendOnline());
+        this.addSubCommandType(new FriendMessage());
+        this.addSubCommandType(new FriendReply());
     }
 }

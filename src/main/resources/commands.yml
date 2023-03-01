@@ -509,3 +509,34 @@ commands:
       not_found: "{error_colour}Invalid player name."
       # Placeholders will register in terms of the friend.
       message: "{message} You are no longer friends with <player>"
+
+    message:
+      enable: true
+      name: "msg"
+      not_found: "{error_colour}Player is not online."
+      not_friend: "{error_colour}You are not friends with this player."
+      message_self: "{error_colour}You cannot message yourself."
+      ignoring: "{error_colour}You have ignored this player."
+      recipient_ignoring: "{error_colour}This player has ignored you."
+      toggled: "{error_colour}You have your messages toggled."
+      recipient_toggled: "{error_colour}This player has there messages toggled."
+      # Placeholders will parse in terms of the other player.
+      to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
+      from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+      # Spy is where other players can see messages.
+      spy_format: "&8&o%from% -> %to% : %message%"
+
+    reply:
+      type: "reply"
+      enable: true
+      name: "r"
+      not_found: "{error_colour}You have no conversation to reply to."
+      not_friend: "{error_colour}You are not friends with this player."
+      ignoring: "{error_colour}This player is ignoring you."
+      toggled: "{error_colour}You have your messages toggled."
+      recipient_toggled: "{error_colour}This player has there messages toggled."
+      # Placeholders will parse in terms of the other player.
+      to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
+      from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+      # Spy is where other players can see messages.
+      spy_format: "&8&o%from% -> %to% : %message%"
