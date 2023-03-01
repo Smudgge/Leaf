@@ -36,5 +36,5 @@ Wiki:   Version 2.2.0
 
 <h1 align=center>Servers Running Leaf
 <div align=center>
-  <a href="https://vulengate.com"><img src="https://i.imgur.com/IMUYzMp.png width="50"></a>
+  <a href="https://vulengate.com"><img src="https://i.imgur.com/IMUYzMp.png width="20%"></a>
 </div>
