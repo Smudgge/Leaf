@@ -33,3 +33,8 @@ Wiki:   Version 2.2.0
 </div>
 
 [![BStats](https://bstats.org/signatures/velocity/Leaf.svg)](https://bstats.org/plugin/velocity/Leaf/17381)
+
+<h1 align=center>Servers Running Leaf
+<div align=center>
+  <a href="https://vulengate.com"><img src="https://i.imgur.com/IMUYzMp.png width="50"></a>
+</div>
