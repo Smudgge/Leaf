@@ -24,7 +24,7 @@
 # Author : Smudge
 
 Plugin: Version 2.3.1
-Wiki:   Version 2.2.0
+Wiki:   Version 2.3.0
 ```
 
 <div>
