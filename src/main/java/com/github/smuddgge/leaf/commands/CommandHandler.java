@@ -133,14 +133,14 @@ public class CommandHandler {
     /**
      * Used to execute a command.
      *
-     * @param commandName The command name to execute.
+     * @param commandString The command to execute.
      */
-    public void execute(Player player, String commandName) {
-        if (Objects.equals(commandName, "")) return;
+    public void execute(Player player, String commandString) {
+        if (Objects.equals(commandString, "")) return;
 
         // Get the identifier.
-        String name = commandName.split(" ")[0];
-        String[] arguments = commandName.substring(0, name.length()).split(" ");
+        String name = commandString.split(" ")[0];
+        String[] arguments = commandString.substring(name.length() + 1).split(" ");
 
         // Get the instance of the command.
         Command command = this.getCommand(name);
