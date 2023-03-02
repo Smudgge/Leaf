@@ -1,3 +1,9 @@
+<div align=center>
+    <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download.png" width="512"></a>
+    <a href="https://smuddgge.gitbook.io/leaf"><img src="./graphics/wiki.png" width="512"></a>
+    <a href="https://discord.com/invite/ZxCnrJfk7Z"><img src="./graphics/Discord.png" width="512"></a>
+</div>
+
 <div >
   <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/field?field=dependencies"><img src="./graphics/download dependencys.png" width="190"></a>
 </div>
@@ -7,13 +13,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/smuddgge/leaf.svg)](https://github.com/smuddgge/leaf/issues) 
 [![GitHub pulls](https://img.shields.io/github/issues-pr/smuddgge/leaf.svg)](https://github.com/smuddgge/leaf/pulls)
 [![GitHub version](https://img.shields.io/github/v/tag/smuddgge/leaf?sort=semver)](https://github.com/smuddgge/leaf/releases)
-
-<div align=center>
-    <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download.png" width="512"></a>
-    <a href="https://smuddgge.gitbook.io/leaf"><img src="./graphics/wiki.png" width="512"></a>
-    <a href="https://discord.com/invite/ZxCnrJfk7Z"><img src="./graphics/Discord.png" width="512"></a>
-</div>
-
 ```yaml
 #  __         ______     ______     ______
 # /\ \       /\  ___\   /\  __ \   /\  ___\
@@ -23,9 +22,6 @@
 #
 # Velocity Proxy Server Plugin
 # Author : Smudge
-
-Plugin: Version 2.3.1
-Wiki:   Version 2.3.0
 ```
 
 <div>
