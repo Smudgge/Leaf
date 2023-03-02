@@ -23,7 +23,7 @@
 # Velocity Proxy Server Plugin
 # Author : Smudge
 
-Plugin: Version 2.2.0
+Plugin: Version 2.3.0
 Wiki:   Version 2.2.0
 ```
 
