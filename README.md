@@ -6,6 +6,7 @@
 [![Github All Releases](https://img.shields.io/github/downloads/smuddgge/leaf/total.svg)](https://github.com/smuddgge/leaf/releases)
 [![GitHub issues](https://img.shields.io/github/issues/smuddgge/leaf.svg)](https://github.com/smuddgge/leaf/issues) 
 [![GitHub pulls](https://img.shields.io/github/issues-pr/smuddgge/leaf.svg)](https://github.com/smuddgge/leaf/pulls)
+[![GitHub version](https://img.shields.io/github/v/tag/smuddgge/leaf?sort=semver)](https://github.com/smuddgge/leaf/releases)
 
 <div align=center>
     <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download.png" width="512"></a>
