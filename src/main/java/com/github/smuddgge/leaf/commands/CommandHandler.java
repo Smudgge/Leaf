@@ -140,7 +140,7 @@ public class CommandHandler {
 
         // Get the identifier.
         String name = commandString.split(" ")[0];
-        String[] arguments = commandString.substring(name.length() + 1).split(" ");
+        String[] arguments = commandString.substring(name.length()).trim().split(" ");
 
         // Get the instance of the command.
         Command command = this.getCommand(name);
