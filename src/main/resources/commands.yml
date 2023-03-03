@@ -83,6 +83,16 @@ commands:
         header: '&7[&f%amount%&7] &c&lAdmins'
         # Placeholders will parse in terms of the player.
         section: '&7- &f<player> {server_formatted}'
+      mod:
+        permission: "leaf.rank.mod"
+        header: '&7[&f%amount%&7] &c&lMods'
+        # Placeholders will parse in terms of the player.
+        section: '&7- &f<player> {server_formatted}'
+      help:
+        permission: "leaf.rank.helper"
+        header: '&7[&f%amount%&7] &c&lHelpers'
+        # Placeholders will parse in terms of the player.
+        section: '&7- &f<player> {server_formatted}'
 
   reload:
     type: "reload"
@@ -216,6 +226,36 @@ commands:
     # %page_amount% : The amount of pages they can see.Trfor (int i = 0; i< n;i++){
     footer: '&8&m&l---------------------'
 
+  amenu:
+    type: "inventory"
+    enabled: true
+    name: "amenu"
+    permission: "leaf.amenu"
+    error: "{error_colour}Error occurred when opening admin menu."
+    inventory:
+      size: GENERIC_9X6
+      title: "&8&lAdmin Menu"
+      content:
+        "top,bottom":
+          material: RED_STAINED_GLASS_PANE
+        "center0":
+          skull: "<player>"
+          name: "&a&l<player>"
+          lore:
+            - "&7Welcome Admin!"
+        "19":
+          material: "black_banner"
+          name: "&a&lToggle Spy"
+          commands:
+            # Only works with commands registered with this plugin.
+            - "togglespy"
+        "21":
+          material: "name_tag"
+          name: "&a&lShow Stafflist"
+          commands:
+            # Only works with commands registered with this plugin.
+            - "stafflist"
+
   inventory:
     type: "inventory"
     enabled: true
@@ -225,13 +265,25 @@ commands:
       size: GENERIC_9X6
       title: "&8&lMenu"
       content:
-        "top,bottom":
-          material: LIME_STAINED_GLASS_PANE
+        "top":
+          material: GRAY_STAINED_GLASS_PANE
         "center0":
           skull: "<player>"
           name: "&a&l<player>"
           lore:
             - "&7You are amazing!"
+        "8":
+          material: "end_crystal"
+          name: "&a&lFriends Settings"
+          commands:
+            # Only works with commands registered with this plugin.
+            - "friends settings"
+        "10":
+          material: "writable_book"
+          name: "&a&lView your friends list"
+          commands:
+            # Only works with commands registered with this plugin.
+            - "friends list"
         "center1":
           material: "Paper"
           name: "&a&lRun Command &f/servers"

@@ -32,3 +32,4 @@ target/*
 
 # Test config
 SquishyYaml/src/main/resources/test.yaml
+/target/
