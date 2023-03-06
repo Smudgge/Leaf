@@ -83,6 +83,14 @@ commands:
         header: '&7[&f%amount%&7] &c&lAdmins'
         # Placeholders will parse in terms of the player.
         section: '&7- &f<player> {server_formatted}'
+      moderator:
+        permission: "leaf.rank.moderator"
+        header: '&7[&f%amount%&7] &a&lMods'
+        section: '&7- &f<player> {server_formatted}'
+      helper:
+        permission: "leaf.rank.helper"
+        header: '&7[&f%amount%&7] &b&lHelpers'
+        section: '&7- &f<player> {server_formatted}'
 
   reload:
     type: "reload"
@@ -216,7 +224,41 @@ commands:
     # %page_amount% : The amount of pages they can see.Trfor (int i = 0; i< n;i++){
     footer: '&8&m&l---------------------'
 
-  inventory:
+  admin_menu:
+    type: "inventory"
+    enabled: true
+    name: "adminmenu"
+    aliases: [ "amenu" ]
+    permission: "leaf.adminmenu"
+    error: "{error_colour}Error occurred when opening the admin menu."
+    inventory:
+      size: GENERIC_9X6
+      title: "&8&lAdmin Menu"
+      content:
+        "top,bottom":
+          material: RED_STAINED_GLASS_PANE
+        "center0":
+          skull: "<player>"
+          name: "&a&l<player>"
+          lore:
+            - "&7Welcome Admin!"
+        "19":
+          material: "spyglass"
+          name: "&a&lToggle Spy"
+          lore:
+            - "&7Click to toggle the ability to veiw global messages."
+          commands:
+            # Only works with commands registered with this plugin.
+            - "togglespy"
+        "21":
+          material: "name_tag"
+          name: "&a&lShow Staff List"
+          lore:
+            - "&7CLick to veiw the list of staff."
+          commands:
+            - "stafflist"
+
+  menu:
     type: "inventory"
     enabled: true
     name: "menu"
@@ -226,17 +268,34 @@ commands:
       title: "&8&lMenu"
       content:
         "top,bottom":
-          material: LIME_STAINED_GLASS_PANE
+          material: GRAY_STAINED_GLASS_PANE
         "center0":
+          # Sets the material to the players skull.
           skull: "<player>"
           name: "&a&l<player>"
           lore:
             - "&7You are amazing!"
-        "center1":
-          material: "Paper"
-          name: "&a&lRun Command &f/servers"
+        "8":
+          material: "end_crystal"
+          name: "&a&lFriend Settings"
+          lore:
+            - "&7Click to run the command &f/settings"
           commands:
             # Only works with commands registered with this plugin.
+            - "friends settings"
+        "10":
+          material: "writable_book"
+          name: "&a&lFriends list"
+          lore:
+            - "&7Click to run the command &f/friends list"
+          commands:
+            - "friends list"
+        "center1":
+          material: "Paper"
+          name: "&a&lServer List"
+          lore:
+            - "&7Click to run the command &f/servers"
+          commands:
             - "servers"
 
   teleport:
