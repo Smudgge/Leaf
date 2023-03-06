@@ -267,7 +267,7 @@ commands:
       size: GENERIC_9X6
       title: "&8&lMenu"
       content:
-        "top":
+        "top,bottom":
           material: GRAY_STAINED_GLASS_PANE
         "center0":
           # Sets the material to the players skull.
