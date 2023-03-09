@@ -21,13 +21,24 @@ public class MessageTable extends TableAdapter<MessageRecord> {
     /**
      * Used to get the records ordered.
      *
-     * @param query The query for the database records.
+     * @param playerUuid1 One of the players.
+     * @param playerUuid2 The other player.
      * @return Sorted list of records.
      */
-    public List<MessageRecord> getRecordOrdered(Query query) {
+    public List<MessageRecord> getMessagesOrdered(String playerUuid1, String playerUuid2) {
         Map<Long, MessageRecord> map = new TreeMap<>(Collections.reverseOrder());
 
-        for (MessageRecord messageRecord : this.getRecordList(query)) {
+        for (MessageRecord messageRecord : this.getRecordList(new Query()
+                .match("fromUuid", playerUuid1)
+                .match("toUuid", playerUuid2))) {
+
+            map.put(Long.parseLong(messageRecord.timeStamp), messageRecord);
+        }
+
+        for (MessageRecord messageRecord : this.getRecordList(new Query()
+                .match("fromUuid", playerUuid2)
+                .match("toUuid", playerUuid1))) {
+
             map.put(Long.parseLong(messageRecord.timeStamp), messageRecord);
         }
 

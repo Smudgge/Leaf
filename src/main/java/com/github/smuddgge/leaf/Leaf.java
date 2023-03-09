@@ -116,6 +116,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new ToggleMessage());
         Leaf.commandHandler.addType(new ToggleSpy());
         Leaf.commandHandler.addType(new UnIgnore());
+        Leaf.commandHandler.addType(new MessageHistory());
 
         Leaf.reloadCommands();
 

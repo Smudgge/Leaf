@@ -72,7 +72,7 @@ commands:
 
   stafflist:
     type: "list"
-    enable: true
+    enabled: true
     name: "stafflist"
     permission: "leaf.stafflist"
     header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
@@ -102,7 +102,7 @@ commands:
 
   report:
     type: "report"
-    enable: true
+    enabled: true
     name: "report"
     permission: "leaf.report.use"
     see_report: "leaf.report.see"
@@ -111,7 +111,7 @@ commands:
 
   send:
     type: "send"
-    enable: true
+    enabled: true
     name: "send"
     permission: "leaf.send"
     # %from% : From command argument.
@@ -123,7 +123,7 @@ commands:
 
   servers:
     type: "servers"
-    enable: true
+    enabled: true
     name: "servers"
     permission: "leaf.servers"
     order:
@@ -137,7 +137,7 @@ commands:
 
   message:
     type: "message"
-    enable: true
+    enabled: true
     name: "globalmessage"
     aliases: [ "gmsg" ]
     not_found: "{error_colour}Player is not online."
@@ -154,7 +154,7 @@ commands:
 
   reply:
     type: "reply"
-    enable: true
+    enabled: true
     name: "globalreply"
     aliases: [ "gr" ]
     not_found: "{error_colour}You have no conversation to reply to."
@@ -169,14 +169,14 @@ commands:
 
   togglemessages:
     type: "togglemessages"
-    enable: true
+    enabled: true
     name: "togglemessages"
     # %toggle% will be replaced with true or false
     message: "{message} Toggled messages %toggle%"
 
   togglespy:
     type: "togglespy"
-    enable: true
+    enabled: true
     name: "togglespy"
     permission: "leaf.togglespy"
     # %toggle% will be replaced with true or false
@@ -184,7 +184,7 @@ commands:
 
   ignore:
     type: "ignore"
-    enable: true
+    enabled: true
     name: "ignore"
     not_found: "{error_colour}Player is not online."
     ignore_self: "{error_colour}You cannot ignore yourself."
@@ -192,14 +192,14 @@ commands:
 
   unignore:
     type: "unignore"
-    enable: true
+    enabled: true
     name: "unignore"
     not_found: "{error_colour}You are not ignoring this player."
     message: "{message} You are no longer ignoring <player>"
 
   ignorelist:
     type: "ignorelist"
-    enable: true
+    enabled: true
     name: "ignorelist"
     message:
       - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
@@ -208,7 +208,7 @@ commands:
 
   history:
     type: "history"
-    enable: true
+    enabled: true
     name: "history"
     not_found: "{error_colour}Player could not be found."
     # Amount of sections on a page.
@@ -221,7 +221,26 @@ commands:
     # %date% : The date and time it occurred.
     section: '&7- %event%&r %server%&r &7%date%'
     # %page% : The number of the page the player is currently viewing.
-    # %page_amount% : The amount of pages they can see.Trfor (int i = 0; i< n;i++){
+    # %page_amount% : The amount of pages they can see.
+    footer: '&8&m&l---------------------'
+
+  message_history:
+    type: "messagehistory"
+    enabled: true
+    name: "messagehistory"
+    not_found: "{error_colour}Player could not be found."
+    # Amount of sections on a page.
+    page_size: 8
+    # %page% : The number of the page the player is currently viewing.
+    # %page_amount% : The amount of pages they can see.
+    header: '&8&m&l------&r &a&lMessages &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
+    # %message% : The content of the message.
+    # %from% : The player the message was from.
+    # %to% :  player the message was sent to.
+    # %date% : The date the message was sent.
+    section: '&7- %event%&r %server%&r &7%date%'
+    # %page% : The number of the page the player is currently viewing.
+    # %page_amount% : The amount of pages they can see.
     footer: '&8&m&l---------------------'
 
   admin_menu:
