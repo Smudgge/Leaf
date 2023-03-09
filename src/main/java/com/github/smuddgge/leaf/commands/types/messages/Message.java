@@ -6,7 +6,9 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
+import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
@@ -134,8 +136,26 @@ public class Message extends BaseCommandType {
                     .replace("%to%", recipient.getName())
                     .replace("%message%", message));
 
-            // Log message interaction
+            // Log message interaction.
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());
+
+            // Save to database if enabled.
+            if (!Leaf.isDatabaseDisabled()
+                    && Leaf.getDatabase().isEnabled()
+                    && ConfigDatabase.get().getInteger("message_limit", 0) != 0) {
+
+                // Insert message to database.
+                MessageTable messageTable = Leaf.getDatabase().getTable(MessageTable.class);
+                messageTable.insertMessage(user.getUniqueId().toString(), recipient.getUniqueId().toString(), message);
+
+                // Get message limit.
+                int limit = ConfigDatabase.get().getInteger("message_limit");
+                if (limit < 0) return new CommandStatus();
+
+                // Limit old messages if the amount of messages is over the limit.
+                messageTable.limitMessages(user.getUniqueId().toString(), limit);
+            }
+
             return new CommandStatus();
         }
 
