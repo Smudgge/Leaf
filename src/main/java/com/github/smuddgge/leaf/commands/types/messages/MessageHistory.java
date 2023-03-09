@@ -18,6 +18,7 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.DateAndTime;
 import com.github.smuddgge.squishydatabase.Query;
 
 import java.util.*;
@@ -145,7 +146,7 @@ public class MessageHistory extends BaseCommandType {
                     .replace("%message%", messageRecord.message)
                     .replace("%from%", from)
                     .replace("%to%", to)
-                    .replace("%date%", messageRecord.date);
+                    .replace("%date%", DateAndTime.convert(messageRecord.date));
 
             builder.append(PlaceholderManager.parse(sectionString, null, new User(null, playerName1)));
             builder.append("\n");

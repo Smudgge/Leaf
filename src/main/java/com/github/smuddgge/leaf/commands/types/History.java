@@ -14,6 +14,7 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.DateAndTime;
 import com.github.smuddgge.squishydatabase.Query;
 
 import java.util.ArrayList;
@@ -140,7 +141,7 @@ public class History extends BaseCommandType {
             String sectionString = section.getString("section")
                     .replace("%event%", PlayerHistoryEventType.valueOf(historyRecord.event).getPrefix())
                     .replace("%server%", historyRecord.server)
-                    .replace("%date%", historyRecord.date);
+                    .replace("%date%", DateAndTime.convert(historyRecord.date));
 
             builder.append(PlaceholderManager.parse(sectionString, null, new User(null, playerName)));
             builder.append("\n");
