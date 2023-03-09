@@ -90,6 +90,13 @@ public class FriendRequestInventory extends CustomInventory {
                 FriendRequestRecord result = friendRequestTable.getFirstRecord(new Query().match("uuid", requestRecord.uuid));
                 if (result == null) continue;
 
+                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(result.playerFromUuid);
+                User friendUser = null;
+                if (optionalPlayer.isPresent()) {friendUser = new User(optionalPlayer.get());}
+
+                // Set user to the friend.
+                inventoryItem.setUser(friendUser);
+
                 // Add the item to the inventory.
                 ItemStack item = this.appendPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));

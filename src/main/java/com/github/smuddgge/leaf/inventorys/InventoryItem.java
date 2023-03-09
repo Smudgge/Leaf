@@ -21,7 +21,7 @@ public class InventoryItem {
 
     private final ConfigurationSection section;
     private final String slot;
-    private final User user;
+    private User user;
 
     private Map<String, String> placeholders = new HashMap<>();
 
@@ -35,6 +35,10 @@ public class InventoryItem {
     public InventoryItem(ConfigurationSection section, String slot, User user) {
         this.section = section;
         this.slot = slot;
+        this.user = user;
+    }
+
+    public void setUser(User user) {
         this.user = user;
     }
 

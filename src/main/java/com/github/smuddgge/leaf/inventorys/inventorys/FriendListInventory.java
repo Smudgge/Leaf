@@ -103,8 +103,24 @@ public class FriendListInventory extends CustomInventory {
                 ItemStack item = this.appendNoPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, item);
             } else {
+                FriendRecord record = this.friendRecords.get(recordIndex);
+                // Get tables.
+                FriendMailTable friendMailTable = Leaf.getDatabase().getTable(FriendMailTable.class);
+                PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
+
+                // Get records.
+                PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.friendPlayerUuid));
+                assert friendPlayerRecord != null;
+
+                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.uuid);
+                User friendUser = null;
+                if (optionalPlayer.isPresent()) {friendUser = new User(optionalPlayer.get());}
+
+                // Set user to the friend.
+                inventoryItem.setUser(friendUser);
+
                 ItemStack item = this.appendPlayerItemStack(inventoryItem);
-                this.inventory.item(slot, this.parseCustomPlaceholders(item, this.friendRecords.get(recordIndex)));
+                this.inventory.item(slot, this.parseCustomPlaceholders(item, record));
             }
 
             // Increase record index.
@@ -156,9 +172,9 @@ public class FriendListInventory extends CustomInventory {
         // Get name and optional player.
         String friendsName = friendPlayerRecord.name;
         Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.uuid);
-        Player player = null;
+        User friendUser = null;
         if (optionalPlayer.isPresent()) {
-            player = optionalPlayer.get();
+            friendUser = new User(optionalPlayer.get());
         }
 
         // Create fake mail record if none exist.
@@ -170,7 +186,7 @@ public class FriendListInventory extends CustomInventory {
 
         // Parse display name.
         String tempName = item.displayName(true);
-        tempName = PlaceholderManager.parse(tempName, null, new User(player));
+        tempName = PlaceholderManager.parse(tempName, null, friendUser);
         item.displayName(MessageManager.convert(tempName
                 .replace("%name%", friendsName)
                 .replace("%date%", DateAndTime.convert(record.dateCreated))
@@ -181,7 +197,7 @@ public class FriendListInventory extends CustomInventory {
         List<Component> lore = new ArrayList<>();
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
-            tempLine = PlaceholderManager.parse(tempLine, null, new User(player));
+            tempLine = PlaceholderManager.parse(tempLine, null, friendUser);
             lore.add(MessageManager.convert(tempLine
                     .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))
