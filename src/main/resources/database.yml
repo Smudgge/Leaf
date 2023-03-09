@@ -6,9 +6,14 @@
 #
 # Author : Smudge
 
-# Changing this value requires a proxy restart.
+# Changing these values require a proxy restart.
 enabled: true
 debugmode: false
 
-# The maximum amount of history a player can have.
+# The maximum amount of history that will
+# be saved in the database per player.
 player_history_limit: 20
+
+# The maximum amount of messages that will
+# be saved in the database per player.
+message_limit: 100

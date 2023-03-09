@@ -214,6 +214,7 @@ public class Leaf {
         Leaf.database.createTable(new FriendRequestTable());
         Leaf.database.createTable(new FriendSettingsTable());
         Leaf.database.createTable(new IgnoreTable());
+        Leaf.database.createTable(new MessageTable());
     }
 
     /**
