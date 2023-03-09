@@ -29,15 +29,15 @@ public class MessageTable extends TableAdapter<MessageRecord> {
         Map<Long, MessageRecord> map = new TreeMap<>(Collections.reverseOrder());
 
         for (MessageRecord messageRecord : this.getRecordList(new Query()
-                .match("fromUuid", playerUuid1)
-                .match("toUuid", playerUuid2))) {
+                .match("fromPlayerUuid", playerUuid1)
+                .match("toPlayerUuid", playerUuid2))) {
 
             map.put(Long.parseLong(messageRecord.timeStamp), messageRecord);
         }
 
         for (MessageRecord messageRecord : this.getRecordList(new Query()
-                .match("fromUuid", playerUuid2)
-                .match("toUuid", playerUuid1))) {
+                .match("fromPlayerUuid", playerUuid2)
+                .match("toPlayerUuid", playerUuid1))) {
 
             map.put(Long.parseLong(messageRecord.timeStamp), messageRecord);
         }
