@@ -238,7 +238,7 @@ commands:
     # %from% : The player the message was from.
     # %to% :  player the message was sent to.
     # %date% : The date the message was sent.
-    section: '&7- %event%&r %server%&r &7%date%'
+    section: '&7%date% &f%from% &7: &e%message%'
     # %page% : The number of the page the player is currently viewing.
     # %page_amount% : The amount of pages they can see.
     footer: '&8&m&l---------------------'
