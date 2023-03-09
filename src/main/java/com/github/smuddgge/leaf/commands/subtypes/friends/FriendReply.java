@@ -50,15 +50,15 @@ public class FriendReply implements CommandType {
         String argString = String.join(" ", arguments);
         String[] messageArgs = argString.substring(command.length() + 1).split(" ");
 
-        String playerName = user.getLastMessaged().getName();
-
-        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(playerName);
+        User recipient = user.getLastMessaged();
 
         // Check if the player exists.
-        if (playerName == null) {
+        if (recipient == null) {
             user.sendMessage(section.getString("not_found", "{error_colour}You have no conversation to reply to."));
             return new CommandStatus();
         }
+
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(recipient.getName());
 
         // Check if the player is online
         if (optionalPlayer.isEmpty()) {
