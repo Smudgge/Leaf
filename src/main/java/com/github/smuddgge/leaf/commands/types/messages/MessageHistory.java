@@ -104,7 +104,7 @@ public class MessageHistory extends BaseCommandType {
         int page = 1;
 
         // Check if a page is specified.
-        if (arguments.length > 1) {
+        if (arguments.length > 2) {
             try {
                 page = Integer.parseInt(arguments[1]);
             } catch (Exception exception) {
