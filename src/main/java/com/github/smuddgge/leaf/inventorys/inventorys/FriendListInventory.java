@@ -156,6 +156,10 @@ public class FriendListInventory extends CustomInventory {
         // Get name and optional player.
         String friendsName = friendPlayerRecord.name;
         Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.uuid);
+        Player player = null;
+        if (optionalPlayer.isPresent()) {
+            player = optionalPlayer.get();
+        }
 
         // Create fake mail record if none exist.
         if (friendMailRecord == null) {
@@ -166,9 +170,7 @@ public class FriendListInventory extends CustomInventory {
 
         // Parse display name.
         String tempName = item.displayName(true);
-        if (optionalPlayer.isPresent()) {
-            tempName = PlaceholderManager.parse(tempName, null, new User(optionalPlayer.get()));
-        }
+        tempName = PlaceholderManager.parse(tempName, null, new User(player));
         item.displayName(MessageManager.convert(tempName
                 .replace("%name%", friendsName)
                 .replace("%date%", DateAndTime.convert(record.dateCreated))
@@ -179,9 +181,7 @@ public class FriendListInventory extends CustomInventory {
         List<Component> lore = new ArrayList<>();
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
-            if (optionalPlayer.isPresent()) {
-                tempLine = PlaceholderManager.parse(tempLine, null, new User(optionalPlayer.get()));
-            }
+            tempLine = PlaceholderManager.parse(tempLine, null, new User(player));
             lore.add(MessageManager.convert(tempLine
                     .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))

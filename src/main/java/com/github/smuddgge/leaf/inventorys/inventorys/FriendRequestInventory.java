@@ -147,12 +147,14 @@ public class FriendRequestInventory extends CustomInventory {
         // Get name and optional player.
         String name = playerRecord.name;
         Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(playerRecord.uuid);
+        Player player = null;
+        if (optionalPlayer.isPresent()) {
+            player = optionalPlayer.get();
+        }
 
         // Parse name.
         String tempName = item.displayName(true);
-        if (optionalPlayer.isPresent()) {
-            tempName = PlaceholderManager.parse(tempName, null, new User(optionalPlayer.get()));
-        }
+        tempName = PlaceholderManager.parse(tempName, null, new User(player));
         item.displayName(MessageManager.convert(tempName
                 .replace("%name%", name)));
 
@@ -160,9 +162,7 @@ public class FriendRequestInventory extends CustomInventory {
         List<Component> lore = new ArrayList<>();
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
-            if (optionalPlayer.isPresent()) {
-                tempLine = PlaceholderManager.parse(tempLine, null, new User(optionalPlayer.get()));
-            }
+            tempLine = PlaceholderManager.parse(tempLine, null, new User(player));
             lore.add(MessageManager.convert(tempLine
                     .replace("%name%", name)));
         }
