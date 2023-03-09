@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands.types.messages;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
@@ -43,7 +44,11 @@ public class MessageHistory extends BaseCommandType {
         if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
         if (arguments.length < 2) return new CommandStatus().incorrectArguments();
 
+        String message = this.getMessage(section, arguments);
 
+        if (message == null) return new CommandStatus().incorrectArguments();
+
+        MessageManager.log(message);
 
         return new CommandStatus().playerCommand();
     }
@@ -53,7 +58,11 @@ public class MessageHistory extends BaseCommandType {
         if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
         if (arguments.length < 2) return new CommandStatus().incorrectArguments();
 
+        String message = this.getMessage(section, arguments);
 
+        if (message == null) return new CommandStatus().incorrectArguments();
+
+        user.sendMessage(message);
 
         return new CommandStatus();
     }
