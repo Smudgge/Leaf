@@ -6,19 +6,24 @@ import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 
 /**
- * Represents an ignored record in the database.
+ * Represents a message sent between two players.
  */
-public class IgnoreRecord extends Record {
+public class MessageRecord extends Record {
 
     @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
     public String uuid;
 
-    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
-    @ForeignKeyAnnotation(table = "Player", field = "uuid")
-    public String playerUuid;
+    public String message;
+
+    public String date;
+
+    public String timeStamp;
 
     @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
     @ForeignKeyAnnotation(table = "Player", field = "uuid")
-    public String ignoredPlayerUuid;
+    public String fromPlayerUuid;
 
+    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
+    @ForeignKeyAnnotation(table = "Player", field = "uuid")
+    public String toPlayerUuid;
 }
