@@ -269,11 +269,30 @@ public record Command(String identifier,
         // Check if there are no suggestions.
         if (suggestions.get() == null) return CompletableFuture.completedFuture(List.of());
         if (suggestions.get().isEmpty()) return CompletableFuture.completedFuture(List.of());
-        if (suggestions.get().size() <= index) return CompletableFuture.completedFuture(List.of());
+        if (suggestions.get().size() <= index) {
+            // If continuous return the last suggestions.
+            if (suggestions.isContinuous()) {
+                return CompletableFuture.completedFuture(
+                        suggestions.get().get(suggestions.get().size() - 1)
+                );
+            }
+
+            return CompletableFuture.completedFuture(List.of());
+        }
 
         // Get the current suggestions as a list.
         List<String> currentSuggestions = suggestions.get().get(index);
-        if (currentSuggestions == null) return CompletableFuture.completedFuture(List.of());
+        if (currentSuggestions == null) {
+
+            // If continuous return the last suggestions.
+            if (suggestions.isContinuous()) {
+                return CompletableFuture.completedFuture(
+                        suggestions.get().get(suggestions.get().size() - 1)
+                );
+            }
+
+            return CompletableFuture.completedFuture(List.of());
+        }
 
         // If there are no arguments.
         if (invocation.arguments().length == 0) {

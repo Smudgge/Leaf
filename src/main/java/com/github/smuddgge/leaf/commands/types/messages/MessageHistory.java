@@ -7,21 +7,17 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.database.records.HistoryRecord;
-import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.MessageRecord;
-import com.github.smuddgge.leaf.database.records.PlayerRecord;
-import com.github.smuddgge.leaf.database.tables.HistoryTable;
-import com.github.smuddgge.leaf.database.tables.IgnoreTable;
 import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
 import com.github.smuddgge.squishydatabase.Query;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class MessageHistory extends BaseCommandType {
 
@@ -32,18 +28,30 @@ public class MessageHistory extends BaseCommandType {
 
     @Override
     public String getSyntax() {
-        return "/[name] [player] [player]";
+        return "/[name] [query]";
     }
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        return new CommandSuggestions().appendDatabasePlayers().appendDatabasePlayers();
+        List<String> options = new ArrayList<>();
+
+        // Player options.
+        CommandSuggestions temp = new CommandSuggestions().appendDatabasePlayers();
+        for (String name : temp.get().get(0)) {
+            options.add("p:" + name);
+        }
+
+        options.add("t:");
+        options.add("i:\"");
+        options.add("e:\"");
+
+        return new CommandSuggestions().append(options).setContinuous();
     }
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
         if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
-        if (arguments.length < 2) return new CommandStatus().incorrectArguments();
+        if (arguments.length < 1) return new CommandStatus().incorrectArguments();
 
         String message = this.getMessage(section, arguments);
 
@@ -57,7 +65,7 @@ public class MessageHistory extends BaseCommandType {
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
         if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
-        if (arguments.length < 2) return new CommandStatus().incorrectArguments();
+        if (arguments.length < 1) return new CommandStatus().incorrectArguments();
 
         String message = this.getMessage(section, arguments);
 
@@ -77,23 +85,12 @@ public class MessageHistory extends BaseCommandType {
      * Null if there were incorrect arguments.
      */
     public String getMessage(ConfigurationSection section, String[] arguments) {
-        // Get the player names.
-        String playerName1 = arguments[0];
-        String playerName2 = arguments[1];
-
         // Get database tables.
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         MessageTable messageTable = Leaf.getDatabase().getTable(MessageTable.class);
 
-        // Get the player's information.
-        PlayerRecord playerRecord1 = playerTable.getFirstRecord(new Query().match("name", playerName1));
-        PlayerRecord playerRecord2 = playerTable.getFirstRecord(new Query().match("name", playerName2));
-
-        // Check if the players exist.
-        if (playerRecord1 == null || playerRecord2 == null) return null;
-
         // Get the message history.
-        List<MessageRecord> messageRecordList = messageTable.getMessagesOrdered(playerRecord1.uuid, playerRecord2.uuid);
+        List<MessageRecord> messageRecordList = messageTable.getMessagesOrdered(String.join(" ", arguments));
         if (messageRecordList.size() == 0) return ConfigMessages.getDatabaseEmpty();
 
         // Get the page information.
@@ -105,11 +102,10 @@ public class MessageHistory extends BaseCommandType {
         int page = 1;
 
         // Check if a page is specified.
-        if (arguments.length > 2) {
+        for (String item : arguments) {
             try {
-                page = Integer.parseInt(arguments[1]);
-            } catch (Exception exception) {
-                return null;
+                page = Integer.parseInt(item);
+            } catch (Exception ignored) {
             }
         }
 
@@ -124,7 +120,7 @@ public class MessageHistory extends BaseCommandType {
                 .replace("%page%", String.valueOf(page))
                 .replace("%page_amount%", String.valueOf(amountOfPages));
 
-        builder.append(PlaceholderManager.parse(header, null, new User(null, playerName1)));
+        builder.append(header);
         builder.append("\n\n");
 
         // Get the records.
@@ -148,7 +144,7 @@ public class MessageHistory extends BaseCommandType {
                     .replace("%to%", to)
                     .replace("%date%", DateAndTime.convert(messageRecord.date));
 
-            builder.append(PlaceholderManager.parse(sectionString, null, new User(null, playerName1)));
+            builder.append(PlaceholderManager.parse(sectionString, null, new User(null, from)));
             builder.append("\n");
         }
         builder.append("\n");
@@ -158,7 +154,7 @@ public class MessageHistory extends BaseCommandType {
                 .replace("%page%", String.valueOf(page))
                 .replace("%page_amount%", String.valueOf(amountOfPages));
 
-        builder.append(PlaceholderManager.parse(footer, null, new User(null, playerName1)));
+        builder.append(footer);
 
         return builder.toString();
     }

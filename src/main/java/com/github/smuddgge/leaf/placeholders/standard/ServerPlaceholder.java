@@ -4,8 +4,8 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.StandardPlaceholder;
 
 /**
- * Represents the server placeholder.
- * Returns what server a user is on.
+ * <h1>Represents the server placeholder</h1>
+ * Returns what server a user is on without checking if they are vanished.
  */
 public class ServerPlaceholder extends StandardPlaceholder {
 

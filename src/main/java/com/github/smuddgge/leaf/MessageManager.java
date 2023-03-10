@@ -144,8 +144,9 @@ public class MessageManager {
     public static void sendSpy(String message) {
         for (Player player : Leaf.getServer().getAllPlayers()) {
             User user = new User(player);
-            if (Objects.equals(user.getRecord().toggleSeeSpy, "false")) continue;
-            user.sendMessage(message);
+            if (Objects.equals(user.getRecord().toggleSeeSpy, "true")) {
+                user.sendMessage(message);
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ import java.util.Locale;
 public class CommandSuggestions {
 
     private final List<List<String>> data = new ArrayList<>();
+    private boolean isContinuous = false;
 
     /**
      * Used to append the next suggestion list.
@@ -224,5 +225,25 @@ public class CommandSuggestions {
                 this.combineSubType(commandType.getSuggestions(section, user));
             }
         }
+    }
+
+    /**
+     * Used to set the suggestions to continuous.
+     * This makes the last suggestion repeat forever.
+     *
+     * @return This instance.
+     */
+    public CommandSuggestions setContinuous() {
+        this.isContinuous = true;
+        return this;
+    }
+
+    /**
+     * Used to check if the suggestions are continuous.
+     *
+     * @return True if the suggestions are continuous.
+     */
+    public boolean isContinuous() {
+        return this.isContinuous;
     }
 }

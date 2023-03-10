@@ -89,7 +89,9 @@ public class FriendRequestInventory extends CustomInventory {
 
                 Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(UUID.fromString(result.playerFromUuid));
                 User friendUser = null;
-                if (optionalPlayer.isPresent()) {friendUser = new User(optionalPlayer.get());}
+                if (optionalPlayer.isPresent()) {
+                    friendUser = new User(optionalPlayer.get());
+                }
 
                 // Set user to the friend.
                 inventoryItem.setUser(friendUser);
