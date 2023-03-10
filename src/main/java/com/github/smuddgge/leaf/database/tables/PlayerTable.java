@@ -43,6 +43,12 @@ public class PlayerTable extends TableAdapter<PlayerRecord> {
             result.name = user.getName();
             this.insertRecord(result);
         }
+
+        // Check if they can message is null;
+        if (result.toggleCanMessage == null) {
+            result.toggleCanMessage = "true";
+            result.toggleSeeSpy = "false";
+        }
     }
 
     /**

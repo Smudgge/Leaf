@@ -11,6 +11,8 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,7 +33,19 @@ public class FriendMessage implements CommandType {
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        return new CommandSuggestions().appendFriends(user);
+        CommandSuggestions commandSuggestions = new CommandSuggestions().appendFriends(user);
+        List<String> onlineFriends = new ArrayList<>();
+
+        for (String friendName : commandSuggestions.get().get(0)) {
+            Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendName);
+            if (optionalPlayer.isEmpty()) continue;
+
+            User friend = new User(optionalPlayer.get());
+            if (friend.isVanished()) continue;
+
+            onlineFriends.add(friendName);
+        }
+        return new CommandSuggestions().append(onlineFriends);
     }
 
     @Override

@@ -112,7 +112,7 @@ public class FriendListInventory extends CustomInventory {
                 PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.friendPlayerUuid));
                 assert friendPlayerRecord != null;
 
-                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.uuid);
+                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.name);
                 User friendUser = null;
                 if (optionalPlayer.isPresent()) {friendUser = new User(optionalPlayer.get());}
 

@@ -17,7 +17,7 @@ public class PlayerRecord extends Record {
     /**
      * Added at version 2.2.0
      */
-    public String toggleCanMessage = "true";
+    public String toggleCanMessage = null;
 
-    public String toggleSeeSpy = "false";
+    public String toggleSeeSpy = null;
 }

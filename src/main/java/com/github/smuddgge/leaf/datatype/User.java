@@ -162,11 +162,12 @@ public class User {
     /**
      * Used to check if the user has there messages toggled.
      *
-     * @return True if their messages are toggled.
+     * @return True if they can message.
      */
     public boolean canMessage() {
-        if (Leaf.isDatabaseDisabled()) return false;
-        if (this.player == null) return false;
+        if (Leaf.isDatabaseDisabled()) return true;
+        if (this.player == null) return true;
+        if (this.getRecord().toggleCanMessage == null) return true;
         return Boolean.parseBoolean(this.getRecord().toggleCanMessage);
     }
 

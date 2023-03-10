@@ -18,10 +18,7 @@ import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Represents the friend requests inventory.
@@ -90,7 +87,7 @@ public class FriendRequestInventory extends CustomInventory {
                 FriendRequestRecord result = friendRequestTable.getFirstRecord(new Query().match("uuid", requestRecord.uuid));
                 if (result == null) continue;
 
-                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(result.playerFromUuid);
+                Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(UUID.fromString(result.playerFromUuid));
                 User friendUser = null;
                 if (optionalPlayer.isPresent()) {friendUser = new User(optionalPlayer.get());}
 
