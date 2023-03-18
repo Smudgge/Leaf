@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * <h1>Info Command Type</h1>
- * Used send infomation to players when executed.
+ * Used send information to players when executed.
  */
 public class Info extends BaseCommandType {
 
@@ -39,7 +39,7 @@ public class Info extends BaseCommandType {
         // If the message is not a list it will return null.
         List<String> message = section.getListString("message", new ArrayList<>());
 
-        // If null assume it's a string.
+        // If size 0 assume it's a string.
         if (message.size() == 0) {
             String messageString = section.getString("message", "null");
             MessageManager.log(PlaceholderManager.parse(messageString, null, new User(null, "Console")));
