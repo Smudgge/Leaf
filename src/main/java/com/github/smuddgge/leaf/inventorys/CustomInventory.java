@@ -3,7 +3,9 @@ package com.github.smuddgge.leaf.inventorys;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import dev.simplix.protocolize.api.Protocolize;
 import dev.simplix.protocolize.api.item.ItemStack;
+import dev.simplix.protocolize.api.player.ProtocolizePlayer;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 
 import java.util.*;
@@ -85,6 +87,14 @@ public abstract class CustomInventory extends InventoryInterface {
             // For each slot, set the item.
             for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
                 this.inventory.item(slot, item);
+
+                // If the inventory should close when the item is clicked.
+                if (inventoryItem.getSection().getBoolean("close", false)) {
+                    this.addAction(slot, () -> {
+                        ProtocolizePlayer player = Protocolize.playerProvider().player(this.user.getUniqueId());
+                        player.closeInventory();
+                    });
+                }
             }
         }
     }

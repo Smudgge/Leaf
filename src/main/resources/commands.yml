@@ -257,6 +257,8 @@ admin_menu:
       "21":
         material: "name_tag"
         name: "&a&lShow Staff List"
+        # Close when clicked
+        close: true
         lore:
           - "&7CLick to veiw the list of staff."
         commands:
@@ -299,6 +301,8 @@ menu:
         name: "&a&lServer List"
         lore:
           - "&7Click to run the command &f/servers"
+        # Close when clicked
+        close: true
         commands:
           - "servers"
 
