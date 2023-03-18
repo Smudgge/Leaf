@@ -32,10 +32,5 @@
 [![BStats](https://bstats.org/signatures/velocity/Leaf.svg)](https://bstats.org/plugin/velocity/Leaf/17381)
 
 <div align=center>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/donation.png" width="512"></a
-</div>
-
-<h1 align=center>Servers Running Leaf
-<div align=center>
-  <a href="https://vulengate.com"><img src="https://i.imgur.com/IMUYzMp.png width="20%"></a>
+    <a href="https://www.paypal.com/donate/?hosted_button_id=6UNZH6234RBHW"><img src="./graphics/donate.png" width="512"></a>
 </div>
