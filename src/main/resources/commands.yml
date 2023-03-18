@@ -334,7 +334,15 @@ join:
   enabled: false
   name: "survival"
   # The name of the server to send the player to.
-  server: "survival"
+  # When multiple servers are listed, the server
+  # with the least amount of players is where the
+  # player will be sent.
+  # This can also be set as a string.
+  # server: "hub"
+  server:
+  - "survival1"
+  - "survival2"
+  # If there are no servers online.
   no_server: "{error_colour}This server is offline"
 
 

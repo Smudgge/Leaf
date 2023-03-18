@@ -9,6 +9,8 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Join extends BaseCommandType {
@@ -35,14 +37,45 @@ public class Join extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-
         // Get the server.
-        String server = section.getString("server");
+        String server = section.getString("server", null);
 
-        // Check if the server exists.
+        // If the server is not a string.
         if (server == null) {
-            MessageManager.warn("Server is not defined for command : " + section.getString("name"));
-            return new CommandStatus().error();
+
+            List<String> listOfServers = section.getListString("server", new ArrayList<>());
+
+            // Check if the server exists.
+            if (listOfServers.size() == 0) {
+                MessageManager.warn("Server is not defined for command : " + section.getString("name"));
+                return new CommandStatus().error();
+            }
+
+            // Set default value.
+            server = listOfServers.get(0);
+
+            // Get the server with the least amount of players.
+            int amountOfPlayers = 0;
+            for (String tempServer : listOfServers) {
+                Optional<RegisteredServer> optionalTempServer = Leaf.getServer().getServer(tempServer);
+                if (optionalTempServer.isEmpty()) continue;
+
+                // Get the amount of players on the server.
+                int size = optionalTempServer.get().getPlayersConnected().size();
+
+                // If the amount of players is still 0 set this to be the server.
+                if (amountOfPlayers == 0) {
+                    server = tempServer;
+                    amountOfPlayers = size;
+                    continue;
+                }
+
+                // If the size is bigger then the current the smallest server.
+                if (size > amountOfPlayers) continue;
+
+                server = tempServer;
+                amountOfPlayers = size;
+            }
         }
 
         Optional<RegisteredServer> optionalRegisteredServer = Leaf.getServer().getServer(server);
