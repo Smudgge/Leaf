@@ -10,5 +10,5 @@ public interface Configuration {
      *
      * @return True if successful
      */
-    boolean load();
+    boolean reload();
 }

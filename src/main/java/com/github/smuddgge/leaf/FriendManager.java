@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf;
 
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
@@ -139,7 +139,7 @@ public class FriendManager {
      * @param user The instance of the user.
      */
     public static void onProxyJoin(User user) {
-        ConfigurationSection section = ConfigCommands.getCommandType("friends");
+        ConfigurationSection section = ConfigurationManager.getCommands().getCommandFromType("friends");
 
         if (section == null) return;
 
@@ -167,7 +167,7 @@ public class FriendManager {
      * @param user The instance of the user.
      */
     public static void onProxyLeave(User user) {
-        ConfigurationSection section = ConfigCommands.getCommandType("friends");
+        ConfigurationSection section = ConfigurationManager.getCommands().getCommandFromType("friends");
 
         if (section == null) return;
 
@@ -195,7 +195,7 @@ public class FriendManager {
      * @param user The instance of the user.
      */
     public static void onChangeServer(User user) {
-        ConfigurationSection section = ConfigCommands.getCommandType("friends");
+        ConfigurationSection section = ConfigurationManager.getCommands().getCommandFromType("friends");
 
         if (section == null) return;
 

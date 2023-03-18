@@ -2,7 +2,7 @@ package com.github.smuddgge.leaf.datatype;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
@@ -205,7 +205,7 @@ public class User {
      * @return True if the player is able to vanish.
      */
     public boolean isNotVanishable() {
-        return !this.hasPermission(ConfigCommands.getVanishablePermission());
+        return !this.hasPermission(ConfigMain.getVanishablePermission());
     }
 
     /**

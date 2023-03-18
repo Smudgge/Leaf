@@ -1,8 +1,8 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.utility.Sounds;
@@ -128,7 +128,7 @@ public record Command(String identifier,
      * @return The configuration section.
      */
     public ConfigurationSection getSection() {
-        return ConfigCommands.getCommand(this.identifier);
+        return ConfigurationManager.getCommands().getCommand(this.identifier);
     }
 
     /**
@@ -137,7 +137,7 @@ public record Command(String identifier,
      * @return The name of the command.
      */
     public String getName() {
-        return ConfigCommands.getCommandName(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandName(this.identifier);
     }
 
     /**
@@ -147,7 +147,7 @@ public record Command(String identifier,
      * @return The list of aliases.
      */
     public CommandAliases getAliases() {
-        return ConfigCommands.getCommandAliases(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandAliases(this.identifier);
     }
 
     /**
@@ -156,7 +156,7 @@ public record Command(String identifier,
      * @return Command permission.
      */
     public String getPermission() {
-        return ConfigCommands.getCommandPermission(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandPermission(this.identifier);
     }
 
     /**
@@ -165,7 +165,7 @@ public record Command(String identifier,
      * @return The sound to play as a string.
      */
     public String getSound() {
-        return ConfigCommands.getCommandSound(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandSound(this.identifier);
     }
 
     /**
@@ -183,7 +183,7 @@ public record Command(String identifier,
      * @return True if the command is enabled.
      */
     public boolean isEnabled() {
-        return ConfigCommands.isCommandEnabled(this.getIdentifier());
+        return ConfigurationManager.getCommands().isCommandEnabled(this.identifier);
     }
 
     @Override

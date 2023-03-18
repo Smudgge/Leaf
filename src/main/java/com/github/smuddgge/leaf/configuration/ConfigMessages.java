@@ -1,22 +1,13 @@
 package com.github.smuddgge.leaf.configuration;
 
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
-import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.placeholders.CustomConditionalPlaceholder;
-import com.github.smuddgge.leaf.placeholders.Placeholder;
-import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
-import com.github.smuddgge.leaf.placeholders.PlaceholderType;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents the message's configuration file.
  */
 public class ConfigMessages extends YamlConfiguration {
-
-    private static final List<String> registeredPlaceholders = new ArrayList<>();
 
     private static ConfigMessages config;
 
@@ -28,7 +19,7 @@ public class ConfigMessages extends YamlConfiguration {
     public ConfigMessages(File folder) {
         super(folder, "messages.yml");
 
-        this.load();
+        this.reload();
     }
 
     /**
@@ -38,53 +29,6 @@ public class ConfigMessages extends YamlConfiguration {
      */
     public static void initialise(File folder) {
         ConfigMessages.config = new ConfigMessages(folder);
-    }
-
-    /**
-     * Used to reload the message's configuration file instance.
-     */
-    public static void reload() {
-        ConfigMessages.config.load();
-
-        for (String placeholderIdentifier : ConfigMessages.registeredPlaceholders) {
-            PlaceholderManager.unregister(placeholderIdentifier);
-        }
-
-        for (String placeholderIdentifier : ConfigMessages.get().getKeys("placeholders")) {
-            ConfigMessages.registeredPlaceholders.add(placeholderIdentifier);
-
-            String value = ConfigMessages.get().getSection("placeholders").getString(placeholderIdentifier);
-
-            if (value != null) {
-                PlaceholderManager.register(
-                        new Placeholder() {
-                            @Override
-                            public PlaceholderType getType() {
-                                return PlaceholderType.CUSTOM;
-                            }
-
-                            @Override
-                            public String getIdentifier() {
-                                return placeholderIdentifier;
-                            }
-
-                            @Override
-                            public String getValue(User user) {
-                                return PlaceholderManager.parse(value, PlaceholderType.STANDARD, user);
-                            }
-
-                            @Override
-                            public String getValue() {
-                                return PlaceholderManager.parse(value, PlaceholderType.STANDARD);
-                            }
-                        }
-                );
-
-                continue;
-            }
-
-            PlaceholderManager.register(new CustomConditionalPlaceholder(placeholderIdentifier));
-        }
     }
 
     /**

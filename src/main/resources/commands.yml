@@ -6,141 +6,578 @@
 #
 # Author : Smudge
 
-# The permission used to check if a player is able to vanish.
-vanish_permission: "leaf.vanishable"
+alert:
+  type: "alert"
+  enabled: true
+  name: "alert"
+  permission: "leaf.alert"
+  # %message% : The alert message.
+  message: "&8&l[&f&lAlert&8&l]&r &a%message%"
 
-# Sometimes a vanishable player will be on an empty server.
-# Unfortunately we can not check if the player is vanished or not.
-# Because of this we assume the player is vanished.
-#
-# Setting this to true will let other vanishable players see
-# vanishable players regardless of the rank.
-#
-# Defaults to false.
-vanishable_can_see_vanishable: true
+alertraw:
+  type: "alertraw"
+  enabled: true
+  name: "alertraw"
+  permission: "leaf.alertraw"
 
-commands:
+staffchat:
+  type: "chat"
+  enabled: true
+  name: "staffchat"
+  aliases: [ "sc" ]
+  permission: "leaf.staffchat"
+  # Should the messages be logged in console?
+  log: true
+  # %message% : The players message.
+  format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
 
-  alert:
-    type: "alert"
+find:
+  type: "find"
+  enabled: true
+  name: "find"
+  permission: "leaf.find"
+  not_found: "{error_colour}Player could not be found."
+  # Placeholders will parse in terms of the player.
+  found: "{message} Player was found on {server_formatted}"
+
+info:
+  # I'd love if you kept this command on your server <3
+  # Shows information about this plugin.
+  type: "info"
+  enabled: true
+  name: "leaf"
+  message:
+    - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
+    - "&7"
+    - "&7Velocity Proxy Plugin"
+    - "&7Version &f<version>"
+    - "&7Author &fSmudge"
+    - "&7"
+    - "&8&m&l--------------------"
+
+stafflist:
+  type: "list"
+  enabled: true
+  name: "stafflist"
+  permission: "leaf.stafflist"
+  header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
+  footer: "&8&m&l--------------------"
+  list:
+    admin:
+      permission: "leaf.rank.admin"
+      header: '&7[&f%amount%&7] &c&lAdmins'
+      # Placeholders will parse in terms of the player.
+      section: '&7- &f<player> {server_formatted}'
+    moderator:
+      permission: "leaf.rank.moderator"
+      header: '&7[&f%amount%&7] &a&lMods'
+      section: '&7- &f<player> {server_formatted}'
+    helper:
+      permission: "leaf.rank.helper"
+      header: '&7[&f%amount%&7] &b&lHelpers'
+      section: '&7- &f<player> {server_formatted}'
+
+reload:
+  type: "reload"
+  enabled: true
+  name: "leafreload"
+  permission: "leaf.reload"
+  message: "{message} Reloaded all configs! <3"
+  error: "{error_colour}An error occurred and the reloading was aborted!"
+
+report:
+  type: "report"
+  enabled: true
+  name: "report"
+  permission: "leaf.report.use"
+  see_report: "leaf.report.see"
+  # %message% : The players message.
+  message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
+
+send:
+  type: "send"
+  enabled: true
+  name: "send"
+  permission: "leaf.send"
+  # %from% : From command argument.
+  # %to% : To command argument.
+  # %amount% : Amount of players successfully sent.
+  message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
+  server_not_found: "{error_colour}Server not found."
+  server_offline: "{error_colour}Server requested is offline."
+
+servers:
+  type: "servers"
+  enabled: true
+  name: "servers"
+  permission: "leaf.servers"
+  order:
+    - name_of_a_server
+    - testing1
+    - testing2
+  header: '&8&m&l------&r &a&lServers &8&m&l------'
+  # Placeholders registered in context of the server.
+  server: '{server_formatted} &f%online% &7Online Players'
+  footer: '&8&m&l---------------------'
+
+message:
+  type: "message"
+  enabled: true
+  name: "globalmessage"
+  aliases: [ "gmsg" ]
+  not_found: "{error_colour}Player is not online."
+  message_self: "{error_colour}You cannot message yourself."
+  ignoring: "{error_colour}You have ignored this player."
+  recipient_ignoring: "{error_colour}This player has ignored you."
+  toggled: "{error_colour}You have your messages toggled."
+  recipient_toggled: "{error_colour}This player has there messages toggled."
+  # Placeholders will parse in terms of the other player.
+  to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
+  from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+  # Spy is where other players can see messages.
+  spy_format: "&8&o%from% -> %to% : %message%"
+
+reply:
+  type: "reply"
+  enabled: true
+  name: "globalreply"
+  aliases: [ "gr" ]
+  not_found: "{error_colour}You have no conversation to reply to."
+  ignoring: "{error_colour}This player is ignoring you."
+  toggled: "{error_colour}You have your messages toggled."
+  recipient_toggled: "{error_colour}This player has there messages toggled."
+  # Placeholders will parse in terms of the other player.
+  to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
+  from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+  # Spy is where other players can see messages.
+  spy_format: "&8&o%from% -> %to% : %message%"
+
+togglemessages:
+  type: "togglemessages"
+  enabled: true
+  name: "togglemessages"
+  # %toggle% will be replaced with true or false
+  message: "{message} Toggled messages %toggle%"
+
+togglespy:
+  type: "togglespy"
+  enabled: true
+  name: "togglespy"
+  permission: "leaf.togglespy"
+  # %toggle% will be replaced with true or false
+  message: "{message} Toggled spy %toggle%"
+
+ignore:
+  type: "ignore"
+  enabled: true
+  name: "ignore"
+  not_found: "{error_colour}Player is not online."
+  ignore_self: "{error_colour}You cannot ignore yourself."
+  message: "{message} You are now ignoring <player>"
+
+unignore:
+  type: "unignore"
+  enabled: true
+  name: "unignore"
+  not_found: "{error_colour}You are not ignoring this player."
+  message: "{message} You are no longer ignoring <player>"
+
+ignorelist:
+  type: "ignorelist"
+  enabled: true
+  name: "ignorelist"
+  message:
+    - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
+    - "%players%"
+    - "&8&m&l---------------------"
+
+history:
+  type: "history"
+  enabled: true
+  name: "history"
+  not_found: "{error_colour}Player could not be found."
+  # Amount of sections on a page.
+  page_size: 5
+  # %page% : The number of the page the player is currently viewing.
+  # %page_amount% : The amount of pages they can see.
+  header: '&8&m&l------&r &a&l<player>''s History &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
+  # %event% : The history event.
+  # %server% : The server involved in the history.
+  # %date% : The date and time it occurred.
+  section: '&7- %event%&r %server%&r &7%date%'
+  # %page% : The number of the page the player is currently viewing.
+  # %page_amount% : The amount of pages they can see.
+  footer: '&8&m&l---------------------'
+
+message_history:
+  type: "messagehistory"
+  enabled: true
+  name: "messagehistory"
+  not_found: "{error_colour}Player could not be found."
+  # Amount of sections on a page.
+  page_size: 8
+  # %page% : The number of the page the player is currently viewing.
+  # %page_amount% : The amount of pages they can see.
+  header: '&8&m&l------&r &a&lMessages &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
+  # %message% : The content of the message.
+  # %from% : The player the message was from.
+  # %to% :  player the message was sent to.
+  # %date% : The date the message was sent.
+  section: '&7%date% &f%from% &7: &e%message%'
+  # %page% : The number of the page the player is currently viewing.
+  # %page_amount% : The amount of pages they can see.
+  footer: '&8&m&l---------------------'
+
+admin_menu:
+  type: "inventory"
+  enabled: true
+  name: "adminmenu"
+  aliases: [ "amenu" ]
+  permission: "leaf.adminmenu"
+  error: "{error_colour}Error occurred when opening the admin menu."
+  inventory:
+    size: GENERIC_9X6
+    title: "&8&lAdmin Menu"
+    content:
+      "top,bottom":
+        material: RED_STAINED_GLASS_PANE
+      "center0":
+        skull: "<player>"
+        name: "&a&l<player>"
+        lore:
+          - "&7Welcome Admin!"
+      "19":
+        material: "spyglass"
+        name: "&a&lToggle Spy"
+        lore:
+          - "&7Click to toggle the ability to veiw global messages."
+        commands:
+          # Only works with commands registered with this plugin.
+          - "togglespy"
+      "21":
+        material: "name_tag"
+        name: "&a&lShow Staff List"
+        lore:
+          - "&7CLick to veiw the list of staff."
+        commands:
+          - "stafflist"
+
+menu:
+  type: "inventory"
+  enabled: true
+  name: "menu"
+  error: "{error_colour}Error occurred when opening inventory."
+  inventory:
+    size: GENERIC_9X6
+    title: "&8&lMenu"
+    content:
+      "top,bottom":
+        material: GRAY_STAINED_GLASS_PANE
+      "center0":
+        # Sets the material to the players skull.
+        skull: "<player>"
+        name: "&a&l<player>"
+        lore:
+          - "&7You are amazing!"
+      "8":
+        material: "end_crystal"
+        name: "&a&lFriend Settings"
+        lore:
+          - "&7Click to run the command &f/settings"
+        commands:
+          # Only works with commands registered with this plugin.
+          - "friends settings"
+      "10":
+        material: "writable_book"
+        name: "&a&lFriends list"
+        lore:
+          - "&7Click to run the command &f/friends list"
+        commands:
+          - "friends list"
+      "center1":
+        material: "Paper"
+        name: "&a&lServer List"
+        lore:
+          - "&7Click to run the command &f/servers"
+        commands:
+          - "servers"
+
+teleport:
+  type: "teleport"
+  enabled: true
+  name: "go"
+  not_found: "{error_colour}Player could not be found."
+  message: "{message} Teleporting..."
+
+join:
+  type: "join"
+  enabled: false
+  name: "survival"
+  # The name of the server to send the player to.
+  server: "survival"
+  no_server: "{error_colour}This server is offline"
+
+
+friends:
+  type: "friends"
+  enabled: true
+  name: "friends"
+
+  proxy_join: "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}"
+  proxy_leave: "&8[&c-&8] &7Your friend &c<player> &7left the network"
+  server_change: "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}"
+
+  list:
+    name: "list"
     enabled: true
-    name: "alert"
-    permission: "leaf.alert"
-    # %message% : The alert message.
-    message: "&8&l[&f&lAlert&8&l]&r &a%message%"
-
-  alertraw:
-    type: "alertraw"
-    enabled: true
-    name: "alertraw"
-    permission: "leaf.alertraw"
-
-  staffchat:
-    type: "chat"
-    enabled: true
-    name: "staffchat"
-    aliases: [ "sc" ]
-    permission: "leaf.staffchat"
-    # Should the messages be logged in console?
-    log: true
-    # %message% : The players message.
-    format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
-
-  find:
-    type: "find"
-    enabled: true
-    name: "find"
-    permission: "leaf.find"
+    # Lets you see other players friend lists.
+    permission_see_any: "leaf.friends.see"
     not_found: "{error_colour}Player could not be found."
-    # Placeholders will parse in terms of the player.
-    found: "{message} Player was found on {server_formatted}"
+    error: "{error_colour}Error occurred when opening inventory."
+    # %name% : Formatted name.
+    # %date% : Date they started being friends
+    # %last_mail% : The last mail that was sent.
+    # %mail_status% : If the mail was read or not.
+    player:
+      skull: "%name%"
+      name: "&6&l%name%"
+      lore:
+        - "&7Friends since %date%"
+    no_player:
+      material: LIGHT_GRAY_STAINED_GLASS_PANE
+    # The inventory displaying the friend list.
+    inventory:
+      size: GENERIC_9X6
+      title: "&8&lFriends List"
+      content:
+        "top,bottom":
+          material: LIME_STAINED_GLASS_PANE
+        "row1,row2,row3,row4":
+          function:
+            type: "player"
+        "45":
+          function:
+            type: "last_page"
+            always_show: false
+          material: YELLOW_STAINED_GLASS_PANE
+          name: "&a&lLast Page"
+          lore:
+            - "&7Click to go back a page"
+        "53":
+          function:
+            type: "next_page"
+            always_show: false
+          material: YELLOW_STAINED_GLASS_PANE
+          name: "&a&lNext Page"
+          lore:
+            - "&7Click to go to the next page"
 
-  info:
-    # I'd love if you kept this command on your server <3
-    # Shows information about this plugin.
-    type: "info"
+  online:
+    name: "online"
     enabled: true
-    name: "leaf"
-    message:
-      - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
-      - "&7"
-      - "&7Velocity Proxy Plugin"
-      - "&7Version &f<version>"
-      - "&7Author &fSmudge"
-      - "&7"
-      - "&8&m&l--------------------"
+    # Lets you see other players friend lists.
+    permission_see_any: "leaf.friends.see"
+    not_found: "{error_colour}Player could not be found."
+    error: "{error_colour}Error occurred when opening inventory."
+    # %name% : Formatted name.
+    # %date% : Date they started being friends
+    # %last_mail% : The last mail that was sent.
+    # %mail_status% : If the mail was read or not.
+    player:
+      skull: "%name%"
+      name: "&6&l%name%"
+      lore:
+        - "&7Friends since %date%"
+    no_player:
+      material: LIGHT_GRAY_STAINED_GLASS_PANE
+    # The inventory displaying the friend list.
+    inventory:
+      size: GENERIC_9X6
+      title: "&8&lFriends List"
+      content:
+        "top,bottom":
+          material: LIME_STAINED_GLASS_PANE
+        "row1,row2,row3,row4":
+          function:
+            type: "player"
+        "45":
+          function:
+            type: "last_page"
+            always_show: false
+          material: YELLOW_STAINED_GLASS_PANE
+          name: "&a&lLast Page"
+          lore:
+            - "&7Click to go back a page"
+        "53":
+          function:
+            type: "next_page"
+            always_show: false
+          material: YELLOW_STAINED_GLASS_PANE
+          name: "&a&lNext Page"
+          lore:
+            - "&7Click to go to the next page"
 
-  stafflist:
-    type: "list"
-    enabled: true
-    name: "stafflist"
-    permission: "leaf.stafflist"
-    header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
-    footer: "&8&m&l--------------------"
-    list:
-      admin:
-        permission: "leaf.rank.admin"
-        header: '&7[&f%amount%&7] &c&lAdmins'
-        # Placeholders will parse in terms of the player.
-        section: '&7- &f<player> {server_formatted}'
-      moderator:
-        permission: "leaf.rank.moderator"
-        header: '&7[&f%amount%&7] &a&lMods'
-        section: '&7- &f<player> {server_formatted}'
-      helper:
-        permission: "leaf.rank.helper"
-        header: '&7[&f%amount%&7] &b&lHelpers'
-        section: '&7- &f<player> {server_formatted}'
 
-  reload:
-    type: "reload"
+  request:
+    name: "request"
     enabled: true
-    name: "leafreload"
-    permission: "leaf.reload"
-    message: "{message} Reloaded all configs! <3"
-    error: "{error_colour}An error occurred and the reloading was aborted!"
+    not_found: "{error_colour}Player has never played on this server."
+    requests_off: "{error_colour}This player has there friend requests off."
+    self: "{error_colour}You can not be friends with your self."
+    # Placeholders will parse in terms of the other player.
+    sent: "{message} You have sent a friend request to &f<player>"
+    # Placeholders will parse in terms of the player that sent the request.
+    from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
 
-  report:
-    type: "report"
+  accept:
+    name: "accept"
     enabled: true
-    name: "report"
-    permission: "leaf.report.use"
-    see_report: "leaf.report.see"
-    # %message% : The players message.
-    message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
+    error: "{error_colour}Error occurred when opening inventory."
+    requests_off: "{error_colour}This player has there friend requests off."
+    already_requested: "{error_colour}You have already requested to be friends with this player."
+    # Placeholders will parse in terms of the player that sent the request.
+    # Message is sent to the friend accepter.
+    from: "{message} You are now friends with &f<player>"
+    # Placeholders will parse in terms of the player that accepted the friend request.
+    # Message is sent to the requester.
+    sent: "{message} You are now friends with &f<player>"
+    # %name% : Formatted name of the player that is requesting.
+    player:
+      skull: "%name%"
+      name: "&6&l%name%"
+      lore:
+        - "&7Click to open request options."
+    no_player:
+      material: LIGHT_GRAY_STAINED_GLASS_PANE
+    # The inventory displaying the friend requests list.
+    inventory:
+      size: GENERIC_9X6
+      title: "&8&lFriend Requests"
+      content:
+        "top,bottom":
+          material: LIME_STAINED_GLASS_PANE
+        "row1,row2,row3,row4":
+          function:
+            type: "player"
+        "45":
+          function:
+            type: "last_page"
+            always_show: false
+          material: YELLOW_STAINED_GLASS_PANE
+          name: "&a&lLast Page"
+          lore:
+            - "&7Click to go back a page"
+        "53":
+          function:
+            type: "next_page"
+            always_show: false
+          material: YELLOW_STAINED_GLASS_PANE
+          name: "&a&lNext Page"
+          lore:
+            - "&7Click to go to the next page"
+    options:
+      size: GENERIC_9X3
+      title: "&8&lFriend Request"
+      content:
+        "0-2,9-11,18-20":
+          function:
+            type: "deny"
+          material: RED_STAINED_GLASS_PANE
+          name: "&c&lDeny"
+          lore:
+            - "&7Anonymously remove this player"
+            - "&7from your requests."
+        "6-8,15-17,24-26":
+          function:
+            type: "accept"
+          material: LIME_STAINED_GLASS_PANE
+          name: "&a&lAccept"
+          lore:
+            - "Click to &aaccept &7friend request."
 
-  send:
-    type: "send"
+  settings:
+    name: "settings"
     enabled: true
-    name: "send"
-    permission: "leaf.send"
-    # %from% : From command argument.
-    # %to% : To command argument.
-    # %amount% : Amount of players successfully sent.
-    message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
-    server_not_found: "{error_colour}Server not found."
-    server_offline: "{error_colour}Server requested is offline."
+    error: "{error_colour}Error occurred when opening inventory."
+    inventory:
+      size: GENERIC_9X3
+      title: "&8&lFriend Requests"
+      content:
+        "row0,row2":
+          material: GRAY_STAINED_GLASS_PANE
+        "10":
+          function:
+            type: "toggleProxyJoin"
+            # When true what should the item be overridden with
+            true:
+              material: LIME_STAINED_GLASS_PANE
+          # Default item
+          material: RED_STAINED_GLASS_PANE
+          name: "&6&lToggle Join Messages"
+          lore:
+            - "&7Click to toggle join messages"
+            - "&6Currently &f%toggleProxyJoin%"
+        "11":
+          function:
+            type: "toggleProxyLeave"
+            # When true what should the item be overridden with
+            true:
+              material: LIME_STAINED_GLASS_PANE
+          # Default item
+          material: RED_STAINED_GLASS_PANE
+          name: "&6&lToggle Leave Messages"
+          lore:
+            - "&7Click to toggle leave messages"
+            - "&6Currently &f%toggleProxyLeave%"
+        "12":
+          function:
+            type: "toggleServerChange"
+            # When true what should the item be overridden with
+            true:
+              material: LIME_STAINED_GLASS_PANE
+          # Default item
+          material: RED_STAINED_GLASS_PANE
+          name: "&6&lToggle Server Change Messages"
+          lore:
+            - "&7Click to toggle server change messages"
+            - "&6Currently &f%toggleServerChange%"
+        "15":
+          function:
+            type: "toggleMail"
+            # When true what should the item be overridden with
+            true:
+              material: LIME_STAINED_GLASS_PANE
+          # Default item
+          material: RED_STAINED_GLASS_PANE
+          name: "&6&lToggle Mail"
+          lore:
+            - "&7Click to toggle mail"
+            - "&6Currently &f%toggleMail%"
+        "16":
+          function:
+            type: "toggleRequests"
+            # When true what should the item be overridden with
+            true:
+              material: LIME_STAINED_GLASS_PANE
+          # Default item
+          material: RED_STAINED_GLASS_PANE
+          name: "&6&lToggle Friend Requests"
+          lore:
+            - "&7Click to toggle friend requests"
+            - "&6Currently &f%toggleRequests%"
 
-  servers:
-    type: "servers"
+  unfriend:
+    name: "unfriend"
     enabled: true
-    name: "servers"
-    permission: "leaf.servers"
-    order:
-      - name_of_a_server
-      - testing1
-      - testing2
-    header: '&8&m&l------&r &a&lServers &8&m&l------'
-    # Placeholders registered in context of the server.
-    server: '{server_formatted} &f%online% &7Online Players'
-    footer: '&8&m&l---------------------'
+    not_found: "{error_colour}Invalid player name."
+    # Placeholders will register in terms of the friend.
+    message: "{message} You are no longer friends with <player>"
 
   message:
-    type: "message"
-    enabled: true
-    name: "globalmessage"
-    aliases: [ "gmsg" ]
+    enable: true
+    name: "msg"
     not_found: "{error_colour}Player is not online."
+    not_friend: "{error_colour}You are not friends with this player."
     message_self: "{error_colour}You cannot message yourself."
     ignoring: "{error_colour}You have ignored this player."
     recipient_ignoring: "{error_colour}This player has ignored you."
@@ -154,10 +591,10 @@ commands:
 
   reply:
     type: "reply"
-    enabled: true
-    name: "globalreply"
-    aliases: [ "gr" ]
+    enable: true
+    name: "r"
     not_found: "{error_colour}You have no conversation to reply to."
+    not_friend: "{error_colour}You are not friends with this player."
     ignoring: "{error_colour}This player is ignoring you."
     toggled: "{error_colour}You have your messages toggled."
     recipient_toggled: "{error_colour}This player has there messages toggled."
@@ -166,455 +603,3 @@ commands:
     from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
     # Spy is where other players can see messages.
     spy_format: "&8&o%from% -> %to% : %message%"
-
-  togglemessages:
-    type: "togglemessages"
-    enabled: true
-    name: "togglemessages"
-    # %toggle% will be replaced with true or false
-    message: "{message} Toggled messages %toggle%"
-
-  togglespy:
-    type: "togglespy"
-    enabled: true
-    name: "togglespy"
-    permission: "leaf.togglespy"
-    # %toggle% will be replaced with true or false
-    message: "{message} Toggled spy %toggle%"
-
-  ignore:
-    type: "ignore"
-    enabled: true
-    name: "ignore"
-    not_found: "{error_colour}Player is not online."
-    ignore_self: "{error_colour}You cannot ignore yourself."
-    message: "{message} You are now ignoring <player>"
-
-  unignore:
-    type: "unignore"
-    enabled: true
-    name: "unignore"
-    not_found: "{error_colour}You are not ignoring this player."
-    message: "{message} You are no longer ignoring <player>"
-
-  ignorelist:
-    type: "ignorelist"
-    enabled: true
-    name: "ignorelist"
-    message:
-      - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
-      - "%players%"
-      - "&8&m&l---------------------"
-
-  history:
-    type: "history"
-    enabled: true
-    name: "history"
-    not_found: "{error_colour}Player could not be found."
-    # Amount of sections on a page.
-    page_size: 5
-    # %page% : The number of the page the player is currently viewing.
-    # %page_amount% : The amount of pages they can see.
-    header: '&8&m&l------&r &a&l<player>''s History &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
-    # %event% : The history event.
-    # %server% : The server involved in the history.
-    # %date% : The date and time it occurred.
-    section: '&7- %event%&r %server%&r &7%date%'
-    # %page% : The number of the page the player is currently viewing.
-    # %page_amount% : The amount of pages they can see.
-    footer: '&8&m&l---------------------'
-
-  message_history:
-    type: "messagehistory"
-    enabled: true
-    name: "messagehistory"
-    not_found: "{error_colour}Player could not be found."
-    # Amount of sections on a page.
-    page_size: 8
-    # %page% : The number of the page the player is currently viewing.
-    # %page_amount% : The amount of pages they can see.
-    header: '&8&m&l------&r &a&lMessages &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
-    # %message% : The content of the message.
-    # %from% : The player the message was from.
-    # %to% :  player the message was sent to.
-    # %date% : The date the message was sent.
-    section: '&7%date% &f%from% &7: &e%message%'
-    # %page% : The number of the page the player is currently viewing.
-    # %page_amount% : The amount of pages they can see.
-    footer: '&8&m&l---------------------'
-
-  admin_menu:
-    type: "inventory"
-    enabled: true
-    name: "adminmenu"
-    aliases: [ "amenu" ]
-    permission: "leaf.adminmenu"
-    error: "{error_colour}Error occurred when opening the admin menu."
-    inventory:
-      size: GENERIC_9X6
-      title: "&8&lAdmin Menu"
-      content:
-        "top,bottom":
-          material: RED_STAINED_GLASS_PANE
-        "center0":
-          skull: "<player>"
-          name: "&a&l<player>"
-          lore:
-            - "&7Welcome Admin!"
-        "19":
-          material: "spyglass"
-          name: "&a&lToggle Spy"
-          lore:
-            - "&7Click to toggle the ability to veiw global messages."
-          commands:
-            # Only works with commands registered with this plugin.
-            - "togglespy"
-        "21":
-          material: "name_tag"
-          name: "&a&lShow Staff List"
-          lore:
-            - "&7CLick to veiw the list of staff."
-          commands:
-            - "stafflist"
-
-  menu:
-    type: "inventory"
-    enabled: true
-    name: "menu"
-    error: "{error_colour}Error occurred when opening inventory."
-    inventory:
-      size: GENERIC_9X6
-      title: "&8&lMenu"
-      content:
-        "top,bottom":
-          material: GRAY_STAINED_GLASS_PANE
-        "center0":
-          # Sets the material to the players skull.
-          skull: "<player>"
-          name: "&a&l<player>"
-          lore:
-            - "&7You are amazing!"
-        "8":
-          material: "end_crystal"
-          name: "&a&lFriend Settings"
-          lore:
-            - "&7Click to run the command &f/settings"
-          commands:
-            # Only works with commands registered with this plugin.
-            - "friends settings"
-        "10":
-          material: "writable_book"
-          name: "&a&lFriends list"
-          lore:
-            - "&7Click to run the command &f/friends list"
-          commands:
-            - "friends list"
-        "center1":
-          material: "Paper"
-          name: "&a&lServer List"
-          lore:
-            - "&7Click to run the command &f/servers"
-          commands:
-            - "servers"
-
-  teleport:
-    type: "teleport"
-    enabled: true
-    name: "go"
-    not_found: "{error_colour}Player could not be found."
-    message: "{message} Teleporting..."
-
-  join:
-    type: "join"
-    enabled: false
-    name: "survival"
-    # The name of the server to send the player to.
-    server: "survival"
-    no_server: "{error_colour}This server is offline"
-
-
-  friends:
-    type: "friends"
-    enabled: true
-    name: "friends"
-
-    proxy_join: "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}"
-    proxy_leave: "&8[&c-&8] &7Your friend &c<player> &7left the network"
-    server_change: "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}"
-
-    list:
-      name: "list"
-      enabled: true
-      # Lets you see other players friend lists.
-      permission_see_any: "leaf.friends.see"
-      not_found: "{error_colour}Player could not be found."
-      error: "{error_colour}Error occurred when opening inventory."
-      # %name% : Formatted name.
-      # %date% : Date they started being friends
-      # %last_mail% : The last mail that was sent.
-      # %mail_status% : If the mail was read or not.
-      player:
-        skull: "%name%"
-        name: "&6&l%name%"
-        lore:
-          - "&7Friends since %date%"
-      no_player:
-        material: LIGHT_GRAY_STAINED_GLASS_PANE
-      # The inventory displaying the friend list.
-      inventory:
-        size: GENERIC_9X6
-        title: "&8&lFriends List"
-        content:
-          "top,bottom":
-            material: LIME_STAINED_GLASS_PANE
-          "row1,row2,row3,row4":
-            function:
-              type: "player"
-          "45":
-            function:
-              type: "last_page"
-              always_show: false
-            material: YELLOW_STAINED_GLASS_PANE
-            name: "&a&lLast Page"
-            lore:
-              - "&7Click to go back a page"
-          "53":
-            function:
-              type: "next_page"
-              always_show: false
-            material: YELLOW_STAINED_GLASS_PANE
-            name: "&a&lNext Page"
-            lore:
-              - "&7Click to go to the next page"
-
-    online:
-      name: "online"
-      enabled: true
-      # Lets you see other players friend lists.
-      permission_see_any: "leaf.friends.see"
-      not_found: "{error_colour}Player could not be found."
-      error: "{error_colour}Error occurred when opening inventory."
-      # %name% : Formatted name.
-      # %date% : Date they started being friends
-      # %last_mail% : The last mail that was sent.
-      # %mail_status% : If the mail was read or not.
-      player:
-        skull: "%name%"
-        name: "&6&l%name%"
-        lore:
-          - "&7Friends since %date%"
-      no_player:
-        material: LIGHT_GRAY_STAINED_GLASS_PANE
-      # The inventory displaying the friend list.
-      inventory:
-        size: GENERIC_9X6
-        title: "&8&lFriends List"
-        content:
-          "top,bottom":
-            material: LIME_STAINED_GLASS_PANE
-          "row1,row2,row3,row4":
-            function:
-              type: "player"
-          "45":
-            function:
-              type: "last_page"
-              always_show: false
-            material: YELLOW_STAINED_GLASS_PANE
-            name: "&a&lLast Page"
-            lore:
-              - "&7Click to go back a page"
-          "53":
-            function:
-              type: "next_page"
-              always_show: false
-            material: YELLOW_STAINED_GLASS_PANE
-            name: "&a&lNext Page"
-            lore:
-              - "&7Click to go to the next page"
-
-
-    request:
-      name: "request"
-      enabled: true
-      not_found: "{error_colour}Player has never played on this server."
-      requests_off: "{error_colour}This player has there friend requests off."
-      self: "{error_colour}You can not be friends with your self."
-      # Placeholders will parse in terms of the other player.
-      sent: "{message} You have sent a friend request to &f<player>"
-      # Placeholders will parse in terms of the player that sent the request.
-      from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
-
-    accept:
-      name: "accept"
-      enabled: true
-      error: "{error_colour}Error occurred when opening inventory."
-      requests_off: "{error_colour}This player has there friend requests off."
-      already_requested: "{error_colour}You have already requested to be friends with this player."
-      # Placeholders will parse in terms of the player that sent the request.
-      # Message is sent to the friend accepter.
-      from: "{message} You are now friends with &f<player>"
-      # Placeholders will parse in terms of the player that accepted the friend request.
-      # Message is sent to the requester.
-      sent: "{message} You are now friends with &f<player>"
-      # %name% : Formatted name of the player that is requesting.
-      player:
-        skull: "%name%"
-        name: "&6&l%name%"
-        lore:
-          - "&7Click to open request options."
-      no_player:
-        material: LIGHT_GRAY_STAINED_GLASS_PANE
-      # The inventory displaying the friend requests list.
-      inventory:
-        size: GENERIC_9X6
-        title: "&8&lFriend Requests"
-        content:
-          "top,bottom":
-            material: LIME_STAINED_GLASS_PANE
-          "row1,row2,row3,row4":
-            function:
-              type: "player"
-          "45":
-            function:
-              type: "last_page"
-              always_show: false
-            material: YELLOW_STAINED_GLASS_PANE
-            name: "&a&lLast Page"
-            lore:
-              - "&7Click to go back a page"
-          "53":
-            function:
-              type: "next_page"
-              always_show: false
-            material: YELLOW_STAINED_GLASS_PANE
-            name: "&a&lNext Page"
-            lore:
-              - "&7Click to go to the next page"
-      options:
-        size: GENERIC_9X3
-        title: "&8&lFriend Request"
-        content:
-          "0-2,9-11,18-20":
-            function:
-              type: "deny"
-            material: RED_STAINED_GLASS_PANE
-            name: "&c&lDeny"
-            lore:
-              - "&7Anonymously remove this player"
-              - "&7from your requests."
-          "6-8,15-17,24-26":
-            function:
-              type: "accept"
-            material: LIME_STAINED_GLASS_PANE
-            name: "&a&lAccept"
-            lore:
-              - "Click to &aaccept &7friend request."
-
-    settings:
-      name: "settings"
-      enabled: true
-      error: "{error_colour}Error occurred when opening inventory."
-      inventory:
-        size: GENERIC_9X3
-        title: "&8&lFriend Requests"
-        content:
-          "row0,row2":
-            material: GRAY_STAINED_GLASS_PANE
-          "10":
-            function:
-              type: "toggleProxyJoin"
-              # When true what should the item be overridden with
-              true:
-                material: LIME_STAINED_GLASS_PANE
-            # Default item
-            material: RED_STAINED_GLASS_PANE
-            name: "&6&lToggle Join Messages"
-            lore:
-              - "&7Click to toggle join messages"
-              - "&6Currently &f%toggleProxyJoin%"
-          "11":
-            function:
-              type: "toggleProxyLeave"
-              # When true what should the item be overridden with
-              true:
-                material: LIME_STAINED_GLASS_PANE
-            # Default item
-            material: RED_STAINED_GLASS_PANE
-            name: "&6&lToggle Leave Messages"
-            lore:
-              - "&7Click to toggle leave messages"
-              - "&6Currently &f%toggleProxyLeave%"
-          "12":
-            function:
-              type: "toggleServerChange"
-              # When true what should the item be overridden with
-              true:
-                material: LIME_STAINED_GLASS_PANE
-            # Default item
-            material: RED_STAINED_GLASS_PANE
-            name: "&6&lToggle Server Change Messages"
-            lore:
-              - "&7Click to toggle server change messages"
-              - "&6Currently &f%toggleServerChange%"
-          "15":
-            function:
-              type: "toggleMail"
-              # When true what should the item be overridden with
-              true:
-                material: LIME_STAINED_GLASS_PANE
-            # Default item
-            material: RED_STAINED_GLASS_PANE
-            name: "&6&lToggle Mail"
-            lore:
-              - "&7Click to toggle mail"
-              - "&6Currently &f%toggleMail%"
-          "16":
-            function:
-              type: "toggleRequests"
-              # When true what should the item be overridden with
-              true:
-                material: LIME_STAINED_GLASS_PANE
-            # Default item
-            material: RED_STAINED_GLASS_PANE
-            name: "&6&lToggle Friend Requests"
-            lore:
-              - "&7Click to toggle friend requests"
-              - "&6Currently &f%toggleRequests%"
-
-    unfriend:
-      name: "unfriend"
-      enabled: true
-      not_found: "{error_colour}Invalid player name."
-      # Placeholders will register in terms of the friend.
-      message: "{message} You are no longer friends with <player>"
-
-    message:
-      enable: true
-      name: "msg"
-      not_found: "{error_colour}Player is not online."
-      not_friend: "{error_colour}You are not friends with this player."
-      message_self: "{error_colour}You cannot message yourself."
-      ignoring: "{error_colour}You have ignored this player."
-      recipient_ignoring: "{error_colour}This player has ignored you."
-      toggled: "{error_colour}You have your messages toggled."
-      recipient_toggled: "{error_colour}This player has there messages toggled."
-      # Placeholders will parse in terms of the other player.
-      to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
-      from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
-      # Spy is where other players can see messages.
-      spy_format: "&8&o%from% -> %to% : %message%"
-
-    reply:
-      type: "reply"
-      enable: true
-      name: "r"
-      not_found: "{error_colour}You have no conversation to reply to."
-      not_friend: "{error_colour}You are not friends with this player."
-      ignoring: "{error_colour}This player is ignoring you."
-      toggled: "{error_colour}You have your messages toggled."
-      recipient_toggled: "{error_colour}This player has there messages toggled."
-      # Placeholders will parse in terms of the other player.
-      to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
-      from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
-      # Spy is where other players can see messages.
-      spy_format: "&8&o%from% -> %to% : %message%"

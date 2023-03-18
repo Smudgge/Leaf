@@ -1,7 +1,6 @@
 package com.github.smuddgge.leaf.placeholders;
 
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 
@@ -23,11 +22,9 @@ public class CustomConditionalPlaceholder implements Placeholder {
      *
      * @param identifier The placeholder's identifier in the configuration.
      */
-    public CustomConditionalPlaceholder(String identifier) {
+    public CustomConditionalPlaceholder(String identifier, ConfigurationSection section) {
         this.identifier = identifier;
-
-        // The placeholder's configuration section
-        this.section = ConfigMessages.get().getSection("placeholders").getSection(identifier);
+        this.section = section;
 
         String configCondition = this.section.getString("condition");
 

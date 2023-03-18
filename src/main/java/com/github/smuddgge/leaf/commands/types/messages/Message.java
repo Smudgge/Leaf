@@ -5,8 +5,8 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
+import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.datatype.User;
@@ -93,7 +93,7 @@ public class Message extends BaseCommandType {
         User recipient = new User(optionalRecipient.get());
 
         // Get if vanishable players can message vanishable players.
-        boolean allowVanishablePlayers = ConfigCommands.canVanishableSeeVanishable();
+        boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
         boolean userIsVanishable = !user.isNotVanishable();
         boolean recipientNotVanished = !recipient.isVanished();
 

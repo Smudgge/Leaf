@@ -5,9 +5,8 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
-import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 
@@ -75,9 +74,7 @@ public class Reload extends BaseCommandType {
         try {
 
             // Reload configs
-            ConfigCommands.reload();
-            ConfigMessages.reload();
-            ConfigDatabase.reload();
+            ConfigurationManager.reload();
 
         } catch (Exception exception) {
             MessageManager.warn("Error occurred when reloading configs and aborted the reload.");
