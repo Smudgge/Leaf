@@ -125,9 +125,9 @@ public class InventoryItem {
         // Set the material of the item.
         try {
             String material = PlaceholderManager.parse(
-                    this.section.getString("material", "LIGHT_GRAY_STAINED_GLASS_PANE").toUpperCase(Locale.ROOT),
+                    this.section.getString("material", "LIGHT_GRAY_STAINED_GLASS_PANE"),
                     null, this.user
-            );
+            ).toUpperCase(Locale.ROOT);
             item.itemType(ItemType.valueOf(material));
         } catch (IllegalArgumentException exception) {
             MessageManager.warn("Invalid material for inventory item. Reference : &f" + this.section.getData().toString());

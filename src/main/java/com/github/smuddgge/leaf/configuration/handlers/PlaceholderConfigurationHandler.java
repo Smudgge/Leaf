@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class PlaceholderConfigurationHandler extends ConfigurationHandler {
 
-    private final List<String> customPlaceholderNameList = new ArrayList<>();
+    private List<String> customPlaceholderNameList = new ArrayList<>();
 
     /**
      * Used to create a placeholder configuration handler.
@@ -38,6 +38,10 @@ public class PlaceholderConfigurationHandler extends ConfigurationHandler {
         for (String identifier : this.customPlaceholderNameList) {
             PlaceholderManager.unregister(identifier);
         }
+
+        this.customPlaceholderNameList = new ArrayList<>();
+        this.configFileList = new ArrayList<>();
+        this.registerFiles();
 
         for (Placeholder placeholder : this.getPlaceholders()) {
             PlaceholderManager.register(placeholder);

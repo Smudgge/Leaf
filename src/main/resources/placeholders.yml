@@ -20,7 +20,7 @@ error_colour: "&7"
 
 # Conditional placeholders.
 # More information is on the wiki : https://smuddgge.gitbook.io/leaf
-# {vanish_colour} {server_formatted} {rank_colour}
+# {vanish_colour} {server_formatted} {rank_colour} {theme_material}
 vanish_colour:
   condition: "MATCH:<vanished>"
   options:
@@ -38,3 +38,10 @@ rank_colour:
   options:
     Default: "&f"
     admin: "&a"
+
+theme_material:
+  condition: "MATCH:<theme>"
+  options:
+    Default: "LIME_STAINED_GLASS_PANE"
+    gray: "GRAY_STAINED_GLASS_PANE"
+    green: "LIME_STAINED_GLASS_PANE"

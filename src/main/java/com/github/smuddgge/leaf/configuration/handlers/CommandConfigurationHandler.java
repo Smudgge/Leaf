@@ -15,14 +15,14 @@ import java.util.Objects;
 /**
  * <h1>Handles the commands configs</h1>
  */
-public class CommandsConfigurationHandler extends ConfigurationHandler {
+public class CommandConfigurationHandler extends ConfigurationHandler {
 
     /**
      * Used to create a command's configuration handler.
      *
      * @param pluginFolder The instance of the plugin folder.
      */
-    public CommandsConfigurationHandler(File pluginFolder) {
+    public CommandConfigurationHandler(File pluginFolder) {
         super(pluginFolder, "commands");
     }
 

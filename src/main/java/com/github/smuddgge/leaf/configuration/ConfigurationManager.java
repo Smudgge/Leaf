@@ -1,7 +1,8 @@
 package com.github.smuddgge.leaf.configuration;
 
-import com.github.smuddgge.leaf.configuration.handlers.CommandsConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.handlers.CommandConfigurationHandler;
 import com.github.smuddgge.leaf.configuration.handlers.PlaceholderConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.handlers.VariableConfigurationHandler;
 
 import java.io.File;
 
@@ -12,8 +13,9 @@ public class ConfigurationManager {
 
     private static File folder;
 
-    private static CommandsConfigurationHandler commandsConfigurationHandler;
+    private static CommandConfigurationHandler commandsConfigurationHandler;
     private static PlaceholderConfigurationHandler placeholderConfigurationHandler;
+    private static VariableConfigurationHandler variableConfigurationHandler;
 
     /**
      * Used to initialise the configuration manager.
@@ -23,8 +25,9 @@ public class ConfigurationManager {
     public static void initialise(File folder) {
         ConfigurationManager.folder = folder;
 
-        ConfigurationManager.commandsConfigurationHandler = new CommandsConfigurationHandler(folder);
+        ConfigurationManager.commandsConfigurationHandler = new CommandConfigurationHandler(folder);
         ConfigurationManager.placeholderConfigurationHandler = new PlaceholderConfigurationHandler(folder);
+        ConfigurationManager.variableConfigurationHandler = new VariableConfigurationHandler(folder);
 
         ConfigMain.initialise(folder);
         ConfigDatabase.initialise(folder);
@@ -37,17 +40,22 @@ public class ConfigurationManager {
     public static void reload() {
         ConfigurationManager.getCommands().reload();
         ConfigurationManager.getPlaceholders().reload();
+        ConfigurationManager.getVariables().reload();
 
         ConfigMain.initialise(folder);
         ConfigDatabase.initialise(folder);
         ConfigMessages.initialise(folder);
     }
 
-    public static CommandsConfigurationHandler getCommands() {
+    public static CommandConfigurationHandler getCommands() {
         return ConfigurationManager.commandsConfigurationHandler;
     }
 
     public static PlaceholderConfigurationHandler getPlaceholders() {
         return ConfigurationManager.placeholderConfigurationHandler;
+    }
+
+    public static VariableConfigurationHandler getVariables() {
+        return ConfigurationManager.variableConfigurationHandler;
     }
 }

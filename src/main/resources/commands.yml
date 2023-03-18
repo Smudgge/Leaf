@@ -228,6 +228,22 @@ message_history:
   # %page_amount% : The amount of pages they can see.
   footer: '&8&m&l---------------------'
 
+change_theme:
+  type: "variable"
+  enabled: true
+  name: "theme"
+  # The variable to save to.
+  variable: "theme"
+  # Suggest options for the player to choose from.
+  suggest:
+    - "green"
+    - "gray"
+  # Only allow values from suggest list.
+  # Defaults to false.
+  only_allow_suggestions: true
+  incorrect_value: "{error_colour}You can only set the theme to &fgreen &7or &fgray."
+  correct_value: "{message} Theme is now set to &f<theme>"
+
 admin_menu:
   type: "inventory"
   enabled: true
@@ -274,9 +290,9 @@ menu:
     title: "&8&lMenu"
     content:
       "top,bottom":
-        material: GRAY_STAINED_GLASS_PANE
+        material: "{theme_material}"
       "center0":
-        # Sets the material to the players skull.
+        # Sets the material to the player's skull.
         skull: "<player>"
         name: "&a&l<player>"
         lore:
