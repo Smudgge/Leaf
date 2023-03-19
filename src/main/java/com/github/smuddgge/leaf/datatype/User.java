@@ -2,7 +2,6 @@ package com.github.smuddgge.leaf.datatype;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
@@ -11,13 +10,17 @@ import com.github.smuddgge.leaf.database.tables.IgnoreTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.squishydatabase.Query;
+import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * <h1>Represents a user connected to one of the servers.</h1>
@@ -286,10 +289,14 @@ public class User {
      */
     public void send(RegisteredServer server) {
         if (this.player == null) return;
-        if (this.server == null) return;
+        if (server == null) return;
+
         try {
-            this.player.createConnectionRequest(server);
-        } catch (Exception ignored) {
+            ConnectionRequestBuilder request = this.player.createConnectionRequest(server);
+            request.fireAndForget();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -328,7 +335,46 @@ public class User {
             amountOfPlayers = size;
         }
 
-        this.send(server);
+        this.forceSend(server, 10);
+    }
+
+    /**
+     * Used to force the user to a server.
+     *
+     * @param server The instance of a server.
+     */
+    public void forceSend(RegisteredServer server, int depth) {
+        if (depth <= 0) {
+            MessageManager.log("&7Tried to send a used to a server, but was unable. Max depth was reached.");
+            return;
+        }
+
+        if (this.player == null) return;
+        if (server == null) return;
+
+        try {
+            ConnectionRequestBuilder request = this.player.createConnectionRequest(server);
+            request.fireAndForget();
+            CompletableFuture<ConnectionRequestBuilder.Result> result = request.connect();
+
+            // Check if unable to connect.
+            if (!result.isCompletedExceptionally()) {
+
+                // Check if connected to the server.
+                Optional<ServerConnection> optional = this.player.getCurrentServer();
+                if (optional.isPresent()
+                        && optional.get().getServer().getServerInfo().getName().equals(server.getServerInfo().getName())) {
+                    return;
+                }
+
+                Leaf.getServer().getScheduler().buildTask(
+                        Leaf.getPlugin(), () -> this.forceSend(server, depth - 1)
+                ).delay(Duration.ofSeconds(1)).schedule();
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**

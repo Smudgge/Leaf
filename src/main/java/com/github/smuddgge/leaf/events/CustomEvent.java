@@ -40,7 +40,6 @@ public record CustomEvent(String identifier,
 
     @Override
     public void onEvent(@NotNull User user) {
-        System.out.println("event fired");
         // Check if the event is enabled.
         if (!this.section.getBoolean("enabled", true)) return;
 
@@ -51,7 +50,6 @@ public record CustomEvent(String identifier,
 
         // Check for servers.
         if (this.section.getListString("servers", new ArrayList<>()).size() > 0) {
-            System.out.println("sending");
             user.send(this.section.getListString("servers"));
         }
     }

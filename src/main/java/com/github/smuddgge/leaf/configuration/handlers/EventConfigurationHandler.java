@@ -3,9 +3,7 @@ package com.github.smuddgge.leaf.configuration.handlers;
 import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
 import com.github.smuddgge.leaf.events.CustomEvent;
-import com.github.smuddgge.leaf.events.Event;
 import com.github.smuddgge.leaf.events.EventManager;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
 import java.util.ArrayList;

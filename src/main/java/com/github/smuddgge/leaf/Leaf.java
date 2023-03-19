@@ -10,8 +10,8 @@ import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
-import com.github.smuddgge.leaf.listeners.EventListener;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
+import com.github.smuddgge.leaf.listeners.EventListener;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -44,6 +44,7 @@ import java.nio.file.Path;
 )
 public class Leaf {
 
+    private static Leaf plugin;
     private static ProxyServer server;
 
     private static CommandHandler commandHandler;
@@ -54,6 +55,7 @@ public class Leaf {
     @Inject
     public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         Leaf.server = server;
+        Leaf.plugin = this;
 
         // Set up the configuration files.
         ConfigurationManager.initialise(folder.toFile());
@@ -131,6 +133,15 @@ public class Leaf {
     @Subscribe
     public void onPlayerLeave(DisconnectEvent event) {
         EventListener.onPlayerLeave(event);
+    }
+
+    /**
+     * Used to get the instance of the plugin.
+     *
+     * @return The instance of the plugin.
+     */
+    public static Leaf getPlugin() {
+        return Leaf.plugin;
     }
 
     /**
