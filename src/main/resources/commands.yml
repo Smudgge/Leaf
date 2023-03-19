@@ -48,8 +48,10 @@ info:
   name: "leaf"
   # Add a requirement
   require:
-    "leaf.bypass":
-      - "ServerName"
+    "identifier":
+      permission: "leaf.bypass"
+      servers:
+        - "ServerName"
   message:
     - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
     - "&7"

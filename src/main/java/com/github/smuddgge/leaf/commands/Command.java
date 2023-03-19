@@ -100,12 +100,20 @@ public record Command(String identifier,
         if (this.getSection().getKeys().contains("require")) {
             ConfigurationSection requireSection = this.getSection().getSection("require");
 
-            for (String permission : requireSection.getKeys()) {
-                List<String> serverList = requireSection.getListString(permission, new ArrayList<>());
-                if (serverList.size() <= 0) continue;
-                if (serverList.contains(user.getConnectedServer().getServerInfo().getName())
-                    && !user.hasPermission(permission)) {
+            // For each requirement.
+            for (String identifier : requireSection.getKeys()) {
+                // Get the permission.
+                String permission = requireSection.getSection(identifier).getString("permission", null);
+                if (permission == null) continue;
 
+                // Get server list.
+                List<String> serverList = requireSection.getSection(identifier).getListString("servers", new ArrayList<>());
+                if (serverList.size() <= 0) continue;
+
+                boolean userOnServer = serverList.contains(user.getConnectedServer().getServerInfo().getName());
+                boolean hasPermission = user.hasPermission(permission);
+
+                if (userOnServer && !hasPermission) {
                     return new CommandStatus().noPermission();
                 }
             }
