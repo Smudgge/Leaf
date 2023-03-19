@@ -1,5 +1,8 @@
 package com.github.smuddgge.leaf.commands;
 
+import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.configuration.ConfigMessages;
+
 /**
  * <h1>Represents a command's status.</h1>
  * Returned after a command is executed.
@@ -127,5 +130,19 @@ public class CommandStatus {
      */
     public boolean hasNoPermission() {
         return this.hasNoPermission;
+    }
+
+    /**
+     * Used to get the error message.
+     *
+     * @return The message.
+     */
+    public String getMessage() {
+        if (this.hasError()) return ConfigMessages.getError();
+        if (this.hasDatabaseDisabled()) return ConfigMessages.getDatabaseDisabled();
+        if (this.hasDatabaseEmpty()) return ConfigMessages.getDatabaseEmpty();
+        if (this.hasPlayerCommand()) return ConfigMessages.getPlayerCommand();
+        if (this.hasNoPermission()) return ConfigMessages.getNoPermission();
+        return null;
     }
 }

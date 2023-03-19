@@ -219,17 +219,14 @@ public record Command(String identifier,
             try {
                 // Run the command as a player.
                 CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
-
                 if (status.hasIncorrectArguments()) {
                     user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
                             .replace("[name]", this.getName()));
                 }
 
-                if (status.hasError()) user.sendMessage(ConfigMessages.getError());
-                if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
-                if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
-                if (status.hasPlayerCommand()) user.sendMessage(ConfigMessages.getPlayerCommand());
-                if (status.hasNoPermission()) user.sendMessage(ConfigMessages.getNoPermission());
+                String message = status.getMessage();
+                if (message == null) return;
+                user.sendMessage(message);
 
                 return;
             } catch (Exception exception) {
@@ -239,21 +236,17 @@ public record Command(String identifier,
             }
         }
 
-
         try {
             // Run the command in console.
             CommandStatus status = this.onConsoleRun(invocation.arguments());
-
             if (status.hasIncorrectArguments()) {
                 MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
                         .replace("[name]", this.getName()));
             }
 
-            if (status.hasError()) MessageManager.log(ConfigMessages.getError());
-            if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
-            if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
-            if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
-            if (status.hasNoPermission()) MessageManager.log(ConfigMessages.getNoPermission());
+            String message = status.getMessage();
+            if (message == null) return;
+            MessageManager.log(message);
 
         } catch (Exception exception) {
             MessageManager.warn("Error occurred while running command : " + this.getName());
