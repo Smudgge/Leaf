@@ -96,6 +96,21 @@ public record Command(String identifier,
             }
         }
 
+        // Check for requirements.
+        if (this.getSection().getKeys().contains("require")) {
+            ConfigurationSection requireSection = this.getSection().getSection("require");
+
+            for (String permission : requireSection.getKeys()) {
+                List<String> serverList = requireSection.getListString(permission, new ArrayList<>());
+                if (serverList.size() <= 0) continue;
+                if (serverList.contains(user.getConnectedServer().getServerInfo().getName())
+                    && !user.hasPermission(permission)) {
+
+                    return new CommandStatus().noPermission();
+                }
+            }
+        }
+
         if (this.commandType.getSubCommandTypes().isEmpty()
                 || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user);
 
@@ -206,6 +221,7 @@ public record Command(String identifier,
                 if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
                 if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
                 if (status.hasPlayerCommand()) user.sendMessage(ConfigMessages.getPlayerCommand());
+                if (status.hasNoPermission()) user.sendMessage(ConfigMessages.getNoPermission());
 
                 return;
             } catch (Exception exception) {
@@ -229,6 +245,7 @@ public record Command(String identifier,
             if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
             if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
             if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
+            if (status.hasNoPermission()) MessageManager.log(ConfigMessages.getNoPermission());
 
         } catch (Exception exception) {
             MessageManager.warn("Error occurred while running command : " + this.getName());

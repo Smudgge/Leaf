@@ -13,3 +13,4 @@ messages:
   database_empty: "{error_colour}There are no records in the database."
   player_command: "{error_colour}This command can only be run by the player."
   error: "{error_colour}Error occurred while running command."
+  no_permission: "{error_colour}No permission."

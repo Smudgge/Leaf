@@ -11,6 +11,7 @@ public class CommandStatus {
     private boolean hasDatabaseDisabled = false;
     private boolean hasDatabaseEmpty = false;
     private boolean hasPlayerCommand = false;
+    private boolean hasNoPermission = false;
 
     /**
      * Used to set error to true.
@@ -63,6 +64,16 @@ public class CommandStatus {
     }
 
     /**
+     * Used to set no permission to true.
+     *
+     * @return This instnace.
+     */
+    public CommandStatus noPermission() {
+        this.hasNoPermission = true;
+        return this;
+    }
+
+    /**
      * Used to get if an error occurred and an error
      * message should be sent.
      *
@@ -107,5 +118,14 @@ public class CommandStatus {
      */
     public boolean hasPlayerCommand() {
         return this.hasPlayerCommand;
+    }
+
+    /**
+     * Used to get if the user doesn't have permission.
+     *
+     * @return True if the player doesn't have permission.
+     */
+    public boolean hasNoPermission() {
+        return this.hasNoPermission;
     }
 }

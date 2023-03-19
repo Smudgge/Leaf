@@ -92,4 +92,14 @@ public class ConfigMessages extends YamlConfiguration {
         return ConfigMessages.config.getSection("messages")
                 .getString("error", "{error_colour}Error occurred while running command.");
     }
+
+    /**
+     * Used to get the no permission message.
+     *
+     * @return The requested no permission message.
+     */
+    public static String getNoPermission() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("no_permission", "{error_colour}No permission.");
+    }
 }
