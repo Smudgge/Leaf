@@ -38,7 +38,7 @@ public class EventManager {
      * Used to run all event with a certain type.
      *
      * @param eventType The instance of an event type.
-     * @param user The instance of a user.
+     * @param user      The instance of a user.
      */
     public static void runEvent(@NotNull EventType eventType, @NotNull User user) {
         for (Event event : EventManager.eventTypeList) {
