@@ -1,6 +1,5 @@
 package com.github.smuddgge.leaf.commands;
 
-import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 
 /**
