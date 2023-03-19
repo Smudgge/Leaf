@@ -6,7 +6,7 @@
 #
 # Author : Smudge
 
-# Changing these values require a proxy restart.
+# Changing these values requires a proxy restart.
 enabled: true
 debugmode: false
 
