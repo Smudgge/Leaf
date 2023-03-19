@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.configuration;
 
 import com.github.smuddgge.leaf.configuration.handlers.CommandConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.handlers.EventConfigurationHandler;
 import com.github.smuddgge.leaf.configuration.handlers.PlaceholderConfigurationHandler;
 import com.github.smuddgge.leaf.configuration.handlers.VariableConfigurationHandler;
 
@@ -16,6 +17,7 @@ public class ConfigurationManager {
     private static CommandConfigurationHandler commandsConfigurationHandler;
     private static PlaceholderConfigurationHandler placeholderConfigurationHandler;
     private static VariableConfigurationHandler variableConfigurationHandler;
+    private static EventConfigurationHandler eventConfigurationHandler;
 
     /**
      * Used to initialise the configuration manager.
@@ -28,6 +30,7 @@ public class ConfigurationManager {
         ConfigurationManager.commandsConfigurationHandler = new CommandConfigurationHandler(folder);
         ConfigurationManager.placeholderConfigurationHandler = new PlaceholderConfigurationHandler(folder);
         ConfigurationManager.variableConfigurationHandler = new VariableConfigurationHandler(folder);
+        ConfigurationManager.eventConfigurationHandler = new EventConfigurationHandler(folder);
 
         ConfigMain.initialise(folder);
         ConfigDatabase.initialise(folder);
@@ -41,6 +44,7 @@ public class ConfigurationManager {
         ConfigurationManager.getCommands().reload();
         ConfigurationManager.getPlaceholders().reload();
         ConfigurationManager.getVariables().reload();
+        ConfigurationManager.getEvents().reload();
 
         ConfigMain.initialise(folder);
         ConfigDatabase.initialise(folder);
@@ -57,5 +61,9 @@ public class ConfigurationManager {
 
     public static VariableConfigurationHandler getVariables() {
         return ConfigurationManager.variableConfigurationHandler;
+    }
+
+    public static EventConfigurationHandler getEvents() {
+        return ConfigurationManager.eventConfigurationHandler;
     }
 }

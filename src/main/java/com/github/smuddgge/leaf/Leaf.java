@@ -10,7 +10,7 @@ import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
-import com.github.smuddgge.leaf.events.EventManager;
+import com.github.smuddgge.leaf.listeners.EventListener;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
@@ -124,12 +124,13 @@ public class Leaf {
 
     @Subscribe
     public void onPlayerJoin(ServerConnectedEvent event) {
-        EventManager.onPlayerJoin(event);
+        EventListener.onPlayerJoin(event);
+        EventListener.onPlayerJoinCustomEvent(event);
     }
 
     @Subscribe
     public void onPlayerLeave(DisconnectEvent event) {
-        EventManager.onPlayerLeave(event);
+        EventListener.onPlayerLeave(event);
     }
 
     /**

@@ -16,6 +16,12 @@ public abstract class ConfigurationHandler {
 
     protected List<YamlConfiguration> configFileList = new ArrayList<>();
 
+    /**
+     * Used to create a configuration handler.
+     *
+     * @param pluginFolder The instance of the plugin's folder.
+     * @param directoryName The directory name it will use.
+     */
     public ConfigurationHandler(File pluginFolder, String directoryName) {
         this.pluginFolder = pluginFolder;
         this.directoryName = directoryName;

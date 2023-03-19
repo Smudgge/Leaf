@@ -1,0 +1,27 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# Author : Smudge
+
+# ★ Don't want events? ★
+# You can disable all by deleting the content of this file.
+# If you delete the file a new one will be generated.
+
+load_balancing:
+  # The type of event.
+  type: "playerjoin"
+  # Used to enable and disable the event.
+  # Defaults to true.
+  enabled: false
+  # Add commands to be run.
+  commands:
+  - "leaf"
+  # Add servers to be sent to.
+  # If more than 1 server is stated the player will
+  # go to the server with the least amount of players
+  servers:
+  - "hub1"
+  - "hub2"

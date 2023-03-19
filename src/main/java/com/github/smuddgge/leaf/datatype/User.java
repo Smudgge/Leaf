@@ -2,13 +2,14 @@ package com.github.smuddgge.leaf.datatype;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
 import com.github.smuddgge.leaf.database.tables.IgnoreTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
-import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
+import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -285,10 +286,49 @@ public class User {
      */
     public void send(RegisteredServer server) {
         if (this.player == null) return;
+        if (this.server == null) return;
         try {
             this.player.createConnectionRequest(server);
         } catch (Exception ignored) {
         }
+    }
+
+    /**
+     * Used to attempt to send a user to a server in a list.
+     * This will use load balancing to decide which server to send to.
+     *
+     * @param servers The list of server names.
+     */
+    public void send(List<String> servers) {
+        // Check if the server exists.
+        if (servers.size() == 0) return;
+
+        // Set default values.
+        RegisteredServer server = null;
+        int amountOfPlayers = 0;
+
+        for (String tempServer : servers) {
+            Optional<RegisteredServer> optionalTempServer = Leaf.getServer().getServer(tempServer);
+            if (optionalTempServer.isEmpty()) continue;
+
+            // Get the amount of players on the server.
+            int size = optionalTempServer.get().getPlayersConnected().size();
+
+            // If the amount of players is still 0 set this to be the server.
+            if (amountOfPlayers == 0) {
+                server = optionalTempServer.get();
+                amountOfPlayers = size;
+                continue;
+            }
+
+            // If the size is bigger then the current the smallest server.
+            if (size > amountOfPlayers) continue;
+
+            server = optionalTempServer.get();
+            amountOfPlayers = size;
+        }
+
+        this.send(server);
     }
 
     /**
