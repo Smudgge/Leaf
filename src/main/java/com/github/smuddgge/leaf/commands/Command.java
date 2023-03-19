@@ -1,8 +1,8 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.utility.Sounds;
@@ -96,6 +96,29 @@ public record Command(String identifier,
             }
         }
 
+        // Check for requirements.
+        if (this.getSection().getKeys().contains("require")) {
+            ConfigurationSection requireSection = this.getSection().getSection("require");
+
+            // For each requirement.
+            for (String identifier : requireSection.getKeys()) {
+                // Get the permission.
+                String permission = requireSection.getSection(identifier).getString("permission", null);
+                if (permission == null) continue;
+
+                // Get server list.
+                List<String> serverList = requireSection.getSection(identifier).getListString("servers", new ArrayList<>());
+                if (serverList.size() <= 0) continue;
+
+                boolean userOnServer = serverList.contains(user.getConnectedServer().getServerInfo().getName());
+                boolean hasPermission = user.hasPermission(permission);
+
+                if (userOnServer && !hasPermission) {
+                    return new CommandStatus().noPermission();
+                }
+            }
+        }
+
         if (this.commandType.getSubCommandTypes().isEmpty()
                 || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user);
 
@@ -128,7 +151,7 @@ public record Command(String identifier,
      * @return The configuration section.
      */
     public ConfigurationSection getSection() {
-        return ConfigCommands.getCommand(this.identifier);
+        return ConfigurationManager.getCommands().getCommand(this.identifier);
     }
 
     /**
@@ -137,7 +160,7 @@ public record Command(String identifier,
      * @return The name of the command.
      */
     public String getName() {
-        return ConfigCommands.getCommandName(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandName(this.identifier);
     }
 
     /**
@@ -147,7 +170,7 @@ public record Command(String identifier,
      * @return The list of aliases.
      */
     public CommandAliases getAliases() {
-        return ConfigCommands.getCommandAliases(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandAliases(this.identifier);
     }
 
     /**
@@ -156,7 +179,7 @@ public record Command(String identifier,
      * @return Command permission.
      */
     public String getPermission() {
-        return ConfigCommands.getCommandPermission(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandPermission(this.identifier);
     }
 
     /**
@@ -165,7 +188,7 @@ public record Command(String identifier,
      * @return The sound to play as a string.
      */
     public String getSound() {
-        return ConfigCommands.getCommandSound(this.getIdentifier());
+        return ConfigurationManager.getCommands().getCommandSound(this.identifier);
     }
 
     /**
@@ -183,7 +206,7 @@ public record Command(String identifier,
      * @return True if the command is enabled.
      */
     public boolean isEnabled() {
-        return ConfigCommands.isCommandEnabled(this.getIdentifier());
+        return ConfigurationManager.getCommands().isCommandEnabled(this.identifier);
     }
 
     @Override
@@ -196,16 +219,14 @@ public record Command(String identifier,
             try {
                 // Run the command as a player.
                 CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
-
                 if (status.hasIncorrectArguments()) {
                     user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
                             .replace("[name]", this.getName()));
                 }
 
-                if (status.hasError()) user.sendMessage(ConfigMessages.getError());
-                if (status.hasDatabaseDisabled()) user.sendMessage(ConfigMessages.getDatabaseDisabled());
-                if (status.hasDatabaseEmpty()) user.sendMessage(ConfigMessages.getDatabaseEmpty());
-                if (status.hasPlayerCommand()) user.sendMessage(ConfigMessages.getPlayerCommand());
+                String message = status.getMessage();
+                if (message == null) return;
+                user.sendMessage(message);
 
                 return;
             } catch (Exception exception) {
@@ -215,20 +236,17 @@ public record Command(String identifier,
             }
         }
 
-
         try {
             // Run the command in console.
             CommandStatus status = this.onConsoleRun(invocation.arguments());
-
             if (status.hasIncorrectArguments()) {
                 MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
                         .replace("[name]", this.getName()));
             }
 
-            if (status.hasError()) MessageManager.log(ConfigMessages.getError());
-            if (status.hasDatabaseDisabled()) MessageManager.log(ConfigMessages.getDatabaseDisabled());
-            if (status.hasDatabaseEmpty()) MessageManager.log(ConfigMessages.getDatabaseEmpty());
-            if (status.hasPlayerCommand()) MessageManager.log(ConfigMessages.getPlayerCommand());
+            String message = status.getMessage();
+            if (message == null) return;
+            MessageManager.log(message);
 
         } catch (Exception exception) {
             MessageManager.warn("Error occurred while running command : " + this.getName());

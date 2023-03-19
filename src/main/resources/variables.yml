@@ -1,0 +1,26 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# Author : Smudge
+
+# Variables can be used to store custom data for each player.
+#
+# To create a variable, define it in this file then restart the proxy.
+# You can then create commands to set the variable and placeholders
+# to get the players variable. Variables use <> brackets like standard placeholders.
+#
+# WARNING: Variable identifiers must be unique to other variables and standard placeholders.
+# REQUIREMENT: Database must be enabled.
+#
+# ★ Don't want variables? ★
+# You can disable all the variables by deleting the content of this file.
+# If you delete the file a new one will be generated.
+
+# The variable identifier.
+# Example: <theme> will return the string data that is set for the player.
+theme:
+  # The default value if the variable is not set.
+  default: "green"

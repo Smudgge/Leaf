@@ -1,5 +1,8 @@
 package com.github.smuddgge.leaf.commands;
 
+import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.configuration.ConfigMessages;
+
 /**
  * <h1>Represents a command's status.</h1>
  * Returned after a command is executed.
@@ -11,6 +14,7 @@ public class CommandStatus {
     private boolean hasDatabaseDisabled = false;
     private boolean hasDatabaseEmpty = false;
     private boolean hasPlayerCommand = false;
+    private boolean hasNoPermission = false;
 
     /**
      * Used to set error to true.
@@ -63,6 +67,16 @@ public class CommandStatus {
     }
 
     /**
+     * Used to set no permission to true.
+     *
+     * @return This instnace.
+     */
+    public CommandStatus noPermission() {
+        this.hasNoPermission = true;
+        return this;
+    }
+
+    /**
      * Used to get if an error occurred and an error
      * message should be sent.
      *
@@ -107,5 +121,28 @@ public class CommandStatus {
      */
     public boolean hasPlayerCommand() {
         return this.hasPlayerCommand;
+    }
+
+    /**
+     * Used to get if the user doesn't have permission.
+     *
+     * @return True if the player doesn't have permission.
+     */
+    public boolean hasNoPermission() {
+        return this.hasNoPermission;
+    }
+
+    /**
+     * Used to get the error message.
+     *
+     * @return The message.
+     */
+    public String getMessage() {
+        if (this.hasError()) return ConfigMessages.getError();
+        if (this.hasDatabaseDisabled()) return ConfigMessages.getDatabaseDisabled();
+        if (this.hasDatabaseEmpty()) return ConfigMessages.getDatabaseEmpty();
+        if (this.hasPlayerCommand()) return ConfigMessages.getPlayerCommand();
+        if (this.hasNoPermission()) return ConfigMessages.getNoPermission();
+        return null;
     }
 }

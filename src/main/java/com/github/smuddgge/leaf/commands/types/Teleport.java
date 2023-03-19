@@ -4,7 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.proxy.Player;
@@ -54,7 +54,7 @@ public class Teleport extends BaseCommandType {
         User foundUser = new User(optionalPlayer.get());
 
         // Get if vanishable players can message vanishable players.
-        boolean allowVanishablePlayers = ConfigCommands.canVanishableSeeVanishable();
+        boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
         boolean userIsVanishable = !user.isNotVanishable();
         boolean recipientNotVanished = !foundUser.isVanished();
 

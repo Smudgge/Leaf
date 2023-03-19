@@ -1,0 +1,47 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# Author : Smudge
+
+# Custom placeholders can be used in any message using curly brackets.
+# You can add as many custom placeholders as you like.
+#
+# In custom placeholders, you can also use standard placeholders.
+# Standard placeholders :
+# <player> <server> <vanished> <version>
+
+# Simple placeholders.
+# {message} {error_colour}
+message: "&8&l[&f&lServer&8&l]&a"
+error_colour: "&7"
+
+# Conditional placeholders.
+# More information is on the wiki : https://smuddgge.gitbook.io/leaf
+# {vanish_colour} {server_formatted} {rank_colour} {theme_material}
+vanish_colour:
+  condition: "MATCH:<vanished>"
+  options:
+    true: "&#c0fce6"
+    false: "&#ffffee"
+
+server_formatted:
+  condition: "MATCH:<server>"
+  options:
+    Default: "&f&l<server>"
+    TestingServer: '&e&lTest Server'
+
+rank_colour:
+  condition: "PERMISSION:leaf.rank.?"
+  options:
+    Default: "&f"
+    admin: "&a"
+
+theme_material:
+  condition: "MATCH:<theme>"
+  options:
+    Default: "LIME_STAINED_GLASS_PANE"
+    gray: "GRAY_STAINED_GLASS_PANE"
+    green: "LIME_STAINED_GLASS_PANE"

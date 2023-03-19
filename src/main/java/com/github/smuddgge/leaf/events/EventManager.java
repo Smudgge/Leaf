@@ -1,83 +1,49 @@
 package com.github.smuddgge.leaf.events;
 
-import com.github.smuddgge.leaf.FriendManager;
-import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.datatype.User;
-import com.velocitypowered.api.event.connection.DisconnectEvent;
-import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Manages proxy events for this plugin.
+ * Used to manager custom events.
  */
 public class EventManager {
 
+    private static final List<Event> eventTypeList = new ArrayList<>();
+
     /**
-     * Executed before a player connects to a server.
+     * Used to register an event with the manager.
      *
-     * @param event Post connection event.
+     * @param event The event to register.
      */
-    public static void onPlayerJoin(ServerConnectedEvent event) {
-        // Check if we are connected to the database
-        if (Leaf.isDatabaseDisabled()) return;
-
-        // Check if the player is null.
-        if (event.getPlayer() == null) return;
-
-        // Get the user
-        User user = new User(event.getPlayer());
-
-        // Update the player in the database
-        user.updateDatabase();
-
-        // Get server connecting to
-        RegisteredServer server = event.getServer();
-
-        // Check if the server is null
-        if (server == null) return;
-
-        // Check if the user is vanished
-        if (user.isVanished()) return;
-
-        user.setConnectedServer(server);
-
-        if (event.getPreviousServer().isEmpty()) FriendManager.onProxyJoin(user);
-        else FriendManager.onChangeServer(user);
-
-        // Add history
-        user.addHistory(server, PlayerHistoryEventType.JOIN);
+    public static void register(@NotNull Event event) {
+        EventManager.eventTypeList.add(event);
+        MessageManager.log("&aRegistered &7event : " + event.getIdentifier());
     }
 
     /**
-     * Executed when a player disconnects from a server.
+     * Used to unregister an event with the manager.
      *
-     * @param event Disconnection event.
+     * @param event The event to unregister.
      */
-    public static void onPlayerLeave(DisconnectEvent event) {
-        // Check if we are connected to the database
-        if (Leaf.isDatabaseDisabled()) return;
+    public static void unRegister(@NotNull Event event) {
+        EventManager.eventTypeList.remove(event);
+        MessageManager.log("&eUnregistered &7event : " + event.getIdentifier());
+    }
 
-        // Check if the player is null.
-        if (event.getPlayer() == null) return;
-
-        // Get the user
-        User user = new User(event.getPlayer());
-
-        // Update the player in the database
-        user.updateDatabase();
-
-        // Get server connecting to
-        RegisteredServer server = user.getConnectedServer();
-
-        // Check if the server is null
-        if (server == null) return;
-
-        // Check if the user is vanished
-        if (user.isVanished()) return;
-
-        FriendManager.onProxyLeave(user);
-
-        // Add history
-        user.addHistory(server, PlayerHistoryEventType.LEAVE);
+    /**
+     * Used to run all event with a certain type.
+     *
+     * @param eventType The instance of an event type.
+     * @param user      The instance of a user.
+     */
+    public static void runEvent(@NotNull EventType eventType, @NotNull User user) {
+        for (Event event : EventManager.eventTypeList) {
+            if (event.getEventType() == null) continue;
+            if (event.getEventType() == eventType) event.onEvent(user);
+        }
     }
 }

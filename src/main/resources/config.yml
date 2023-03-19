@@ -1,0 +1,20 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# Author : Smudge
+
+# The permission used to check if a player is able to vanish.
+vanish_permission: "leaf.vanishable"
+
+# Sometimes a vanishable player will be on an empty server.
+# Unfortunately we can not check if the player is vanished or not.
+# Because of this we assume the player is vanished.
+#
+# Setting this to true will let other vanishable players see
+# vanishable players regardless of the rank.
+#
+# Defaults to false.
+vanishable_can_see_vanishable: false

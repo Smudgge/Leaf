@@ -8,11 +8,12 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * <h1>Info Command Type</h1>
- * Used send infomation to players when executed.
+ * Used send information to players when executed.
  */
 public class Info extends BaseCommandType {
 
@@ -36,10 +37,10 @@ public class Info extends BaseCommandType {
 
         // Get message as list.
         // If the message is not a list it will return null.
-        List<String> message = section.getListString("message");
+        List<String> message = section.getListString("message", new ArrayList<>());
 
-        // If null assume it's a string.
-        if (message == null) {
+        // If size 0 assume it's a string.
+        if (message.size() == 0) {
             String messageString = section.getString("message", "null");
             MessageManager.log(PlaceholderManager.parse(messageString, null, new User(null, "Console")));
             return new CommandStatus();

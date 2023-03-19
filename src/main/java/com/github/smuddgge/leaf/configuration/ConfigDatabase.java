@@ -19,7 +19,7 @@ public class ConfigDatabase extends YamlConfiguration {
     public ConfigDatabase(File folder) {
         super(folder, "database.yml");
 
-        this.load();
+        this.reload();
     }
 
     /**
@@ -29,13 +29,6 @@ public class ConfigDatabase extends YamlConfiguration {
      */
     public static void initialise(File folder) {
         ConfigDatabase.config = new ConfigDatabase(folder);
-    }
-
-    /**
-     * Used to reload the database's configuration file instance.
-     */
-    public static void reload() {
-        ConfigDatabase.config.load();
     }
 
     /**

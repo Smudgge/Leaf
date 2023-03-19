@@ -1,4 +1,4 @@
-package com.github.smuddgge.leaf.events;
+package com.github.smuddgge.leaf.listeners;
 
 /**
  * Represents the type of history to append to the record.

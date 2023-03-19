@@ -12,7 +12,7 @@ import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.events.PlayerHistoryEventType;
+import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
 import com.github.smuddgge.squishydatabase.Query;

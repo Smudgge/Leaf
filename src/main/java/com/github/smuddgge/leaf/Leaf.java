@@ -6,13 +6,12 @@ import com.github.smuddgge.leaf.commands.CommandHandler;
 import com.github.smuddgge.leaf.commands.subtypes.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.commands.types.messages.*;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
-import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
-import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
+import com.github.smuddgge.leaf.listeners.EventListener;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
@@ -39,12 +38,13 @@ import java.nio.file.Path;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "2.5.0",
+        version = "3.0.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
 public class Leaf {
 
+    private static Leaf plugin;
     private static ProxyServer server;
 
     private static CommandHandler commandHandler;
@@ -55,11 +55,10 @@ public class Leaf {
     @Inject
     public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         Leaf.server = server;
+        Leaf.plugin = this;
 
-        // Set up the configuration files
-        ConfigCommands.initialise(folder.toFile());
-        ConfigMessages.initialise(folder.toFile());
-        ConfigDatabase.initialise(folder.toFile());
+        // Set up the configuration files.
+        ConfigurationManager.initialise(folder.toFile());
 
         // Set up the database
         Leaf.setupDatabase(folder.toFile());
@@ -88,8 +87,8 @@ public class Leaf {
         ConditionManager.register(new MatchCondition());
         ConditionManager.register(new PermissionCondition());
 
-        // Reload configuration to load custom placeholders
-        ConfigMessages.reload();
+        // Reload configuration to load custom placeholders correctly.
+        ConfigurationManager.reload();
 
         // Append all command types
         Leaf.commandHandler = new CommandHandler();
@@ -117,6 +116,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new ToggleSpy());
         Leaf.commandHandler.addType(new UnIgnore());
         Leaf.commandHandler.addType(new MessageHistory());
+        Leaf.commandHandler.addType(new Variable());
 
         Leaf.reloadCommands();
 
@@ -126,12 +126,22 @@ public class Leaf {
 
     @Subscribe
     public void onPlayerJoin(ServerConnectedEvent event) {
-        EventManager.onPlayerJoin(event);
+        EventListener.onPlayerJoin(event);
+        EventListener.onPlayerJoinCustomEvent(event);
     }
 
     @Subscribe
     public void onPlayerLeave(DisconnectEvent event) {
-        EventManager.onPlayerLeave(event);
+        EventListener.onPlayerLeave(event);
+    }
+
+    /**
+     * Used to get the instance of the plugin.
+     *
+     * @return The instance of the plugin.
+     */
+    public static Leaf getPlugin() {
+        return Leaf.plugin;
     }
 
     /**
@@ -224,9 +234,11 @@ public class Leaf {
     public static void reloadCommands() {
         Leaf.commandHandler.unregister();
 
-        for (String identifier : ConfigCommands.get().getSection("commands").getKeys()) {
-            String commandTypeName = ConfigCommands.get().getSection("commands").getSection(identifier).getString("type");
-            BaseCommandType commandType = Leaf.commandHandler.getType(commandTypeName);
+        for (String identifier : ConfigurationManager.getCommands().getAllIdentifiers()) {
+            String commandTypeString = ConfigurationManager.getCommands().getCommandType(identifier);
+            if (commandTypeString == null) continue;
+
+            BaseCommandType commandType = Leaf.commandHandler.getType(commandTypeString);
 
             if (commandType == null) {
                 MessageManager.warn("Invalid command type for : " + identifier);

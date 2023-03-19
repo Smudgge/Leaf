@@ -72,7 +72,7 @@ public class YamlConfiguration extends YamlConfigurationSection implements Confi
     }
 
     @Override
-    public boolean load() {
+    public boolean reload() {
         this.file = new File(this.getAbsolutePath());
 
         // Create file if it doesn't exist

@@ -20,4 +20,9 @@ public class PlayerRecord extends Record {
     public String toggleCanMessage = null;
 
     public String toggleSeeSpy = null;
+
+    /**
+     * Added at version 3.0.0
+     */
+    public String variables;
 }

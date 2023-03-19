@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.configuration.ConfigCommands;
+import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
@@ -111,7 +111,7 @@ public class CommandSuggestions {
      */
     public CommandSuggestions appendPlayers(User user) {
         if (user.isNotVanishable()) return this.appendPlayers();
-        if (ConfigCommands.canVanishableSeeVanishable()) return this.appendPlayersRaw();
+        if (ConfigMain.getVanishableCanSeeVanishable()) return this.appendPlayersRaw();
         return this.appendPlayers();
     }
 
