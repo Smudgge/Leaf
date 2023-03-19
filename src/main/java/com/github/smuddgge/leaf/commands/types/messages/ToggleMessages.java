@@ -14,7 +14,7 @@ import com.github.smuddgge.squishydatabase.record.Record;
  * <h1>Toggle Messages Command Type</h1>
  * Used to toggle receive and send messages.
  */
-public class ToggleMessage extends BaseCommandType {
+public class ToggleMessages extends BaseCommandType {
 
     @Override
     public String getName() {

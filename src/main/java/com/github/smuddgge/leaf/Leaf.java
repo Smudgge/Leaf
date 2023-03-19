@@ -112,7 +112,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Teleport());
         Leaf.commandHandler.addType(new Ignore());
         Leaf.commandHandler.addType(new IgnoreList());
-        Leaf.commandHandler.addType(new ToggleMessage());
+        Leaf.commandHandler.addType(new ToggleMessages());
         Leaf.commandHandler.addType(new ToggleSpy());
         Leaf.commandHandler.addType(new UnIgnore());
         Leaf.commandHandler.addType(new MessageHistory());

@@ -46,12 +46,6 @@ info:
   type: "info"
   enabled: true
   name: "leaf"
-  # Add a requirement
-  require:
-    "identifier":
-      permission: "leaf.bypass"
-      servers:
-        - "ServerName"
   message:
     - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
     - "&7"
