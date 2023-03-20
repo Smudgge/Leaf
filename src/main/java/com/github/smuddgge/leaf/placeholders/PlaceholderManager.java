@@ -102,7 +102,7 @@ public class PlaceholderManager {
 
         PlaceholderManager.placeholderList.add(placeholder);
 
-        MessageManager.log("&aRegistered &7placeholder : " + placeholder.getIdentifier());
+        MessageManager.log("&7[Placeholders] &aRegistered &7placeholder : " + placeholder.getIdentifier());
     }
 
     /**
@@ -115,7 +115,7 @@ public class PlaceholderManager {
 
         if (placeholder == null) return;
 
-        MessageManager.log("&eUnregistered &7placeholder : " + identifier);
+        MessageManager.log("&7[Placeholders] &eUnregistered &7placeholder : " + identifier);
 
         PlaceholderManager.placeholderList.remove(placeholder);
     }

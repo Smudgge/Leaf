@@ -82,7 +82,7 @@ public class CommandHandler {
             }
 
             // Log enable message
-            MessageManager.log("&aEnabling &7command : " + command.getName());
+            MessageManager.log("&7[Commands] &aEnabling &7command : " + command.getName());
 
             // Load subcommands
             command.getBaseCommandType().loadSubCommands();
@@ -90,7 +90,7 @@ public class CommandHandler {
 
             // Check if the command is valid
             if (command.getName() == null) {
-                MessageManager.warn("&eUnregistering command &f[command]. &eCommand name not specified in the configuration file."
+                MessageManager.warn("&7[Commands] &eUnregistering command &f[command]. &eCommand name not specified in the configuration file."
                         .replace("[command]", command.getIdentifier()));
                 continue;
             }

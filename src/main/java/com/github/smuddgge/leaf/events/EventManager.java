@@ -21,7 +21,7 @@ public class EventManager {
      */
     public static void register(@NotNull Event event) {
         EventManager.eventTypeList.add(event);
-        MessageManager.log("&aRegistered &7event : " + event.getIdentifier());
+        MessageManager.log("&7[Events] &aRegistered &7event : " + event.getIdentifier());
     }
 
     /**
@@ -31,7 +31,7 @@ public class EventManager {
      */
     public static void unRegister(@NotNull Event event) {
         EventManager.eventTypeList.remove(event);
-        MessageManager.log("&eUnregistered &7event : " + event.getIdentifier());
+        MessageManager.log("&7[Events] &eUnregistered &7event : " + event.getIdentifier());
     }
 
     /**
