@@ -10,6 +10,7 @@ import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
 import com.github.smuddgge.leaf.listeners.EventListener;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
@@ -120,6 +121,13 @@ public class Leaf {
 
         // Load slot types
         SlotManager.setup();
+
+        // Check for dependencies.
+        if (!ProtocolizeDependency.isEnabled()) {
+            MessageManager.log("&7[Dependencies] Could not find optional dependency &fProtocolize");
+            MessageManager.log("&7[Dependencies] Inventories and sounds will be disabled.");
+            MessageManager.log(ProtocolizeDependency.getDependencyMessage());
+        }
     }
 
     @Subscribe

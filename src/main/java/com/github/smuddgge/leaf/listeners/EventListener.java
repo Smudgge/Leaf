@@ -39,8 +39,7 @@ public class EventListener {
         // Run the events.
         if (event.getPreviousServer().isEmpty()) {
             EventManager.runEvent(EventType.PLAYER_JOIN, user);
-        }
-        else {
+        } else {
             EventManager.runEvent(EventType.PLAYER_SWITCH, user);
         }
     }

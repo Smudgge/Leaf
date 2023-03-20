@@ -58,7 +58,7 @@ public class FriendList implements CommandType {
             MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
             return new CommandStatus().error();
         }
-        
+
         ConfigurationSection listSection = section.getSection(this.getName());
 
         // If a player is specified, and they have permission to see

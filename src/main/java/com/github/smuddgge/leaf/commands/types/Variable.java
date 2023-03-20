@@ -64,7 +64,7 @@ public class Variable extends BaseCommandType {
         List<String> exclude = section.getListString("exclude", new ArrayList<>());
         for (String pattern : exclude) {
             if (!value.matches(pattern)) continue;
-            
+
             user.sendMessage(section.getString("incorrect_value", "{error_colour}You can only set the theme to &fgreen &7or &fgray."));
             return new CommandStatus();
         }
