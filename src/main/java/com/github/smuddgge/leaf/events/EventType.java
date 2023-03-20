@@ -9,7 +9,7 @@ import java.util.Objects;
  * Represents types of events.
  */
 public enum EventType {
-    PLAYER_JOIN("playerjoin");
+    PLAYER_JOIN("playerjoin"), PLAYER_SWITCH("playerswitch");
 
     private final String typeIdentifier;
 
