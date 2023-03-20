@@ -49,6 +49,13 @@ public class FriendOnline implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+        // Check if inventory interfance is disabled.
+        if (!ProtocolizeDependency.isInventoryEnabled()) {
+            MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
+            MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
+            return new CommandStatus().error();
+        }
+        
         ConfigurationSection listSection = section.getSection(this.getName());
 
         // If a player is specified, and they have permission to see

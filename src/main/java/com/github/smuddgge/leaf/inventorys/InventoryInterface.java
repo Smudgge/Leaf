@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import dev.simplix.protocolize.api.Protocolize;
 import dev.simplix.protocolize.api.inventory.Inventory;
@@ -36,6 +37,14 @@ public abstract class InventoryInterface {
      * @return This instance.
      */
     public InventoryInterface open() {
+
+        // Check if inventory interfance is disabled.
+        if (!ProtocolizeDependency.isInventoryEnabled()) {
+            MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
+            MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
+            return this;
+        }
+
         this.inventory = new Inventory(this.getInventoryType());
         this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
         this.load();

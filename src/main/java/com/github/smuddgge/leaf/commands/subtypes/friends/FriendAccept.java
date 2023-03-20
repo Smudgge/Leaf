@@ -37,6 +37,12 @@ public class FriendAccept implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+        // Check if inventory interfance is disabled.
+        if (!ProtocolizeDependency.isInventoryEnabled()) {
+            MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
+            MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
+            return new CommandStatus().error();
+        }
 
         // Open the players friend requests inventory.
         try {

@@ -1,6 +1,8 @@
 package com.github.smuddgge.leaf.utility;
 
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
+
 import dev.simplix.protocolize.api.Protocolize;
 import dev.simplix.protocolize.api.SoundCategory;
 import dev.simplix.protocolize.api.player.ProtocolizePlayer;
@@ -22,6 +24,13 @@ public class Sounds {
      * @param playerUuid The players uuid.
      */
     public static void play(Sound sound, UUID playerUuid) {
+        // Check if protocolize is enabled.
+        if (!ProtocolizeDependency.isEnabled()) {
+            MessageManager.warn("Tried to use sounds when the dependency is not enabled.");
+            MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
+            return;
+        }
+
         ProtocolizePlayer player = Protocolize.playerProvider().player(playerUuid);
         player.playSound(sound, SoundCategory.MASTER, 1f, 1f);
     }
