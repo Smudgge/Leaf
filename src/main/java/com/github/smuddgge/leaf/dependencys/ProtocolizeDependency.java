@@ -37,6 +37,6 @@ public class ProtocolizeDependency {
      * @return The requirested string.
      */
     public static String getDependencyMessage() {
-        return "Protocolize : https://www.spigotmc.org/resources/protocolize-protocollib-for-bungeecord-waterfall-velocity.63778/"
+        return "Protocolize : https://www.spigotmc.org/resources/protocolize-protocollib-for-bungeecord-waterfall-velocity.63778/";
     }
 }
