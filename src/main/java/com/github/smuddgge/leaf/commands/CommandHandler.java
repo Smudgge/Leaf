@@ -77,7 +77,7 @@ public class CommandHandler {
         for (Command command : this.commands) {
             // Check if command is enabled
             if (!command.isEnabled()) {
-                MessageManager.log(command.getIdentifier() + " is not enabled in configuration, therefore disabling.");
+                MessageManager.log("&7[Commands] " + command.getIdentifier() + " is disabled in the configuration file.");
                 continue;
             }
 
@@ -90,7 +90,7 @@ public class CommandHandler {
 
             // Check if the command is valid
             if (command.getName() == null) {
-                MessageManager.warn("&7[Commands] &eUnregistering command &f[command]. &eCommand name not specified in the configuration file."
+                MessageManager.warn("&7[Commands] &f[command] &e: Command name not specified in the configuration file."
                         .replace("[command]", command.getIdentifier()));
                 continue;
             }
