@@ -241,6 +241,10 @@ change_theme:
   # Only allow values from suggest list.
   # Defaults to false.
   only_allow_suggestions: true
+  # Should not include yellow in the value.
+  # This uses regex.
+  exclude:
+  - "yellow"
   incorrect_value: "{error_colour}You can only set the theme to &fgreen &7or &fgray."
   correct_value: "{message} Theme is now set to &f<theme>"
 
