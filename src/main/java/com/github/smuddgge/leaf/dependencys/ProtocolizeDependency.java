@@ -1,9 +1,8 @@
 package com.github.smuddgge.leaf.dependencys;
 
-import java.lang;
-
 /**
- * Represents the protocolise dependecy utilitys.
+ * Represents the protocolize dependency.
+ * Contains utility methods.
  */
 public class ProtocolizeDependency {
 
@@ -17,8 +16,8 @@ public class ProtocolizeDependency {
     }
 
     /**
-     * Used to check if the protocolize dependency is enabled and inventorys
-     * are avaliable.
+     * Used to check if the protocolize dependency is enabled and inventories
+     * are available.
      * 
      * @return True if enabled.
      */
@@ -34,7 +33,7 @@ public class ProtocolizeDependency {
     /**
      * Used to get the dependency message.
      * 
-     * @return The requirested string.
+     * @return The requested string.
      */
     public static String getDependencyMessage() {
         return "Protocolize : https://www.spigotmc.org/resources/protocolize-protocollib-for-bungeecord-waterfall-velocity.63778/";

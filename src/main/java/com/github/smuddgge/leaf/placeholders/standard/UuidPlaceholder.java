@@ -18,7 +18,7 @@ public class UuidPlaceholder extends StandardPlaceholder {
     public String getValue(User user) {
         if (user == null) return null;
 
-        return user.getUniqueId() == null ? null : user.getUniqueId();
+        return user.getUniqueId() == null ? null : user.getUniqueId().toString();
     }
 
     @Override

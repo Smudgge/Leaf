@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 
 /**
@@ -37,7 +38,7 @@ public class Friend extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        // Check if inventory interfance is disabled.
+        // Check if inventory interface is disabled.
         if (!ProtocolizeDependency.isInventoryEnabled()) {
             MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
             MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());

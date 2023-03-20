@@ -16,10 +16,7 @@ import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
 import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
-import com.github.smuddgge.leaf.placeholders.standard.PlayerNamePlaceholder;
-import com.github.smuddgge.leaf.placeholders.standard.ServerPlaceholder;
-import com.github.smuddgge.leaf.placeholders.standard.VanishedPlaceholder;
-import com.github.smuddgge.leaf.placeholders.standard.VersionPlaceholder;
+import com.github.smuddgge.leaf.placeholders.standard.*;
 import com.github.smuddgge.squishydatabase.DatabaseCredentials;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
@@ -79,6 +76,7 @@ public class Leaf {
 
         // Register placeholders
         PlaceholderManager.register(new PlayerNamePlaceholder());
+        PlaceholderManager.register(new UuidPlaceholder());
         PlaceholderManager.register(new ServerPlaceholder());
         PlaceholderManager.register(new VanishedPlaceholder());
         PlaceholderManager.register(new VersionPlaceholder());

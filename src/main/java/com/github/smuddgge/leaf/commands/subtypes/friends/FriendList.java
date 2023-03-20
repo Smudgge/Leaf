@@ -9,6 +9,7 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
 import com.github.smuddgge.squishydatabase.Query;
 
@@ -51,7 +52,7 @@ public class FriendList implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        // Check if inventory interfance is disabled.
+        // Check if inventory interface is disabled.
         if (!ProtocolizeDependency.isInventoryEnabled()) {
             MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
             MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
