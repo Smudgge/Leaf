@@ -23,7 +23,7 @@ public class ProtocolizeDependency {
      */
     public static boolean isInventoryEnabled() {
         try {
-            Class.forName("dev/simplix/protocolize/api/inventory/Inventory");
+            Class.forName("dev.simplix.protocolize.api.inventory.Inventory");
             return true;
         } catch (Exception exception) {
             return false;
