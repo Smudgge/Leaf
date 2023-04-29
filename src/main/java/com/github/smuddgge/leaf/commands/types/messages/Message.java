@@ -11,6 +11,7 @@ import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Locale;
@@ -124,17 +125,20 @@ public class Message extends BaseCommandType {
                 return new CommandStatus();
             }
 
-            // Send messages
+            // Send messages and sounds.
             recipient.sendMessage(PlaceholderManager.parse(section.getString("from")
                     .replace("%message%", message), null, user));
+            Sounds.play(section.getString("from_sound"), recipient.getUniqueId());
 
             user.sendMessage(PlaceholderManager.parse(section.getString("to")
                     .replace("%message%", message), null, recipient));
+            Sounds.play(section.getString("to_sound"), recipient.getUniqueId());
 
             MessageManager.sendSpy(section.getString("spy_format", "&8&o%from% -> %to% : %message%")
                     .replace("%from%", user.getName())
                     .replace("%to%", recipient.getName())
                     .replace("%message%", message));
+            Sounds.play(section.getString("spy_sound"), recipient.getUniqueId());
 
             // Log message interaction.
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());
