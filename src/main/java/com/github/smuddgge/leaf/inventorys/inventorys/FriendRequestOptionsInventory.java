@@ -9,6 +9,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
 
@@ -95,5 +96,6 @@ public class FriendRequestOptionsInventory extends CustomInventory {
                 this.section.getString("sent", "{message} You are now friends with &f<name>"),
                 null, user
         ));
+        Sounds.play(this.section.getString("accept_sound"), userSentTo.getUniqueId());
     }
 }
