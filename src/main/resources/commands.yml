@@ -474,6 +474,7 @@ friends:
     # Message is sent to the requester.
     sent: "{message} You are now friends with &f<player>"
     # %name% : Formatted name of the player that is requesting.
+    accept_sound: "none"
     player:
       skull: "%name%"
       name: "&6&l%name%"
@@ -632,6 +633,9 @@ friends:
     recipient_toggled: "{error_colour}This player has there messages toggled."
     # Placeholders will parse in terms of the other player.
     to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
+    to_sound: "none"
     from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+    from_sound: "none"
     # Spy is where other players can see messages.
     spy_format: "&8&o%from% -> %to% : %message%"
+    spy_sound: "none"

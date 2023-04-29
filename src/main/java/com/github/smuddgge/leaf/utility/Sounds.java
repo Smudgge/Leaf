@@ -41,6 +41,8 @@ public class Sounds {
      * @param playerUuid The players uuid.
      */
     public static void play(String sound, UUID playerUuid) {
+        if (sound.equals("none")) return;
+
         try {
             Sounds.play(Sound.valueOf(sound.toUpperCase(Locale.ROOT)), playerUuid);
         } catch (IllegalArgumentException illegalArgumentException) {
