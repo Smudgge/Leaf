@@ -30,6 +30,7 @@ staffchat:
   log: true
   # %message% : The players message.
   format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
+  receive_sound: "none"
 
 find:
   type: "find"

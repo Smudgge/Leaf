@@ -41,6 +41,7 @@ public class Sounds {
      * @param playerUuid The players uuid.
      */
     public static void play(String sound, UUID playerUuid) {
+        if (sound == null) return;
         if (sound.equals("none")) return;
 
         try {

@@ -132,13 +132,20 @@ public class Message extends BaseCommandType {
 
             user.sendMessage(PlaceholderManager.parse(section.getString("to")
                     .replace("%message%", message), null, recipient));
-            Sounds.play(section.getString("to_sound"), recipient.getUniqueId());
+            Sounds.play(section.getString("to_sound"), user.getUniqueId());
 
             MessageManager.sendSpy(section.getString("spy_format", "&8&o%from% -> %to% : %message%")
                     .replace("%from%", user.getName())
                     .replace("%to%", recipient.getName())
                     .replace("%message%", message));
-            Sounds.play(section.getString("spy_sound"), recipient.getUniqueId());
+
+            // Spy sound.
+            for (Player player : Leaf.getServer().getAllPlayers()) {
+                User temp = new User(player);
+                if (Objects.equals(temp.getRecord().toggleSeeSpy, "true")) {
+                    Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
+                }
+            }
 
             // Log message interaction.
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());

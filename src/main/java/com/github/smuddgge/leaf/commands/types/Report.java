@@ -100,7 +100,7 @@ public class Report extends BaseCommandType {
             String sound = section.getString("see_sound", null);
             if (sound == null) continue;
 
-            Sounds.play(sound, user.getUniqueId());
+            Sounds.play(sound, toSend.getUniqueId());
         }
 
         // Send the message to the sender.

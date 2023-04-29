@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.proxy.Player;
 
 /**
@@ -54,7 +55,10 @@ public class Chat extends BaseCommandType {
             if (permission != null
                     && !player.hasPermission(section.getString("permission"))) continue;
 
-            new User(player).sendMessage(message);
+            User toSend = new User(player);
+
+            toSend.sendMessage(message);
+            Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
         }
 
         // Log the message.
