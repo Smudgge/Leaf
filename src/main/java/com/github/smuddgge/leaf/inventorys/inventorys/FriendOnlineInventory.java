@@ -49,7 +49,9 @@ public class FriendOnlineInventory extends FriendListInventory {
         for (FriendRecord friendRecord : this.friendRecords) {
             String uuid = friendRecord.friendPlayerUuid;
             Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(UUID.fromString(uuid));
-            if (optionalPlayer.isPresent()) onlineFriendsList.add(friendRecord);
+            if (optionalPlayer.isEmpty()) continue;
+            if (new User(optionalPlayer.get()).isVanished()) continue;
+            onlineFriendsList.add(friendRecord);
         }
 
         // Override the friend list.
