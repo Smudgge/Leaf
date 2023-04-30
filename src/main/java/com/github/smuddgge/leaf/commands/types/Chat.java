@@ -56,7 +56,6 @@ public class Chat extends BaseCommandType {
                     && !player.hasPermission(section.getString("permission"))) continue;
 
             User toSend = new User(player);
-
             toSend.sendMessage(message);
             Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
         }
@@ -89,7 +88,9 @@ public class Chat extends BaseCommandType {
             if (permission != null
                     && !player.hasPermission(section.getString("permission"))) continue;
 
-            new User(player).sendMessage(message);
+            User toSend = new User(player);
+            toSend.sendMessage(message);
+            Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
         }
 
         // Log the message if it is enabled.
