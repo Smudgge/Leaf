@@ -28,6 +28,7 @@
     <a href="https://builtbybit.com/resources/leaf-velocity-plugin.26200/"><img src="./graphics/builtbybit.png" width="200"></a>
     <a href="https://forums.papermc.io/threads/leaf-★-create-your-own-essential-proxy-commands.580/"><img src="./graphics/paper.png" width="200"></a>
     <a href="https://modrinth.com/plugin/leaf"><img src="./graphics/modrinth.png" width="200"></a>
+    <a href="https://hangar.papermc.io/Smudge/Leaf"><img src="./graphics/hangar.png" width="200"></a>
 </div>
 
 [![BStats](https://bstats.org/signatures/velocity/Leaf.svg)](https://bstats.org/plugin/velocity/Leaf/17381)
