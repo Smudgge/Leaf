@@ -169,12 +169,11 @@ public class YamlConfigurationSection implements ConfigurationSection {
         if (path == null) return this;
 
         // Return a new empty section if it does not exist
-        if (!(this.get(path) instanceof Map)) {
+        if (!(this.get(path) instanceof Map<?, ?> unknownMap)) {
             return new YamlConfigurationSection(this.baseSection.getData(), this.getBasePath(path), new HashMap<>());
         }
 
         // Get the section and return it
-        Map<?, ?> unknownMap = (Map<?, ?>) this.get(path);
         Map<String, Object> knownMap = new LinkedHashMap<>();
 
         for (Map.Entry<?, ?> entry : unknownMap.entrySet()) {
