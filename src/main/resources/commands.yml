@@ -92,6 +92,7 @@ report:
   name: "report"
   permission: "leaf.report.use"
   see_report: "leaf.report.see"
+  see_sound: "none"
   # %message% : The players message.
   message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
 
@@ -134,9 +135,12 @@ message:
   recipient_toggled: "{error_colour}This player has there messages toggled."
   # Placeholders will parse in terms of the other player.
   to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
+  to_sound: "none"
   from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+  from_sound: "none"
   # Spy is where other players can see messages.
   spy_format: "&8&o%from% -> %to% : %message%"
+  spy_sound: "none"
 
 reply:
   type: "reply"
@@ -148,10 +152,13 @@ reply:
   toggled: "{error_colour}You have your messages toggled."
   recipient_toggled: "{error_colour}This player has there messages toggled."
   # Placeholders will parse in terms of the other player.
-  to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
-  from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+  to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
+  to_sound: "none"
+  from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+  from_sound: "none"
   # Spy is where other players can see messages.
   spy_format: "&8&o%from% -> %to% : %message%"
+  spy_sound: "none"
 
 togglemessages:
   type: "togglemessages"
@@ -618,10 +625,13 @@ friends:
     toggled: "{error_colour}You have your messages toggled."
     recipient_toggled: "{error_colour}This player has there messages toggled."
     # Placeholders will parse in terms of the other player.
-    to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
-    from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
+    to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
+    to_sound: "none"
+    from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
+    from_sound: "none"
     # Spy is where other players can see messages.
     spy_format: "&8&o%from% -> %to% : %message%"
+    spy_sound: "none"
 
   reply:
     type: "reply"
