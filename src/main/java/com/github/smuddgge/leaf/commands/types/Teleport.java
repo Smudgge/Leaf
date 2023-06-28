@@ -53,27 +53,28 @@ public class Teleport extends BaseCommandType {
         // Get the player as a user.
         User foundUser = new User(optionalPlayer.get());
 
-        // Get if vanishable players can message vanishable players.
-        boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
+        boolean vanishableCanSeeVanishable = ConfigMain.getVanishableCanSeeVanishable();
         boolean userIsVanishable = !user.isNotVanishable();
-        boolean recipientVanished = foundUser.isVanished();
+        boolean foundIsNotVanished = !foundUser.isVanished();
 
-        // Check if user is vanishable and vanishable players can message vanishable players.
-        // Or check if recipient is not vanished.
-        if ((allowVanishablePlayers && userIsVanishable)
-                || recipientVanished) {
+        // Teleport if:
+        // - The user they want to teleport to is not vanished.
+        // - The user wanting to teleport is vanishable, and vanishable can see vanishable.
+        if (foundIsNotVanished
+                || (vanishableCanSeeVanishable && userIsVanishable)) {
 
-            String notFound = section.getString("not_found", "{error_colour}Player could not be found.");
-            user.sendMessage(notFound);
+            // Get the message and send it.
+            String message = section.getString("message", "{message} Teleporting...");
+
+            user.sendMessage(message);
+            user.teleport(foundUser.getConnectedServer());
+
             return new CommandStatus();
         }
 
-        // Get the message and send it.
-        String message = section.getString("message", "{message} Teleporting...");
-
-        user.sendMessage(message);
-        user.teleport(foundUser.getConnectedServer());
-
+        // The user is unable to teleport to the other player.
+        String notFound = section.getString("not_found", "{error_colour}Player could not be found.");
+        user.sendMessage(notFound);
         return new CommandStatus();
     }
 }
