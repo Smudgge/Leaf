@@ -56,12 +56,12 @@ public class Teleport extends BaseCommandType {
         // Get if vanishable players can message vanishable players.
         boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
         boolean userIsVanishable = !user.isNotVanishable();
-        boolean recipientNotVanished = !foundUser.isVanished();
+        boolean recipientVanished = foundUser.isVanished();
 
         // Check if user is vanishable and vanishable players can message vanishable players.
         // Or check if recipient is not vanished.
         if ((allowVanishablePlayers && userIsVanishable)
-                || recipientNotVanished) {
+                || recipientVanished) {
 
             String notFound = section.getString("not_found", "{error_colour}Player could not be found.");
             user.sendMessage(notFound);
