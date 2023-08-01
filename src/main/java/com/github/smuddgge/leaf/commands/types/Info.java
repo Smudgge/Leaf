@@ -69,10 +69,10 @@ public class Info extends BaseCommandType {
 
         // Get message as list.
         // If the message is not a list it will return null.
-        List<String> message = section.getListString("message");
+        List<String> message = section.getListString("message", new ArrayList<>());
 
         // If null assume it's a string.
-        if (message == null) {
+        if (message == null || message.isEmpty()) {
             String messageString = section.getString("message", "null");
             user.sendMessage(messageString);
             return new CommandStatus();

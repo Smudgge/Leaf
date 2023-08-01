@@ -14,12 +14,11 @@ import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.TitlePart;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -236,12 +235,43 @@ public class User {
     /**
      * Used to send a user a message.
      * This will also convert the messages placeholders and colours.
+     * <li>Title example: "::title =string::"</li>
+     * <li>Subtitle example: "::subtitle =string>::"</li>
+     * <li>Action bar example: "::actionbar =string::"</li>
      *
      * @param message The message to send.
      */
     public void sendMessage(String message) {
         if (this.player == null) return;
-        this.player.sendMessage(MessageManager.convert(message, this));
+        String[] parts = message.split("::");
+
+        // Loop though parts.
+        for (String part : parts) {
+            if (part.equals("")) continue;
+
+            // Check if it's a title part.
+            if (part.startsWith("title =")) {
+                String titleMessage = part.split("=")[1];
+                this.player.sendTitlePart(TitlePart.TITLE, MessageManager.convert(titleMessage));
+                continue;
+            }
+
+            // Check if it's a subtitle part.
+            if (part.startsWith("subtitle =")) {
+                String subtitleMessage = part.split("=")[1];
+                this.player.sendTitlePart(TitlePart.SUBTITLE, MessageManager.convert(subtitleMessage));
+                continue;
+            }
+
+            // Check if it's an actionbar part.
+            if (part.startsWith("actionbar =")) {
+                String actionbarMessage = part.split("=")[1];
+                this.player.sendActionBar(MessageManager.convert(actionbarMessage));
+                continue;
+            }
+
+            this.player.sendMessage(MessageManager.convert(part));
+        }
     }
 
     /**
