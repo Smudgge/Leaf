@@ -5,8 +5,10 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
+import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.velocitypowered.api.proxy.Player;
@@ -65,6 +67,19 @@ public class Report extends BaseCommandType {
             Sounds.play(sound, user.getUniqueId());
         }
 
+        // Check if there is a discord webhook.
+        if (section.getKeys().contains(ConfigurationKey.DISCORD_WEBHOOK.getKey())) {
+            DiscordWebhookAdapter adapter = new DiscordWebhookAdapter(
+                    section.getSection(ConfigurationKey.DISCORD_WEBHOOK.getKey())
+            );
+
+            adapter.setPlaceholderParser(string -> PlaceholderManager.parse(
+                    string.replace("%message%", String.join(" ", arguments)),
+                    null, new User(null, "Console")));
+
+            adapter.send();
+        }
+
         // Log the message in console.
         MessageManager.log(message);
         return new CommandStatus();
@@ -110,6 +125,19 @@ public class Report extends BaseCommandType {
         String sound = section.getString("see_sound", null);
         if (sound != null) {
             Sounds.play(sound, user.getUniqueId());
+        }
+
+        // Check if there is a discord webhook.
+        if (section.getKeys().contains(ConfigurationKey.DISCORD_WEBHOOK.getKey())) {
+            DiscordWebhookAdapter adapter = new DiscordWebhookAdapter(
+                    section.getSection(ConfigurationKey.DISCORD_WEBHOOK.getKey())
+            );
+
+            adapter.setPlaceholderParser(string -> PlaceholderManager.parse(
+                    string.replace("%message%", String.join(" ", arguments)),
+                    null, new User(null, "Console")));
+
+            adapter.send();
         }
 
         // Log the message.
