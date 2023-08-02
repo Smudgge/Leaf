@@ -88,7 +88,7 @@ public class Info extends BaseCommandType {
         String toSend = builder.toString();
 
         // Get rid of the last '\n'.
-        toSend = toSend.substring(0, toSend.length() -1);
+        toSend = toSend.substring(0, toSend.length() - 1);
 
         // Send the message to the user.
         user.sendMessage(toSend);

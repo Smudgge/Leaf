@@ -15,11 +15,15 @@ import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.title.TitlePart;
+import net.kyori.adventure.title.Title;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -236,8 +240,8 @@ public class User {
     /**
      * Used to send a user a message.
      * This will also convert the messages placeholders and colours.
-     * <li>Title example: "::title =string::"</li>
-     * <li>Subtitle example: "::subtitle =string>::"</li>
+     * <li>Title example: "::title fadeIn stay fadeOut =string::"</li>
+     * <li>Subtitle example: "::subtitle fadeIn stay fadeOut =string>::"</li>
      * <li>Action bar example: "::actionbar =string::"</li>
      *
      * @param message The message to send.
@@ -246,33 +250,91 @@ public class User {
         if (this.player == null) return;
         String[] parts = message.split("::");
 
+        boolean hasTitle = false;
+        Title.Times times = Title.Times.of(
+                Duration.ofMillis(1000),
+                Duration.ofMillis(1000),
+                Duration.ofMillis(1000)
+        );
+
+        String title = "";
+        String subtitle = "";
+
         // Loop though parts.
         for (String part : parts) {
             if (part.equals("")) continue;
 
             // Check if it's a title part.
-            if (part.startsWith("title =")) {
-                String titleMessage = part.split("=")[1];
-                this.player.sendTitlePart(TitlePart.TITLE, MessageManager.convert(titleMessage));
+            if (part.startsWith("title ")) {
+                hasTitle = true;
+                title = part.split("=")[1];
+
+                Title.Times temp = this.exstractTimes(part);
+                if (temp != null) times = temp;
                 continue;
             }
 
             // Check if it's a subtitle part.
-            if (part.startsWith("subtitle =")) {
-                String subtitleMessage = part.split("=")[1];
-                this.player.sendTitlePart(TitlePart.SUBTITLE, MessageManager.convert(subtitleMessage));
+            if (part.startsWith("subtitle ")) {
+                hasTitle = true;
+                subtitle = part.split("=")[1];
+
+                Title.Times temp = this.exstractTimes(part);
+                if (temp != null) times = temp;
                 continue;
             }
 
             // Check if it's an actionbar part.
-            if (part.startsWith("actionbar =")) {
+            if (part.startsWith("actionbar ")) {
                 String actionbarMessage = part.split("=")[1];
                 this.player.sendActionBar(MessageManager.convert(actionbarMessage));
-                continue;
             }
 
             this.player.sendMessage(MessageManager.convert(part));
         }
+
+        // Check if there is a title to show.
+        if (hasTitle) {
+            this.player.showTitle(Title.title(
+                    MessageManager.convert(title),
+                    MessageManager.convert(subtitle),
+                    times
+            ));
+        }
+    }
+
+
+    /**
+     * Used to extract the times from a title part.
+     *
+     * @param part The instance of the part.
+     * @return The times.
+     */
+    private @Nullable Title.Times exstractTimes(@NotNull String part) {
+        // Get durations. [title, fadeIn, stay, fadeOut, ""]
+        String[] durations = part.split("=")[0].split(" ");
+
+        // Check if there are no durations.
+        if (durations.length < 2 || durations.length == 2 && durations[1].equals("")) {
+            return null;
+        }
+
+        // Get durations.
+        int fadeIn = !durations[1].equals("")
+                ? Integer.parseInt(durations[1]) : 1000;
+
+        int stay = durations.length >= 3 && !durations[2].equals("")
+                ? Integer.parseInt(durations[2]) : 1000;
+
+        int fadeOut = durations.length >= 4 && !durations[3].equals("")
+                ? Integer.parseInt(durations[3]) : 1000;
+
+        // Create durations.
+        return Title.Times.of(
+                Duration.ofMillis(fadeIn),
+                Duration.ofMillis(stay),
+                Duration.ofMillis(fadeOut)
+        );
     }
 
     /**
