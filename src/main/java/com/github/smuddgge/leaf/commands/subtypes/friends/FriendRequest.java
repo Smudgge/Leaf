@@ -18,6 +18,7 @@ import com.velocitypowered.api.proxy.Player;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * <h1>Friend Request Subcommand Type</h1>
@@ -85,6 +86,18 @@ public class FriendRequest implements CommandType {
         // Check if the player has already sent a friend request to this player.
         if (FriendManager.hasRequested(user.getUniqueId(), playerToRequestRecord.uuid)) {
             user.sendMessage(section.getSection("request").getString("already_requested", "{error_colour}You have already requested to be friends with this player."));
+            return new CommandStatus();
+        }
+
+        // Check if the player that has been requested has already sent a request.
+        if (FriendManager.hasRequested(UUID.fromString(playerToRequestRecord.uuid), user.getUniqueId().toString())) {
+            user.sendMessage(section.getSection("request").getString("has_request", "{error_colour}This player has already sent you a request."));
+            return new CommandStatus();
+        }
+
+        // Check if they are already friends.
+        if (user.isFriends(UUID.fromString(playerToRequestRecord.uuid))) {
+            user.sendMessage(section.getSection("request").getString("already_friends", "{error_colour}You are already friends with this player."));
             return new CommandStatus();
         }
 

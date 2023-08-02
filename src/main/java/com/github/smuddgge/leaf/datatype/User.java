@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.datatype;
 
+import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
@@ -415,5 +416,15 @@ public class User {
     public void executeCommand(String command) {
         if (this.player == null) return;
         Leaf.getCommandHandler().execute(this.player, command);
+    }
+
+    /**
+     * Used to check if this user is friends with another player.
+     *
+     * @param uuid The players uuid.
+     * @return True if they are friends.
+     */
+    public boolean isFriends(UUID uuid) {
+        return FriendManager.isFriends(this.getUniqueId(), uuid);
     }
 }

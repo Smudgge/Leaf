@@ -463,6 +463,9 @@ friends:
     enabled: true
     not_found: "{error_colour}Player has never played on this server."
     requests_off: "{error_colour}This player has there friend requests off."
+    already_requested: "{error_colour}You have already requested to be friends with this player."
+    already_friends: "{error_colour}You are already friends with this player."
+    has_request: "{error_colour}This player has already sent you a request."
     self: "{error_colour}You can not be friends with your self."
     # Placeholders will parse in terms of the other player.
     sent: "{message} You have sent a friend request to &f<player>"

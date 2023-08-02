@@ -134,6 +134,19 @@ public class FriendManager {
     }
 
     /**
+     * Used to check if two players are friends.
+     *
+     * @param uuid1 The first players uuid.
+     * @param uuid2 The second players uuid.
+     * @return True if they are friends.
+     */
+    public static boolean isFriends(UUID uuid1, UUID uuid2) {
+        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
+        FriendRecord record = friendTable.getFriend(uuid1.toString(), uuid2.toString());
+        return record != null;
+    }
+
+    /**
      * Called when a user joins the proxy and is able to be seen.
      *
      * @param user The instance of the user.
