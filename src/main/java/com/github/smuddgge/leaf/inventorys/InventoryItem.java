@@ -148,6 +148,11 @@ public class InventoryItem {
             }
         }
 
+        // If the item has model data.
+        if (this.section.getKeys().contains("custom_model_data")) {
+            compoundTag.putInt("custom_model_data", this.section.getInteger("custom_model_data", 0));
+        }
+
         // Set the display name.
         String name = this.section.getString("name", "&7");
         item.displayName(MessageManager.convert(MessageManager.convertToLegacy(
