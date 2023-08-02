@@ -135,7 +135,7 @@ public class Report extends BaseCommandType {
 
             adapter.setPlaceholderParser(string -> PlaceholderManager.parse(
                     string.replace("%message%", String.join(" ", arguments)),
-                    null, new User(null, "Console")));
+                    null, user));
 
             adapter.send();
         }

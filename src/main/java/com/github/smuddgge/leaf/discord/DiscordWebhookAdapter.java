@@ -23,6 +23,21 @@ import org.jetbrains.annotations.Nullable;
  *     username: "<player>"
  *     avatar: "https://crafatar.com/avatars/<uuid>?overlay"
  *     message: "Hello there!"
+ *   embed:
+ *      color: 0x00FF00
+ *      title:
+ *        message: "Title"
+ *        url: "url"
+ *      description: "Description"
+ *      footer:
+ *        message: "Footer"
+ *        icon: "url"
+ *      author:
+ *        name: "Smudge"
+ *        iconUrl: "url"
+ *        url: "url"
+ *      imageUrl: "url"
+ *      thumbnailUrl: "url"
  * </pre>
  */
 public class DiscordWebhookAdapter {
@@ -196,7 +211,8 @@ public class DiscordWebhookAdapter {
      * @param string The string to parse.
      * @return The parsed string.
      */
-    private @NotNull String parse(@NotNull String string) {
+    private @Nullable String parse(@Nullable String string) {
+        if (string == null) return null;
         return this.placeholderParser.parsePlaceholders(string);
     }
 }
