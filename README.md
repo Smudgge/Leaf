@@ -1,6 +1,6 @@
 <div align=center>
     <a href="https://github.com/smuddgge/Leaf/releases"><img src="./graphics/download.png" width="512"></a>
-    <a href="https://smuddgge.gitbook.io/leaf-3.2.0/"><img src="./graphics/wiki.png" width="512"></a>
+    <a href="https://smuddgge.gitbook.io/leaf-3.4.0/"><img src="./graphics/wiki.png" width="512"></a>
     <a href="https://discord.gg/pax7uFhaaD"><img src="./graphics/Discord.png" width="512"></a>
 </div>
 
