@@ -56,11 +56,10 @@ public class Info extends BaseCommandType {
         String toSend = builder.toString();
 
         // Get rid of the last '\n'.
-        toSend = toSend.substring(0, toSend.length() - 2);
+        toSend = toSend.substring(0, toSend.length() - 1);
 
         // Log the message.
         MessageManager.log(PlaceholderManager.parse(toSend, null, new User(null, "Console")));
-
         return new CommandStatus();
     }
 
@@ -92,7 +91,6 @@ public class Info extends BaseCommandType {
 
         // Send the message to the user.
         user.sendMessage(toSend);
-
         return new CommandStatus();
     }
 }

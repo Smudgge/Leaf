@@ -95,6 +95,7 @@ public class Leaf {
 
         Leaf.commandHandler.addType(new Alert());
         Leaf.commandHandler.addType(new AlertRaw());
+        Leaf.commandHandler.addType(new AlertMessage());
         Leaf.commandHandler.addType(new Chat());
         Leaf.commandHandler.addType(new Find());
         Leaf.commandHandler.addType(new Friend());
