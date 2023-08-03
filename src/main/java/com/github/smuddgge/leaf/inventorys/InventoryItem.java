@@ -150,7 +150,7 @@ public class InventoryItem {
 
         // If the item has model data.
         if (this.section.getKeys().contains("custom_model_data")) {
-            compoundTag.putInt("custom_model_data", this.section.getInteger("custom_model_data", 0));
+            compoundTag.putInt("CustomModelData", this.section.getInteger("custom_model_data", 0));
         }
 
         // Set the display name.
