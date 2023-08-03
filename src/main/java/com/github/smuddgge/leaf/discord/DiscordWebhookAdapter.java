@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents a discord webhook.
  * Uses the webhook from {@link club.minnced.discord.webhook.WebhookClient}
  * to create a link to discord.
- *
+ * <p>
  * <h2>Example</h2>
  * <pre>
  * discord_webhook:
@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class DiscordWebhookAdapter {
 
-    private @NotNull ConfigurationSection section;
+    private final @NotNull ConfigurationSection section;
     private @NotNull PlaceholderParser placeholderParser;
 
     /**
@@ -101,24 +101,31 @@ public class DiscordWebhookAdapter {
      * the configuration section.
      */
     public @NotNull DiscordWebhookAdapter send() {
-        if (this.getUrl() == null) return this;
-        WebhookClientBuilder builder = new WebhookClientBuilder(this.getUrl());
-        WebhookClient client = builder.build();
-        WebhookMessageBuilder messageBuilder = new WebhookMessageBuilder();
+        try {
+            if (this.getUrl() == null) return this;
+            WebhookClientBuilder builder = new WebhookClientBuilder(this.getUrl());
+            WebhookClient client = builder.build();
+            WebhookMessageBuilder messageBuilder = new WebhookMessageBuilder();
 
-        // Add message.
-        if (this.section.getKeys().contains("message")) {
-            this.sendMessage(messageBuilder);
+            // Add message.
+            if (this.section.getKeys().contains("message")) {
+                this.sendMessage(messageBuilder);
+            }
+
+            // Add embed.
+            if (this.section.getKeys().contains("embed")) {
+                this.sendEmbed(messageBuilder);
+            }
+
+            client.send(messageBuilder.build());
+            client.close();
+            return this;
+
+        } catch (Exception exception) {
+            Console.warn("Unable to send web hook message to url = " + this.getUrl());
+            exception.printStackTrace();
+            return this;
         }
-
-        // Add embed.
-        if (this.section.getKeys().contains("embed")) {
-            this.sendEmbed(messageBuilder);
-        }
-
-        client.send(messageBuilder.build());
-        client.close();
-        return this;
     }
 
     /**

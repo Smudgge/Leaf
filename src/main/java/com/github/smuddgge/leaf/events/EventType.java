@@ -9,9 +9,13 @@ import java.util.Objects;
  * Represents types of events.
  */
 public enum EventType {
-    PLAYER_JOIN("playerjoin"), PLAYER_SWITCH("playerswitch");
+    PLAYER_JOIN("playerjoin"),
+    PLAYER_SWITCH("playerswitch"),
+    PLAYER_LEAVE("playerleave"),
+    PLAYER_CHAT("playerchat");
 
     private final String typeIdentifier;
+    private String message;
 
     /**
      * Used to create an event type.
@@ -24,12 +28,32 @@ public enum EventType {
     }
 
     /**
+     * Used to set a message placeholder.
+     *
+     * @param message The instance of a message.
+     * @return This instance.
+     */
+    public @NotNull EventType setMessage(@Nullable String message) {
+        this.message = message;
+        return this;
+    }
+
+    /**
      * Used to get the type identifier.
      *
      * @return The enums type identifier.
      */
     public String getTypeIdentifier() {
         return this.typeIdentifier;
+    }
+
+    /**
+     * Used to get the message value.
+     *
+     * @return The message.
+     */
+    public @Nullable String getMessage() {
+        return this.message;
     }
 
     /**

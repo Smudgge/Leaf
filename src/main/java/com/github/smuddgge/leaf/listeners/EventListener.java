@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.leaf.events.EventType;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
@@ -104,6 +105,9 @@ public class EventListener {
         // Check if the server is null
         if (server == null) return;
 
+        // Run event.
+        EventManager.runEvent(EventType.PLAYER_LEAVE, user);
+
         // Check if the user is vanished
         if (user.isVanished()) return;
 
@@ -111,5 +115,18 @@ public class EventListener {
 
         // Add history
         user.addHistory(server, PlayerHistoryEventType.LEAVE);
+    }
+
+    /**
+     * Executed on player chat event.
+     *
+     * @param event The instance of the event.
+     */
+    public static void onPlayerChat(PlayerChatEvent event) {
+        // Get the user
+        User user = new User(event.getPlayer());
+
+        // Run event.
+        EventManager.runEvent(EventType.PLAYER_CHAT.setMessage(event.getMessage()), user);
     }
 }
