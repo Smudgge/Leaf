@@ -5,8 +5,11 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
+import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.proxy.Player;
 
 /**
@@ -43,14 +46,53 @@ public class Alert extends BaseCommandType {
             new User(player).sendMessage(message);
         }
 
+        // Check if there is a discord webhook.
+        if (section.getKeys().contains(ConfigurationKey.DISCORD_WEBHOOK.getKey())) {
+            DiscordWebhookAdapter adapter = new DiscordWebhookAdapter(
+                    section.getSection(ConfigurationKey.DISCORD_WEBHOOK.getKey())
+            );
+
+            adapter.setPlaceholderParser(string -> PlaceholderManager.parse(
+                    string.replace("%message%", String.join(" ", arguments)),
+                    null, new User(null, "Console")));
+
+            adapter.send();
+        }
+
         // Log the message in console.
         MessageManager.log(message);
-
         return new CommandStatus();
     }
 
     @Override
-    public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        return this.onConsoleRun(section, arguments);
+    public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {// Check if there is a discord webhook.
+        if (arguments.length == 0) return new CommandStatus().incorrectArguments();
+
+        // Get the message.
+        String message = section.getString("message")
+                .replace("%message%", String.join(" ", arguments));
+
+        // Send the message to all online players.
+        for (Player player : Leaf.getServer().getAllPlayers()) {
+            new User(player).sendMessage(message);
+        }
+
+        // Log the message in console.
+        MessageManager.log(message);
+
+        // Check for discord webhook.
+        if (section.getKeys().contains(ConfigurationKey.DISCORD_WEBHOOK.getKey())) {
+            DiscordWebhookAdapter adapter = new DiscordWebhookAdapter(
+                    section.getSection(ConfigurationKey.DISCORD_WEBHOOK.getKey())
+            );
+
+            adapter.setPlaceholderParser(string -> PlaceholderManager.parse(
+                    string.replace("%message%", String.join(" ", arguments)),
+                    null, user));
+
+            adapter.send();
+        }
+
+        return new CommandStatus();
     }
 }
