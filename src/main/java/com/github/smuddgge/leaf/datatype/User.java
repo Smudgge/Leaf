@@ -288,6 +288,7 @@ public class User {
             if (part.startsWith("actionbar ")) {
                 String actionbarMessage = part.split("=")[1];
                 this.player.sendActionBar(MessageManager.convert(actionbarMessage));
+                continue;
             }
 
             this.player.sendMessage(MessageManager.convert(part));
