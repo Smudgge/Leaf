@@ -91,37 +91,42 @@ public class FriendListInventory extends CustomInventory {
      * @return The updated item stack.
      */
     private ItemStack onLoadPlayer(InventoryItem inventoryItem) {
+
+        // Just in case there is multiple inventory items with the same function name.
         Map<Integer, String> mockInventory = this.getInventoryOf("player");
 
-        int friendsPerPage = this.getInventoryOf("player").size();
+        // Calculate how many friends per page and the record index based on this page.
+        int friendsPerPage = mockInventory.size();
         int recordIndex = (friendsPerPage * this.page) - friendsPerPage;
 
         for (Integer slot : mockInventory.keySet()) {
 
             // Check if the record exists.
-            if (this.friendRecords.size() - 1 < recordIndex) {
+            if ((this.friendRecords.size() - 1) < recordIndex) {
                 ItemStack item = this.appendNoPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, item);
+
             } else {
+
+                // Get friend record.
                 FriendRecord record = this.friendRecords.get(recordIndex);
+
                 // Get tables.
-                FriendMailTable friendMailTable = Leaf.getDatabase().getTable(FriendMailTable.class);
                 PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
 
-                // Get records.
+                // Get friend player record.
                 PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.friendPlayerUuid));
-                assert friendPlayerRecord != null;
+                if (friendPlayerRecord == null) continue;
 
                 Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.name);
-                User friendUser = null;
-                if (optionalPlayer.isPresent()) {
-                    friendUser = new User(optionalPlayer.get());
-                }
 
-                // Set user to the friend.
-                inventoryItem.setUser(friendUser);
+                // Set user if present.
+                optionalPlayer.ifPresent(player -> {
+                    inventoryItem.setUser(new User(player));
+                });
 
                 ItemStack item = this.appendPlayerItemStack(inventoryItem);
+
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, record));
             }
 
@@ -151,7 +156,8 @@ public class FriendListInventory extends CustomInventory {
      */
     private ItemStack appendNoPlayerItemStack(InventoryItem inventoryItem) {
         if (!this.section.getKeys().contains("no_player")) return inventoryItem.getItemStack();
-        return inventoryItem.append(this.section.getSection("no_player")).getItemStack();
+        inventoryItem.append(this.section.getSection("no_player"));
+        return inventoryItem.getItemStack();
     }
 
     /**

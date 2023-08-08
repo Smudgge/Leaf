@@ -43,8 +43,8 @@ public class AlertMessage extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        // Get message as list.
-        // If the message is not a list it will return an empty list.
+        // Get a message as a list.
+        // If the message is not a list, it will return an empty list.
         List<String> listMessage = section.getListString("message", new ArrayList<>());
 
         // The final message to send.

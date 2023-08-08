@@ -33,10 +33,11 @@ public class PlaceholderManager {
             // If we are filtering and the placeholder is not the filter type, skip.
             if (filterType != null && placeholder.getType() != filterType) continue;
 
+            // Check if the message contains the placeholder.
+            if (!message.contains(placeholder.getString())) continue;
+
             String replacer = placeholder.getString();
-
             String value = placeholder.getValue(user);
-
             if (value == null) value = "null";
 
             if (placeholder.getType() == PlaceholderType.CUSTOM) {

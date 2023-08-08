@@ -42,7 +42,7 @@ public class FriendRequestInventory extends CustomInventory {
 
         // Load all the friend records.
         this.requestRecords = Leaf.getDatabase().getTable(FriendRequestTable.class).getRecordList(
-                new Query().match("playerToUuid", this.user.getUniqueId())
+                new Query().match("playerToUuid", this.user.getUniqueId().toString())
         );
     }
 

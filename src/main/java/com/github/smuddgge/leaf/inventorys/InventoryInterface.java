@@ -38,7 +38,7 @@ public abstract class InventoryInterface {
      */
     public InventoryInterface open() {
 
-        // Check if inventory interfance is disabled.
+        // Check if inventory interface is disabled.
         if (!ProtocolizeDependency.isInventoryEnabled()) {
             MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
             MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
@@ -47,6 +47,7 @@ public abstract class InventoryInterface {
 
         this.inventory = new Inventory(this.getInventoryType());
         this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
+
         this.load();
 
         ProtocolizePlayer player = Protocolize.playerProvider().player(this.user.getUniqueId());

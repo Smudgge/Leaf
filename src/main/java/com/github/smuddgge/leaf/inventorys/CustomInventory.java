@@ -69,7 +69,11 @@ public abstract class CustomInventory extends InventoryInterface {
 
         this.resetActions();
 
+        // Loop though every type of item.
+        // This will not loop though every slot.
         for (InventoryItem inventoryItem : this.getInventoryItems()) {
+
+            // Get the instance of the item stack.
             ItemStack item = inventoryItem.getItemStack();
 
             // Check if the inventory item contains a function.
@@ -110,6 +114,7 @@ public abstract class CustomInventory extends InventoryInterface {
 
     /**
      * Used to get the list of inventory items configured in this inventory.
+     * The amount of items does not represent the amount of slots.
      *
      * @return The requested list of items.
      */
@@ -162,10 +167,6 @@ public abstract class CustomInventory extends InventoryInterface {
 
         if (recordsSize - 1 < recordIndex) {
             if (!inventoryItem.getFunctionSection().getBoolean("always_show", false)) {
-                for (Integer slot : inventoryItem.getSlots(this.getInventoryType())) {
-                    this.addAction(slot, () -> {
-                    });
-                }
                 return null;
             }
         } else {

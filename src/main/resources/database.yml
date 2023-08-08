@@ -6,14 +6,21 @@
 #
 # Author : Smudge
 
-# Changing these values requires a proxy restart.
+# --- Changing these values requires a proxy restart. ---
 enabled: true
 debugmode: false
+
+# SQLITE DATABASE
+type: SQLITE
+
+# # MONGO DATABASE
+# connection_string: "connectionString"
+# database_same: "Database"
 
 # The maximum amount of history that will
 # be saved in the database per player.
 player_history_limit: 20
 
-# The maximum amount of messages that will
+# The maximum number of messages that will
 # be saved in the database per player.
 message_limit: 100

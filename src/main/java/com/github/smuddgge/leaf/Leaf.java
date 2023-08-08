@@ -20,6 +20,7 @@ import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
 import com.github.smuddgge.leaf.placeholders.standard.*;
 import com.github.smuddgge.squishydatabase.DatabaseCredentials;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
+import com.github.smuddgge.squishydatabase.console.Console;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
@@ -30,14 +31,16 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Objects;
 
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "3.4.0",
+        version = "3.5.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -215,11 +218,32 @@ public class Leaf {
             return;
         }
 
-        DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
+        try {
+            String type = ConfigDatabase.get().getString("type", "SQLITE");
 
-        Leaf.database = databaseFactory.create(new DatabaseCredentials(
-                folder.getAbsolutePath() + File.separator + "database.sqlite3"
-        ));
+            // Check if it's an SQLITE database.
+            if (Objects.equals(type, "SQLITE")) {
+                DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
+                Leaf.database = databaseFactory.create(
+                        DatabaseCredentials.SQLITE(folder.getAbsolutePath() + File.separator + "database.sqlite3")
+                );
+            }
+
+            // Check if it's a MONGO database.
+            if (Objects.equals(type, "MONGO")) {
+                DatabaseFactory databaseFactory = DatabaseFactory.MONGO;
+                Leaf.database = databaseFactory.create(
+                        DatabaseCredentials.MONGO(
+                                ConfigDatabase.get().getString("connection_string", "none"),
+                                ConfigDatabase.get().getString("database_name", "Database")
+                        )
+                );
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            Console.warn("Connection String : " + ConfigDatabase.get().getString("connection_string"));
+        }
 
         if (ConfigDatabase.isDebugMode()) {
             Leaf.database.setDebugMode(true);

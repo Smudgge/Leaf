@@ -9,6 +9,7 @@ import dev.simplix.protocolize.api.item.ItemFlag;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
+import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
 
@@ -155,9 +156,16 @@ public class InventoryItem {
 
         // Set the display name.
         String name = this.section.getString("name", "&7");
-        item.displayName(MessageManager.convert(MessageManager.convertToLegacy(
-                this.parsePlaceholders(PlaceholderManager.parse(name, null, this.user))
-        )));
+
+        String x = PlaceholderManager.parse(name, null, this.user);
+
+        String a = this.parsePlaceholders(x);
+
+        String b = MessageManager.convertToLegacy(a);
+
+        Component c = MessageManager.convert(b);
+
+        item.displayName(c);
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
@@ -214,7 +222,6 @@ public class InventoryItem {
 
         // Add the nbt data.
         item.nbtData(compoundTag);
-
         return item;
     }
 
