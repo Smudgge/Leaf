@@ -116,12 +116,16 @@ public class MessageHistory extends BaseCommandType {
         StringBuilder builder = new StringBuilder();
 
         // Get the header.
-        String header = section.getString("header")
-                .replace("%page%", String.valueOf(page))
-                .replace("%page_amount%", String.valueOf(amountOfPages));
+        String header = section.getString("header", null);
 
-        builder.append(header);
-        builder.append("\n\n");
+        // Check if there is no header.
+        if (header != null) {
+            builder.append(header
+                    .replace("%page%", String.valueOf(page))
+                    .replace("%page_amount%", String.valueOf(amountOfPages))
+            );
+            builder.append("\n\n");
+        }
 
         // Get the records.
         int index = -1;
@@ -150,11 +154,15 @@ public class MessageHistory extends BaseCommandType {
         builder.append("\n");
 
         // Get the footer.
-        String footer = section.getString("footer")
-                .replace("%page%", String.valueOf(page))
-                .replace("%page_amount%", String.valueOf(amountOfPages));
+        String footer = section.getString("footer", null);
 
-        builder.append(footer);
+        // Check if there is a footer.
+        if (footer != null) {
+            builder.append(footer
+                    .replace("%page%", String.valueOf(page))
+                    .replace("%page_amount%", String.valueOf(amountOfPages))
+            );
+        }
 
         return builder.toString();
     }
