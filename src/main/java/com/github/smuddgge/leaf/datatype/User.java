@@ -11,6 +11,7 @@ import com.github.smuddgge.leaf.database.tables.IgnoreTable;
 import com.github.smuddgge.leaf.database.tables.MuteTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
@@ -240,7 +241,7 @@ public class User {
 
     /**
      * Used to send a user a message.
-     * This will also convert the messages placeholders and colours.
+     * This will also convert the message placeholders and colors.
      * <li>Title example: "::title fadeIn stay fadeOut =string::"</li>
      * <li>Subtitle example: "::subtitle fadeIn stay fadeOut =string>::"</li>
      * <li>Action bar example: "::actionbar =string::"</li>
@@ -248,6 +249,7 @@ public class User {
      * @param message The message to send.
      */
     public void sendMessage(String message) {
+        message = PlaceholderManager.parse(message, null, this);
         if (this.player == null) return;
         String[] parts = message.split("::");
 
