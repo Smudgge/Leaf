@@ -78,7 +78,11 @@ public class List extends BaseCommandType {
 
         // Build the message.
         StringBuilder builder = new StringBuilder();
-        builder.append(section.getString("header")).append("\n");
+
+        String header = section.getString("header", null);
+        if (header != null) {
+            builder.append(header).append("\n");
+        }
 
         // For each rank in the list.
         for (String key : section.getSection("list").getKeys()) {
@@ -110,7 +114,10 @@ public class List extends BaseCommandType {
             builder.append("\n");
         }
 
-        builder.append("\n").append(section.getString("footer"));
+        String footer = section.getString("footer", null);
+        if (footer != null) {
+            builder.append("\n").append(footer);
+        }
 
         return builder.toString();
     }
