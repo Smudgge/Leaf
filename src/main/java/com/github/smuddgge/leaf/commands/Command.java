@@ -233,6 +233,7 @@ public record Command(String identifier,
                 user.sendMessage(ConfigMessages.getError());
                 MessageManager.warn("Error occurred while running command : " + this.getName());
                 exception.printStackTrace();
+                return;
             }
         }
 

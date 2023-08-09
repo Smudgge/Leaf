@@ -93,6 +93,18 @@ public class Message extends BaseCommandType {
         // Get who the message is being sent to.
         User recipient = new User(optionalRecipient.get());
 
+        // Check if this user is muted.
+        if (user.isMuted()) {
+            user.sendMessage(section.getString("you_are_muted", "&7You are muted."));
+            return new CommandStatus();
+        }
+
+        // Check if you cannot message muted players.
+        if (recipient.isMuted() && !section.getBoolean("message_muted_players", true)) {
+            user.sendMessage(section.getString("recipient_muted", "&7Cannot send a message to a muted player."));
+            return new CommandStatus();
+        }
+
         // Get if vanishable players can message vanishable players.
         boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
         boolean userIsVanishable = !user.isNotVanishable();

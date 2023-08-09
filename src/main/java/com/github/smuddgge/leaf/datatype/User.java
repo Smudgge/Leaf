@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
 import com.github.smuddgge.leaf.database.tables.IgnoreTable;
+import com.github.smuddgge.leaf.database.tables.MuteTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.squishydatabase.Query;
@@ -489,5 +490,17 @@ public class User {
      */
     public boolean isFriends(UUID uuid) {
         return FriendManager.isFriends(this.getUniqueId(), uuid);
+    }
+
+    /**
+     * Used to check if this user is muted.
+     *
+     * @return True if they are muted.
+     */
+    public boolean isMuted() {
+        if (Leaf.isDatabaseDisabled()) return false;
+
+        // Check if they have a mute record.
+        return Leaf.getDatabase().getTable(MuteTable.class).getPlayer(this.getUniqueId()) != null;
     }
 }

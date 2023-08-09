@@ -133,6 +133,10 @@ message:
   recipient_ignoring: "{error_colour}This player has ignored you."
   toggled: "{error_colour}You have your messages toggled."
   recipient_toggled: "{error_colour}This player has there messages toggled."
+  you_are_muted: "&7You are muted."
+  recipient_muted: "&7Cannot sent a message to a muted player."
+  # When true, you can message a muted player.
+  message_muted_players: true
   # Placeholders will parse in terms of the other player.
   to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
   to_sound: "none"
@@ -252,7 +256,7 @@ change_theme:
   # Should not include yellow in the value.
   # This uses regex.
   exclude:
-  - "yellow"
+    - "yellow"
   incorrect_value: "{error_colour}You can only set the theme to &fgreen &7or &fgray."
   correct_value: "{message} Theme is now set to &f<theme>"
 
@@ -352,11 +356,24 @@ join:
   # This can also be set as a string.
   # server: "hub"
   server:
-  - "survival1"
-  - "survival2"
+    - "survival1"
+    - "survival2"
   # If there are no servers online.
   no_server: "{error_colour}This server is offline"
 
+mute:
+  type: "mute"
+  enabled: false
+  name: "globalmute"
+  not_found: "&7Could not find player in the database."
+  muted: "&7Muted <player> for &f%time%&7."
+
+unmute:
+  type: "unmute"
+  enabled: false
+  name: "globalunmute"
+  not_found: "&7Could not find player in the database."
+  unmute: "&7Unmuted <player>"
 
 friends:
   type: "friends"

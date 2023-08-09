@@ -31,7 +31,6 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import org.checkerframework.checker.units.qual.C;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -40,7 +39,7 @@ import java.util.Objects;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "3.5.0",
+        version = "3.6.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -121,6 +120,8 @@ public class Leaf {
         Leaf.commandHandler.addType(new UnIgnore());
         Leaf.commandHandler.addType(new MessageHistory());
         Leaf.commandHandler.addType(new Variable());
+        Leaf.commandHandler.addType(new Mute());
+        Leaf.commandHandler.addType(new UnMute());
 
         Leaf.reloadCommands();
 
@@ -263,6 +264,7 @@ public class Leaf {
         Leaf.database.createTable(new FriendSettingsTable());
         Leaf.database.createTable(new IgnoreTable());
         Leaf.database.createTable(new MessageTable());
+        Leaf.database.createTable(new MuteTable());
     }
 
     /**
