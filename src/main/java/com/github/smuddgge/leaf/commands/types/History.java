@@ -124,12 +124,17 @@ public class History extends BaseCommandType {
         StringBuilder builder = new StringBuilder();
 
         // Get the header.
-        String header = section.getString("header")
-                .replace("%page%", String.valueOf(page))
-                .replace("%page_amount%", String.valueOf(amountOfPages));
+        String header = section.getString("header", null);
 
-        builder.append(PlaceholderManager.parse(header, null, new User(null, playerName)));
-        builder.append("\n\n");
+        if (header != null) {
+            builder.append(
+                    PlaceholderManager.parse(header
+                                    .replace("%page%", String.valueOf(page))
+                                    .replace("%page_amount%", String.valueOf(amountOfPages)),
+                            null, new User(null, playerName))
+            );
+            builder.append("\n\n");
+        }
 
         // Get the records.
         int index = -1;
@@ -149,11 +154,15 @@ public class History extends BaseCommandType {
         builder.append("\n");
 
         // Get the footer.
-        String footer = section.getString("footer")
-                .replace("%page%", String.valueOf(page))
-                .replace("%page_amount%", String.valueOf(amountOfPages));
+        String footer = section.getString("footer", null);
 
-        builder.append(PlaceholderManager.parse(footer, null, new User(null, playerName)));
+        if (footer != null) {
+            builder.append(PlaceholderManager.parse(footer
+                            .replace("%page%", String.valueOf(page))
+                            .replace("%page_amount%", String.valueOf(amountOfPages))
+                    , null, new User(null, playerName))
+            );
+        }
 
         return builder.toString();
     }
