@@ -1,11 +1,10 @@
 package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -51,32 +50,46 @@ public class MessageManager {
     }
 
     /**
-     * Used to convert a message to a component with colour.
+     * Convert to to mini message component.
      *
-     * @param message The message to convert.
-     * @return The requested component.
+     * @param message The instance of the message.
+     * @return The component.
      */
-    public static Component convert(String message) {
-        return Component.text()
-                .append(LegacyComponentSerializer.legacyAmpersand().deserialize(
-                        PlaceholderManager.parse(message)
-                ))
-                .build();
+    public static Component convertMiniMessage(String message) {
+        return MiniMessage.miniMessage().deserialize(message);
     }
 
     /**
      * Used to convert a message to a component with colour.
      *
      * @param message The message to convert.
-     * @param user    The user context to convert placeholders with.
      * @return The requested component.
      */
-    public static Component convert(String message, User user) {
-        return Component.text()
-                .append(LegacyComponentSerializer.legacyAmpersand().deserialize(
-                        PlaceholderManager.parse(message, null, user)
-                ))
-                .build();
+    public static Component convert(String message) {
+        return MessageManager.convertMiniMessage(message
+                .replace("&0", "<black>")
+                .replace("&1", "<dark_blue>")
+                .replace("&2", "<dark_green>")
+                .replace("&3", "<dark_aqua>")
+                .replace("&4", "<dark_red>")
+                .replace("&5", "<dark_purple>")
+                .replace("&6", "<gold>")
+                .replace("&7", "<gray>")
+                .replace("&8", "<dark_gray>")
+                .replace("&9", "<blue>")
+                .replace("&a", "<green>")
+                .replace("&b", "<aqua>")
+                .replace("&c", "<red>")
+                .replace("&d", "<light_purple>")
+                .replace("&e", "<yellow>")
+                .replace("&f", "<white>")
+                .replace("&k", "<obf>")
+                .replace("&l", "<b>")
+                .replace("&m", "<st>")
+                .replace("&n", "<u>")
+                .replace("&o", "<i>")
+                .replace("&r", "<reset>")
+        );
     }
 
     /**
