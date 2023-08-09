@@ -64,7 +64,10 @@ public class Servers extends BaseCommandType {
         StringBuilder builder = new StringBuilder();
 
         // Appear the header.
-        builder.append(section.getString("header")).append("&r\n\n");
+        String header = section.getString("header", null);
+        if (header != null) {
+            builder.append(header).append("&r\n\n");
+        }
 
         // Get the order of the servers.
         // This list also determines which servers will be displayed.
@@ -91,8 +94,11 @@ public class Servers extends BaseCommandType {
         }
 
         // Append the footer.
-        builder.append("&r\n");
-        builder.append(section.getString("footer"));
+        String footer = section.getString("footer", null);
+        if (footer != null) {
+            builder.append("&r\n");
+            builder.append(section.getString("footer"));
+        }
 
         return builder.toString();
     }
