@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishydatabase.console.Console;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
@@ -66,30 +67,37 @@ public class MessageManager {
      * @return The requested component.
      */
     public static Component convert(String message) {
-        return MessageManager.convertMiniMessage(message
-                .replace("&0", "<reset><black>")
-                .replace("&1", "<reset><dark_blue>")
-                .replace("&2", "<reset><dark_green>")
-                .replace("&3", "<reset><dark_aqua>")
-                .replace("&4", "<reset><dark_red>")
-                .replace("&5", "<reset><dark_purple>")
-                .replace("&6", "<reset><gold>")
-                .replace("&7", "<reset><gray>")
-                .replace("&8", "<reset><dark_gray>")
-                .replace("&9", "<reset><blue>")
-                .replace("&a", "<reset><green>")
-                .replace("&b", "<reset><aqua>")
-                .replace("&c", "<reset><red>")
-                .replace("&d", "<reset><light_purple>")
-                .replace("&e", "<reset><yellow>")
-                .replace("&f", "<reset><white>")
-                .replace("&k", "<obf>")
-                .replace("&l", "<b>")
-                .replace("&m", "<st>")
-                .replace("&n", "<u>")
-                .replace("&o", "<i>")
-                .replace("&r", "<reset>")
-        );
+        try {
+            return MessageManager.convertMiniMessage(message
+                    .replace("§", "&") // Ensure there are no legacy symbols.
+                    .replace("&0", "<reset><black>")
+                    .replace("&1", "<reset><dark_blue>")
+                    .replace("&2", "<reset><dark_green>")
+                    .replace("&3", "<reset><dark_aqua>")
+                    .replace("&4", "<reset><dark_red>")
+                    .replace("&5", "<reset><dark_purple>")
+                    .replace("&6", "<reset><gold>")
+                    .replace("&7", "<reset><gray>")
+                    .replace("&8", "<reset><dark_gray>")
+                    .replace("&9", "<reset><blue>")
+                    .replace("&a", "<reset><green>")
+                    .replace("&b", "<reset><aqua>")
+                    .replace("&c", "<reset><red>")
+                    .replace("&d", "<reset><light_purple>")
+                    .replace("&e", "<reset><yellow>")
+                    .replace("&f", "<reset><white>")
+                    .replace("&k", "<obf>")
+                    .replace("&l", "<b>")
+                    .replace("&m", "<st>")
+                    .replace("&n", "<u>")
+                    .replace("&o", "<i>")
+                    .replace("&r", "<reset>")
+            );
+        } catch (Exception exception) {
+            Console.warn("Unable to convert message : " + message);
+            exception.printStackTrace();
+            return null;
+        }
     }
 
     /**

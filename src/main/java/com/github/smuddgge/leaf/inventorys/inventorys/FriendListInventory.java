@@ -194,8 +194,8 @@ public class FriendListInventory extends CustomInventory {
 
         // Parse display name.
         String tempName = item.displayName(true);
-        tempName = PlaceholderManager.parse(tempName, null, friendUser);
-        item.displayName(MessageManager.convert(tempName
+        String x = PlaceholderManager.parse(tempName, null, friendUser);
+        item.displayName(MessageManager.convert("<reset>" + x
                 .replace("%name%", friendsName)
                 .replace("%date%", DateAndTime.convert(record.dateCreated))
                 .replace("%last_mail%", friendMailRecord.message)
@@ -206,7 +206,7 @@ public class FriendListInventory extends CustomInventory {
         for (Object line : item.lore(true)) {
             String tempLine = (String) line;
             tempLine = PlaceholderManager.parse(tempLine, null, friendUser);
-            lore.add(MessageManager.convert(tempLine
+            lore.add(MessageManager.convert("<reset>" + tempLine
                     .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))
                     .replace("%last_mail%", friendMailRecord.message)

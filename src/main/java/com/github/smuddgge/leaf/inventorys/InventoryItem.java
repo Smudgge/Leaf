@@ -156,22 +156,16 @@ public class InventoryItem {
 
         // Set the display name.
         String name = this.section.getString("name", "&7");
-
         String x = PlaceholderManager.parse(name, null, this.user);
-
         String a = this.parsePlaceholders(x);
-
-        String b = MessageManager.convertToLegacy(a);
-
-        Component c = MessageManager.convert(b);
-
+        Component c = MessageManager.convert(a);
         item.displayName(c);
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
-            item.addToLore(MessageManager.convert(MessageManager.convertToLegacy(
+            item.addToLore(MessageManager.convert(
                     this.parsePlaceholders(PlaceholderManager.parse(line, null, this.user))
-            )));
+            ));
         }
 
         if (this.section.getKeys().contains("durability")) {
