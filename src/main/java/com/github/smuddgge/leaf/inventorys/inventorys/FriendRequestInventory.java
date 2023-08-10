@@ -1,7 +1,6 @@
 package com.github.smuddgge.leaf.inventorys.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
@@ -10,16 +9,14 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
-import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemStack;
-import net.kyori.adventure.text.Component;
-import net.querz.nbt.tag.CompoundTag;
-import net.querz.nbt.tag.Tag;
-import org.checkerframework.checker.units.qual.A;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Represents the friend requests inventory.
