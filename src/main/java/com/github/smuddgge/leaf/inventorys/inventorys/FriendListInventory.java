@@ -21,10 +21,7 @@ import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Represents the friend list inventory.
@@ -179,7 +176,7 @@ public class FriendListInventory extends CustomInventory {
 
         // Get name and optional player.
         String friendsName = friendPlayerRecord.name;
-        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendPlayerRecord.uuid);
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendsName);
         User friendUser = null;
         if (optionalPlayer.isPresent()) {
             friendUser = new User(optionalPlayer.get());
@@ -218,7 +215,7 @@ public class FriendListInventory extends CustomInventory {
         // Parse nbt.
         CompoundTag compoundTag = item.nbtData();
         CompoundTag toAdd = new CompoundTag();
-        for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {
+        for (Map.Entry<String, Tag<?>> tag :compoundTag.entrySet()) {
             toAdd.putString(tag.getKey(), tag.getValue().valueToString()
                     .replace("%name%", friendsName)
                     .replace("%date%", DateAndTime.convert(record.dateCreated))

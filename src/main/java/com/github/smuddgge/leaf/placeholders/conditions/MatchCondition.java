@@ -23,7 +23,11 @@ public class MatchCondition implements PlaceholderCondition {
     @Override
     public String getValue(ConfigurationSection section, User user) {
         String condition = section.getString("condition");
-        String pattern = PlaceholderManager.parse(condition.split(":")[1], PlaceholderType.STANDARD, user);
+        String pattern = PlaceholderManager.parse(
+                condition.split(":")[1],
+                PlaceholderType.STANDARD,
+                user
+        );
 
         List<String> options = section.getKeys("options");
 

@@ -40,6 +40,7 @@ public class PlaceholderManager {
             String value = placeholder.getValue(user);
             if (value == null) value = "null";
 
+            // Check if it is a custom placeholder.
             if (placeholder.getType() == PlaceholderType.CUSTOM) {
                 value = PlaceholderManager.parse(value, PlaceholderType.STANDARD, user);
             }
