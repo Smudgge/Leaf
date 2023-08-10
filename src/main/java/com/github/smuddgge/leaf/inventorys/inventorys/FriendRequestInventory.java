@@ -17,6 +17,7 @@ import dev.simplix.protocolize.api.item.ItemStack;
 import net.kyori.adventure.text.Component;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -97,7 +98,7 @@ public class FriendRequestInventory extends CustomInventory {
                 inventoryItem.setUser(friendUser);
 
                 // Add the item to the inventory.
-                ItemStack item = this.appendPlayerItemStack(inventoryItem);
+                InventoryItem item = this.appendPlayerItemStack(inventoryItem);
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, requestRecord));
 
                 this.addAction(slot, () -> {
@@ -122,9 +123,9 @@ public class FriendRequestInventory extends CustomInventory {
      * @param inventoryItem The current inventory item.
      * @return The requested item stack.
      */
-    private ItemStack appendPlayerItemStack(InventoryItem inventoryItem) {
-        if (!this.section.getKeys().contains("player")) return inventoryItem.getItemStack();
-        return inventoryItem.append(this.section.getSection("player")).getItemStack();
+    private InventoryItem appendPlayerItemStack(InventoryItem inventoryItem) {
+        if (!this.section.getKeys().contains("player")) return inventoryItem;
+        return inventoryItem.append(this.section.getSection("player"));
     }
 
     /**
@@ -145,46 +146,22 @@ public class FriendRequestInventory extends CustomInventory {
      * @param record The record to parse in context of.
      * @return The requested item stack.
      */
-    private ItemStack parseCustomPlaceholders(ItemStack item, FriendRequestRecord record) {
+    private ItemStack parseCustomPlaceholders(InventoryItem item, FriendRequestRecord record) {
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         PlayerRecord playerRecord = playerTable.getFirstRecord(new Query().match("uuid", record.playerFromUuid));
         assert playerRecord != null;
 
         // Get name and optional player.
         String name = playerRecord.name;
-        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(playerRecord.uuid);
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(name);
         Player player = null;
         if (optionalPlayer.isPresent()) {
             player = optionalPlayer.get();
         }
 
-        // Parse name.
-        String tempName = item.displayName(true);
-        tempName = PlaceholderManager.parse(tempName, null, new User(player));
-        item.displayName(MessageManager.convert(tempName
-                .replace("%name%", name)));
+        item.setUser(new User(player));
+        item.addPlaceholder("%name%", name);
 
-        // Parse lore.
-        List<Component> lore = new ArrayList<>();
-        for (Object line : item.lore(true)) {
-            String tempLine = (String) line;
-            tempLine = PlaceholderManager.parse(tempLine, null, new User(player));
-            lore.add(MessageManager.convert(tempLine
-                    .replace("%name%", name)));
-        }
-        item.lore(lore, false);
-
-        // Parse nbt.
-        CompoundTag compoundTag = item.nbtData();
-        CompoundTag toAdd = new CompoundTag();
-        for (Map.Entry<String, Tag<?>> tag : compoundTag.entrySet()) {
-            toAdd.putString(tag.getKey(), tag.getValue().valueToString()
-                    .replace("%name%", name)
-                    .replace("\"", "")
-                    .replace("\\", ""));
-        }
-        item.nbtData(toAdd);
-
-        return item;
+        return item.getItemStack();
     }
 }

@@ -122,8 +122,10 @@ public class FriendListInventory extends CustomInventory {
                     inventoryItem.setUser(new User(player));
                 });
 
-                ItemStack item = this.appendPlayerItemStack(inventoryItem);
+                // Add the player item stack.
+                InventoryItem item = this.appendPlayerItemStack(inventoryItem);
 
+                // Set the item after parsing custom placeholders.
                 this.inventory.item(slot, this.parseCustomPlaceholders(item, record));
             }
 
@@ -140,9 +142,9 @@ public class FriendListInventory extends CustomInventory {
      * @param inventoryItem The current inventory item.
      * @return The requested item stack.
      */
-    private ItemStack appendPlayerItemStack(InventoryItem inventoryItem) {
-        if (!this.section.getKeys().contains("player")) return inventoryItem.getItemStack();
-        return inventoryItem.append(this.section.getSection("player")).getItemStack();
+    private InventoryItem appendPlayerItemStack(InventoryItem inventoryItem) {
+        if (!this.section.getKeys().contains("player")) return inventoryItem;
+        return inventoryItem.append(this.section.getSection("player"));
     }
 
     /**
@@ -164,7 +166,7 @@ public class FriendListInventory extends CustomInventory {
      * @param record The record to parse in context of.
      * @return The requested item stack.
      */
-    private ItemStack parseCustomPlaceholders(ItemStack item, FriendRecord record) {
+    private ItemStack parseCustomPlaceholders(InventoryItem item, FriendRecord record) {
         // Get tables.
         FriendMailTable friendMailTable = Leaf.getDatabase().getTable(FriendMailTable.class);
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
@@ -189,43 +191,13 @@ public class FriendListInventory extends CustomInventory {
             friendMailRecord.viewedBoolean = "true";
         }
 
-        // Parse display name.
-        String tempName = item.displayName(true);
-        String x = PlaceholderManager.parse(tempName, null, friendUser);
-        item.displayName(MessageManager.convert("<reset>" + x
-                .replace("%name%", friendsName)
-                .replace("%date%", DateAndTime.convert(record.dateCreated))
-                .replace("%last_mail%", friendMailRecord.message)
-                .replace("%mail_status%", friendMailRecord.getStatus())));
+        item.setUser(friendUser);
 
-        // Parse lore.
-        List<Component> lore = new ArrayList<>();
-        for (Object line : item.lore(true)) {
-            String tempLine = (String) line;
-            tempLine = PlaceholderManager.parse(tempLine, null, friendUser);
-            lore.add(MessageManager.convert("<reset>" + tempLine
-                    .replace("%name%", friendsName)
-                    .replace("%date%", DateAndTime.convert(record.dateCreated))
-                    .replace("%last_mail%", friendMailRecord.message)
-                    .replace("%mail_status%", friendMailRecord.getStatus())
-            ));
-        }
-        item.lore(lore, false);
+        item.addPlaceholder("%name%", friendsName);
+        item.addPlaceholder("%date%", DateAndTime.convert(record.dateCreated));
+        item.addPlaceholder("%last_mail%", friendMailRecord.message);
+        item.addPlaceholder("%mail_status%", friendMailRecord.getStatus());
 
-        // Parse nbt.
-        CompoundTag compoundTag = item.nbtData();
-        CompoundTag toAdd = new CompoundTag();
-        for (Map.Entry<String, Tag<?>> tag :compoundTag.entrySet()) {
-            toAdd.putString(tag.getKey(), tag.getValue().valueToString()
-                    .replace("%name%", friendsName)
-                    .replace("%date%", DateAndTime.convert(record.dateCreated))
-                    .replace("%last_mail%", friendMailRecord.message)
-                    .replace("%mail_status%", friendMailRecord.getStatus())
-                    .replace("\"", "")
-                    .replace("\\", ""));
-        }
-        item.nbtData(toAdd);
-
-        return item;
+        return item.getItemStack();
     }
 }

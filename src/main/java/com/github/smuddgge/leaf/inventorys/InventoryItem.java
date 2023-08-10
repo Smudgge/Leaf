@@ -51,17 +51,22 @@ public class InventoryItem {
      * @return A new inventory item instance.
      */
     public InventoryItem append(ConfigurationSection section) {
+        // Create a clone.
         ConfigurationSection cloneSection = new YamlConfigurationSection(new HashMap<>());
+
+        // Add this sections values.
         for (String key : this.section.getKeys()) {
             cloneSection.setInSection(key, this.section.get(key));
         }
+
+        // Add the section to append values.
         for (String key : section.getKeys()) {
             cloneSection.setInSection(key, section.get(key));
         }
 
+        // Create the item.
         InventoryItem clone = new InventoryItem(cloneSection, this.slot, this.user);
         clone.placeholders = this.placeholders;
-
         return clone;
     }
 
