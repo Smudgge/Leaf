@@ -86,7 +86,7 @@ public class FriendListInventory extends CustomInventory {
      */
     private ItemStack onLoadPlayer(InventoryItem inventoryItem) {
 
-        // Just in case there is multiple inventory items with the same function name.
+        // Just in case there are multiple inventory items with the same function name.
         Map<Integer, String> mockInventory = this.getInventoryOf("player");
 
         // Calculate how many friends per page and the record index based on this page.
