@@ -1,8 +1,11 @@
 package com.github.smuddgge.leaf.brand;
 
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.network.ProtocolVersion;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.proxy.connection.MinecraftSessionHandler;
 import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
 import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
@@ -11,6 +14,7 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.packet.PluginMessage;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
+import dev.simplix.protocolize.data.listeners.PlayerPositionListener;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.elytrium.java.commons.reflection.ReflectionException;
@@ -34,8 +38,8 @@ class BrandPluginMessageHook extends PluginMessage {
         // Check if the handler is the correct handler.
         // Check if the brand feature is enabled.
         if (!(handler instanceof BackendPlaySessionHandler)
-                || ConfigMain.get().getBoolean("brand.in_game.enabled", false)
-                || PluginMessageUtil.isMcBrand(this)) {
+                || !ConfigMain.get().getBoolean("brand.in_game.enabled", false)
+                || !PluginMessageUtil.isMcBrand(this)) {
 
             return super.handle(handler);
         }
@@ -48,7 +52,7 @@ class BrandPluginMessageHook extends PluginMessage {
 
             // Write the minecraft brand.
             player.getConnection().write(
-                    this.getMinecraftBrand(this, player.getProtocolVersion())
+                    this.getMinecraftBrand(this, player)
             );
 
             return true;
@@ -62,27 +66,29 @@ class BrandPluginMessageHook extends PluginMessage {
      * Used to get the minecraft brand message.
      *
      * @param message         The instance of the current message to rewrite.
-     * @param protocolVersion The protocol version.
+     * @param player The instance of the player.
      * @return The instance of the new message.
      */
-    private @NotNull PluginMessage getMinecraftBrand(@NotNull PluginMessage message, @NotNull ProtocolVersion protocolVersion) {
+    private @NotNull PluginMessage getMinecraftBrand(@NotNull PluginMessage message, @NotNull Player player) {
 
         // Get the current brand.
         String currentBrand = PluginMessageUtil.readBrandMessage(message.content());
 
         // Get the brand.
         String brand = PlaceholderManager.parse(
-                ConfigMain.get().getString("brand.in_game.brand", "None")
+                ConfigMain.get().getString("brand.in_game.brand", "None"),
+                null,
+                new User(player)
         );
 
         // Get the new brand.
-        String rewrittenBrand = MessageFormat.format(brand, currentBrand);
+        String rewrittenBrand = MessageFormat.format(MessageManager.convertToLegacy(brand), currentBrand);
 
         // Create the buffer.
         ByteBuf rewrittenBuf = Unpooled.buffer();
 
         // Check if the minecraft version is above or equal to 1.8
-        if (protocolVersion.compareTo(ProtocolVersion.MINECRAFT_1_8) >= 0) {
+        if (player.getProtocolVersion().compareTo(ProtocolVersion.MINECRAFT_1_8) >= 0) {
             ProtocolUtils.writeString(rewrittenBuf, rewrittenBrand);
             return new PluginMessage(message.getChannel(), rewrittenBuf);
         }

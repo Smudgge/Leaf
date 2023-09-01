@@ -48,14 +48,11 @@ public abstract class InventoryInterface {
         this.inventory = new Inventory(this.getInventoryType());
         this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
 
-        System.out.println("load");
         this.load();
 
-        System.out.println("open");
         ProtocolizePlayer player = Protocolize.playerProvider().player(this.user.getUniqueId());
         player.openInventory(this.inventory);
 
-        System.out.println("on click");
         this.inventory.onClick(click -> {
             int slot = click.slot();
 
