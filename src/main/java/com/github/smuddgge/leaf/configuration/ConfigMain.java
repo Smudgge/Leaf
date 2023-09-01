@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.configuration;
 
 import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 

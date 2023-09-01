@@ -18,3 +18,16 @@ vanish_permission: "leaf.vanishable"
 #
 # Defaults to false.
 vanishable_can_see_vanishable: false
+
+# Change the server's brand.
+brand:
+
+  # The brand shown in ping.
+  ping:
+    enabled: false
+    brand: "None"
+
+  # The in game brand.
+  in_game:
+    enabled: false
+    brand: "None"
