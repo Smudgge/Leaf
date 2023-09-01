@@ -1,8 +1,7 @@
 package com.github.smuddgge.leaf;
 
-import com.github.smuddgge.leaf.brand.BrandHandler;
-import com.github.smuddgge.leaf.brand.BrandPingChangerListener;
-import com.github.smuddgge.leaf.brand.BrandPluginMessageHook;
+import com.github.smuddgge.leaf.brand.ProxyPingListener;
+import com.github.smuddgge.leaf.brand.HooksInitializer;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandHandler;
@@ -31,24 +30,13 @@ import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
-import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
-import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
-import com.velocitypowered.proxy.protocol.MinecraftPacket;
-import com.velocitypowered.proxy.protocol.StateRegistry;
-import io.netty.util.collection.IntObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
 
 import java.io.File;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 @Plugin(
         id = "leaf",
@@ -150,10 +138,10 @@ public class Leaf {
         }
 
         // Events.
-        Leaf.getServer().getEventManager().register(this, new BrandPingChangerListener());
+        Leaf.getServer().getEventManager().register(this, new ProxyPingListener());
 
-        // Set up the brand handler.
-        BrandHandler.setup();
+        // Initialize hooks.
+        HooksInitializer.init();
     }
 
     @Subscribe
