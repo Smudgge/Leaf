@@ -1,6 +1,5 @@
 package com.github.smuddgge.leaf.brand;
 
-import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.event.Subscribe;
