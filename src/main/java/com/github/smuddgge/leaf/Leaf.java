@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf;
 
-import com.github.smuddgge.leaf.brand.ProxyPingListener;
+import com.github.smuddgge.leaf.brand.BrandProxyPingListener;
 import com.github.smuddgge.leaf.brand.HooksInitializer;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.Command;
@@ -138,7 +138,7 @@ public class Leaf {
         }
 
         // Events.
-        Leaf.getServer().getEventManager().register(this, new ProxyPingListener());
+        Leaf.getServer().getEventManager().register(this, new BrandProxyPingListener());
 
         // Initialize hooks.
         HooksInitializer.init();

@@ -9,7 +9,7 @@ import com.velocitypowered.api.proxy.server.ServerPing;
  * Used to listen to the proxy ping event and change
  * the brand if enabled.
  */
-public class ProxyPingListener {
+public class BrandProxyPingListener {
 
     @Subscribe
     public void onPing(ProxyPingEvent event) {
