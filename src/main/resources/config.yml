@@ -24,8 +24,8 @@ brand:
   # The brand shown in ping.
   ping:
     enabled: false
-    brand: "None"
+    brand: "&aLeaf <version>&r"
   # The in game brand.
   in_game:
     enabled: false
-    brand: "None"
+    brand: "&aLeaf <version>&r"
