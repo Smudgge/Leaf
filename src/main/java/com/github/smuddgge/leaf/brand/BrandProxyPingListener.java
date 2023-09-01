@@ -1,6 +1,8 @@
 package com.github.smuddgge.leaf.brand;
 
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyPingEvent;
 import com.velocitypowered.api.proxy.server.ServerPing;
@@ -24,7 +26,7 @@ public class BrandProxyPingListener {
         builder.version(
                 new ServerPing.Version(
                         event.getPing().getVersion().getProtocol(),
-                        ConfigMain.get().getString("brand.ping.brand", "None")
+                        PlaceholderManager.parse(ConfigMain.get().getString("brand.ping.brand", "None"))
                 )
         );
 

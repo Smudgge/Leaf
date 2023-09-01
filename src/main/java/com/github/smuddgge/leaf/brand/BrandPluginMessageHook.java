@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.brand;
 
 import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.connection.MinecraftSessionHandler;
 import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
@@ -69,12 +70,15 @@ class BrandPluginMessageHook extends PluginMessage {
         // Get the current brand.
         String currentBrand = PluginMessageUtil.readBrandMessage(message.content());
 
-        // Get the new brand.
-        String rewrittenBrand = MessageFormat.format(
-                ConfigMain.get().getString("brand.in_game.brand", "None"),
-                currentBrand
+        // Get the brand.
+        String brand = PlaceholderManager.parse(
+                ConfigMain.get().getString("brand.in_game.brand", "None")
         );
 
+        // Get the new brand.
+        String rewrittenBrand = MessageFormat.format(brand, currentBrand);
+
+        // Create the buffer.
         ByteBuf rewrittenBuf = Unpooled.buffer();
 
         // Check if the minecraft version is above or equal to 1.8
