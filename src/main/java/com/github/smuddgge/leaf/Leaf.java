@@ -82,9 +82,10 @@ public class Leaf {
 
         // Register placeholders
         PlaceholderManager.register(new PlayerNamePlaceholder());
-        PlaceholderManager.register(new UuidPlaceholder());
-        PlaceholderManager.register(new ServerPlaceholder());
-        PlaceholderManager.register(new VanishedPlaceholder());
+        PlaceholderManager.register(new PlayerPingPlaceholder());
+        PlaceholderManager.register(new PlayerUuidPlaceholder());
+        PlaceholderManager.register(new PlayerServerPlaceholder());
+        PlaceholderManager.register(new PlayerVanishedPlaceholder());
         PlaceholderManager.register(new VersionPlaceholder());
 
         // Register placeholder conditions

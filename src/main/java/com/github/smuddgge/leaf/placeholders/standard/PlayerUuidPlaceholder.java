@@ -4,22 +4,21 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.StandardPlaceholder;
 
 /**
- * <h1>Represents the server placeholder</h1>
- * Returns what server a user is on without checking if they are vanished.
+ * <h1>Represents the uuid placeholder</h1>
+ * Returns the users uuid.
  */
-public class ServerPlaceholder extends StandardPlaceholder {
+public class PlayerUuidPlaceholder extends StandardPlaceholder {
 
     @Override
     public String getIdentifier() {
-        return "server";
+        return "uuid";
     }
 
     @Override
     public String getValue(User user) {
         if (user == null) return null;
-        if (user.getConnectedServer() == null) return null;
 
-        return user.getConnectedServer().getServerInfo().getName();
+        return user.getUniqueId() == null ? null : user.getUniqueId().toString();
     }
 
     @Override

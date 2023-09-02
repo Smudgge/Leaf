@@ -41,6 +41,12 @@
             <id>elytrium-repo</id>
             <url>https://maven.elytrium.net/repo/</url>
         </repository>
+
+        <!-- Spark -->
+        <repository>
+            <id>sonatype-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -121,6 +127,14 @@
             <groupId>net.elytrium</groupId>
             <artifactId>fastprepare</artifactId>
             <version>1.0.4</version>
+        </dependency>
+
+        <!-- Spark -->
+        <dependency>
+            <groupId>me.lucko</groupId>
+            <artifactId>spark-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

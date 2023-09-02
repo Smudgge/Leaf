@@ -4,24 +4,22 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.StandardPlaceholder;
 
 /**
- * Represents the vanished placeholder.
- * Returns if a user is vanished.
+ * Used to get the players ping.
  */
-public class VanishedPlaceholder extends StandardPlaceholder {
+public class PlayerPingPlaceholder extends StandardPlaceholder {
 
     @Override
     public String getIdentifier() {
-        return "vanished";
+        return "ping";
     }
 
     @Override
     public String getValue(User user) {
-        if (user == null) return null;
-        return String.valueOf(user.isVanished());
+        return String.valueOf(user.getPing());
     }
 
     @Override
     public String getValue() {
-        return null;
+        return "0";
     }
 }

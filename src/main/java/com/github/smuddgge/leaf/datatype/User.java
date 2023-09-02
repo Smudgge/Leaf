@@ -148,6 +148,16 @@ public class User {
     }
 
     /**
+     * Get the players ping.
+     *
+     * @return The players ping.
+     */
+    public long getPing() {
+        if (this.player == null) return 0;
+        return this.player.getPing();
+    }
+
+    /**
      * Used to set the registered server.
      *
      * @param server The registered server.

@@ -4,21 +4,20 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.StandardPlaceholder;
 
 /**
- * <h1>Represents the uuid placeholder</h1>
- * Returns the users uuid.
+ * Represents the vanished placeholder.
+ * Returns if a user is vanished.
  */
-public class UuidPlaceholder extends StandardPlaceholder {
+public class PlayerVanishedPlaceholder extends StandardPlaceholder {
 
     @Override
     public String getIdentifier() {
-        return "uuid";
+        return "vanished";
     }
 
     @Override
     public String getValue(User user) {
         if (user == null) return null;
-
-        return user.getUniqueId() == null ? null : user.getUniqueId().toString();
+        return String.valueOf(user.isVanished());
     }
 
     @Override
