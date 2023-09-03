@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.smuddgge</groupId>
-    <artifactId>Leaf</artifactId>
+    <artifactId>LeafSeparationPlugin</artifactId>
     <version>3.8.0</version>
     <packaging>jar</packaging>
 
@@ -196,7 +196,7 @@
                 </plugins>
                 <resources>
                     <resource>
-                        <directory>src/main/resources</directory>
+                        <directory>../src/main/resources</directory>
                         <filtering>true</filtering>
                     </resource>
                 </resources>
@@ -211,33 +211,11 @@
                 <filtering>true</filtering>
             </resource>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>../src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
-            <!-- Sqlite Driver -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/services/java.sql.Driver</resource>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Velocity -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -14,7 +14,6 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.ProtocolUtils;
 import com.velocitypowered.proxy.protocol.packet.PluginMessage;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
-import dev.simplix.protocolize.data.listeners.PlayerPositionListener;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.elytrium.java.commons.reflection.ReflectionException;
@@ -65,8 +64,8 @@ class BrandPluginMessageHook extends PluginMessage {
     /**
      * Used to get the minecraft brand message.
      *
-     * @param message         The instance of the current message to rewrite.
-     * @param player The instance of the player.
+     * @param message The instance of the current message to rewrite.
+     * @param player  The instance of the player.
      * @return The instance of the new message.
      */
     private @NotNull PluginMessage getMinecraftBrand(@NotNull PluginMessage message, @NotNull Player player) {
