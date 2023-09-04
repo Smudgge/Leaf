@@ -34,7 +34,7 @@ public record Command(String identifier,
      * @return The command's syntax.
      */
     public String getSyntax() {
-        return this.commandType.getSyntax();
+        return this.getSection().getString("syntax", this.commandType.getSyntax());
     }
 
     /**
