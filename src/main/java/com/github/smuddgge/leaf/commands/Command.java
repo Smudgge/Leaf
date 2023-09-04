@@ -164,7 +164,7 @@ public record Command(String identifier,
     }
 
     /**
-     * Used to get the commands aliases.
+     * Used to get the command's aliases.
      * These are other command names that will execute this command.
      *
      * @return The list of aliases.
