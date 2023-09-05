@@ -6,11 +6,11 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,7 +42,7 @@ public class Chat extends BaseCommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         // Get the message.
-        String rawMessage = section.getString("format")
+        String rawMessage = section.getAdaptedString("format", "\n")
                 .replace("%message%", String.join(" ", arguments));
 
         // Parse the message.
@@ -81,7 +81,7 @@ public class Chat extends BaseCommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         // Get the message.
-        String rawMessage = section.getString("format")
+        String rawMessage = section.getAdaptedString("format", "\n")
                 .replace("%message%", String.join(" ", arguments));
 
         // Parse the message.

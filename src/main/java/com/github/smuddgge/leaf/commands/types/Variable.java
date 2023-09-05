@@ -4,10 +4,10 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -56,7 +56,7 @@ public class Variable extends BaseCommandType {
         if (section.getBoolean("only_allow_suggestions", false)
                 && !suggestions.contains(value)) {
 
-            user.sendMessage(section.getString("incorrect_value", "{error_colour}You can only set the theme to &fgreen &7or &fgray."));
+            user.sendMessage(section.getAdaptedString("incorrect_value", "\n", "{error_colour}You can only set the theme to &fgreen &7or &fgray."));
             return new CommandStatus();
         }
 
@@ -65,7 +65,7 @@ public class Variable extends BaseCommandType {
         for (String pattern : exclude) {
             if (!value.matches(pattern)) continue;
 
-            user.sendMessage(section.getString("incorrect_value", "{error_colour}You can only set the theme to &fgreen &7or &fgray."));
+            user.sendMessage(section.getAdaptedString("incorrect_value", "\n", "{error_colour}You can only set the theme to &fgreen &7or &fgray."));
             return new CommandStatus();
         }
 
@@ -74,7 +74,7 @@ public class Variable extends BaseCommandType {
         // Current player variables.
         Map<String, Object> variables;
 
-        // Attempt to get the players variables from the database.
+        // Attempt to get the player's variables from the database.
         try {
 
             Gson gson = new Gson();
@@ -93,7 +93,7 @@ public class Variable extends BaseCommandType {
         playerRecord.variables = new Gson().toJson(variables);
         Leaf.getDatabase().getTable(PlayerTable.class).insertRecord(playerRecord);
 
-        user.sendMessage(section.getString("correct_value", "{message} Theme is now set to &f<theme>"));
+        user.sendMessage(section.getAdaptedString("correct_value", "\n", "{message} Theme is now set to &f<theme>"));
         return new CommandStatus();
     }
 }

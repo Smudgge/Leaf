@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 
 public interface CommandType {
 

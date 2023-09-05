@@ -4,10 +4,10 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendRequestInventory;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 
 /**
  * <h1>Friend Accept Subcommand Type</h1>

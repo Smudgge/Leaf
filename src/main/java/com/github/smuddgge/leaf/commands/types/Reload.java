@@ -7,8 +7,8 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 
 /**
  * <h1>Reload Command Type</h1>
@@ -43,7 +43,7 @@ public class Reload extends BaseCommandType {
         if (!success) return new CommandStatus();
 
         // Get the message and log it in console.
-        String message = section.getString("message", "{message} Reloaded all configs! <3");
+        String message = section.getAdaptedString("message", "\n", "{message} Reloaded all configs! <3");
         MessageManager.log(message);
         return new CommandStatus();
     }
@@ -55,12 +55,12 @@ public class Reload extends BaseCommandType {
 
         // Check if the reloading was aborted.
         if (!success) {
-            user.sendMessage(section.getString("error", "{error_colour}An error occurred and the reloading was aborted!"));
+            user.sendMessage(section.getAdaptedString("error", "\n", "{error_colour}An error occurred and the reloading was aborted!"));
             return new CommandStatus();
         }
 
         // Get the message and send it to the user.
-        String message = section.getString("message", "{message} Reloaded all configs! <3");
+        String message = section.getAdaptedString("message", "\n", "{message} Reloaded all configs! <3");
         user.sendMessage(message);
         return new CommandStatus();
     }

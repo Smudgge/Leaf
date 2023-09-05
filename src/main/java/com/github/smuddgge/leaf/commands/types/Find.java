@@ -5,9 +5,9 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Optional;
@@ -42,7 +42,7 @@ public class Find extends BaseCommandType {
 
         // Check if the player doesn't exist.
         if (optionalPlayer.isEmpty()) {
-            String notFound = section.getString("not_found");
+            String notFound = section.getAdaptedString("not_found", "\n");
             MessageManager.log(notFound);
             return new CommandStatus();
         }
@@ -51,7 +51,7 @@ public class Find extends BaseCommandType {
         User user = new User(optionalPlayer.get());
 
         // Log the result message.
-        String found = section.getString("found");
+        String found = section.getAdaptedString("found", "\n");
         MessageManager.log(PlaceholderManager.parse(found, null, user));
 
         return new CommandStatus();
@@ -66,7 +66,7 @@ public class Find extends BaseCommandType {
 
         // Check if the player doesn't exist.
         if (optionalPlayer.isEmpty()) {
-            String notFound = section.getString("not_found");
+            String notFound = section.getAdaptedString("not_found", "\n");
             user.sendMessage(notFound);
             return new CommandStatus();
         }
@@ -79,7 +79,7 @@ public class Find extends BaseCommandType {
                 && !user.isNotVanishable()) {
 
             // Send the result message to the player.
-            String found = section.getString("found");
+            String found = section.getAdaptedString("found", "\n");
             user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
             return new CommandStatus();
@@ -87,13 +87,13 @@ public class Find extends BaseCommandType {
 
         // Check if the user is vanished.
         if (foundUser.isVanished()) {
-            String notFound = section.getString("not_found");
+            String notFound = section.getAdaptedString("not_found", "\n");
             user.sendMessage(notFound);
             return new CommandStatus();
         }
 
         // Send the result message to the player.
-        String found = section.getString("found");
+        String found = section.getAdaptedString("found", "\n");
         user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
         return new CommandStatus();

@@ -5,8 +5,8 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
@@ -69,7 +69,7 @@ public class Send extends BaseCommandType {
 
         // Check if the server exists.
         if (server.isEmpty()) {
-            MessageManager.log(section.getString("server_not_found", "{error_colour}Server not found."));
+            MessageManager.log(section.getAdaptedString("server_not_found", "\n", "{error_colour}Server not found."));
             return new CommandStatus();
         }
 
@@ -77,7 +77,7 @@ public class Send extends BaseCommandType {
         try {
             server.get().ping().get();
         } catch (InterruptedException | ExecutionException ignored) {
-            MessageManager.log(section.getString("server_offline", "{error_colour}Server requested is offline."));
+            MessageManager.log(section.getAdaptedString("server_offline", "\n", "{error_colour}Server requested is offline."));
             return new CommandStatus();
         }
 
@@ -86,7 +86,7 @@ public class Send extends BaseCommandType {
         int amount = this.send(arguments[0], server.get());
 
         // Log the message in console.
-        MessageManager.log(section.getString("message")
+        MessageManager.log(section.getAdaptedString("message", "\n")
                 .replace("%from%", arguments[0])
                 .replace("%to%", arguments[1])
                 .replace("%amount%", String.valueOf(amount)));
@@ -103,7 +103,7 @@ public class Send extends BaseCommandType {
 
         // Check if the server exists.
         if (server.isEmpty()) {
-            user.sendMessage(section.getString("server_not_found", "{error_colour}Server not found."));
+            user.sendMessage(section.getAdaptedString("server_not_found", "\n", "{error_colour}Server not found."));
             return new CommandStatus();
         }
 
@@ -111,7 +111,7 @@ public class Send extends BaseCommandType {
         try {
             server.get().ping().get();
         } catch (InterruptedException | ExecutionException ignored) {
-            user.sendMessage(section.getString("server_offline", "{error_colour}Server requested is offline."));
+            user.sendMessage(section.getAdaptedString("server_offline", "\n", "{error_colour}Server requested is offline."));
             return new CommandStatus();
         }
 
@@ -120,7 +120,7 @@ public class Send extends BaseCommandType {
         int amount = this.send(arguments[0], server.get());
 
         // Send the message.
-        user.sendMessage(section.getString("message")
+        user.sendMessage(section.getAdaptedString("message", "\n")
                 .replace("%from%", arguments[0])
                 .replace("%to%", arguments[1])
                 .replace("%amount%", String.valueOf(amount)));
@@ -133,7 +133,7 @@ public class Send extends BaseCommandType {
      *
      * @param from Which players to send.
      * @param to   The server to send the players to.
-     * @return How many players were sent.
+     * @return The number of players that were sent.
      */
     private int send(String from, RegisteredServer to) {
         // The final list of players to send.
@@ -158,7 +158,7 @@ public class Send extends BaseCommandType {
         // Check if no players will be sent.
         if (playersToSend.size() == 0) return 0;
 
-        // Represents the amount of player that get sent.
+        // Represents the amount of player that gets sent.
         int amount = 0;
 
         for (Player player : playersToSend) {

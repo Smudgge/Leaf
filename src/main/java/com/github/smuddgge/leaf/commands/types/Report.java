@@ -6,11 +6,11 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Objects;
@@ -42,7 +42,7 @@ public class Report extends BaseCommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         // Get the message.
-        String rawMessage = section.getString("message")
+        String rawMessage = section.getAdaptedString("message", "\n")
                 .replace("%message%", String.join(" ", arguments));
 
         // Parse the message.
@@ -90,7 +90,7 @@ public class Report extends BaseCommandType {
         if (arguments.length == 0) return new CommandStatus().incorrectArguments();
 
         // Get the message.
-        String rawMessage = section.getString("message")
+        String rawMessage = section.getAdaptedString("message", "\n")
                 .replace("%message%", String.join(" ", arguments));
 
         // Parse the message.

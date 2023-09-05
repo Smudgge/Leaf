@@ -5,8 +5,8 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Optional;
@@ -45,7 +45,7 @@ public class Teleport extends BaseCommandType {
 
         // Check if the player is online.
         if (optionalPlayer.isEmpty()) {
-            String notFound = section.getString("not_found", "{error_colour}Player could not be found.");
+            String notFound = section.getAdaptedString("not_found", "\n", "{error_colour}Player could not be found.");
             user.sendMessage(notFound);
             return new CommandStatus();
         }
@@ -64,7 +64,7 @@ public class Teleport extends BaseCommandType {
                 || (vanishableCanSeeVanishable && userIsVanishable)) {
 
             // Get the message and send it.
-            String message = section.getString("message", "{message} Teleporting...");
+            String message = section.getAdaptedString("message", "\n", "{message} Teleporting...");
 
             user.sendMessage(message);
             user.teleport(foundUser.getConnectedServer());
@@ -73,7 +73,7 @@ public class Teleport extends BaseCommandType {
         }
 
         // The user is unable to teleport to the other player.
-        String notFound = section.getString("not_found", "{error_colour}Player could not be found.");
+        String notFound = section.getAdaptedString("not_found", "\n", "{error_colour}Player could not be found.");
         user.sendMessage(notFound);
         return new CommandStatus();
     }

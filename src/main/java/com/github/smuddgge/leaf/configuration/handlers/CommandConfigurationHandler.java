@@ -2,9 +2,9 @@ package com.github.smuddgge.leaf.configuration.handlers;
 
 import com.github.smuddgge.leaf.commands.CommandAliases;
 import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
-import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfigurationSection;
+import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -83,11 +83,11 @@ public class CommandConfigurationHandler extends ConfigurationHandler {
             }
         }
 
-        return new YamlConfigurationSection(new HashMap<>());
+        return new MemoryConfigurationSection(new HashMap<>());
     }
 
     /**
-     * Used to get the commands type.
+     * Used to get the commands a type.
      *
      * @param identifier The command's identifier.
      * @return The commands type.

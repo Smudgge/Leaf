@@ -6,7 +6,6 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.HistoryRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.HistoryTable;
@@ -15,6 +14,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
 
 import java.util.ArrayList;
@@ -124,8 +124,7 @@ public class History extends BaseCommandType {
         StringBuilder builder = new StringBuilder();
 
         // Get the header.
-        String header = section.getString("header", null);
-
+        String header = section.getAdaptedString("header", "\n", null);
         if (header != null) {
             builder.append(
                     PlaceholderManager.parse(header
@@ -143,7 +142,7 @@ public class History extends BaseCommandType {
             if (index < (pageSize * (page - 1))) continue;
             if (index >= (pageSize * (page - 1)) + pageSize) continue;
 
-            String sectionString = section.getString("section")
+            String sectionString = section.getAdaptedString("section", "\n")
                     .replace("%event%", PlayerHistoryEventType.valueOf(historyRecord.event).getPrefix())
                     .replace("%server%", historyRecord.server)
                     .replace("%date%", DateAndTime.convert(historyRecord.date));
@@ -154,8 +153,7 @@ public class History extends BaseCommandType {
         builder.append("\n");
 
         // Get the footer.
-        String footer = section.getString("footer", null);
-
+        String footer = section.getAdaptedString("footer", "\n", null);
         if (footer != null) {
             builder.append(PlaceholderManager.parse(footer
                             .replace("%page%", String.valueOf(page))

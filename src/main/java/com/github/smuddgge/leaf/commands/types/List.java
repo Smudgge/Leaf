@@ -5,10 +5,10 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,7 @@ public class List extends BaseCommandType {
         // Build the message.
         StringBuilder builder = new StringBuilder();
 
-        String header = section.getString("header", null);
+        String header = section.getAdaptedString("header", "\n", null);
         if (header != null) {
             builder.append(header).append("\n");
         }
@@ -93,7 +93,7 @@ public class List extends BaseCommandType {
             if (permission == null) continue;
 
             // Get the filtered list of players.
-            // If the players permissions include the permission add vanished players to the list.
+            // If the player's permissions include the permission add vanished players to the list.
             java.util.List<User> players = proxyServerInterface.getFilteredPlayers(
                     permission, possiblePermissions, permissions.contains(permission)
             );
@@ -102,19 +102,20 @@ public class List extends BaseCommandType {
             if (players.size() == 0) continue;
 
             // Append the header
-            builder.append("\n").append(innerSection.getString("header")
-                    .replace("%amount%", String.valueOf(players.size())));
+            String innerHeader = innerSection.getAdaptedString("header", "'\n", null);
+            if (innerHeader != null) {
+                builder.append("\n").append(innerHeader
+                        .replace("%amount%", String.valueOf(players.size())));
+            }
 
             // Append the players
             for (User user : players) {
                 String userSection = innerSection.getString("section").replace("%player%", user.getName());
                 builder.append("\n").append(PlaceholderManager.parse(userSection, null, user));
             }
-
-            builder.append("\n");
         }
 
-        String footer = section.getString("footer", null);
+        String footer = section.getAdaptedString("footer", "\n", null);
         if (footer != null) {
             builder.append("\n").append(footer);
         }

@@ -1,10 +1,10 @@
 package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
-import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import dev.simplix.protocolize.api.item.ItemFlag;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
@@ -52,7 +52,7 @@ public class InventoryItem {
      */
     public InventoryItem append(ConfigurationSection section) {
         // Create a clone.
-        ConfigurationSection cloneSection = new YamlConfigurationSection(new HashMap<>());
+        ConfigurationSection cloneSection = new MemoryConfigurationSection(new HashMap<>());
 
         // Add this sections values.
         for (String key : this.section.getKeys()) {
@@ -136,7 +136,7 @@ public class InventoryItem {
             ).toUpperCase(Locale.ROOT);
             item.itemType(ItemType.valueOf(material));
         } catch (IllegalArgumentException exception) {
-            MessageManager.warn("Invalid material for inventory item. Reference : &f" + this.section.getData().toString());
+            MessageManager.warn("Invalid material for inventory item. Reference : &f" + this.section.getMap().toString());
         }
 
         // If the item has a skull value.

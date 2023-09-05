@@ -5,12 +5,12 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.MuteTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 
@@ -49,7 +49,7 @@ public class UnMute extends BaseCommandType {
         // Get the player record.
         PlayerRecord record = Leaf.getDatabase().getTable(PlayerTable.class).getFirstRecord(new Query().match("name", playerName));
         if (record == null) {
-            MessageManager.log(section.getString("not_found", "&7Could not find player in the database."));
+            MessageManager.log(section.getAdaptedString("not_found", "\n", "&7Could not find player in the database."));
             return new CommandStatus();
         }
 
@@ -66,7 +66,7 @@ public class UnMute extends BaseCommandType {
         // Log the mute.
         MessageManager.log(
                 PlaceholderManager.parse(
-                        section.getString("unmute", "&7Unmuted <player>"),
+                        section.getAdaptedString("unmute", "\n", "&7Unmuted <player>"),
                         null, playerToMute)
         );
         return new CommandStatus();
@@ -83,7 +83,7 @@ public class UnMute extends BaseCommandType {
         // Get the player record.
         PlayerRecord record = Leaf.getDatabase().getTable(PlayerTable.class).getFirstRecord(new Query().match("name", playerName));
         if (record == null) {
-            MessageManager.log(section.getString("not_found", "&7Could not find player in the database."));
+            MessageManager.log(section.getAdaptedString("not_found", "\n", "&7Could not find player in the database."));
             return new CommandStatus();
         }
 
@@ -100,7 +100,7 @@ public class UnMute extends BaseCommandType {
         // Log the mute.
         user.sendMessage(
                 PlaceholderManager.parse(
-                        section.getString("unmute", "&7Unmuted <player>"),
+                        section.getAdaptedString("unmute", "\n", "&7Unmuted <player>"),
                         null, playerToMute)
         );
         return new CommandStatus();

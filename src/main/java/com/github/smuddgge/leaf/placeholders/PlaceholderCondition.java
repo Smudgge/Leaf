@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.placeholders;
 
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 
 /**
  * Represents a placeholder's condition.

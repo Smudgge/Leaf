@@ -7,11 +7,11 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Locale;
@@ -48,7 +48,7 @@ public class Message extends BaseCommandType {
 
         // Check if the player is online
         if (optionalRecipient.isEmpty()) {
-            MessageManager.log(section.getString("not_found", "{error_colour}Player is not online."));
+            MessageManager.log(section.getAdaptedString("not_found", "\n", "{error_colour}Player is not online."));
             return new CommandStatus();
         }
 
@@ -59,10 +59,10 @@ public class Message extends BaseCommandType {
         User recipient = new User(optionalRecipient.get());
 
         // Send messages
-        recipient.sendMessage(PlaceholderManager.parse(section.getString("from")
+        recipient.sendMessage(PlaceholderManager.parse(section.getAdaptedString("from", "\n")
                 .replace("%message%", message), null, new User(null, "Console")));
 
-        MessageManager.log(PlaceholderManager.parse(section.getString("to")
+        MessageManager.log(PlaceholderManager.parse(section.getAdaptedString("to", "\n")
                 .replace("%message%", message), null, recipient));
 
         return new CommandStatus();
@@ -138,15 +138,15 @@ public class Message extends BaseCommandType {
             }
 
             // Send messages and sounds.
-            recipient.sendMessage(PlaceholderManager.parse(section.getString("from")
+            recipient.sendMessage(PlaceholderManager.parse(section.getAdaptedString("from", "\n")
                     .replace("%message%", message), null, user));
             Sounds.play(section.getString("from_sound"), recipient.getUniqueId());
 
-            user.sendMessage(PlaceholderManager.parse(section.getString("to")
+            user.sendMessage(PlaceholderManager.parse(section.getAdaptedString("to", "\n")
                     .replace("%message%", message), null, recipient));
             Sounds.play(section.getString("to_sound"), user.getUniqueId());
 
-            MessageManager.sendSpy(section.getString("spy_format", "&8&o%from% -> %to% : %message%")
+            MessageManager.sendSpy(section.getAdaptedString("spy_format", "\n", "&8&o%from% -> %to% : %message%")
                     .replace("%from%", user.getName())
                     .replace("%to%", recipient.getName())
                     .replace("%message%", message));
@@ -162,7 +162,7 @@ public class Message extends BaseCommandType {
             // Log message interaction.
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());
 
-            // Save to database if enabled.
+            // Save to a database if enabled.
             if (!Leaf.isDatabaseDisabled()
                     && Leaf.getDatabase().isEnabled()
                     && ConfigDatabase.get().getInteger("message_limit", 0) != 0) {

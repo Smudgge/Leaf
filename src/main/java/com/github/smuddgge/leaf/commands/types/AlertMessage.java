@@ -6,14 +6,11 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <h1>Alert Message Command Type</h1>
@@ -43,27 +40,10 @@ public class AlertMessage extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        // Get a message as a list.
-        // If the message is not a list, it will return an empty list.
-        List<String> listMessage = section.getListString("message", new ArrayList<>());
+        // Get message.
+        String message = section.getAdaptedString("message", "\n", "");
 
-        // The final message to send.
-        String message;
-
-        // If size 0 assume it's a string.
-        if (listMessage.isEmpty()) {
-            message = section.getString("message", "");
-
-        } else {
-            // Otherwise, it's a list.
-            StringBuilder builder = new StringBuilder();
-            for (String string : listMessage) builder.append(string).append("\n");
-            String toSend = builder.toString();
-
-            // Get rid of the last '\n'.
-            message = toSend.substring(0, toSend.length() - 1);
-        }
-
+        // Send the message.
         if (!message.isEmpty()) {
 
             // Send the message to all online players.
@@ -78,9 +58,8 @@ public class AlertMessage extends BaseCommandType {
                     section.getSection(ConfigurationKey.DISCORD_WEBHOOK.getKey())
             );
 
-            String finalMessage = message;
             adapter.setPlaceholderParser(string -> PlaceholderManager.parse(
-                    string.replace("%message%", finalMessage),
+                    string.replace("%message%", message),
                     null, user));
 
             adapter.send();

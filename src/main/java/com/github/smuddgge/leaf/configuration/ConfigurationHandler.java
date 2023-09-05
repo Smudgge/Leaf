@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.configuration;
 
-import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public abstract class ConfigurationHandler {
     protected void addDefaultFiles() {
         if (this.getFileNames(this.getDirectory()).size() == 0) {
             YamlConfiguration defaultConfiguration = this.createDefaultConfiguration(this.getDirectory());
-            defaultConfiguration.reload();
+            defaultConfiguration.load();
         }
     }
 
@@ -133,7 +133,7 @@ public abstract class ConfigurationHandler {
     protected void registerFiles() {
         for (File file : this.getFiles(this.getDirectory())) {
             YamlConfiguration yamlConfiguration = new YamlConfiguration(file);
-            yamlConfiguration.reload();
+            yamlConfiguration.load();
             this.addConfiguration(yamlConfiguration);
         }
     }

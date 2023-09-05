@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.configuration;
 
-import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 
 import java.io.File;
 
@@ -19,8 +19,7 @@ public class ConfigMain extends YamlConfiguration {
      */
     public ConfigMain(File folder) {
         super(folder, "config.yml");
-
-        this.reload();
+        this.load();
     }
 
     /**

@@ -5,10 +5,10 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class Servers extends BaseCommandType {
     }
 
     /**
-     * Used to get the servers message.
+     * Used to get the server's message.
      *
      * @param section The instance of the configuration section.
      * @return The requested message.
@@ -64,7 +64,7 @@ public class Servers extends BaseCommandType {
         StringBuilder builder = new StringBuilder();
 
         // Appear the header.
-        String header = section.getString("header", null);
+        String header = section.getAdaptedString("header", "\n", null);
         if (header != null) {
             builder.append(header).append("&r\n\n");
         }
@@ -83,9 +83,9 @@ public class Servers extends BaseCommandType {
             if (server.isEmpty()) continue;
 
             // Get the information message.
-            String parsed = PlaceholderManager.parse(section.getString("server"), null, new User(server.get(), null));
+            String parsed = PlaceholderManager.parse(section.getAdaptedString("server", "\n"), null, new User(server.get(), null));
 
-            // Get the amount of players online.
+            // Get the number of players online.
             int online = proxyServerInterface.getFilteredPlayers(server.get(), null, false).size();
 
             // Add to the final message.
@@ -94,7 +94,7 @@ public class Servers extends BaseCommandType {
         }
 
         // Append the footer.
-        String footer = section.getString("footer", null);
+        String footer = section.getAdaptedString("footer", "\n", null);
         if (footer != null) {
             builder.append("&r\n");
             builder.append(section.getString("footer"));

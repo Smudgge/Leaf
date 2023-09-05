@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>3.9.0</version>
+    <version>3.10.0</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -36,7 +36,7 @@
             <url>https://jitpack.io</url>
         </repository>
 
-        <!-- Elytrium -->
+        <!-- Elytrium (For Branding) -->
         <repository>
             <id>elytrium-repo</id>
             <url>https://maven.elytrium.net/repo/</url>
@@ -70,15 +70,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Snake Yaml -->
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>2.0</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- Jupiter Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -100,6 +91,13 @@
             <groupId>com.github.smuddgge</groupId>
             <artifactId>SquishyDatabase</artifactId>
             <version>3.0.1</version>
+        </dependency>
+
+        <!-- Configuration API -->
+        <dependency>
+            <groupId>com.github.smuddgge</groupId>
+            <artifactId>SquishyConfiguration</artifactId>
+            <version>1.4.0</version>
         </dependency>
 
         <!-- Discord Webhooks -->

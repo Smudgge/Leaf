@@ -68,15 +68,15 @@ stafflist:
       permission: "leaf.rank.admin"
       header: '&7[&f%amount%&7] &c&lAdmins'
       # Placeholders will parse in terms of the player.
-      section: '&7- &f<player> {server_formatted}'
+      section: '&7- &f<player> {server_formatted}\n'
     moderator:
       permission: "leaf.rank.moderator"
       header: '&7[&f%amount%&7] &a&lMods'
-      section: '&7- &f<player> {server_formatted}'
+      section: '&7- &f<player> {server_formatted}\n'
     helper:
       permission: "leaf.rank.helper"
       header: '&7[&f%amount%&7] &b&lHelpers'
-      section: '&7- &f<player> {server_formatted}'
+      section: '&7- &f<player> {server_formatted}\n'
 
 reload:
   type: "reload"

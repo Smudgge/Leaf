@@ -1,12 +1,12 @@
 package com.github.smuddgge.leaf.configuration.handlers;
 
 import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.squishyyaml.YamlConfiguration;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.CustomConditionalPlaceholder;
 import com.github.smuddgge.leaf.placeholders.Placeholder;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderType;
+import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;

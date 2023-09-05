@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;

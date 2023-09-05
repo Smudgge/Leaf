@@ -1,8 +1,8 @@
 package com.github.smuddgge.leaf.inventorys;
 
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.squishyyaml.ConfigurationSection;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import dev.simplix.protocolize.api.Protocolize;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.api.player.ProtocolizePlayer;
@@ -35,7 +35,7 @@ public abstract class CustomInventory extends InventoryInterface {
         // Check if the inventory is empty
         if (this.getInventorySection().getKeys().size() == 0) {
             MessageManager.log("&eInventory section found empty in configuration!");
-            MessageManager.log(section.getData().toString());
+            MessageManager.log(section.getMap().toString());
         }
     }
 
