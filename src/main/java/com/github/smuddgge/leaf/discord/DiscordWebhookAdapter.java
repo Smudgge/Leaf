@@ -7,8 +7,13 @@ import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.console.Console;
+import jdk.jfr.Timestamp;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.time.Instant;
+import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 
 /**
  * Represents a discord webhook.
@@ -38,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
  *        url: "url"
  *      imageUrl: "url"
  *      thumbnailUrl: "url"
+ *      timeStamp: false
  * </pre>
  */
 public class DiscordWebhookAdapter {
@@ -166,6 +172,7 @@ public class DiscordWebhookAdapter {
      *     url: "url"
      *   imageUrl: "url"
      *   thumbnailUrl: "url"
+     *   timeStamp: false
      * </pre>
      */
     private void sendEmbed(@NotNull WebhookMessageBuilder messageBuilder) {
@@ -207,6 +214,10 @@ public class DiscordWebhookAdapter {
 
         if (embedSection.getKeys().contains("thumbnailUrl")) {
             embedBuilder.setThumbnailUrl(this.parse(embedSection.getString("thumbnailUrl", null)));
+        }
+
+        if (embedSection.getBoolean("timeStamp", false)) {
+            embedBuilder.setTimestamp(Instant.ofEpochMilli(System.currentTimeMillis()));
         }
 
         messageBuilder.addEmbeds(embedBuilder.build());

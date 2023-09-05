@@ -46,6 +46,14 @@ public record CustomEvent(String identifier,
         // Check if the event is enabled.
         if (!this.section.getBoolean("enabled", true)) return;
 
+        // Check if there is a permission
+        // and if the user doesn't have it.
+        if (this.section.getKeys().contains("permission")
+                && !user.hasPermission(this.section.getString("permission"))) {
+
+            return;
+        }
+
         // Check for commands.
         for (String command : this.section.getListString("commands", new ArrayList<>())) {
             user.executeCommand(command
