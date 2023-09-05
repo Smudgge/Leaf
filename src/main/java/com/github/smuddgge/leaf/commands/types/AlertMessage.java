@@ -9,6 +9,7 @@ import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
+import com.github.smuddgge.leaf.utility.Sounds;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
 
@@ -49,6 +50,9 @@ public class AlertMessage extends BaseCommandType {
             // Send the message to all online players.
             for (Player player : Leaf.getServer().getAllPlayers()) {
                 new User(player).sendMessage(message);
+
+                // Play sound if it exists.
+                Sounds.play(section.getString("see_sound", null), player.getUniqueId());
             }
         }
 

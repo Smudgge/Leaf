@@ -112,10 +112,7 @@ public class Report extends BaseCommandType {
             toSend.sendMessage(message);
 
             // Play a sound if it exists.
-            String sound = section.getString("see_sound", null);
-            if (sound == null) continue;
-
-            Sounds.play(sound, toSend.getUniqueId());
+            Sounds.play(section.getString("see_sound", null), toSend.getUniqueId());
         }
 
         // Send the message to the sender.
