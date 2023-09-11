@@ -40,6 +40,7 @@ find:
   not_found: "{error_colour}Player could not be found."
   # Placeholders will parse in terms of the player.
   found: "{message} Player was found on {server_formatted}"
+  found_no_args: "{message} You are on {server_formatted}"
 
 info:
   # I'd love if you kept this command on your server <3

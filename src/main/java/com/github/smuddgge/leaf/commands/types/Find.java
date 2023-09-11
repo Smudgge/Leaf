@@ -59,10 +59,17 @@ public class Find extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
-        if (arguments.length == 0) return new CommandStatus().incorrectArguments();
+        Optional<Player> optionalPlayer;
 
-        // Get the player.
-        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(arguments[0]);
+        if (arguments.length == 0) {
+
+            // Get this player.
+            optionalPlayer = Leaf.getServer().getPlayer(user.getUniqueId());
+        } else {
+
+            // Get the player.
+            optionalPlayer = Leaf.getServer().getPlayer(arguments[0]);
+        }
 
         // Check if the player doesn't exist.
         if (optionalPlayer.isEmpty()) {
@@ -80,6 +87,7 @@ public class Find extends BaseCommandType {
 
             // Send the result message to the player.
             String found = section.getAdaptedString("found", "\n");
+            if (arguments.length == 0) found = section.getAdaptedString("found_no_args", "\n");
             user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
             return new CommandStatus();
@@ -94,6 +102,7 @@ public class Find extends BaseCommandType {
 
         // Send the result message to the player.
         String found = section.getAdaptedString("found", "\n");
+        if (arguments.length == 0) found = section.getAdaptedString("found_no_args", "\n");
         user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
         return new CommandStatus();
