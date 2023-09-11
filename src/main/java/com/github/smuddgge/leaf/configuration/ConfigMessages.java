@@ -19,6 +19,7 @@ public class ConfigMessages extends YamlConfiguration {
      */
     public ConfigMessages(File folder) {
         super(folder, "messages.yml");
+        this.setDefaultPath("messages.yml");
         this.load();
     }
 

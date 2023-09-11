@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>3.10.0</version>
+    <version>3.11.0</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -97,14 +97,14 @@
         <dependency>
             <groupId>com.github.smuddgge</groupId>
             <artifactId>SquishyConfiguration</artifactId>
-            <version>1.4.0</version>
+            <version>1.5.1</version>
         </dependency>
 
         <!-- Discord Webhooks -->
         <dependency>
             <groupId>club.minnced</groupId>
             <artifactId>discord-webhooks</artifactId>
-            <version>0.8.2</version>
+            <version>0.8.4</version>
         </dependency>
 
         <!-- MiniMessage -->

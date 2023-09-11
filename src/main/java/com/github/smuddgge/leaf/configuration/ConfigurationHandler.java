@@ -121,8 +121,9 @@ public abstract class ConfigurationHandler {
      * Used to add the default files if needed.
      */
     protected void addDefaultFiles() {
-        if (this.getFileNames(this.getDirectory()).size() == 0) {
+        if (this.getFileNames(this.getDirectory()).isEmpty()) {
             YamlConfiguration defaultConfiguration = this.createDefaultConfiguration(this.getDirectory());
+            defaultConfiguration.setDefaultPath(defaultConfiguration.getFile().getName());
             defaultConfiguration.load();
         }
     }

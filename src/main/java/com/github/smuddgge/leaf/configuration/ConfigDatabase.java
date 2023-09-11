@@ -18,6 +18,7 @@ public class ConfigDatabase extends YamlConfiguration {
      */
     public ConfigDatabase(File folder) {
         super(folder, "database.yml");
+        this.setDefaultPath("database.yml");
         this.load();
     }
 

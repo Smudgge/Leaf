@@ -19,6 +19,7 @@ public class ConfigMain extends YamlConfiguration {
      */
     public ConfigMain(File folder) {
         super(folder, "config.yml");
+        this.setDefaultPath("config.yml");
         this.load();
     }
 
