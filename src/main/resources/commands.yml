@@ -31,6 +31,20 @@ staffchat:
   # %message%: The players message.
   format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
   receive_sound: "none"
+  # You can link a discord bot in the main
+  # config and enable this for staff chat discord support!
+  # The below is an example, any pairs can be deleted.
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    # The permissions that will be checked against.
+    # If the player has the permission's the staff chat
+    # message will be sent to minecraft.
+    permissions:
+      - ADMINISTRATOR
+    # The message appearing in minecraft.
+    format: "&b&lDiscord&r &f%name%&r &7: &f%message%"
 
 find:
   type: "find"

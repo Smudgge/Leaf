@@ -12,6 +12,7 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,6 +113,24 @@ public class Chat extends BaseCommandType {
         if (section.getBoolean("log", true)) MessageManager.log(message);
 
         return new CommandStatus();
+    }
+
+    @Override
+    public void onDiscordMessage(ConfigurationSection section, @NotNull MessageReceivedEvent event) {
+        String message = event.getMessage().getContentRaw();
+        String name = event.getAuthor().getName();
+
+        String formatted = PlaceholderManager.parse(
+                        section.getAdaptedString("discord_bot.format", "\n", "&b&lDiscord&r &f%name%&r &7: &f%message%"),
+                        null, null
+                )
+                .replace("%message%", message)
+                .replace("%name%", name);
+
+        Chat.sendToPlayers(section, section.getString("permission"), formatted);
+
+        // Log the message if it is enabled.
+        if (section.getBoolean("log", true)) MessageManager.log(formatted);
     }
 
     /**

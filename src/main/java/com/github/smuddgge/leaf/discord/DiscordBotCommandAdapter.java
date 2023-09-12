@@ -165,6 +165,14 @@ public class DiscordBotCommandAdapter {
      * @param event The instance of the event.
      */
     public void onMessage(@NotNull MessageReceivedEvent event) {
+
+        // Check if the message is in the correct channel.
+        if (!this.isAllowed(event.getChannel().getId())) return;
+
+        // Check if the user has permission for the command to register the message.
+        if (event.getMember() != null && !this.hasPermission(event.getMember())) return;
+
+        // Run event.
         this.getCommand()
                 .getBaseCommandType()
                 .onDiscordMessage(this.getCommand().getSection(), event);
