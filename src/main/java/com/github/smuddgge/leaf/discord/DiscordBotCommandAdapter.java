@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
-import org.apache.commons.collections4.list.AbstractLinkedList;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

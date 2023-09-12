@@ -53,6 +53,7 @@ public interface CommandType {
 
     /**
      * Executed when a command is registered.
+     *
      * @param action The create command action to add options.
      */
     default void onDiscordRegister(ConfigurationSection section, @NotNull CommandCreateAction action) {
@@ -63,7 +64,7 @@ public interface CommandType {
      * Default as it is not required in a command.
      *
      * @param section The instance of the configuration section.
-     * @param event The instance of the slash event.
+     * @param event   The instance of the slash event.
      * @return The instance of the commands status.
      */
     default CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
@@ -74,7 +75,7 @@ public interface CommandType {
      * Executed when a member on a discord server sends a message.
      *
      * @param section The instance of the configuration section.
-     * @param event The instance of the event.
+     * @param event   The instance of the event.
      */
     default void onDiscordMessage(ConfigurationSection section, @NotNull MessageReceivedEvent event) {
 

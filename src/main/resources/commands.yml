@@ -104,6 +104,34 @@ stafflist:
       permission: "leaf.rank.helper"
       header: '&7[&f%amount%&7] &b&lHelpers'
       section: '&7- &f<player> {server_formatted}\n'
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    channel_not_allowed: "You cannot run this command in this channel."
+    permissions:
+      - ADMINISTRATOR
+    no_permission: "You do not have permission to run this command."
+    list:
+      admin:
+        permission: "leaf.rank.admin"
+        header: '**Admins**'
+        # Placeholders will parse in terms of the player.
+        section: '<player> `<server>`\n'
+      moderator:
+        permission: "leaf.rank.moderator"
+        header: '**Mods**'
+        section: '&<player> `<server>`\n'
+      helper:
+        permission: "leaf.rank.helper"
+        header: '**Helpers**'
+        section: '<player> `<server>`\n'
+    message:
+      embeds:
+        1:
+          title:
+            message: "Staff List"
+          description: "%list%"
 
 reload:
   type: "reload"

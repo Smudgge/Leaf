@@ -7,8 +7,11 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -65,6 +68,32 @@ public class List extends BaseCommandType {
         return new CommandStatus();
     }
 
+    @Override
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+        ArrayList<String> possiblePermissions = new ArrayList<>();
+
+        for (String key : section.getSection("list").getKeys()) {
+            String permission = section.getSection("list").getSection(key).getString("permission");
+            possiblePermissions.add(permission);
+        }
+
+        // Get list placeholder.
+        String list = this.getFormatted(section.getSection("discord_bot"), new ArrayList<>(), possiblePermissions);
+
+        // Create message.
+        DiscordBotMessageAdapter message = new DiscordBotMessageAdapter(section, "discord_bot.message", "%list%")
+                .setParser(new DiscordBotMessageAdapter.PlaceholderParser() {
+                    @Override
+                    public @NotNull String parsePlaceholders(@NotNull String string) {
+                        return PlaceholderManager.parse(string, null, null)
+                                .replace("%list%", list);
+                    }
+                });
+
+        event.reply(message.buildMessage()).queue();
+        return new CommandStatus();
+    }
+
     /**
      * Used to get the formatted message.
      *
@@ -81,7 +110,7 @@ public class List extends BaseCommandType {
 
         String header = section.getAdaptedString("header", "\n", null);
         if (header != null) {
-            builder.append(header).append("\n");
+            builder.append(header.replace("\\n", "\n")).append("\n");
         }
 
         // For each rank in the list.
@@ -103,21 +132,26 @@ public class List extends BaseCommandType {
 
             // Append the header
             String innerHeader = innerSection.getAdaptedString("header", "'\n", null);
+
             if (innerHeader != null) {
                 builder.append("\n").append(innerHeader
-                        .replace("%amount%", String.valueOf(players.size())));
+                        .replace("%amount%", String.valueOf(players.size()))
+                        .replace("\\n", "\n"));
             }
 
             // Append the players
             for (User user : players) {
-                String userSection = innerSection.getString("section").replace("%player%", user.getName());
+                String userSection = innerSection.getString("section")
+                        .replace("%player%", user.getName())
+                        .replace("\\n", "\n");
+
                 builder.append("\n").append(PlaceholderManager.parse(userSection, null, user));
             }
         }
 
         String footer = section.getAdaptedString("footer", "\n", null);
         if (footer != null) {
-            builder.append("\n").append(footer);
+            builder.append("\n").append(footer.replace("\\n", "\n"));
         }
 
         return builder.toString();

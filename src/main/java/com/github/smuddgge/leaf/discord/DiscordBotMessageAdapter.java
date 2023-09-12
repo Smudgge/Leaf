@@ -19,17 +19,17 @@ import java.util.List;
  */
 public class DiscordBotMessageAdapter {
 
-    private @NotNull ConfigurationSection section;
-    private @NotNull String path;
-    private @NotNull String alternative;
+    private final @NotNull ConfigurationSection section;
+    private final @NotNull String path;
+    private final @NotNull String alternative;
     private @NotNull PlaceholderParser parser;
 
     /**
      * Used to create a discord message.
      *
-     * @param section The configuration section where the message key is located.
-     *                This is because the message may just be a string or list.
-     * @param path    The path to the message within the section.
+     * @param section     The configuration section where the message key is located.
+     *                    This is because the message may just be a string or list.
+     * @param path        The path to the message within the section.
      * @param alternative The alternative value if the message does not exist.
      */
     public DiscordBotMessageAdapter(@NotNull ConfigurationSection section, @NotNull String path, @NotNull String alternative) {

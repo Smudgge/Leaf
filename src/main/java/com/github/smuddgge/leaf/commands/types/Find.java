@@ -10,7 +10,6 @@ import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;

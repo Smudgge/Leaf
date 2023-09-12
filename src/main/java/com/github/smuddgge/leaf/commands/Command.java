@@ -10,7 +10,6 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.data.Sound;
-import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 
 import java.util.ArrayList;
 import java.util.List;
