@@ -9,10 +9,12 @@ import com.github.smuddgge.leaf.commands.subtypes.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.commands.types.messages.*;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
+import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
+import com.github.smuddgge.leaf.discord.DiscordBot;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
 import com.github.smuddgge.leaf.listeners.EventListener;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
@@ -52,6 +54,7 @@ public class Leaf {
 
     private static CommandHandler commandHandler;
     private static Database database;
+    private static DiscordBot discordBot;
 
     private final Metrics.Factory metricsFactory;
 
@@ -73,14 +76,14 @@ public class Leaf {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
 
-        // Set up b stats
+        // Set up b stats.
         int pluginId = 17381;
         this.metricsFactory.make(this, pluginId);
 
-        // Log header
+        // Log header.
         MessageManager.logHeader();
 
-        // Register placeholders
+        // Register placeholders.
         PlaceholderManager.register(new PlayerNamePlaceholder());
         PlaceholderManager.register(new PlayerPingPlaceholder());
         PlaceholderManager.register(new PlayerUuidPlaceholder());
@@ -88,14 +91,14 @@ public class Leaf {
         PlaceholderManager.register(new PlayerVanishedPlaceholder());
         PlaceholderManager.register(new VersionPlaceholder());
 
-        // Register placeholder conditions
+        // Register placeholder conditions.
         ConditionManager.register(new MatchCondition());
         ConditionManager.register(new PermissionCondition());
 
         // Reload configuration to load custom placeholders correctly.
         ConfigurationManager.reload();
 
-        // Append all command types
+        // Append all command types.
         Leaf.commandHandler = new CommandHandler();
 
         Leaf.commandHandler.addType(new Alert());
@@ -128,7 +131,7 @@ public class Leaf {
 
         Leaf.reloadCommands();
 
-        // Load slot types
+        // Load slot types.
         SlotManager.setup();
 
         // Check for dependencies.
@@ -282,6 +285,14 @@ public class Leaf {
     public static void reloadCommands() {
         Leaf.commandHandler.unregister();
 
+        // Check if the discord bot is not null.
+        if (Leaf.discordBot != null) {
+            Leaf.discordBot.shutdown();
+        }
+
+        // Create new connection.
+        Leaf.discordBot = new DiscordBot(ConfigMain.get().getString("discord_token", null));
+
         for (String identifier : ConfigurationManager.getCommands().getAllIdentifiers()) {
             String commandTypeString = ConfigurationManager.getCommands().getCommandType(identifier);
             if (commandTypeString == null) continue;
@@ -293,7 +304,9 @@ public class Leaf {
                 continue;
             }
 
-            Leaf.commandHandler.append(new Command(identifier, commandType));
+            Command command = new Command(identifier, commandType);
+            Leaf.commandHandler.append(command);
+            Leaf.discordBot.registerCommand(command);
         }
 
         Leaf.commandHandler.register();

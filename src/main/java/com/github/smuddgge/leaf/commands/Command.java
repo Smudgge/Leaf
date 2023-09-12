@@ -10,6 +10,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.data.Sound;
+import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,6 +165,16 @@ public record Command(String identifier,
     }
 
     /**
+     * Used to get the command's description.
+     * This will be used for discord commands.
+     *
+     * @return The command's description.
+     */
+    public String getDescription() {
+        return ConfigurationManager.getCommands().getCommand(this.identifier).getString("description", "No Description");
+    }
+
+    /**
      * Used to get the command's aliases.
      * These are other command names that will execute this command.
      *
@@ -207,6 +218,15 @@ public record Command(String identifier,
      */
     public boolean isEnabled() {
         return ConfigurationManager.getCommands().isCommandEnabled(this.identifier);
+    }
+
+    /**
+     * Used to check if the command is executable from discord.
+     *
+     * @return True if this command can be executed on discord.
+     */
+    public boolean isDiscordEnabled() {
+        return ConfigurationManager.getCommands().getCommand(this.identifier).getBoolean("discord_bot.enabled", false);
     }
 
     @Override

@@ -29,3 +29,6 @@ brand:
   in_game:
     enabled: false
     brand: "&aLeaf <version>&r"
+
+# Discord bot support.
+discord_token: ""

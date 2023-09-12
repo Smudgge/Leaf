@@ -28,7 +28,7 @@ staffchat:
   permission: "leaf.staffchat"
   # Should the messages be logged in console?
   log: true
-  # %message% : The players message.
+  # %message%: The players message.
   format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
   receive_sound: "none"
 
@@ -41,6 +41,18 @@ find:
   # Placeholders will parse in terms of the player.
   found: "{message} Player was found on {server_formatted}"
   found_no_args: "{message} You are on {server_formatted}"
+  # Discord bot support.
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    channel_not_allowed: "You cannot run this command in this channel."
+    permissions:
+      - ADMINISTRATOR
+    no_permission: "You do not have permission to run this command."
+    not_found: "Player could not be found."
+    found: "Player was found on {server_formatted}"
+
 
 info:
   # I'd love if you kept this command on your server <3

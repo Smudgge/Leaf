@@ -47,6 +47,13 @@
             <id>sonatype-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+
+        <!-- Discord Bot -->
+        <repository>
+            <id>dv8tion</id>
+            <name>m2-dv8tion</name>
+            <url>https://m2.dv8tion.net/releases</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -107,6 +114,13 @@
             <version>0.8.4</version>
         </dependency>
 
+        <!-- Discord Bot -->
+        <dependency>
+            <groupId>net.dv8tion</groupId>
+            <artifactId>JDA</artifactId>
+            <version>4.4.1_353</version>
+        </dependency>
+
         <!-- MiniMessage -->
         <dependency>
             <groupId>net.kyori</groupId>
@@ -120,7 +134,6 @@
             <artifactId>java-commons</artifactId>
             <version>1.1.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>net.elytrium</groupId>
             <artifactId>fastprepare</artifactId>
