@@ -6,9 +6,16 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
@@ -105,6 +112,46 @@ public class Find extends BaseCommandType {
         if (arguments.length == 0) found = section.getAdaptedString("found_no_args", "\n");
         user.sendMessage(PlaceholderManager.parse(found, null, foundUser));
 
+        return new CommandStatus();
+    }
+
+    @Override
+    public void onDiscordRegister(ConfigurationSection section, @NotNull CommandCreateAction action) {
+        action.addOption(OptionType.STRING, "player", "The players name.").complete();
+    }
+
+    @Override
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+        OptionMapping mapping = event.getOption("player");
+
+        // No player specified.
+        if (mapping == null) {
+
+            event.reply(new DiscordBotMessageAdapter(
+                    section, "discord_bot.no_args", "Incorrect arguments."
+            ).buildMessage()).queue();
+
+            return new CommandStatus();
+        }
+
+        // Get the player.
+        String playerName = mapping.getAsString();
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(playerName);
+
+        // Check if the player is offline.
+        if (optionalPlayer.isEmpty() || new User(optionalPlayer.get()).isVanished()) {
+
+            event.reply(new DiscordBotMessageAdapter(
+                    section, "discord_bot.not_found", "Player not found."
+            ).buildMessage()).queue();
+
+            return new CommandStatus();
+        }
+
+        // Send the result message to the member.
+        event.reply(new DiscordBotMessageAdapter(
+                section, "discord_bot.found", "Player found on {server_formatted}"
+        ).setParser(new User(optionalPlayer.get())).buildMessage()).queue();
         return new CommandStatus();
     }
 }
