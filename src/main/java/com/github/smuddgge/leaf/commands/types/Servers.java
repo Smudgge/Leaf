@@ -7,9 +7,12 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,25 @@ public class Servers extends BaseCommandType {
         return new CommandStatus();
     }
 
+    @Override
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+        // Get list placeholder.
+        String list = this.getMessage(section.getSection("discord_bot"));
+
+        // Create message.
+        DiscordBotMessageAdapter message = new DiscordBotMessageAdapter(section, "discord_bot.message", "%list%")
+                .setParser(new DiscordBotMessageAdapter.PlaceholderParser() {
+                    @Override
+                    public @NotNull String parsePlaceholders(@NotNull String string) {
+                        return PlaceholderManager.parse(string, null, null)
+                                .replace("%list%", list);
+                    }
+                });
+
+        event.reply(message.buildMessage()).queue();
+        return new CommandStatus();
+    }
+
     /**
      * Used to get the server's message.
      *
@@ -66,7 +88,7 @@ public class Servers extends BaseCommandType {
         // Appear the header.
         String header = section.getAdaptedString("header", "\n", null);
         if (header != null) {
-            builder.append(header).append("&r\n\n");
+            builder.append(header).append("\n\n");
         }
 
         // Get the order of the servers.
@@ -90,13 +112,13 @@ public class Servers extends BaseCommandType {
 
             // Add to the final message.
             builder.append(parsed.replace("%online%", String.valueOf(online)));
-            builder.append("&r\n");
+            builder.append("\n");
         }
 
         // Append the footer.
         String footer = section.getAdaptedString("footer", "\n", null);
         if (footer != null) {
-            builder.append("&r\n");
+            builder.append("\n");
             builder.append(section.getString("footer"));
         }
 

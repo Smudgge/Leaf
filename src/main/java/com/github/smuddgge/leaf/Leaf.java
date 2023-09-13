@@ -32,6 +32,7 @@ import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -43,7 +44,7 @@ import java.util.Objects;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "3.11.0",
+        version = "4.0.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -146,6 +147,11 @@ public class Leaf {
 
         // Initialize hooks.
         HooksInitializer.init();
+    }
+
+    @Subscribe
+    public void onProxyShutdown(ProxyShutdownEvent event) {
+        Leaf.discordBot.shutdown();
     }
 
     @Subscribe

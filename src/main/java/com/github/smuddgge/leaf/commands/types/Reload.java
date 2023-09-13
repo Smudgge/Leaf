@@ -73,7 +73,7 @@ public class Reload extends BaseCommandType {
 
         try {
 
-            // Reload configs
+            // Reload configs.
             ConfigurationManager.reload();
 
         } catch (Exception exception) {
@@ -82,7 +82,7 @@ public class Reload extends BaseCommandType {
             return false;
         }
 
-        // Unregister the commands
+        // Unregister the commands.
         Leaf.getCommandHandler().unregister();
 
         // Reload the commands and re-register them

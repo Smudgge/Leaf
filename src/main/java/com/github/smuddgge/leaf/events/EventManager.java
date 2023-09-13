@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.events;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.datatype.User;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -44,6 +45,13 @@ public class EventManager {
         for (Event event : EventManager.eventTypeList) {
             if (event.getEventType() == null) continue;
             if (event.getEventType() == eventType) event.onEvent(user);
+        }
+    }
+
+    public static void runEvent(@NotNull MessageReceivedEvent messageReceivedEvent) {
+        for (Event event : EventManager.eventTypeList) {
+            if (event.getEventType() == null) continue;
+            event.onDiscordMessage(messageReceivedEvent);
         }
     }
 }

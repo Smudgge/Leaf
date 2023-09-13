@@ -82,6 +82,24 @@ info:
     - "&7Author &fSmudge"
     - "&7"
     - "&8&m&l--------------------"
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    channel_not_allowed: "You cannot run this command in this channel."
+    permissions:
+      - ADMINISTRATOR
+    no_permission: "You do not have permission to run this command."
+    message:
+      embeds:
+        1:
+          title:
+            message: "Leaf"
+          description:
+            - "**Velocity Proxy Plugin**"
+            - "Version `<version>`"
+            - "Author `Smudge`"
+
 
 stafflist:
   type: "list"
@@ -140,6 +158,19 @@ reload:
   permission: "leaf.reload"
   message: "{message} Reloaded all configs! <3"
   error: "{error_colour}An error occurred and the reloading was aborted!"
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    channel_not_allowed: "You cannot run this command in this channel."
+    permissions:
+      - ADMINISTRATOR
+    no_permission: "You do not have permission to run this command."
+    message:
+      embeds:
+        1:
+          title:
+            message: "Reloaded"
 
 report:
   type: "report"
@@ -176,6 +207,26 @@ servers:
   # Placeholders registered in context of the server.
   server: '{server_formatted} &f%online% &7Online Players'
   footer: '&8&m&l---------------------'
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    channel_not_allowed: "You cannot run this command in this channel."
+    permissions:
+      - ADMINISTRATOR
+    no_permission: "You do not have permission to run this command."
+    order:
+      - name_of_a_server
+      - testing1
+      - testing2
+    # Placeholders registered in context of the server.
+    server: '**<server>** `%online%` Online Players'
+    message:
+      embeds:
+        1:
+          title:
+            message: "Server List"
+          description: "%list%"
 
 message:
   type: "message"

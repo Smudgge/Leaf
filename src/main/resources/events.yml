@@ -25,3 +25,19 @@ load_balancing:
   servers:
     - "hub1"
     - "hub2"
+
+discord_message:
+  type: "discordmessage"
+  enabled: false
+  # Channels to listen to.
+  allowed_channels:
+    - "1150803388309712947"
+  # Permissions to require.
+  permissions:
+    - ADMINISTRATOR
+  # The minecraft servers to send to.
+  send_to:
+    - server_1
+  # %name% The member's discord name.
+  # %message% The message sent.
+  message: "&b&lDiscord &f%name% &7: &f%message%"

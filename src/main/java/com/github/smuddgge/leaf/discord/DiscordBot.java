@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.discord;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
+import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.squishydatabase.console.Console;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -92,6 +93,8 @@ public class DiscordBot extends ListenerAdapter {
 
         // Create new discord command.
         DiscordBotCommandAdapter discordCommand = new DiscordBotCommandAdapter(command, action);
+        MessageManager.log("&7[Discord Bot] &fLoading &7command : " + command.getName());
+        action.complete();
 
         // Log.
         MessageManager.log("&7[Discord Bot] &aRegistered &7command : " + command.getName());
@@ -144,5 +147,7 @@ public class DiscordBot extends ListenerAdapter {
         for (DiscordBotCommandAdapter discordCommand : this.discordCommandList) {
             discordCommand.onMessage(event);
         }
+
+        EventManager.runEvent(event);
     }
 }

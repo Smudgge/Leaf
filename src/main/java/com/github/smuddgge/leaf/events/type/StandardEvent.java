@@ -1,9 +1,11 @@
-package com.github.smuddgge.leaf.events;
+package com.github.smuddgge.leaf.events.type;
 
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
+import com.github.smuddgge.leaf.events.Event;
+import com.github.smuddgge.leaf.events.EventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
@@ -11,19 +13,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Represents a custom event.
+ * Represents a custom standard event.
+ *
+ * @param identifier The events unique identifier.
+ * @param section    The instance of the identifier's section.
+ * @param type       The type of event it will be listening to.
  */
-public record CustomEvent(String identifier,
-                          ConfigurationSection section) implements Event {
-
-    /**
-     * Used to create a custom event.
-     *
-     * @param identifier The events identifier.
-     * @param section    The configuration section attached to the identifier.
-     */
-    public CustomEvent {
-    }
+public record StandardEvent(@NotNull String identifier,
+                            @NotNull ConfigurationSection section,
+                            @NotNull EventType type) implements Event {
 
     @Override
     public String getIdentifier() {

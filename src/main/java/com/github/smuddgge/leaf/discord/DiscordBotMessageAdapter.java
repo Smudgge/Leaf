@@ -102,36 +102,36 @@ public class DiscordBotMessageAdapter {
 
         if (section.getKeys().contains("title")) {
             embedBuilder.setTitle(
-                    this.parse(section.getSection("title").getString("message", "")),
-                    this.parse(section.getSection("title").getString("url", null))
+                    this.parse(section.getSection("title").getAdaptedString("message", "\n", "")),
+                    this.parse(section.getSection("title").getAdaptedString("url", "\n", null))
             );
         }
 
         if (section.getKeys().contains("description")) {
-            embedBuilder.setDescription(this.parse(section.getString("description", "")));
+            embedBuilder.setDescription(this.parse(section.getAdaptedString("description", "\n", "")));
         }
 
         if (section.getKeys().contains("footer")) {
             embedBuilder.setFooter(
-                    this.parse(section.getSection("footer").getString("message", "")),
-                    this.parse(section.getSection("footer").getString("icon", null))
+                    this.parse(section.getSection("footer").getAdaptedString("message", "\n", "")),
+                    this.parse(section.getSection("footer").getAdaptedString("icon", "\n", null))
             );
         }
 
         if (section.getKeys().contains("author")) {
             embedBuilder.setAuthor(
-                    this.parse(section.getSection("author").getString("name", "")),
-                    this.parse(section.getSection("author").getString("url", null)),
-                    this.parse(section.getSection("author").getString("iconUrl", null))
+                    this.parse(section.getSection("author").getAdaptedString("name", "\n", "")),
+                    this.parse(section.getSection("author").getAdaptedString("url", "\n", null)),
+                    this.parse(section.getSection("author").getAdaptedString("iconUrl", "\n", null))
             );
         }
 
         if (section.getKeys().contains("imageUrl")) {
-            embedBuilder.setImage(this.parse(section.getString("imageUrl", null)));
+            embedBuilder.setImage(this.parse(section.getAdaptedString("imageUrl", "\n", null)));
         }
 
         if (section.getKeys().contains("thumbnailUrl")) {
-            embedBuilder.setThumbnail(this.parse(section.getString("thumbnailUrl", null)));
+            embedBuilder.setThumbnail(this.parse(section.getAdaptedString("thumbnailUrl", "\n", null)));
         }
 
         if (section.getBoolean("timeStamp", false)) {

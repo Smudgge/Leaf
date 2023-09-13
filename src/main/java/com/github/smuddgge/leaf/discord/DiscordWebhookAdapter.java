@@ -181,36 +181,36 @@ public class DiscordWebhookAdapter {
 
         if (embedSection.getKeys().contains("title")) {
             embedBuilder.setTitle(new WebhookEmbed.EmbedTitle(
-                    this.parse(embedSection.getSection("title").getString("message", "")),
-                    this.parse(embedSection.getSection("title").getString("url", null))
+                    this.parse(embedSection.getSection("title").getAdaptedString("message", "\n", "")),
+                    this.parse(embedSection.getSection("title").getAdaptedString("url", "\n", null))
             ));
         }
 
         if (embedSection.getKeys().contains("description")) {
-            embedBuilder.setDescription(this.parse(embedSection.getString("description", "")));
+            embedBuilder.setDescription(this.parse(embedSection.getAdaptedString("description", "\n", "")));
         }
 
         if (embedSection.getKeys().contains("footer")) {
             embedBuilder.setFooter(new WebhookEmbed.EmbedFooter(
-                    this.parse(embedSection.getSection("footer").getString("message", "")),
-                    this.parse(embedSection.getSection("footer").getString("icon", null))
+                    this.parse(embedSection.getSection("footer").getAdaptedString("message", "\n", "")),
+                    this.parse(embedSection.getSection("footer").getAdaptedString("icon", "\n", null))
             ));
         }
 
         if (embedSection.getKeys().contains("author")) {
             embedBuilder.setAuthor(new WebhookEmbed.EmbedAuthor(
-                    this.parse(embedSection.getSection("author").getString("name", "")),
-                    this.parse(embedSection.getSection("author").getString("iconUrl", null)),
-                    this.parse(embedSection.getSection("author").getString("url", null))
+                    this.parse(embedSection.getSection("author").getAdaptedString("name", "\n", "")),
+                    this.parse(embedSection.getSection("author").getAdaptedString("iconUrl", "\n", null)),
+                    this.parse(embedSection.getSection("author").getAdaptedString("url", "\n", null))
             ));
         }
 
         if (embedSection.getKeys().contains("imageUrl")) {
-            embedBuilder.setImageUrl(this.parse(embedSection.getString("imageUrl", null)));
+            embedBuilder.setImageUrl(this.parse(embedSection.getAdaptedString("imageUrl", "\n", null)));
         }
 
         if (embedSection.getKeys().contains("thumbnailUrl")) {
-            embedBuilder.setThumbnailUrl(this.parse(embedSection.getString("thumbnailUrl", null)));
+            embedBuilder.setThumbnailUrl(this.parse(embedSection.getAdaptedString("thumbnailUrl", "\n", null)));
         }
 
         if (embedSection.getBoolean("timeStamp", false)) {

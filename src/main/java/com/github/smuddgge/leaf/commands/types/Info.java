@@ -5,8 +5,10 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 
 /**
  * <h1>Info Command Type</h1>
@@ -50,6 +52,18 @@ public class Info extends BaseCommandType {
 
         // Send the message to the user.
         user.sendMessage(message);
+        return new CommandStatus();
+    }
+
+    @Override
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+
+        // Send the message.
+        event.reply(new DiscordBotMessageAdapter(
+                section, "discord_bot.message",
+                "No message."
+        ).buildMessage()).queue();
+
         return new CommandStatus();
     }
 }

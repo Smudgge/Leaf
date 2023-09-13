@@ -1,9 +1,12 @@
 package com.github.smuddgge.leaf.configuration.handlers;
 
 import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
-import com.github.smuddgge.leaf.events.CustomEvent;
+import com.github.smuddgge.leaf.events.Event;
 import com.github.smuddgge.leaf.events.EventManager;
+import com.github.smuddgge.leaf.events.EventType;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.smuddgge.squishydatabase.console.Console;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.List;
 
 public class EventConfigurationHandler extends ConfigurationHandler {
 
-    private List<CustomEvent> loadedEventList = new ArrayList<>();
+    private List<Event> loadedEventList = new ArrayList<>();
 
     /**
      * Used to create an event's configuration handler.
@@ -29,19 +32,18 @@ public class EventConfigurationHandler extends ConfigurationHandler {
 
     @Override
     public void reload() {
-        for (CustomEvent customEvent : this.loadedEventList) {
-            EventManager.unRegister(customEvent);
+        for (Event event : this.loadedEventList) {
+            EventManager.unRegister(event);
         }
 
         this.loadedEventList = new ArrayList<>();
         this.configFileList = new ArrayList<>();
         this.registerFiles();
 
-        for (CustomEvent customEvent : this.getCustomEvents()) {
-            EventManager.register(customEvent);
-            this.loadedEventList.add(customEvent);
+        for (Event event : this.getEvents()) {
+            EventManager.register(event);
+            this.loadedEventList.add(event);
         }
-
     }
 
     /**
@@ -49,16 +51,26 @@ public class EventConfigurationHandler extends ConfigurationHandler {
      *
      * @return The list of custom events.
      */
-    public List<CustomEvent> getCustomEvents() {
-        List<CustomEvent> customEventList = new ArrayList<>();
+    public List<Event> getEvents() {
+        List<Event> eventList = new ArrayList<>();
 
         for (YamlConfiguration configuration : this.configFileList) {
             for (String identifier : configuration.getKeys()) {
-                CustomEvent customEvent = new CustomEvent(identifier, configuration.getSection(identifier));
-                customEventList.add(customEvent);
+
+                ConfigurationSection section = configuration.getSection(identifier);
+                String typeString = section.getString("type", "none");
+                EventType type = EventType.getFromType(typeString);
+
+                if (type == null) {
+                    Console.warn("Invalid event : &f" + identifier + ". &eType doesnt exists : &f" + typeString);
+                    continue;
+                }
+
+                // Add event.
+                eventList.add(type.create(identifier, section));
             }
         }
 
-        return customEventList;
+        return eventList;
     }
 }
