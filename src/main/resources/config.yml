@@ -6,11 +6,12 @@
 #
 # Author : Smudge
 
+# ✿ Vanish Support ✿
 # The permission used to check if a player is able to vanish.
 vanish_permission: "leaf.vanishable"
 
 # Sometimes a vanishable player will be on an empty server.
-# Unfortunately we can not check if the player is vanished or not.
+# Unfortunately we cannot check if the player is vanished or not.
 # Because of this we assume the player is vanished.
 #
 # Setting this to true will let other vanishable players see
@@ -19,7 +20,8 @@ vanish_permission: "leaf.vanishable"
 # Defaults to false.
 vanishable_can_see_vanishable: false
 
-# Change the server's brand.
+# ⚾︎ Server Brand ⚾︎
+# Used to change the server brand.
 brand:
   # The brand shown in ping.
   ping:
@@ -30,5 +32,8 @@ brand:
     enabled: false
     brand: "&aLeaf <version>&r"
 
-# Discord bot support.
+# ☁︎ Discord bot support ☁︎
+# Paste your discord bot token in here
+# and restart the proxy server to
+# enable discord bot support.
 discord_token: ""

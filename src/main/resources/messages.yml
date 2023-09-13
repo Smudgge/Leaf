@@ -6,6 +6,7 @@
 #
 # Author : Smudge
 
+# Default messages used in the plugin.
 messages:
 
   incorrect_arguments: "{error_colour}Incorrect arguments. %command%"

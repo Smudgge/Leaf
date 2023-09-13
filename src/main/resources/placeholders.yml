@@ -5,7 +5,12 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
-
+#
+# ★ Don't want some of the placeholders? ★
+# You can delete a placeholder by removing it
+# from the file.
+#
+# ★ What are these placeholders? ★
 # Custom placeholders can be used in any message using curly brackets.
 # You can add as many custom placeholders as you like.
 #
@@ -13,13 +18,13 @@
 # Standard placeholders :
 # <player> <server> <vanished> <version>
 
-# Simple placeholders.
+# ❤︎ Simple placeholders ❤︎
 # {message} {error_colour}
 message: "&8&l[&f&lServer&8&l]&a"
 error_colour: "&7"
 
-# Conditional placeholders.
-# More information is on the wiki : https://smuddgge.gitbook.io/leaf
+# ❤︎ Conditional placeholders ❤︎
+# More information is on the wiki: https://smuddgge.gitbook.io/leaf
 # {vanish_colour} {server_formatted} {rank_colour} {theme_material}
 vanish_colour:
   condition: "MATCH:<vanished>"

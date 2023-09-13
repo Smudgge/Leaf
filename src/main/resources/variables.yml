@@ -5,7 +5,7 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
-
+#
 # Variables can be used to store custom data for each player.
 #
 # To create a variable, define it in this file then restart the proxy.

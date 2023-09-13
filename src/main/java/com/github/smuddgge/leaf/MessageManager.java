@@ -152,7 +152,10 @@ public class MessageManager {
                 "&a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\\n" +
                 "&a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/\n" +
                 "\n" +
-                "    &7By Smudge    Version &e" + Leaf.class.getAnnotation(Plugin.class).version();
+                "      &7By Smudge    Version &b" + Leaf.class.getAnnotation(Plugin.class).version() + "\n" +
+                "&7\n" +
+                "&7● &aEnabled &7Discord Support &f~10mib\n" +
+                "&7● &aEnabled &7Database Support &f~10mib\n\n";
 
         MessageManager.log(message);
     }

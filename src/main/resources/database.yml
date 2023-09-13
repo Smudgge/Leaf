@@ -5,18 +5,26 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
-
-# --- Changing these values requires a proxy restart. ---
+#
+# Changing these values requires a proxy restart.
+# Enable the database?
 enabled: true
+# Debug mode will output to console the
+# databases procsesses.
 debugmode: false
 
+# ✜ Type of Database ✜
 # SQLITE DATABASE
+# This type of database saves the data
+# to a file located in this folder.
 type: SQLITE
 
 # # MONGO DATABASE
+# # This type of database saves data to the cloud.
 # connection_string: "connectionString"
 # database_same: "Database"
 
+# ✜ Settings ✜
 # The maximum amount of history that will
 # be saved in the database per player.
 player_history_limit: 20

@@ -5,6 +5,10 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
+#
+# ★ Don't want all of these commands? ★
+# You can disable independent commands by deleting them
+# from this file.
 
 alert:
   type: "alert"
@@ -158,19 +162,6 @@ reload:
   permission: "leaf.reload"
   message: "{message} Reloaded all configs! <3"
   error: "{error_colour}An error occurred and the reloading was aborted!"
-  discord_bot:
-    enabled: false
-    allowed_channels:
-      - "1150803388309712947"
-    channel_not_allowed: "You cannot run this command in this channel."
-    permissions:
-      - ADMINISTRATOR
-    no_permission: "You do not have permission to run this command."
-    message:
-      embeds:
-        1:
-          title:
-            message: "Reloaded"
 
 report:
   type: "report"
