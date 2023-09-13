@@ -44,7 +44,7 @@ import java.util.Objects;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "4.0.0",
+        version = "4.0.1",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
