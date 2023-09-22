@@ -13,6 +13,7 @@ import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishydatabase.Query;
+import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.proxy.ConnectionRequestBuilder;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
@@ -22,10 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -491,7 +489,36 @@ public class User {
      */
     public void executeCommand(String command) {
         if (this.player == null) return;
-        Leaf.getCommandHandler().execute(this.player, command);
+
+        // Get the command manager.
+        CommandManager manager = Leaf.getServer().getCommandManager();
+
+        // Check if it should be run in console.
+        if (command.contains(" -c")) {
+
+            // Run in console.
+            manager.executeAsync(Leaf.getServer().getConsoleCommandSource(), command.replace(" -c", ""));
+            return;
+        }
+
+        // Check if the player should have every permission.
+        if (command.contains(" -o")) {
+
+            // Run as op player.
+            manager.executeAsync(new OpPlayerAdapter(this.player), command.replace(" -o", ""));
+            return;
+        }
+
+        // Check if the command is runnable in leaf.
+        if (Leaf.getCommandHandler().isRunnable(command)) {
+
+            // Run the command.
+            Leaf.getCommandHandler().execute(this.player, command);
+            return;
+        }
+
+        // Get the command manager.
+        manager.executeAsync(this.player, command);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.github.smuddgge.leaf.commands;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,5 +43,15 @@ public class CommandAliases {
      */
     public List<String> get() {
         return this.aliases;
+    }
+
+    /**
+     * Used to check if a name is contained in this list.
+     *
+     * @param name The name of the command.
+     * @return True if it is an alias.
+     */
+    public boolean contains(@NotNull String name) {
+        return this.aliases.contains(name);
     }
 }

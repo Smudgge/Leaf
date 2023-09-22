@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.proxy.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +129,23 @@ public class CommandHandler {
 
         this.registeredCommands = new ArrayList<>();
         this.commands = new ArrayList<>();
+    }
+
+    /**
+     * Used to check if a command string is runnable in this handler.
+     *
+     * @param commandString The instance of the command string.
+     * @return True if it is runnable.
+     */
+    public boolean isRunnable(@NotNull String commandString) {
+        String base = commandString.split(" ")[0];
+
+        for (Command command : this.commands) {
+            if (command.getName().equals(base)) return true;
+            if (command.getAliases().contains(base)) return true;
+        }
+
+        return false;
     }
 
     /**
