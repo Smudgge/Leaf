@@ -114,7 +114,7 @@ public class OpPlayerAdapter implements Player {
 
     @Override
     public Component getPlayerListHeader() {
-        return this.player.getPlayerListHeader()
+        return this.player.getPlayerListHeader();
     }
 
     @Override
