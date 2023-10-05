@@ -71,6 +71,47 @@ find:
     not_found: "Player could not be found."
     found: "Player was found on {server_formatted}"
 
+command:
+  # The 'command' command type is chainable,
+  # so be careful it doesn't loop forever!
+  type: "command"
+  enabled: false
+  name: "findoverride"
+  permission: "leaf.find"
+  # Suggestions will be seen when tab completing.
+  # Suggestions can either be a list of strings or a single string.
+  #
+  # Placeholders include:
+  # %players%: The players the player can see online, excluding vanished.
+  # %all_players%: All players online, including vanished.
+  # %database_players%: All players in the database.
+  suggestions:
+    first_suggestion: "%database_players%"
+    these_keys_can_be_named_anything:
+      - "No more arguments"
+      - "Sorry"
+  # Only proxy commands will work.
+  # Defaults to run as the player.
+  # You can use -c to run the command in the console.
+  # You can use -o to run the command as operator.
+  # You can use the placeholders:
+  # %argument_<number>% Returns the value of the argument.
+  # If the command is executed by a user, the user placeholders will also work.
+  commands:
+    - "find %argument_1%"
+    - "lobby -o"
+  # Discord bot support.
+  discord_bot:
+    enabled: false
+    allowed_channels:
+      - "1150803388309712947"
+    channel_not_allowed: "You cannot run this command in this channel."
+    permissions:
+      - ADMINISTRATOR
+    no_permission: "You do not have permission to run this command."
+    not_found: "Player could not be found."
+    found: "Player was found on {server_formatted}"
+
 
 info:
   # I'd love if you kept this command on your server <3
@@ -347,7 +388,7 @@ change_theme:
   suggest:
     - "green"
     - "gray"
-  # Only allow values from suggest list.
+  # Only allow values from a suggested list.
   # Defaults to false.
   only_allow_suggestions: true
   # Should not include yellow in the value.

@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.utility.PlayerUtility;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
@@ -87,17 +88,7 @@ public class CommandSuggestions {
      * @return This instance.
      */
     public CommandSuggestions appendPlayers() {
-        List<String> players = new ArrayList<>();
-
-        for (Player player : Leaf.getServer().getAllPlayers()) {
-            User user = new User(player);
-
-            if (user.isVanished()) continue;
-
-            players.add(player.getGameProfile().getName());
-        }
-
-        this.data.add(players);
+        this.data.add(PlayerUtility.getPlayers());
         return this;
     }
 
@@ -110,9 +101,8 @@ public class CommandSuggestions {
      * @return This instance
      */
     public CommandSuggestions appendPlayers(User user) {
-        if (user.isNotVanishable()) return this.appendPlayers();
-        if (ConfigMain.getVanishableCanSeeVanishable()) return this.appendPlayersRaw();
-        return this.appendPlayers();
+        this.data.add(PlayerUtility.getPlayers(user));
+        return this;
     }
 
     /**
@@ -122,13 +112,7 @@ public class CommandSuggestions {
      * @return This instance.
      */
     public CommandSuggestions appendPlayersRaw() {
-        List<String> players = new ArrayList<>();
-
-        for (Player player : Leaf.getServer().getAllPlayers()) {
-            players.add(player.getGameProfile().getName());
-        }
-
-        this.data.add(players);
+        this.data.add(PlayerUtility.getPlayersRaw());
         return this;
     }
 
@@ -138,36 +122,18 @@ public class CommandSuggestions {
      * @return This instance
      */
     public CommandSuggestions appendDatabasePlayers() {
-        List<String> players = new ArrayList<>();
-
-        if (Leaf.isDatabaseDisabled()) return this;
-
-        for (PlayerRecord playerRecord : Leaf.getDatabase().getTable(PlayerTable.class).getRecordList()) {
-            players.add(playerRecord.name);
-        }
-
-        this.data.add(players);
+        this.data.add(PlayerUtility.getDatabasePlayers());
         return this;
     }
 
     /**
-     * Used to append a users list of friends.
+     * Used to append a user's list of friends.
      *
      * @param user The instance of the user.
      * @return This instance.
      */
     public CommandSuggestions appendFriends(User user) {
-        if (Leaf.isDatabaseDisabled()) return this;
-
-        FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
-        List<FriendRecord> friends = friendTable.getRecordList(new Query().match("playerUuid", user.getUniqueId()));
-
-        List<String> friendNameList = new ArrayList<>();
-        for (FriendRecord friendRecord : friends) {
-            friendNameList.add(friendRecord.friendNameFormatted);
-        }
-
-        this.data.add(friendNameList);
+        this.data.add(PlayerUtility.getFriends(user));
         return this;
     }
 

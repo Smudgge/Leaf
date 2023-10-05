@@ -19,7 +19,7 @@ public class MessageManager {
     /**
      * List of players and who they last messaged.
      */
-    private static final HashMap<UUID, UUID> lastMessaged = new HashMap<UUID, UUID>();
+    private static final HashMap<UUID, UUID> lastMessaged = new HashMap<>();
 
     /**
      * Used to set who a player last messaged.
@@ -61,7 +61,7 @@ public class MessageManager {
     }
 
     /**
-     * Used to convert a message to a component with colour.
+     * Used to convert a message to a component with color.
      *
      * @param message The message to convert.
      * @return The requested component.

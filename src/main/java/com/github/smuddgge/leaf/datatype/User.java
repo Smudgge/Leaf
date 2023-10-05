@@ -216,7 +216,7 @@ public class User {
         if (unableToVanishPlayer == null) return true;
 
         // Check if this player can be seen on the tab list by
-        // players that can not vanish.
+        // players that cannot vanish.
         return !unableToVanishPlayer.getTabList().containsEntry(this.player.getUniqueId());
     }
 
@@ -487,6 +487,7 @@ public class User {
 
     /**
      * Used to execute a command in this plugin.
+     * This will also parse placeholders in terms of this player.
      *
      * @param command The command to execute.
      */
@@ -500,7 +501,9 @@ public class User {
         if (command.contains(" -c")) {
 
             // Run in console.
-            manager.executeAsync(Leaf.getServer().getConsoleCommandSource(), command.replace(" -c", ""));
+            manager.executeAsync(Leaf.getServer().getConsoleCommandSource(), PlaceholderManager.parse(command, null, this)
+                    .replace(" -c", "")
+            );
             return;
         }
 
@@ -508,7 +511,9 @@ public class User {
         if (command.contains(" -o")) {
 
             // Run as op player.
-            manager.executeAsync(new OpPlayerAdapter(this.player), command.replace(" -o", ""));
+            manager.executeAsync(new OpPlayerAdapter(this.player), PlaceholderManager.parse(command, null, this)
+                    .replace(" -o", "")
+            );
             return;
         }
 
@@ -516,12 +521,23 @@ public class User {
         if (Leaf.getCommandHandler().isRunnable(command)) {
 
             // Run the command.
-            Leaf.getCommandHandler().execute(this.player, command);
+            Leaf.getCommandHandler().execute(this.player, PlaceholderManager.parse(command, null, this));
             return;
         }
 
         // Get the command manager.
         manager.executeAsync(this.player, command);
+    }
+
+    /**
+     * Used to execute a list of commands.
+     *
+     * @param commandList The list of commands.
+     */
+    public void executeCommand(List<String> commandList) {
+        for (String command : commandList) {
+            this.executeCommand(command);
+        }
     }
 
     /**
