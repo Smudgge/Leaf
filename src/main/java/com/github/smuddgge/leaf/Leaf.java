@@ -106,6 +106,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new AlertRaw());
         Leaf.commandHandler.addType(new AlertMessage());
         Leaf.commandHandler.addType(new Chat());
+        Leaf.commandHandler.addType(new com.github.smuddgge.leaf.commands.types.Command());
         Leaf.commandHandler.addType(new Find());
         Leaf.commandHandler.addType(new Friend());
         Leaf.commandHandler.addType(new History());

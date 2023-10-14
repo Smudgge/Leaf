@@ -54,7 +54,8 @@ public interface CommandType {
     /**
      * Executed when a command is registered.
      *
-     * @param action The create command action to add options.
+     * @param section The command section.
+     * @param action  The create command action to add options.
      */
     default void onDiscordRegister(ConfigurationSection section, @NotNull CommandCreateAction action) {
     }

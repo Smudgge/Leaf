@@ -1,7 +1,6 @@
 package com.github.smuddgge.leaf.utility;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.datatype.OpPlayerAdapter;
 import com.velocitypowered.api.command.CommandManager;
 import org.jetbrains.annotations.NotNull;
 

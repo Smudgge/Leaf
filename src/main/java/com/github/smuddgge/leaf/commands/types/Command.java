@@ -4,10 +4,12 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.utility.CommandUtility;
 import com.github.smuddgge.leaf.utility.PlayerUtility;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import org.jetbrains.annotations.NotNull;
@@ -87,19 +89,48 @@ public class Command extends BaseCommandType {
 
     @Override
     public void onDiscordRegister(ConfigurationSection section, @NotNull CommandCreateAction action) {
-        action.addOption(OptionType.STRING, "player", "The players name.").complete();
+
+        // Get suggestion section.
+        ConfigurationSection argumentSection = section.getSection("discord_bot").getSection("arguments");
+
+        // Loop though suggestions.
+        for (String key : argumentSection.getKeys()) {
+            action.addOption(OptionType.STRING, key, argumentSection.getString(key));
+        }
+
+        action.complete();
     }
 
     @Override
     public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
-        return super.onDiscordRun(section, event);
+
+        // Loop though each command.
+        for (String command : section.getSection("discord_bot").getListString("commands")) {
+
+            for (OptionMapping optionMapping : event.getOptions()) {
+
+                // Replace argument placeholder.
+                command = command.replace("%" + optionMapping.getName() + "%", optionMapping.getAsString());
+            }
+
+            // Execute command.
+            CommandUtility.executeCommandInConsole(command);
+        }
+
+        // Respond message.
+        event.reply(new DiscordBotMessageAdapter(
+                section, "discord_bot.message",
+                "Ran commands."
+        ).buildMessage()).queue();
+
+        return new CommandStatus();
     }
 
     /**
      * Used to get the list of commands
      * to execute.
      *
-     * @param section The instance of the configuration section.
+     * @param section   The instance of the configuration section.
      * @param arguments The instance of the command arguments.
      * @return The list of commands to execute.
      */
@@ -115,7 +146,7 @@ public class Command extends BaseCommandType {
             int argumentNumber = 1;
             for (String argument : arguments) {
                 finalCommand = finalCommand.replace("%argument_" + argumentNumber + "%", argument);
-                argumentNumber ++;
+                argumentNumber++;
             }
 
             finalCommandList.add(finalCommand);

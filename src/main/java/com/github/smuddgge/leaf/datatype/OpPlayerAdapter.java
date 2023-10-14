@@ -113,6 +113,11 @@ public class OpPlayerAdapter implements Player {
     }
 
     @Override
+    public void clearPlayerListHeaderAndFooter() {
+        this.player.clearPlayerListHeaderAndFooter();
+    }
+
+    @Override
     public Component getPlayerListHeader() {
         return this.player.getPlayerListHeader();
     }

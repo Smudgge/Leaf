@@ -109,8 +109,15 @@ command:
     permissions:
       - ADMINISTRATOR
     no_permission: "You do not have permission to run this command."
-    not_found: "Player could not be found."
-    found: "Player was found on {server_formatted}"
+    # List of suggestions.
+    arguments:
+      arg_1: "The descrption."
+    # Commands to be run in console.
+    commands:
+      - "find %arg_1%"
+      - "lobby"
+    message: "Ran commands."
+
 
 
 info:
