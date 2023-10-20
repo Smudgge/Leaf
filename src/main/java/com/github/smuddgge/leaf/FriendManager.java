@@ -14,6 +14,7 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.DateAndTime;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.console.Console;
 import com.velocitypowered.api.proxy.Player;
 
 import java.util.Objects;
@@ -152,24 +153,44 @@ public class FriendManager {
      * @param user The instance of the user.
      */
     public static void onProxyJoin(User user) {
+        // Check if the friend command is enabled.
         ConfigurationSection section = ConfigurationManager.getCommands().getCommandFromType("friends");
-
         if (section == null) return;
 
+        // Get the tables.
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
         FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
 
+        // Get the message.
         String message = section.getString("proxy_join", "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}");
 
+        // Loops though each of the players friends.
         for (FriendRecord friendRecord : friendTable.getFriendList(user.getUniqueId().toString())) {
-            Optional<Player> optional = Leaf.getServer().getPlayer(friendRecord.friendNameFormatted);
+
+            // Get the player's name.
+            String friendUuid = friendRecord.friendPlayerUuid;
+            PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", friendUuid));
+            if (friendPlayerRecord == null) {
+                Console.warn("Could not find player in player table when sending friend event!");
+                continue;
+            }
+
+            // Get the friend's name.
+            String friendName = friendPlayerRecord.name;
+
+            // Attempt to get if they are on the server.
+            Optional<Player> optional = Leaf.getServer().getPlayer(friendName);
             if (optional.isEmpty()) continue;
             Player player = optional.get();
 
-            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendRecord.friendPlayerUuid);
+            // Get there friend settings.
+            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendUuid);
 
+            // Check if they have settings toggled.
             if (Objects.equals(settings.toggleProxyJoin, "false")) continue;
 
+            // Send the message.
             new User(player).sendMessage(PlaceholderManager.parse(message, null, user));
         }
     }
@@ -184,17 +205,31 @@ public class FriendManager {
 
         if (section == null) return;
 
+        // Get the tables.
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
         FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
 
         String message = section.getString("proxy_leave", "&8[&c-&8] &7Your friend &c<player> &7left the network");
 
         for (FriendRecord friendRecord : friendTable.getFriendList(user.getUniqueId().toString())) {
-            Optional<Player> optional = Leaf.getServer().getPlayer(friendRecord.friendNameFormatted);
+
+            // Get the player's name.
+            String friendUuid = friendRecord.friendPlayerUuid;
+            PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", friendUuid));
+            if (friendPlayerRecord == null) {
+                Console.warn("Could not find player in player table when sending friend event!");
+                continue;
+            }
+
+            // Get the friend's name.
+            String friendName = friendPlayerRecord.name;
+
+            Optional<Player> optional = Leaf.getServer().getPlayer(friendName);
             if (optional.isEmpty()) continue;
             Player player = optional.get();
 
-            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendRecord.friendPlayerUuid);
+            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendUuid);
 
             if (Objects.equals(settings.toggleProxyLeave, "false")) continue;
 
@@ -212,17 +247,31 @@ public class FriendManager {
 
         if (section == null) return;
 
+        // Get the tables.
+        PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);
         FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
 
         String message = section.getString("server_change", "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}");
 
         for (FriendRecord friendRecord : friendTable.getFriendList(user.getUniqueId().toString())) {
-            Optional<Player> optional = Leaf.getServer().getPlayer(friendRecord.friendNameFormatted);
+
+            // Get the player's name.
+            String friendUuid = friendRecord.friendPlayerUuid;
+            PlayerRecord friendPlayerRecord = playerTable.getFirstRecord(new Query().match("uuid", friendUuid));
+            if (friendPlayerRecord == null) {
+                Console.warn("Could not find player in player table when sending friend event!");
+                continue;
+            }
+
+            // Get the friend's name.
+            String friendName = friendPlayerRecord.name;
+
+            Optional<Player> optional = Leaf.getServer().getPlayer(friendName);
             if (optional.isEmpty()) continue;
             Player player = optional.get();
 
-            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendRecord.friendPlayerUuid);
+            FriendSettingsRecord settings = friendSettingsTable.getSettings(friendUuid);
 
             if (Objects.equals(settings.toggleServerChange, "false")) continue;
 
