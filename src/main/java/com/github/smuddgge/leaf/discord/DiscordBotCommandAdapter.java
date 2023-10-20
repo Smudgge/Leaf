@@ -2,10 +2,10 @@ package com.github.smuddgge.leaf.discord;
 
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
+import com.github.smuddgge.leaf.utility.DiscordUtility;
 import com.github.smuddgge.squishydatabase.console.Console;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
@@ -130,21 +130,7 @@ public class DiscordBotCommandAdapter {
      * or if there are no roles to check for.
      */
     public boolean hasRoleFromList(@NotNull Member member) {
-
-        // Check if there are no roles in the list.
-        if (this.getDiscordRoles().isEmpty()) return true;
-
-        // Loop though all possible role names.
-        for (String roleName : this.getDiscordRoles()) {
-
-            // Loop though the members roles.
-            for (Role role : member.getRoles()) {
-
-                // Check if the member has the role.
-                if (roleName.toLowerCase().equals(role.getName().toUpperCase())) return true;
-            }
-        }
-        return false;
+        return DiscordUtility.hasRoleFromList(this.getDiscordRoles(), member);
     }
 
     /**

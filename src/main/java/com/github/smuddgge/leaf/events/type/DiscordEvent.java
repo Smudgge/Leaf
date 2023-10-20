@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.events.Event;
 import com.github.smuddgge.leaf.events.EventType;
+import com.github.smuddgge.leaf.utility.DiscordUtility;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.console.Console;
 import com.velocitypowered.api.proxy.Player;
@@ -66,6 +67,14 @@ public record DiscordEvent(@NotNull String identifier,
             return;
         }
 
+        // Check if they have the correct roles.
+        if (this.section.getKeys().contains("roles")
+                && messageReceivedEvent.getMember() != null
+                && !DiscordUtility.hasRoleFromList(this.getRoles(), messageReceivedEvent.getMember())) {
+
+            return;
+        }
+
         // Get message.
         String message = section.getAdaptedString("message", "\n", null);
         if (message == null) return;
@@ -106,5 +115,15 @@ public record DiscordEvent(@NotNull String identifier,
         }
 
         return permissionList;
+    }
+
+    /**
+     * Used to get the list of role names of which
+     * the member should have 1 of them.
+     *
+     * @return The list of role names.
+     */
+    public @NotNull List<String> getRoles() {
+        return this.section.getListString("roles", new ArrayList<>());
     }
 }
