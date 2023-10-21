@@ -11,7 +11,7 @@ import java.util.UUID;
  * Represents a command limit record.
  * Used to limit the amount of times a player
  * can execute a command.
- *
+ * <p>
  * Implemented with version 4.3.0
  */
 public class CommandLimitRecord extends Record {
@@ -35,7 +35,7 @@ public class CommandLimitRecord extends Record {
      * Used to create the records primary key from
      * the players uuid and the commands id.
      *
-     * @param uuid The players uuid.
+     * @param uuid      The players uuid.
      * @param commandId The command's id.
      * @return The requested primary key.
      */

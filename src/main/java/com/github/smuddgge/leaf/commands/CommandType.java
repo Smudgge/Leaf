@@ -2,7 +2,7 @@ package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import org.jetbrains.annotations.NotNull;
@@ -68,7 +68,7 @@ public interface CommandType {
      * @param event   The instance of the slash event.
      * @return The instance of the commands status.
      */
-    default CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+    default CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
         return null;
     }
 

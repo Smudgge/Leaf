@@ -8,7 +8,7 @@ import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.utility.CommandUtility;
 import com.github.smuddgge.leaf.utility.PlayerUtility;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
@@ -102,7 +102,7 @@ public class Command extends BaseCommandType {
     }
 
     @Override
-    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
 
         // Loop though each command.
         for (String command : section.getSection("discord_bot").getListString("commands")) {

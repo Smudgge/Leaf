@@ -4,9 +4,9 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -181,8 +181,8 @@ public class DiscordBotMessageAdapter {
      *
      * @return The instance of the message.
      */
-    public @NotNull Message buildMessage() {
-        MessageBuilder builder = new MessageBuilder();
+    public @NotNull MessageCreateData buildMessage() {
+        MessageCreateBuilder builder = new MessageCreateBuilder();
 
         // Check if the message is not a section.
         if (this.section.getSection(this.path).getMap().isEmpty()) {

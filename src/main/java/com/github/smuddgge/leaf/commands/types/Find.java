@@ -10,7 +10,7 @@ import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
@@ -120,7 +120,7 @@ public class Find extends BaseCommandType {
     }
 
     @Override
-    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
         OptionMapping mapping = event.getOption("player");
 
         // No player specified.

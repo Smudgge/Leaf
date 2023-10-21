@@ -11,7 +11,7 @@ import java.util.UUID;
  * Represents the command limit table.
  * Used to check if a player has reached the limit
  * on the number of times they can execute a command.
- *
+ * <p>
  * Implemented with version 4.3.0
  */
 public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
@@ -24,7 +24,8 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
     /**
      * Used to get the amount of times a command
      * has been executed by a player.
-     * @param uuid The players uuid.
+     *
+     * @param uuid      The players uuid.
      * @param commandId The id of the command.
      * @return The amount executed.
      */
@@ -43,7 +44,7 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
      * Used to increase the amount of times a player
      * has executed a specific command.
      *
-     * @param uuid The players uuid.
+     * @param uuid      The players uuid.
      * @param commandId The command's id.
      */
     public void increaseAmountExecuted(@NotNull UUID uuid, @NotNull String commandId) {

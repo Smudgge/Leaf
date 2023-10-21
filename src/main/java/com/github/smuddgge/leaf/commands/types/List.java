@@ -10,7 +10,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class List extends BaseCommandType {
     }
 
     @Override
-    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
         ArrayList<String> possiblePermissions = new ArrayList<>();
 
         for (String key : section.getSection("list").getKeys()) {

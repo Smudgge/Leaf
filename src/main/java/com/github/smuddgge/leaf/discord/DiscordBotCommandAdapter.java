@@ -6,7 +6,7 @@ import com.github.smuddgge.leaf.utility.DiscordUtility;
 import com.github.smuddgge.squishydatabase.console.Console;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import org.jetbrains.annotations.NotNull;
@@ -138,7 +138,7 @@ public class DiscordBotCommandAdapter {
      *
      * @param event The instance of the discord event.
      */
-    public void execute(@NotNull SlashCommandEvent event) {
+    public void execute(@NotNull SlashCommandInteractionEvent event) {
 
         // Check if the channel is allowed.
         if (!this.isAllowed(event.getChannel().getId())) {

@@ -11,7 +11,7 @@ import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class Servers extends BaseCommandType {
     }
 
     @Override
-    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
         // Get list placeholder.
         String list = this.getMessage(section.getSection("discord_bot"));
 

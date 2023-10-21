@@ -8,7 +8,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 /**
  * <h1>Info Command Type</h1>
@@ -56,7 +56,7 @@ public class Info extends BaseCommandType {
     }
 
     @Override
-    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandEvent event) {
+    public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
 
         // Send the message.
         event.reply(new DiscordBotMessageAdapter(
