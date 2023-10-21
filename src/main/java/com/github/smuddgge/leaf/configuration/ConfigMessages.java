@@ -103,4 +103,14 @@ public class ConfigMessages extends YamlConfiguration {
         return ConfigMessages.config.getSection("messages")
                 .getString("no_permission", "{error_colour}No permission.");
     }
+
+    /**
+     * Used to get the is limited message.
+     *
+     * @return The requested is limited message.
+     */
+    public static String getIsLimited() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("is_limited", "{error_colour}You cannot execute this command anymore as you have reached the limit.");
+    }
 }

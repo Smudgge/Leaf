@@ -1,8 +1,11 @@
 package com.github.smuddgge.leaf.commands;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.database.records.CommandLimitRecord;
+import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
@@ -10,6 +13,7 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.data.Sound;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,6 +117,9 @@ public record Command(String identifier,
             }
         }
 
+        // Check the command limit.
+        if (this.isLimited(user)) return new CommandStatus().isLimited();
+
         // Play sound.
         if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
             try {
@@ -125,7 +132,7 @@ public record Command(String identifier,
 
         // Check if there are no sub command types.
         if (this.commandType.getSubCommandTypes().isEmpty()
-                || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user);
+                || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseLimit(user, this);
 
         // Otherwise, check if it is a sub command.
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
@@ -136,10 +143,10 @@ public record Command(String identifier,
             subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
 
             if (subCommandNames.contains(name))
-                return commandType.onPlayerRun(this.getSection(), arguments, user);
+                return commandType.onPlayerRun(this.getSection(), arguments, user).increaseLimit(user, this);
         }
 
-        return this.commandType.onPlayerRun(this.getSection(), arguments, user);
+        return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseLimit(user, this);
     }
 
     /**
@@ -232,6 +239,49 @@ public record Command(String identifier,
      */
     public boolean isDiscordEnabled() {
         return ConfigurationManager.getCommands().getCommand(this.identifier).getBoolean("discord_bot.enabled", false);
+    }
+
+    /**
+     * Used to check if a user has exceeded the limit
+     * on using this command.
+     *
+     * @param user The instance of the user.
+     * @return True if the user has reached the limit.
+     */
+    public boolean isLimited(@NotNull User user) {
+
+        // Get the command limit for this command.
+        int limit = ConfigurationManager.getCommands().getCommandLimit(this.identifier);
+
+        // Check if there is no limit.
+        if (limit == -1) return false;
+
+        // Check if the database is disabled.
+        // We return true because the database may have disabled its self
+        // and the admin may still want commands to be limited.
+        if (Leaf.isDatabaseDisabled()) return true;
+
+        int amountExecuted = Leaf.getDatabase()
+                .getTable(CommandLimitTable.class)
+                .getAmountExecuted(user.getUniqueId(), this.identifier);
+
+        // Check if the amount of times the command
+        // has been executed is bigger or equal to the limit.
+        return amountExecuted >= limit;
+    }
+
+    /**
+     * Used to check if the command has a limit.
+     *
+     * @return True if teh command has a limit.
+     */
+    public boolean hasLimit() {
+
+        // Get the command limit for this command.
+        int limit = ConfigurationManager.getCommands().getCommandLimit(this.identifier);
+
+        // Check if there is no limit.
+        return limit != -1;
     }
 
     @Override

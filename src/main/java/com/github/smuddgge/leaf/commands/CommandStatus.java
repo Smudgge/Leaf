@@ -1,6 +1,8 @@
 package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.datatype.User;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <h1>Represents a command's status.</h1>
@@ -14,6 +16,9 @@ public class CommandStatus {
     private boolean hasDatabaseEmpty = false;
     private boolean hasPlayerCommand = false;
     private boolean hasNoPermission = false;
+    private boolean hasIsLimited = false;
+
+    private boolean hasStopIncreaseLimit = false;
 
     /**
      * Used to set error to true.
@@ -76,6 +81,26 @@ public class CommandStatus {
     }
 
     /**
+     * Used to set is limited to true.
+     *
+     * @return This instance.
+     */
+    public CommandStatus isLimited() {
+        this.hasIsLimited = true;
+        return this;
+    }
+
+    /**
+     * Used to stop the limit from increasing.
+     *
+     * @return This instance.
+     */
+    public CommandStatus stopIncreaseLimit() {
+        this.hasStopIncreaseLimit = true;
+        return this;
+    }
+
+    /**
      * Used to get if an error occurred and an error
      * message should be sent.
      *
@@ -132,6 +157,26 @@ public class CommandStatus {
     }
 
     /**
+     * Used to check if the user has been limited.
+     *
+     * @return True if the player has been limited.
+     */
+    public boolean hasIsLimited() {
+        return this.hasIsLimited;
+    }
+
+    /**
+     * Used to check if the increase of the command limit
+     * should be stopped.
+     *
+     * @return True if the increase of the command limit
+     * should be stopped.
+     */
+    public boolean hasStopIncreaseLimit() {
+        return this.hasStopIncreaseLimit;
+    }
+
+    /**
      * Used to get the error message.
      *
      * @return The message.
@@ -142,6 +187,28 @@ public class CommandStatus {
         if (this.hasDatabaseEmpty()) return ConfigMessages.getDatabaseEmpty();
         if (this.hasPlayerCommand()) return ConfigMessages.getPlayerCommand();
         if (this.hasNoPermission()) return ConfigMessages.getNoPermission();
+        if (this.hasIsLimited()) return ConfigMessages.getIsLimited();
         return null;
+    }
+
+    /**
+     * Used to increase the command limit of a command in
+     * regard to this command status.
+     *
+     * @param user The instance of the user.
+     * @param command The command's instance.
+     * @return This instance.
+     */
+    public @NotNull CommandStatus increaseLimit(@NotNull User user, @NotNull Command command) {
+
+        // Check if the increase has been stopped.
+        if (this.hasStopIncreaseLimit()) return this;
+
+        // Check if the command doesn't have a limit.
+        if (!command.hasLimit()) return this;
+
+        // Increase the limit.
+        user.increaseAmountExecuted(command.getIdentifier());
+        return this;
     }
 }

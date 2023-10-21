@@ -138,6 +138,17 @@ public class CommandConfigurationHandler extends ConfigurationHandler {
     }
 
     /**
+     * Used to get the command's limit.
+     *
+     * @param identifier The command's identifier.
+     * @return The command limit.
+     * -1 if there is no command limit.
+     */
+    public int getCommandLimit(String identifier) {
+        return this.getCommand(identifier).getInteger("limit", -1);
+    }
+
+    /**
      * Used to get the first command with a certain
      * command type.
      *

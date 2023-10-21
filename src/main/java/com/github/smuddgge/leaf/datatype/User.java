@@ -4,12 +4,10 @@ import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.database.records.CommandLimitRecord;
 import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
-import com.github.smuddgge.leaf.database.tables.HistoryTable;
-import com.github.smuddgge.leaf.database.tables.IgnoreTable;
-import com.github.smuddgge.leaf.database.tables.MuteTable;
-import com.github.smuddgge.leaf.database.tables.PlayerTable;
+import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishydatabase.Query;
@@ -538,6 +536,23 @@ public class User {
         for (String command : commandList) {
             this.executeCommand(command);
         }
+    }
+
+    /**
+     * Used to increase the amount of times
+     * this player has executed a specific command.
+     *
+     * @param commandId The command's id.
+     */
+    public void increaseAmountExecuted(@NotNull String commandId) {
+
+        // Check if the database is disabled.
+        if (Leaf.isDatabaseDisabled()) return;
+
+        // Increase amount executed.
+        Leaf.getDatabase()
+                .getTable(CommandLimitTable.class)
+                .increaseAmountExecuted(this.getUniqueId(), commandId);
     }
 
     /**
