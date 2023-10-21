@@ -1,7 +1,10 @@
 package com.github.smuddgge.leaf.commands;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;
+import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -192,14 +195,14 @@ public class CommandStatus {
     }
 
     /**
-     * Used to increase the command limit of a command in
-     * regard to this command status.
+     * Used to increase the number of command executions
+     * for a command in regard to this command status.
      *
-     * @param user The instance of the user.
+     * @param user    The instance of the user.
      * @param command The command's instance.
      * @return This instance.
      */
-    public @NotNull CommandStatus increaseLimit(@NotNull User user, @NotNull Command command) {
+    public @NotNull CommandStatus increaseExecutions(@NotNull User user, @NotNull Command command) {
 
         // Check if the increase has been stopped.
         if (this.hasStopIncreaseLimit()) return this;
@@ -209,6 +212,34 @@ public class CommandStatus {
 
         // Increase the limit.
         user.increaseAmountExecuted(command.getIdentifier());
+        return this;
+    }
+
+    /**
+     * Used to increase the number of command executions
+     * for a command in regard to this command status.
+     *
+     * @param member  The instance of the discord member.
+     * @param command The instance of the command.
+     * @return This instance.
+     */
+    public @NotNull CommandStatus increaseExecutions(@NotNull Member member, @NotNull Command command) {
+
+        // Check if the increase has been stopped.
+        if (this.hasStopIncreaseLimit()) return this;
+
+        // Check if the command doesn't have a limit.
+        if (!command.hasLimit()) return this;
+
+        // Increase the limit.
+        // Check if the database is disabled.
+        if (Leaf.isDatabaseDisabled()) return this;
+
+        // Increase amount executed.
+        Leaf.getDatabase()
+                .getTable(CommandLimitTable.class)
+                .increaseAmountExecuted(member, command.getIdentifier());
+
         return this;
     }
 }

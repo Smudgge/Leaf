@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.database.tables;
 import com.github.smuddgge.leaf.database.records.CommandLimitRecord;
 import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
+import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -33,7 +34,26 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
         CommandLimitRecord record = this.getFirstRecord(
                 new Query().match(
                         "uuidPlusCommand",
-                        CommandLimitRecord.createUuidPlusCommand(uuid, commandId)
+                        CommandLimitRecord.createPrimaryKey(uuid, commandId)
+                )
+        );
+
+        return record == null ? 0 : record.getAmountExecuted();
+    }
+
+    /**
+     * Used to get the amount of times a command
+     * has been executed by a discord member.
+     *
+     * @param member    The discord member.
+     * @param commandId The command's identifier.
+     * @return The amount executed.
+     */
+    public int getAmountExecuted(@NotNull Member member, @NotNull String commandId) {
+        CommandLimitRecord record = this.getFirstRecord(
+                new Query().match(
+                        "uuidPlusCommand",
+                        CommandLimitRecord.createPrimaryKey(member, commandId)
                 )
         );
 
@@ -53,14 +73,45 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
         CommandLimitRecord record = this.getFirstRecord(
                 new Query().match(
                         "uuidPlusCommand",
-                        CommandLimitRecord.createUuidPlusCommand(uuid, commandId)
+                        CommandLimitRecord.createPrimaryKey(uuid, commandId)
                 )
         );
 
         // Check if the record doesn't exist.
         if (record == null) {
             record = new CommandLimitRecord();
-            record.uuidPlusCommand = CommandLimitRecord.createUuidPlusCommand(uuid, commandId);
+            record.primaryKey = CommandLimitRecord.createPrimaryKey(uuid, commandId);
+            record.amountExecuted = "0";
+        }
+
+        // Increase the amount executed.
+        record.amountExecuted = String.valueOf(record.getAmountExecuted() + 1);
+
+        // Update in database.
+        this.insertRecord(record);
+    }
+
+    /**
+     * Used to increase the amount of times a discord
+     * member has executed a specific command.
+     *
+     * @param member    The instance of the member.
+     * @param commandId The command's identifier
+     */
+    public void increaseAmountExecuted(@NotNull Member member, @NotNull String commandId) {
+
+        // Attempt to get the record.
+        CommandLimitRecord record = this.getFirstRecord(
+                new Query().match(
+                        "uuidPlusCommand",
+                        CommandLimitRecord.createPrimaryKey(member, commandId)
+                )
+        );
+
+        // Check if the record doesn't exist.
+        if (record == null) {
+            record = new CommandLimitRecord();
+            record.primaryKey = CommandLimitRecord.createPrimaryKey(member, commandId);
             record.amountExecuted = "0";
         }
 

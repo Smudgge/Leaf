@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.database.records;
 import com.github.smuddgge.squishydatabase.record.Record;
 import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
+import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.UUID;
 public class CommandLimitRecord extends Record {
 
     @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
-    public String uuidPlusCommand;
+    public String primaryKey;
 
     public String amountExecuted;
 
@@ -39,7 +40,19 @@ public class CommandLimitRecord extends Record {
      * @param commandId The command's id.
      * @return The requested primary key.
      */
-    public static String createUuidPlusCommand(@NotNull UUID uuid, @NotNull String commandId) {
-        return uuid + "--" + commandId;
+    public static @NotNull String createPrimaryKey(@NotNull UUID uuid, @NotNull String commandId) {
+        return "minecraft--" + uuid + "--" + commandId;
+    }
+
+    /**
+     * Used to create the record primary key from
+     * the members name and commands id.
+     *
+     * @param member    The instance of the member.
+     * @param commandId The command's identifier.
+     * @return The requested primary key.
+     */
+    public static @NotNull String createPrimaryKey(@NotNull Member member, @NotNull String commandId) {
+        return "discord--" + member.getUser().getName() + "--" + commandId;
     }
 }

@@ -1,7 +1,9 @@
 package com.github.smuddgge.leaf.discord;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
+import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.utility.DiscordUtility;
 import com.github.smuddgge.squishydatabase.console.Console;
 import net.dv8tion.jda.api.Permission;
@@ -134,6 +136,37 @@ public class DiscordBotCommandAdapter {
     }
 
     /**
+     * Used to check if the member is limited by the
+     * number of times they can execute the command.
+     *
+     * @param member The instance of the member.
+     * @return This instance.
+     */
+    public boolean isLimited(@NotNull Member member) {
+
+        // Get the command limit for this command.
+        int limit = this.command.getSection()
+                .getSection("discord_bot")
+                .getInteger("limit", -1);
+
+        // Check if there is no limit.
+        if (limit == -1) return false;
+
+        // Check if the database is disabled.
+        // We return true because the database may have disabled its self
+        // and the admin may still want commands to be limited.
+        if (Leaf.isDatabaseDisabled()) return true;
+
+        int amountExecuted = Leaf.getDatabase()
+                .getTable(CommandLimitTable.class)
+                .getAmountExecuted(member, this.command.getIdentifier());
+
+        // Check if the amount of times the command
+        // has been executed is bigger or equal to the limit.
+        return amountExecuted >= limit;
+    }
+
+    /**
      * Used to execute the discord command.
      *
      * @param event The instance of the discord event.
@@ -150,8 +183,18 @@ public class DiscordBotCommandAdapter {
             return;
         }
 
+        // Check if the member is null.
+        if (event.getMember() == null) {
+            event.reply(new DiscordBotMessageAdapter(
+                    this.command.getSection(),
+                    "discord_bot.member_error",
+                    "An error occurred while trying to get the member instance."
+            ).buildMessage()).queue();
+            return;
+        }
+
         // Check if the user has permission to run the command.
-        if (event.getMember() != null && !this.hasPermission(event.getMember())) {
+        if (!this.hasPermission(event.getMember())) {
             event.reply(new DiscordBotMessageAdapter(
                     this.command.getSection(),
                     "discord_bot.no_permission",
@@ -161,7 +204,7 @@ public class DiscordBotCommandAdapter {
         }
 
         // Check if the user has the correct roles to run the command.
-        if (event.getMember() != null && !this.hasRoleFromList(event.getMember())) {
+        if (!this.hasRoleFromList(event.getMember())) {
             event.reply(new DiscordBotMessageAdapter(
                     this.command.getSection(),
                     "discord_bot.no_permission",
@@ -170,6 +213,16 @@ public class DiscordBotCommandAdapter {
             return;
         }
 
+        // Check if the member is limited.
+        if (this.isLimited(event.getMember())) {
+            event.reply(new DiscordBotMessageAdapter(
+                    this.command.getSection(),
+                    "discord_bot.limited",
+                    "You can no longer execute this command because " +
+                            "you have reached the commands execute limit."
+            ).buildMessage()).queue();
+            return;
+        }
 
         // Execute as discord command.
         CommandStatus status = this.getCommand().getBaseCommandType().onDiscordRun(
@@ -183,11 +236,12 @@ public class DiscordBotCommandAdapter {
             return;
         }
 
+        // Increase the command executions.
+        status.increaseExecutions(event.getMember(), this.command);
+
         // Send a status message if given.
         String message = status.getMessage();
-        if (message != null) {
-            event.reply(message).queue();
-        }
+        if (message != null) event.reply(message).queue();
     }
 
     /**

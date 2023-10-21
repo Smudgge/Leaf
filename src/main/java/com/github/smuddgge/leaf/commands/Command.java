@@ -4,7 +4,6 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
-import com.github.smuddgge.leaf.database.records.CommandLimitRecord;
 import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.utility.Sounds;
@@ -132,7 +131,8 @@ public record Command(String identifier,
 
         // Check if there are no sub command types.
         if (this.commandType.getSubCommandTypes().isEmpty()
-                || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseLimit(user, this);
+                || arguments.length <= 0)
+            return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseExecutions(user, this);
 
         // Otherwise, check if it is a sub command.
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
@@ -143,10 +143,10 @@ public record Command(String identifier,
             subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
 
             if (subCommandNames.contains(name))
-                return commandType.onPlayerRun(this.getSection(), arguments, user).increaseLimit(user, this);
+                return commandType.onPlayerRun(this.getSection(), arguments, user).increaseExecutions(user, this);
         }
 
-        return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseLimit(user, this);
+        return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseExecutions(user, this);
     }
 
     /**
