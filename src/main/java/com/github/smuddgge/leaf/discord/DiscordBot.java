@@ -88,19 +88,29 @@ public class DiscordBot extends ListenerAdapter {
         if (this.bot == null) return this;
         if (!command.isDiscordEnabled()) return this;
 
-        // Register with bot.
-        CommandCreateAction action = this.bot.upsertCommand(command.getName(), command.getDescription());
+        try {
+            // Register with bot.
+            CommandCreateAction action = this.bot.upsertCommand(command.getName(), command.getDescription());
 
-        // Create new discord command.
-        DiscordBotCommandAdapter discordCommand = new DiscordBotCommandAdapter(command, action);
-        MessageManager.log("&7[Discord Bot] &fLoading &7command : " + command.getName());
-        action.complete();
+            // Create new discord command.
+            DiscordBotCommandAdapter discordCommand = new DiscordBotCommandAdapter(command, action);
+            MessageManager.log("&7[Discord Bot] &fLoading &7command : " + command.getName());
+            action.complete();
 
-        // Log.
-        MessageManager.log("&7[Discord Bot] &aRegistered &7command : " + command.getName());
+            // Log.
+            MessageManager.log("&7[Discord Bot] &aRegistered &7command : " + command.getName());
 
-        // Add to the listener list.
-        this.discordCommandList.add(discordCommand);
+            // Add to the listener list.
+            this.discordCommandList.add(discordCommand);
+
+        } catch (Exception exception) {
+            Console.warn("Unable to load command " + command.getName() + ". Please ensure the following:");
+            Console.warn("- The discord bot token is correct.");
+            Console.warn("- The discord bot has the correct &fPrivileged Gateway Intents.");
+            Console.warn("- The discord bot has the correct permissions on the server.");
+            Console.warn("Exception for debugging:");
+            exception.printStackTrace();
+        }
         return this;
     }
 
