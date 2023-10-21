@@ -79,6 +79,7 @@ public record Command(String identifier,
 
     /**
      * Executed when a player runs the command.
+     * This will also check for permissions.
      *
      * @param arguments The arguments given in the command.
      * @param user      The instance of the user running the command.
@@ -86,17 +87,10 @@ public record Command(String identifier,
      */
     public CommandStatus onPlayerRun(String[] arguments, User user) {
 
-        // Play sound.
-        if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
-            try {
-                Sounds.play(Sound.valueOf(this.getSound().toUpperCase(Locale.ROOT)), user.getUniqueId());
-            } catch (IllegalArgumentException illegalArgumentException) {
-                MessageManager.warn("Invalid sound for command " + this.getName() + " : ");
-                illegalArgumentException.printStackTrace();
-            }
-        }
+        // Double check permissions.
+        if (!user.hasPermission(this.getPermission())) return new CommandStatus().noPermission();
 
-        // Check for requirements.
+        // Check for permission-based requirements.
         if (this.getSection().getKeys().contains("require")) {
             ConfigurationSection requireSection = this.getSection().getSection("require");
 
@@ -119,9 +113,21 @@ public record Command(String identifier,
             }
         }
 
+        // Play sound.
+        if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
+            try {
+                Sounds.play(Sound.valueOf(this.getSound().toUpperCase(Locale.ROOT)), user.getUniqueId());
+            } catch (IllegalArgumentException illegalArgumentException) {
+                MessageManager.warn("Invalid sound for command " + this.getName() + " : ");
+                illegalArgumentException.printStackTrace();
+            }
+        }
+
+        // Check if there are no sub command types.
         if (this.commandType.getSubCommandTypes().isEmpty()
                 || arguments.length <= 0) return this.commandType.onPlayerRun(this.getSection(), arguments, user);
 
+        // Otherwise, check if it is a sub command.
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
             String name = arguments[0];
 
