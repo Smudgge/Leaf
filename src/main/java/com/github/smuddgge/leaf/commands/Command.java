@@ -106,7 +106,7 @@ public record Command(String identifier,
                 String permission = requireSection.getSection(identifier).getString("permission", null);
                 if (permission == null) continue;
 
-                // Get server list.
+                // Get a server list.
                 List<String> serverList = requireSection.getSection(identifier).getListString("servers", new ArrayList<>());
                 if (serverList.size() <= 0) continue;
 

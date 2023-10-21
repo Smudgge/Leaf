@@ -284,6 +284,9 @@ public class Leaf {
         Leaf.database.createTable(new IgnoreTable());
         Leaf.database.createTable(new MessageTable());
         Leaf.database.createTable(new MuteTable());
+
+        // Version 4.3.0
+        Leaf.database.createTable(new CommandLimitTable());
     }
 
     /**

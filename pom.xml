@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>4.3.0</version>
+    <version>4.3.0-DEV.0</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
