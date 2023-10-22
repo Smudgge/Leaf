@@ -136,10 +136,15 @@ public class Command extends BaseCommandType {
                 // Respond message.
                 hook.editOriginal(MessageEditData.fromCreateData(new DiscordBotMessageAdapter(
                         section, "discord_bot.message",
-                        "```py\n%Console%\n```".replace("%Console%", LoggerUtility.getLastLines(
+                        "```py\n%Console%\n```"
+                ).setParser(new DiscordBotMessageAdapter.PlaceholderParser() {
+                    @Override
+                    public @NotNull String parsePlaceholders(@NotNull String string) {
+                        return string.replace("%Console%", LoggerUtility.getLastLines(
                                 section.getSection("discord_bot").getInteger("lines", 10)
-                        ))
-                ).buildMessage())).queue();
+                        ));
+                    }
+                }).buildMessage())).queue();
 
             } catch (Exception exception) {
                 exception.printStackTrace();
