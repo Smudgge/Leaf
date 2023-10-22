@@ -207,8 +207,8 @@ public class DiscordBotCommandAdapter {
         if (!this.hasRoleFromList(event.getMember())) {
             event.reply(new DiscordBotMessageAdapter(
                     this.command.getSection(),
-                    "discord_bot.no_permission",
-                    "You do not have permission to run this command."
+                    "discord_bot.no_roles",
+                    "You do not have the correct roles to run this command."
             ).buildMessage()).queue();
             return;
         }

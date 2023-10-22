@@ -6,14 +6,18 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
 import com.github.smuddgge.leaf.utility.CommandUtility;
+import com.github.smuddgge.leaf.utility.LoggerUtility;
 import com.github.smuddgge.leaf.utility.PlayerUtility;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,11 +121,30 @@ public class Command extends BaseCommandType {
             CommandUtility.executeCommandInConsole(command);
         }
 
-        // Respond message.
-        event.reply(new DiscordBotMessageAdapter(
+        InteractionHook hook = event.reply(new DiscordBotMessageAdapter(
                 section, "discord_bot.message",
-                "Ran commands."
-        ).buildMessage()).queue();
+                "```py\n%Console%\n```".replace("%Console%", "Loading...")
+        ).buildMessage()).complete();
+
+        // Run in another thread.
+        new Thread(() -> {
+
+            try {
+
+                Thread.sleep(Duration.ofSeconds(2));
+
+                // Respond message.
+                hook.editOriginal(MessageEditData.fromCreateData(new DiscordBotMessageAdapter(
+                        section, "discord_bot.message",
+                        "```py\n%Console%\n```".replace("%Console%", LoggerUtility.getLastLines(
+                                section.getSection("discord_bot").getInteger("lines", 10)
+                        ))
+                ).buildMessage())).queue();
+
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }).start();
 
         return new CommandStatus();
     }

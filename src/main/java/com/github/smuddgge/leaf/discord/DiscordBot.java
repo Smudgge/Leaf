@@ -3,7 +3,6 @@ package com.github.smuddgge.leaf.discord;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.events.EventManager;
-import com.github.smuddgge.squishydatabase.console.Console;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -57,11 +56,11 @@ public class DiscordBot extends ListenerAdapter {
             MessageManager.log("&7[Discord Bot] &aEnabled");
 
         } catch (Exception exception) {
-            Console.warn("Unable to login to the discord bot. Please ensure the following:");
-            Console.warn("- The discord bot token is correct.");
-            Console.warn("- The discord bot has the correct &fPrivileged Gateway Intents.");
-            Console.warn("- The discord bot has the correct permissions on the server.");
-            Console.warn("Exception for debugging:");
+            MessageManager.warn("Unable to login to the discord bot. Please ensure the following:");
+            MessageManager.warn("- The discord bot token is correct.");
+            MessageManager.warn("- The discord bot has the correct &fPrivileged Gateway Intents.");
+            MessageManager.warn("- The discord bot has the correct permissions on the server.");
+            MessageManager.warn("Exception for debugging:");
             exception.printStackTrace();
         }
     }
@@ -104,11 +103,11 @@ public class DiscordBot extends ListenerAdapter {
             this.discordCommandList.add(discordCommand);
 
         } catch (Exception exception) {
-            Console.warn("Unable to load command " + command.getName() + ". Please ensure the following:");
-            Console.warn("- The discord bot token is correct.");
-            Console.warn("- The discord bot has the correct &fPrivileged Gateway Intents.");
-            Console.warn("- The discord bot has the correct permissions on the server.");
-            Console.warn("Exception for debugging:");
+            MessageManager.warn("Unable to load command " + command.getName() + ". Please ensure the following:");
+            MessageManager.warn("- The discord bot token is correct.");
+            MessageManager.warn("- The discord bot has the correct &fPrivileged Gateway Intents.");
+            MessageManager.warn("- The discord bot has the correct permissions on the server.");
+            MessageManager.warn("Exception for debugging:");
             exception.printStackTrace();
         }
         return this;

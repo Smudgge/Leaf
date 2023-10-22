@@ -32,7 +32,7 @@ public class DiscordUtility {
             for (Role role : member.getRoles()) {
 
                 // Check if the member has the role.
-                if (roleName.toLowerCase().equals(role.getName().toUpperCase())) return true;
+                if (roleName.equalsIgnoreCase(role.getName())) return true;
             }
         }
         return false;

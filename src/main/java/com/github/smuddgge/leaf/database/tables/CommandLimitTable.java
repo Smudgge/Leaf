@@ -33,7 +33,7 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
     public int getAmountExecuted(@NotNull UUID uuid, @NotNull String commandId) {
         CommandLimitRecord record = this.getFirstRecord(
                 new Query().match(
-                        "uuidPlusCommand",
+                        "primaryKey",
                         CommandLimitRecord.createPrimaryKey(uuid, commandId)
                 )
         );
@@ -52,7 +52,7 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
     public int getAmountExecuted(@NotNull Member member, @NotNull String commandId) {
         CommandLimitRecord record = this.getFirstRecord(
                 new Query().match(
-                        "uuidPlusCommand",
+                        "primaryKey",
                         CommandLimitRecord.createPrimaryKey(member, commandId)
                 )
         );
@@ -72,7 +72,7 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
         // Attempt to get the record.
         CommandLimitRecord record = this.getFirstRecord(
                 new Query().match(
-                        "uuidPlusCommand",
+                        "primaryKey",
                         CommandLimitRecord.createPrimaryKey(uuid, commandId)
                 )
         );
@@ -103,7 +103,7 @@ public class CommandLimitTable extends TableAdapter<CommandLimitRecord> {
         // Attempt to get the record.
         CommandLimitRecord record = this.getFirstRecord(
                 new Query().match(
-                        "uuidPlusCommand",
+                        "primaryKey",
                         CommandLimitRecord.createPrimaryKey(member, commandId)
                 )
         );

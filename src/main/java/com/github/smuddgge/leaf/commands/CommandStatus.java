@@ -229,7 +229,7 @@ public class CommandStatus {
         if (this.hasStopIncreaseLimit()) return this;
 
         // Check if the command doesn't have a limit.
-        if (!command.hasLimit()) return this;
+        if (command.getSection().getSection("discord_bot").getInteger("limit", -1) == -1) return this;
 
         // Increase the limit.
         // Check if the database is disabled.

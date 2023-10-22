@@ -52,6 +52,7 @@ public class Leaf {
 
     private static Leaf plugin;
     private static ProxyServer server;
+    private static Path folder;
 
     private static CommandHandler commandHandler;
     private static Database database;
@@ -63,6 +64,7 @@ public class Leaf {
     public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
         Leaf.server = server;
         Leaf.plugin = this;
+        Leaf.folder = folder;
 
         // Set up the configuration files.
         ConfigurationManager.initialise(folder.toFile());
@@ -187,6 +189,15 @@ public class Leaf {
      */
     public static ProxyServer getServer() {
         return Leaf.server;
+    }
+
+    /**
+     * Used to get the instance of the folder.
+     *
+     * @return The instance of the folder.
+     */
+    public static Path getFolder() {
+        return Leaf.folder;
     }
 
     /**

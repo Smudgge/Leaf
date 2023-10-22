@@ -116,7 +116,7 @@ command:
     commands:
       - "find %arg_1%"
       - "lobby"
-    message: "Ran commands."
+    message: "```py\n%Console%\n```"
 
 
 
