@@ -22,7 +22,7 @@ type: SQLITE
 # # MONGO DATABASE
 # # This type of database saves data to the cloud.
 # connection_string: "connectionString"
-# database_same: "Database"
+# database_name: "Database"
 
 # ✜ Settings ✜
 # The maximum amount of history that will
