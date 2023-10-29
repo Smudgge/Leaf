@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.commands.types;
 
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
@@ -131,7 +132,12 @@ public class Command extends BaseCommandType {
 
             try {
 
-                Thread.sleep(Duration.ofSeconds(2));
+                try {
+                    // Attempt to sleep.
+                    Thread.sleep(2000);
+                } catch (Exception ignored) {
+                    MessageManager.warn("Unable to Thread.sleep(); for the 'command' command type. This may be due to needing a higher Java Version.");
+                }
 
                 // Respond message.
                 hook.editOriginal(MessageEditData.fromCreateData(new DiscordBotMessageAdapter(
