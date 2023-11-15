@@ -67,7 +67,7 @@ public class FriendUnfriend implements CommandType {
 
         // Check if the player is not a friend.
         if (friendRecord == null) {
-            user.sendMessage(section.getString("not_found", "{error_colour}Invalid player name."));
+            user.sendMessage(unfriendSection.getString("not_found", "{error_colour}Invalid player name."));
             return new CommandStatus();
         }
 
@@ -75,7 +75,7 @@ public class FriendUnfriend implements CommandType {
         FriendManager.unFriend(user.getUniqueId().toString(), unfriendPlayerRecord.uuid);
 
         // Send the user a message.
-        String message = section.getString("message", "{message} You are no longer friends with <player>");
+        String message = unfriendSection.getString("message", "{message} You are no longer friends with <player>");
         user.sendMessage(PlaceholderManager.parse(message, null, new User(null, unfriendPlayerRecord.name)));
 
         return new CommandStatus();
