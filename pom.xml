@@ -128,6 +128,14 @@
             <version>4.14.0</version>
         </dependency>
 
+        <!-- MiniPlaceholders -->
+        <dependency>
+            <groupId>io.github.miniplaceholders</groupId>
+            <artifactId>miniplaceholders-api</artifactId>
+            <version>2.2.2</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Elytrium -->
         <dependency>
             <groupId>net.elytrium</groupId>

@@ -298,18 +298,18 @@ public class User {
             // Check if it's an actionbar part.
             if (part.startsWith("actionbar ")) {
                 String actionbarMessage = part.split("=")[1];
-                this.player.sendActionBar(MessageManager.convert(actionbarMessage));
+                this.player.sendActionBar(MessageManager.convertAndParse(actionbarMessage, player));
                 continue;
             }
 
-            this.player.sendMessage(MessageManager.convert(part));
+            this.player.sendMessage(MessageManager.convertAndParse(part, player));
         }
 
         // Check if there is a title to show.
         if (hasTitle) {
             this.player.showTitle(Title.title(
-                    MessageManager.convert(title),
-                    MessageManager.convert(subtitle),
+                    MessageManager.convertAndParse(title, player),
+                    MessageManager.convertAndParse(subtitle, player),
                     times
             ));
         }
