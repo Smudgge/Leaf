@@ -343,6 +343,7 @@ ignorelist:
   type: "ignorelist"
   enabled: true
   name: "ignorelist"
+  none_ignored: "{error_colour}You are not ignoring anyone."
   message:
     - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
     - "%players%"
