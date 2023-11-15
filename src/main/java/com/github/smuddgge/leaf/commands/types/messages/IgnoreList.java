@@ -64,7 +64,7 @@ public class IgnoreList extends BaseCommandType {
 
         String playerNamesString = String.join(", ", playerNames);
         String rawMessage = String.join("\n", section.getListString("message", new ArrayList<>()));
-        String formattedMessage = rawMessage.replace("%players%", "&r&f" + playerNamesString);
+        String formattedMessage = rawMessage.replace("%players%", playerNamesString);
 
         user.sendMessage(formattedMessage);
         return new CommandStatus();
