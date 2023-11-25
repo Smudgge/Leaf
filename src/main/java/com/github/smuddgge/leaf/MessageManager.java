@@ -1,19 +1,20 @@
 package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.MiniPlaceholdersAdapter;
+import com.github.smuddgge.leaf.dependencys.MiniPlaceholdersDependency;
 import com.github.smuddgge.squishydatabase.console.Console;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
-import io.github.miniplaceholders.api.MiniPlaceholders;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Represents the message manager.
@@ -61,11 +62,13 @@ public class MessageManager {
      * @return The component.
      */
     public static Component convertAndParseMiniMessage(String message, @Nullable Player player) {
-        if (player != null) {
-            return MiniMessage.miniMessage().deserialize(message, MiniPlaceholders.getAudiencePlaceholders(Audience.audience(player)), MiniPlaceholders.getGlobalPlaceholders());
-        } else {
-            return MiniMessage.miniMessage().deserialize(message, MiniPlaceholders.getGlobalPlaceholders());
+
+        // Check if the mini placeholders dependency is disabled.
+        if (!MiniPlaceholdersDependency.isEnabled()) {
+            return MiniMessage.miniMessage().deserialize(message);
         }
+
+        return MiniPlaceholdersAdapter.parseMiniPlaceholders(message, player);
     }
 
     /**
@@ -76,31 +79,31 @@ public class MessageManager {
      */
     public static Component convertAndParse(String message, @Nullable Player player) {
         try {
-            return MessageManager.convertAndParseMiniMessage(message
-                    .replace("§", "&") // Ensure there are no legacy symbols.
-                    .replace("&0", "<reset><black>")
-                    .replace("&1", "<reset><dark_blue>")
-                    .replace("&2", "<reset><dark_green>")
-                    .replace("&3", "<reset><dark_aqua>")
-                    .replace("&4", "<reset><dark_red>")
-                    .replace("&5", "<reset><dark_purple>")
-                    .replace("&6", "<reset><gold>")
-                    .replace("&7", "<reset><gray>")
-                    .replace("&8", "<reset><dark_gray>")
-                    .replace("&9", "<reset><blue>")
-                    .replace("&a", "<reset><green>")
-                    .replace("&b", "<reset><aqua>")
-                    .replace("&c", "<reset><red>")
-                    .replace("&d", "<reset><light_purple>")
-                    .replace("&e", "<reset><yellow>")
-                    .replace("&f", "<reset><white>")
-                    .replace("&k", "<obf>")
-                    .replace("&l", "<b>")
-                    .replace("&m", "<st>")
-                    .replace("&n", "<u>")
-                    .replace("&o", "<i>")
-                    .replace("&r", "<reset>"),
-                player
+            return MessageManager.convertAndParseMiniMessage(convertLegacyHexToMiniMessage(message)
+                            .replace("§", "&") // Ensure there are no legacy symbols.
+                            .replace("&0", "<reset><black>")
+                            .replace("&1", "<reset><dark_blue>")
+                            .replace("&2", "<reset><dark_green>")
+                            .replace("&3", "<reset><dark_aqua>")
+                            .replace("&4", "<reset><dark_red>")
+                            .replace("&5", "<reset><dark_purple>")
+                            .replace("&6", "<reset><gold>")
+                            .replace("&7", "<reset><gray>")
+                            .replace("&8", "<reset><dark_gray>")
+                            .replace("&9", "<reset><blue>")
+                            .replace("&a", "<reset><green>")
+                            .replace("&b", "<reset><aqua>")
+                            .replace("&c", "<reset><red>")
+                            .replace("&d", "<reset><light_purple>")
+                            .replace("&e", "<reset><yellow>")
+                            .replace("&f", "<reset><white>")
+                            .replace("&k", "<obf>")
+                            .replace("&l", "<b>")
+                            .replace("&m", "<st>")
+                            .replace("&n", "<u>")
+                            .replace("&o", "<i>")
+                            .replace("&r", "<reset>"),
+                    player
             );
         } catch (Exception exception) {
             Console.warn("Unable to convert message : " + message);
@@ -117,6 +120,29 @@ public class MessageManager {
      */
     public static String convertToLegacy(String message) {
         return "§r" + message.replace("&", "§");
+    }
+
+    /**
+     * Used to convert legacy hex to mini message hex.
+     *
+     * @param message The instance of the message.
+     * @return The message with converted hex.
+     */
+    public static String convertLegacyHexToMiniMessage(String message) {
+        StringBuilder builder = new StringBuilder(
+                message.replace("&#", "<#")
+        );
+
+        // Create a regular expression pattern for the hex strings.
+        Pattern pattern = Pattern.compile("<#[0-9a-fA-F]{6}");
+        Matcher matcher = pattern.matcher(builder);
+
+        // Add the end bracket for a mini message.
+        matcher.results().forEach(
+                result -> builder.insert(result.start() + 8, ">")
+        );
+
+        return builder.toString();
     }
 
     /**

@@ -13,6 +13,7 @@ import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
+import com.github.smuddgge.leaf.dependencys.MiniPlaceholdersDependency;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.discord.DiscordBot;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
@@ -143,6 +144,12 @@ public class Leaf {
             MessageManager.log("&7[Dependencies] Could not find optional dependency &fProtocolize");
             MessageManager.log("&7[Dependencies] Inventories and sounds will be disabled.");
             MessageManager.log(ProtocolizeDependency.getDependencyMessage());
+        }
+
+        if (!MiniPlaceholdersDependency.isEnabled()) {
+            MessageManager.log("&7[Dependencies] Could not find optional dependency &fMini Placeholders");
+            MessageManager.log("&7[Dependencies] This optional plugin lets you use mini placeholders, not to be confused with leaf placeholders.");
+            MessageManager.log(MiniPlaceholdersDependency.getDependencyMessage());
         }
 
         // Events.

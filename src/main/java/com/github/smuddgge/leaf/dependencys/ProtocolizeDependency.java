@@ -25,7 +25,7 @@ public class ProtocolizeDependency {
         try {
             Class.forName("dev.simplix.protocolize.api.inventory.Inventory");
             return true;
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
             return false;
         }
     }

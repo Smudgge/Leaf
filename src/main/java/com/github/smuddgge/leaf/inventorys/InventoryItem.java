@@ -129,6 +129,7 @@ public class InventoryItem {
      */
     public ItemStack getItemStack(ItemStack item) {
         CompoundTag compoundTag = new CompoundTag();
+        Optional<Player> player = Leaf.getServer().getPlayer(this.user.getUniqueId());
 
         // Set the material of the item.
         try {
@@ -165,7 +166,6 @@ public class InventoryItem {
         String name = this.section.getString("name", "&7");
         String x = PlaceholderManager.parse(name, null, this.user);
         String a = this.parsePlaceholders(x);
-        Optional<Player> player = Leaf.getServer().getPlayer(this.user.getUniqueId());
         Component c = MessageManager.convertAndParse(a, player.orElse(null));
         item.displayName(c);
 
