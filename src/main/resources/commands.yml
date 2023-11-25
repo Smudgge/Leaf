@@ -90,6 +90,12 @@ command:
     these_keys_can_be_named_anything:
       - "No more arguments"
       - "Sorry"
+  # Used to check if an argument that is meant to be a
+  # players name has a certain permission.
+  check_argument_permissions:
+    1: "permission.permission"
+  not_found: "The player could not be found."
+  no_permission: "The player you have stated does not have the required permissions."
   # Only proxy commands will work.
   # Defaults to run as the player.
   # You can use -c to run the command in the console.
@@ -112,6 +118,11 @@ command:
     # List of suggestions.
     arguments:
       arg_1: "The descrption."
+    # Check the argument's permissions.
+    check_argument_permissions:
+      arg_1: "permission.permission"
+    not_found: "The player could not be found."
+    player_no_permission: "The player you have stated does not have the required permissions."
     # Commands to be run in console.
     commands:
       - "find %arg_1%"

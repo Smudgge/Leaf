@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.commands.types;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
@@ -10,6 +11,7 @@ import com.github.smuddgge.leaf.utility.CommandUtility;
 import com.github.smuddgge.leaf.utility.LoggerUtility;
 import com.github.smuddgge.leaf.utility.PlayerUtility;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.velocitypowered.api.proxy.Player;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Command extends BaseCommandType {
 
@@ -73,7 +76,7 @@ public class Command extends BaseCommandType {
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
 
         // Get the final command list.
-        List<String> commandList = this.getFinalCommandList(section, arguments);
+        List<String> commandList = this.getFinalCommandList(section, arguments, new User(null, "Console"));
 
         // Execute the commands in console.
         CommandUtility.executeCommandInConsole(commandList);
@@ -84,7 +87,7 @@ public class Command extends BaseCommandType {
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
 
         // Get the final command list.
-        List<String> commandList = this.getFinalCommandList(section, arguments);
+        List<String> commandList = this.getFinalCommandList(section, arguments, user);
 
         // Execute the commands as the user.
         user.executeCommand(commandList);
@@ -107,6 +110,36 @@ public class Command extends BaseCommandType {
 
     @Override
     public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
+
+        // Loop though the check argument permissions.
+        ConfigurationSection checkPermissionSection = section.getSection("discord_bot.check_argument_permissions");
+        for (String argumentName : checkPermissionSection.getKeys()) {
+            String permission = checkPermissionSection.getString("permission");
+
+            OptionMapping optionMapping = event.getOption(argumentName);
+            if (optionMapping == null) return new CommandStatus().incorrectArguments();
+
+            // Attempt to get the player.
+            Optional<Player> optionalPlayer = Leaf.getServer()
+                    .getPlayer(optionMapping.getAsString());
+
+            // Check if the player is online.
+            if (optionalPlayer.isEmpty()) {
+                event.reply(new DiscordBotMessageAdapter(
+                        section, "discord_bot.not_found", "The player could not be found."
+                ).buildMessage()).complete();
+                return new CommandStatus();
+            }
+
+            // Find the user and check permissions.
+            User foundUser = new User(optionalPlayer.get());
+            if (!foundUser.hasPermission(permission)) {
+                event.reply(new DiscordBotMessageAdapter(
+                        section, "discord_bot.player_no_permission", "The player could not be found."
+                ).buildMessage()).complete();
+                return new CommandStatus();
+            }
+        }
 
         // Loop though each command.
         for (String command : section.getSection("discord_bot").getListString("commands")) {
@@ -165,10 +198,33 @@ public class Command extends BaseCommandType {
      *
      * @param section   The instance of the configuration section.
      * @param arguments The instance of the command arguments.
+     * @param user      The instance of the user to send messages to.
      * @return The list of commands to execute.
      */
-    private @NotNull List<String> getFinalCommandList(ConfigurationSection section, String[] arguments) {
+    private @NotNull List<String> getFinalCommandList(ConfigurationSection section, String[] arguments, @NotNull User user) {
         List<String> finalCommandList = new ArrayList<>();
+
+        // Loop though the check argument permissions.
+        ConfigurationSection checkPermissionSection = section.getSection("check_argument_permissions");
+        for (String argumentNumber : checkPermissionSection.getKeys()) {
+            String permission = checkPermissionSection.getString("permission");
+
+            Optional<Player> optionalPlayer = Leaf.getServer()
+                    .getPlayer(arguments[Integer.parseInt(argumentNumber)]);
+
+            // Check if the player is online.
+            if (optionalPlayer.isEmpty()) {
+                user.sendMessage(section.getString("not_found", "The player could not be found."));
+                return new ArrayList<>();
+            }
+
+            // Find the user and check permissions.
+            User foundUser = new User(optionalPlayer.get());
+            if (!foundUser.hasPermission(permission)) {
+                user.sendMessage(section.getString("no_permission", "The player you have stated does not have the required permissions."));
+                return new ArrayList<>();
+            }
+        }
 
         // Loop though each command.
         for (String command : section.getListString("commands", new ArrayList<>())) {

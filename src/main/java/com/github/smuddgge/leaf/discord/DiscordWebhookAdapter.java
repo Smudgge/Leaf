@@ -16,7 +16,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.BiConsumer;
 
 /**
  * Represents a discord webhook.
@@ -146,7 +145,7 @@ public class DiscordWebhookAdapter extends TaskContainer {
 
                         // Close the client.
                         client.close();
-                        
+
                     } catch (InterruptedException | ExecutionException exception) {
                         throw new RuntimeException(exception);
                     }
