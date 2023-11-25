@@ -2,15 +2,21 @@ package com.github.smuddgge.leaf.discord;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.github.smuddgge.leaf.task.TaskContainer;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.console.Console;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.BiConsumer;
 
 /**
  * Represents a discord webhook.
@@ -43,7 +49,7 @@ import java.time.Instant;
  *      timeStamp: false
  * </pre>
  */
-public class DiscordWebhookAdapter {
+public class DiscordWebhookAdapter extends TaskContainer {
 
     private final @NotNull ConfigurationSection section;
     private @NotNull PlaceholderParser placeholderParser;
@@ -120,7 +126,35 @@ public class DiscordWebhookAdapter {
                 this.sendEmbed(messageBuilder);
             }
 
-            client.send(messageBuilder.build());
+            // Send the message.
+            CompletableFuture<ReadonlyMessage> completableMessage = client.send(messageBuilder.build());
+
+            // Check if the message should be deleted.
+            if (this.section.getInteger("delete_after", -1) >= 0) {
+
+                // Thread it.
+                this.runTask(() -> {
+                    try {
+
+                        // Wait for complete.
+                        while (!completableMessage.isDone()) {
+                            Thread.sleep(200);
+                        }
+
+                        // Delete the message.
+                        client.delete(completableMessage.get().getId());
+
+                        // Close the client.
+                        client.close();
+                        
+                    } catch (InterruptedException | ExecutionException exception) {
+                        throw new RuntimeException(exception);
+                    }
+
+                }, Duration.ofSeconds(this.section.getInteger("delete_after", -1)), "delete");
+                return this;
+            }
+
             client.close();
             return this;
 
