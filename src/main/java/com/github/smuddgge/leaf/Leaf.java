@@ -315,7 +315,8 @@ public class Leaf {
 
         // Check if the discord bot is not null.
         if (Leaf.discordBot != null) {
-            Leaf.discordBot.shutdown();
+            Leaf.discordBot.removeCommands()
+                    .shutdown();
         }
 
         // Create new connection.
