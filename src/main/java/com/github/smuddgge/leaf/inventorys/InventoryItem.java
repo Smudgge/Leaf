@@ -1,10 +1,12 @@
 package com.github.smuddgge.leaf.inventorys;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
+import com.velocitypowered.api.proxy.Player;
 import dev.simplix.protocolize.api.item.ItemFlag;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
@@ -163,13 +165,15 @@ public class InventoryItem {
         String name = this.section.getString("name", "&7");
         String x = PlaceholderManager.parse(name, null, this.user);
         String a = this.parsePlaceholders(x);
-        Component c = MessageManager.convert(a);
+        Optional<Player> player = Leaf.getServer().getPlayer(this.user.getUniqueId());
+        Component c = MessageManager.convertAndParse(a, player.orElse(null));
         item.displayName(c);
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
-            item.addToLore(MessageManager.convert(
-                    this.parsePlaceholders(PlaceholderManager.parse(line, null, this.user))
+            item.addToLore(MessageManager.convertAndParse(
+                    this.parsePlaceholders(PlaceholderManager.parse(line, null, this.user)),
+                    player.orElse(null)
             ));
         }
 

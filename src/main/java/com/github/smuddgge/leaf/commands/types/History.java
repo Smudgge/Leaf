@@ -150,11 +150,11 @@ public class History extends BaseCommandType {
             builder.append(PlaceholderManager.parse(sectionString, null, new User(null, playerName)));
             builder.append("\n");
         }
-        builder.append("\n");
 
         // Get the footer.
         String footer = section.getAdaptedString("footer", "\n", null);
         if (footer != null) {
+            builder.append("\n");
             builder.append(PlaceholderManager.parse(footer
                             .replace("%page%", String.valueOf(page))
                             .replace("%page_amount%", String.valueOf(amountOfPages))

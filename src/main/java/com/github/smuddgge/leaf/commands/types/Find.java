@@ -48,7 +48,8 @@ public class Find extends BaseCommandType {
 
         // Check if the player doesn't exist.
         if (optionalPlayer.isEmpty()) {
-            String notFound = section.getAdaptedString("not_found", "\n");
+            String notFound = section.getAdaptedString("not_found", "\n")
+                .replace("%player%", arguments[0]);
             MessageManager.log(notFound);
             return new CommandStatus();
         }
@@ -79,7 +80,8 @@ public class Find extends BaseCommandType {
 
         // Check if the player doesn't exist.
         if (optionalPlayer.isEmpty()) {
-            String notFound = section.getAdaptedString("not_found", "\n");
+            String notFound = section.getAdaptedString("not_found", "\n")
+                .replace("%player%", arguments[0]);
             user.sendMessage(notFound);
             return new CommandStatus();
         }
@@ -101,8 +103,9 @@ public class Find extends BaseCommandType {
 
         // Check if the user is vanished.
         if (foundUser.isVanished()) {
-            String notFound = section.getAdaptedString("not_found", "\n");
-            user.sendMessage(notFound);
+            String notFound = section.getAdaptedString("not_found", "\n")
+                .replace("%player%", foundUser.getName());
+            user.sendMessage(PlaceholderManager.parse(notFound, null, foundUser));
             return new CommandStatus();
         }
 

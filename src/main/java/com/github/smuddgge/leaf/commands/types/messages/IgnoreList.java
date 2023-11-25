@@ -9,6 +9,7 @@ import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.IgnoreTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
 
@@ -62,9 +63,14 @@ public class IgnoreList extends BaseCommandType {
             playerNames.add(ignoredPlayerRecord.name);
         }
 
+        if (playerNames.isEmpty()) {
+            user.sendMessage(PlaceholderManager.parse(section.getAdaptedString("none_ignored", "{error_colour}You are not ignoring anyone.")));
+            return new CommandStatus();
+        }
+
         String playerNamesString = String.join(", ", playerNames);
         String rawMessage = String.join("\n", section.getListString("message", new ArrayList<>()));
-        String formattedMessage = rawMessage.replace("%players%", "&r&f" + playerNamesString);
+        String formattedMessage = rawMessage.replace("%players%", playerNamesString);
 
         user.sendMessage(formattedMessage);
         return new CommandStatus();

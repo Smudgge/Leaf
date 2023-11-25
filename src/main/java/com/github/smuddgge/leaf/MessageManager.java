@@ -4,8 +4,12 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.squishydatabase.console.Console;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
+import io.github.miniplaceholders.api.MiniPlaceholders;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -56,8 +60,12 @@ public class MessageManager {
      * @param message The instance of the message.
      * @return The component.
      */
-    public static Component convertMiniMessage(String message) {
-        return MiniMessage.miniMessage().deserialize(message);
+    public static Component convertAndParseMiniMessage(String message, @Nullable Player player) {
+        if (player != null) {
+            return MiniMessage.miniMessage().deserialize(message, MiniPlaceholders.getAudiencePlaceholders(Audience.audience(player)), MiniPlaceholders.getGlobalPlaceholders());
+        } else {
+            return MiniMessage.miniMessage().deserialize(message, MiniPlaceholders.getGlobalPlaceholders());
+        }
     }
 
     /**
@@ -66,9 +74,9 @@ public class MessageManager {
      * @param message The message to convert.
      * @return The requested component.
      */
-    public static Component convert(String message) {
+    public static Component convertAndParse(String message, @Nullable Player player) {
         try {
-            return MessageManager.convertMiniMessage(message
+            return MessageManager.convertAndParseMiniMessage(message
                     .replace("§", "&") // Ensure there are no legacy symbols.
                     .replace("&0", "<reset><black>")
                     .replace("&1", "<reset><dark_blue>")
@@ -91,7 +99,8 @@ public class MessageManager {
                     .replace("&m", "<st>")
                     .replace("&n", "<u>")
                     .replace("&o", "<i>")
-                    .replace("&r", "<reset>")
+                    .replace("&r", "<reset>"),
+                player
             );
         } catch (Exception exception) {
             Console.warn("Unable to convert message : " + message);
@@ -119,7 +128,7 @@ public class MessageManager {
         message = "&a[Leaf] &7" + message;
 
         for (String string : message.split("\n")) {
-            Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convert(string));
+            Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convertAndParse(string, null));
         }
     }
 
@@ -140,7 +149,7 @@ public class MessageManager {
     public static void warn(String message) {
         message = "&a[Leaf] &e[WARNING] &6" + message;
         for (String string : message.split("\n")) {
-            Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convert(string));
+            Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convertAndParse(string, null));
         }
     }
 
