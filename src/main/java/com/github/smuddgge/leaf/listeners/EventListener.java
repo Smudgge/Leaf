@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.leaf.events.EventType;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
+import com.velocitypowered.api.event.player.PlayerChooseInitialServerEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
@@ -46,39 +47,62 @@ public class EventListener {
     }
 
     /**
-     * Executed before a player connects to a server.
+     * Fired when the player first joins the server.
      *
-     * @param event Server connected event.
+     * @param event The instance of the event.
      */
-    public static void onPlayerJoin(ServerConnectedEvent event) {
+    public static void onPlayerFirstJoin(PlayerChooseInitialServerEvent event) {
         // Check if we are connected to the database
         if (Leaf.isDatabaseDisabled()) return;
 
         // Check if the player is null.
         if (event.getPlayer() == null) return;
+        if (event.getInitialServer().isEmpty()) return;
 
-        // Get the user
+        // Get the user and server.
         User user = new User(event.getPlayer());
+        RegisteredServer server = event.getInitialServer().get();
 
         // Update the player in the database.
         user.updateDatabase();
 
-        // Get server connecting to.
-        RegisteredServer server = event.getServer();
+        // Check if the user is vanished.
+        if (user.isVanished()) return;
 
-        // Check if the server is null.
-        if (server == null) return;
+        // Set connected server.
+        user.setConnectedServer(server);
+
+        // Sort processes.
+        FriendManager.onProxyJoin(user);
+        user.addHistory(server, PlayerHistoryEventType.JOIN);
+    }
+
+    /**
+     * Executed when a player connects to a server.
+     *
+     * @param event Server connected event.
+     */
+    public static void onPlayerSwitch(ServerConnectedEvent event) {
+        // Check if we are connected to the database
+        if (Leaf.isDatabaseDisabled()) return;
+
+        // Check if the player or the server is null.
+        if (event.getPlayer() == null) return;
+        if (event.getPreviousServer().isEmpty()) return;
+
+        // Get the user.
+        User user = new User(event.getPlayer());
+        RegisteredServer previousServer = event.getPreviousServer().get();
 
         // Check if the user is vanished.
         if (user.isVanished()) return;
 
-        user.setConnectedServer(server);
+        // Set connected server.
+        user.setConnectedServer(event.getServer());
 
-        if (event.getPreviousServer().isEmpty()) FriendManager.onProxyJoin(user);
-        else FriendManager.onChangeServer(user);
-
-        // Add history.
-        user.addHistory(server, PlayerHistoryEventType.JOIN);
+        // Sort processes.
+        FriendManager.onChangeServer(user);
+        user.addHistory(previousServer, PlayerHistoryEventType.JOIN);
     }
 
     /**
