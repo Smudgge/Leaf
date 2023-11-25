@@ -129,7 +129,7 @@ public class DiscordWebhookAdapter extends TaskContainer {
             CompletableFuture<ReadonlyMessage> completableMessage = client.send(messageBuilder.build());
 
             // Check if the message should be deleted.
-            if (this.section.getInteger("delete_after", -1) >= 0) {
+            if (this.section.getInteger("delete_after_seconds", -1) >= 0) {
 
                 // Thread it.
                 this.runTask(() -> {
