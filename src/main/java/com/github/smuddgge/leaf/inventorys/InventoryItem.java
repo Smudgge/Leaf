@@ -12,6 +12,7 @@ import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
 
@@ -163,20 +164,26 @@ public class InventoryItem {
         }
 
         // Set the display name.
-        String name = this.section.getString("name", "&7");
-        String x = PlaceholderManager.parse(name, null, this.user);
-        String a = this.parsePlaceholders(x);
-        Component c = MessageManager.convertAndParse(a, player.orElse(null));
-        item.displayName(c);
+        Component component = MessageManager.convertAndParse(this.parsePlaceholders(
+                PlaceholderManager.parse(
+                        this.section.getString("name", "&7"),
+                        null, this.user
+                )
+        ), player.orElse(null));
+        item.displayName(component == null ? null
+                : component.decoration(TextDecoration.ITALIC, false));
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
-            item.addToLore(MessageManager.convertAndParse(
+            Component loreComponent = MessageManager.convertAndParse(
                     this.parsePlaceholders(PlaceholderManager.parse(line, null, this.user)),
                     player.orElse(null)
-            ));
+            );
+            item.addToLore(loreComponent == null ? null
+                    : loreComponent.decoration(TextDecoration.ITALIC, false));
         }
 
+        // Set durability.
         if (this.section.getKeys().contains("durability")) {
             item.durability((short) this.section.getInteger("durability"));
         }
