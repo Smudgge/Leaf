@@ -162,7 +162,7 @@ public class Leaf {
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
-        Leaf.discordBot.shutdown();
+        Leaf.discordBot.removeCommands().shutdown();
     }
 
     @Subscribe
