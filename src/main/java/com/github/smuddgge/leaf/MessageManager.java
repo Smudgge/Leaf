@@ -8,6 +8,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -20,6 +21,8 @@ import java.util.regex.Pattern;
  * Represents the message manager.
  */
 public class MessageManager {
+
+    private static final Pattern HEX_PATTERN = Pattern.compile("<#[0-9a-fA-F]{6}");
 
     /**
      * List of players and who they last messaged.
@@ -77,7 +80,7 @@ public class MessageManager {
      * @param message The message to convert.
      * @return The requested component.
      */
-    public static Component convertAndParse(String message, @Nullable Player player) {
+    public static @NotNull Component convertAndParse(@NotNull String message, @Nullable Player player) {
         try {
             return MessageManager.convertAndParseMiniMessage(convertLegacyHexToMiniMessage(message)
                             .replace("§", "&") // Ensure there are no legacy symbols.
@@ -122,8 +125,6 @@ public class MessageManager {
         return "§r" + message.replace("&", "§");
     }
 
-    // Create a regular expression pattern for the hex strings.
-    private static final Pattern HEX_PATTERN = Pattern.compile("<#[0-9a-fA-F]{6}");
     /**
      * Used to convert legacy hex to mini message hex.
      *
@@ -135,7 +136,7 @@ public class MessageManager {
                 message.replace("&#", "<#")
         );
 
-        final Matcher matcher = HEX_PATTERN.matcher(builder);
+        final Matcher matcher = MessageManager.HEX_PATTERN.matcher(builder);
 
         // Add the end bracket for a mini message.
         matcher.results().forEach(
@@ -181,18 +182,18 @@ public class MessageManager {
 
     public static void logHeader() {
         final String message = """
-                
+                &7
                 &a __         ______     ______     ______
-                &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\\
-                &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\\
-                &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\\
+                &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\
+                &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\
+                &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\
                 &a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/
-                
+                &7
                       &7By Smudge    Version &b%s
                 &7
                 &7● &aEnabled &7Discord Support &f~10mib
                 &7● &aEnabled &7Database Support &f~10mib
-                
+                &7
                 """.formatted(Leaf.class.getAnnotation(Plugin.class).version());
 
         MessageManager.log(message);

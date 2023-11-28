@@ -14,6 +14,13 @@ import com.velocitypowered.api.proxy.server.ServerPing;
  * the brand if enabled.
  */
 public class BrandProxyPingListener implements AwaitingEventExecutor<ProxyPingEvent> {
+
+    /**
+     * Used to register this event.
+     *
+     * @param plugin       The instance of the plugin.
+     * @param eventManager The instance of the event manager to register with.
+     */
     public void register(Leaf plugin, EventManager eventManager) {
         eventManager.register(plugin, ProxyPingEvent.class, this);
     }

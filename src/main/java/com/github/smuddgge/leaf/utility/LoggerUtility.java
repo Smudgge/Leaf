@@ -15,8 +15,8 @@ public class LoggerUtility {
         try (
                 // Open the file.
                 final FileInputStream fileInputStream = new FileInputStream(
-                Leaf.getFolder().toAbsolutePath().toString()
-                        .replace("/plugins/leaf", "") + "/logs/latest.log");
+                        Leaf.getFolder().toAbsolutePath().toString()
+                                .replace("/plugins/leaf", "") + "/logs/latest.log");
                 // Get the list of lines in the file.
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream))
         ) {
