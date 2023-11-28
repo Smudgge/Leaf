@@ -180,17 +180,20 @@ public class MessageManager {
     }
 
     public static void logHeader() {
-        String message = "\n" +
-                "&a __         ______     ______     ______\n" +
-                "&a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\\n" +
-                "&a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\\n" +
-                "&a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\\n" +
-                "&a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/\n" +
-                "\n" +
-                "      &7By Smudge    Version &b" + Leaf.class.getAnnotation(Plugin.class).version() + "\n" +
-                "&7\n" +
-                "&7● &aEnabled &7Discord Support &f~10mib\n" +
-                "&7● &aEnabled &7Database Support &f~10mib\n\n";
+        final String message = """
+                
+                &a __         ______     ______     ______
+                &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\\
+                &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\\
+                &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\\
+                &a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/
+                
+                      &7By Smudge    Version &b%s
+                &7
+                &7● &aEnabled &7Discord Support &f~10mib
+                &7● &aEnabled &7Database Support &f~10mib
+                
+                """.formatted(Leaf.class.getAnnotation(Plugin.class).version());
 
         MessageManager.log(message);
     }
