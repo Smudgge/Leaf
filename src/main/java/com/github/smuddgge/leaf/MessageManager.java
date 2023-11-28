@@ -151,10 +151,10 @@ public class MessageManager {
      * @param message The message to send.
      */
     public static void log(String message) {
-        message = "&a[Leaf] &7" + message;
+        message = "&7" + message;
 
         for (String string : message.split("\n")) {
-            Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convertAndParse(string, null));
+            Leaf.getComponentLogger().info(MessageManager.convertAndParse(string, null));
         }
     }
 
@@ -164,7 +164,7 @@ public class MessageManager {
      * @param component The component.
      */
     public static void log(Component component) {
-        Leaf.getServer().getConsoleCommandSource().sendMessage(component);
+        Leaf.getComponentLogger().info(component);
     }
 
     /**
@@ -173,9 +173,9 @@ public class MessageManager {
      * @param message The message to send.
      */
     public static void warn(String message) {
-        message = "&a[Leaf] &e[WARNING] &6" + message;
+        message = "&6" + message;
         for (String string : message.split("\n")) {
-            Leaf.getServer().getConsoleCommandSource().sendMessage(MessageManager.convertAndParse(string, null));
+            Leaf.getComponentLogger().warn(MessageManager.convertAndParse(string, null));
         }
     }
 

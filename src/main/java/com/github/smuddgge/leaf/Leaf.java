@@ -38,6 +38,7 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -55,6 +56,7 @@ public class Leaf {
     private static Leaf plugin;
     private static ProxyServer server;
     private static Path folder;
+    private static ComponentLogger componentLogger;
 
     private static CommandHandler commandHandler;
     private static Database database;
@@ -63,10 +65,11 @@ public class Leaf {
     private final Metrics.Factory metricsFactory;
 
     @Inject
-    public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory) {
+    public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory, ComponentLogger componentLogger) {
         Leaf.server = server;
         Leaf.plugin = this;
         Leaf.folder = folder;
+        Leaf.componentLogger = componentLogger;
 
         // Set up the configuration files.
         ConfigurationManager.initialise(folder.toFile());
@@ -211,6 +214,15 @@ public class Leaf {
      */
     public static Path getFolder() {
         return Leaf.folder;
+    }
+
+    /**
+     * Used to get the instance of the component logger.
+     *
+     * @return The instance of the component logger.
+     */
+    public static ComponentLogger getComponentLogger() {
+        return Leaf.componentLogger;
     }
 
     /**
