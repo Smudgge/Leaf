@@ -123,7 +123,7 @@ public class DiscordBot extends ListenerAdapter {
 
         for (DiscordBotCommandAdapter commandAdapter : this.discordCommandList) {
             MessageManager.log("&7[Discord Bot] &eRemoving &7command : " + commandAdapter.getCommand().getName());
-            this.bot.deleteCommandById(commandAdapter.getSnowflake()).queue();
+            this.bot.deleteCommandById(commandAdapter.getSnowflake()).complete();
         }
 
         this.discordCommandList = new ArrayList<>();
