@@ -20,8 +20,7 @@ public class MiniPlaceholdersAdapter {
         if (player != null) {
             return MiniMessage.miniMessage().deserialize(
                     message,
-                    MiniPlaceholders.getAudiencePlaceholders(Audience.audience(player)),
-                    MiniPlaceholders.getGlobalPlaceholders()
+                    MiniPlaceholders.getAudienceGlobalPlaceholders(Audience.audience(player))
             );
         }
 

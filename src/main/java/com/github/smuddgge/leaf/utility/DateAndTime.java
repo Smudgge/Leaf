@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
  * Represents a date and time utility class.
  */
 public class DateAndTime {
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH-mm-ss");
 
     /**
      * Used to get the date and time formatted.
@@ -14,9 +15,8 @@ public class DateAndTime {
      * @return Requested string.
      */
     public static String getNow() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH-mm-ss");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        return dateTimeFormatter.format(localDateTime);
+        final LocalDateTime localDateTime = LocalDateTime.now();
+        return DATE_TIME_FORMATTER.format(localDateTime);
     }
 
     /**
@@ -40,20 +40,20 @@ public class DateAndTime {
      * @param fromNow The amount of time backwards from this moment.
      * @return The converted time stamp.
      */
-    public static Long convertToTimeStamp(String fromNow) {
+    public static long convertToTimeStamp(String fromNow) {
         String amountAsString = fromNow.substring(0, fromNow.length() - 1);
         long amount = Long.parseLong(amountAsString);
 
         if (fromNow.endsWith("d")) {
-            Long milliseconds = amount * 24 * 60 * 60 * 1000;
-            Long current = System.currentTimeMillis();
+            long milliseconds = amount * 24 * 60 * 60 * 1000;
+            long current = System.currentTimeMillis();
 
             return current - milliseconds;
         }
 
         if (fromNow.endsWith("h")) {
-            Long milliseconds = amount * 60 * 60 * 1000;
-            Long current = System.currentTimeMillis();
+            long milliseconds = amount * 60 * 60 * 1000;
+            long current = System.currentTimeMillis();
 
             return current - milliseconds;
         }
@@ -67,8 +67,8 @@ public class DateAndTime {
      * @param time The amount of time as a string to go back in time.
      * @return The time stamp.
      */
-    public static Long getFrom(String time) {
-        String[] timeList = time.split("-");
+    public static long getFrom(String time) {
+        final String[] timeList = time.split("-");
         return DateAndTime.convertToTimeStamp(timeList[0]);
     }
 
@@ -78,8 +78,8 @@ public class DateAndTime {
      * @param time The amount of time as a string to go back in time.
      * @return The time stamp.
      */
-    public static Long getTo(String time) {
-        String[] timeList = time.split("-");
+    public static long getTo(String time) {
+        final String[] timeList = time.split("-");
         if (timeList.length < 2) return System.currentTimeMillis();
 
         return DateAndTime.convertToTimeStamp(timeList[1]);

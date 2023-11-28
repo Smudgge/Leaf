@@ -154,7 +154,7 @@ public class Leaf {
         }
 
         // Events.
-        Leaf.getServer().getEventManager().register(this, new BrandProxyPingListener());
+        new BrandProxyPingListener().register(this, server.getEventManager());
 
         // Initialize hooks.
         HooksInitializer.init();
