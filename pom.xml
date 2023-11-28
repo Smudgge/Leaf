@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>4.4.0.DEV.1</version>
+    <version>4.4.0.DEV.3</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -119,13 +119,6 @@
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
             <version>5.0.0-beta.14</version>
-        </dependency>
-
-        <!-- MiniMessage -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-minimessage</artifactId>
-            <version>4.14.0</version>
         </dependency>
 
         <!-- MiniPlaceholders -->

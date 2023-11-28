@@ -101,7 +101,7 @@ public class CommandHandler {
             this.registeredCommands.add(command.getName());
 
             // Register aliases if they exist
-            if (command.getAliases().get().size() == 0) continue;
+            if (command.getAliases().get().isEmpty()) continue;
 
             for (String alias : command.getAliases().get()) {
                 manager.register(manager.metaBuilder(alias).build(), command);
