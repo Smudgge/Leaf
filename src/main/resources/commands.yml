@@ -9,166 +9,73 @@
 # ★ Don't want all of these commands? ★
 # You can disable independent commands by deleting them
 # from this file.
+#
+# ★ Want more commands? ★
+# Create your own custom commands by adding them to this file.
+# The list of possible commands is on the wiki!
+
+reload:
+  type: "reload"
+  name: "leafreload"
+  permission: "leaf.reload"
+  message: "{message} Reloaded all configs! <3"
+  error: "{error_colour}An error occurred and the reloading was aborted!"
 
 alert:
   type: "alert"
-  enabled: true
   name: "alert"
   permission: "leaf.alert"
-  # %message% : The alert message.
   message: "&8&l[&f&lAlert&8&l]&r &a%message%"
 
-alertraw:
-  type: "alertraw"
-  enabled: true
-  name: "alertraw"
-  permission: "leaf.alertraw"
+send:
+  type: "send"
+  name: "send"
+  permission: "leaf.send"
+  message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
+  server_not_found: "{error_colour}Server not found."
+  server_offline: "{error_colour}Server requested is offline."
 
-staffchat:
+history:
+  type: "history"
+  name: "history"
+  permission: "leaf.history"
+  not_found: "{error_colour}Player could not be found."
+  page_size: 5
+  header: '&8&m&l------&r &a&l<player>''s History &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
+  section: '&7- %event%&r %server%&r &7%date%'
+  footer: '&8&m&l---------------------'
+
+staff_chat:
   type: "chat"
-  enabled: true
   name: "staffchat"
   aliases: [ "sc" ]
   permission: "leaf.staffchat"
-  # Should the messages be logged in console?
-  log: true
-  # %message%: The players message.
   format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
-  receive_sound: "none"
-  # You can link a discord bot in the main
-  # config and enable this for staff chat discord support!
-  # The below is an example, any pairs can be deleted.
+  receive_sound: "BLOCK_NOTE_BLOCK_XYLOPHONE"
+  sound: "BLOCK_NOTE_BLOCK_XYLOPHONE"
+  # Discord -> Minecraft
+  # Add a discord bots token to the config.yml and enable
+  # this to let staff chat discord messages get sent to minecraft.
   discord_bot:
     enabled: false
+    # The staff chat channel.
     allowed_channels:
       - "1150803388309712947"
-    # The permissions that will be checked against.
-    # If the player has the permission's the staff chat
-    # message will be sent to minecraft.
-    permissions:
-      - ADMINISTRATOR
-    # The message appearing in minecraft.
     format: "&b&lDiscord&r &f%name%&r &7: &f%message%"
+  # Minecraft -> Discord
+  # Connect a web hook to allow minecraft staff chat
+  # to be sent to the discord channel.
+  # Uncomment the following to use:
+  # discord_webhook:
+  #   url: "url"
+  #   message:
+  #     username: "<player>"
+  #     avatar: "https://crafatar.com/avatars/<uuid>?overlay"
+  #     message: "%message%"
 
-find:
-  type: "find"
-  enabled: true
-  name: "find"
-  permission: "leaf.find"
-  not_found: "{error_colour}Player could not be found."
-  # Placeholders will parse in terms of the player.
-  found: "{message} Player was found on {server_formatted}"
-  found_no_args: "{message} You are on {server_formatted}"
-  # Discord bot support.
-  discord_bot:
-    enabled: false
-    allowed_channels:
-      - "1150803388309712947"
-    channel_not_allowed: "You cannot run this command in this channel."
-    permissions:
-      - ADMINISTRATOR
-    no_permission: "You do not have permission to run this command."
-    not_found: "Player could not be found."
-    found: "Player was found on {server_formatted}"
-
-command:
-  # The 'command' command type is chainable,
-  # so be careful it doesn't loop forever!
-  type: "command"
-  enabled: false
-  name: "findoverride"
-  permission: "leaf.find"
-  # Suggestions will be seen when tab completing.
-  # Suggestions can either be a list of strings or a single string.
-  #
-  # Placeholders include:
-  # %players%: The players the player can see online, excluding vanished.
-  # %all_players%: All players online, including vanished.
-  # %database_players%: All players in the database.
-  suggestions:
-    first_suggestion: "%database_players%"
-    these_keys_can_be_named_anything:
-      - "No more arguments"
-      - "Sorry"
-  # Used to check if an argument that is meant to be a
-  # players name has a certain permission.
-  check_argument_permissions:
-    1: "permission.permission"
-  not_found: "The player could not be found."
-  no_permission: "The player you have stated does not have the required permissions."
-  # Only proxy commands will work.
-  # Defaults to run as the player.
-  # You can use -c to run the command in the console.
-  # You can use -o to run the command as operator.
-  # You can use the placeholders:
-  # %argument_<number>% Returns the value of the argument.
-  # If the command is executed by a user, the user placeholders will also work.
-  commands:
-    - "find %argument_1%"
-    - "lobby -o"
-  # Discord bot support.
-  discord_bot:
-    enabled: false
-    allowed_channels:
-      - "1150803388309712947"
-    channel_not_allowed: "You cannot run this command in this channel."
-    permissions:
-      - ADMINISTRATOR
-    no_permission: "You do not have permission to run this command."
-    # List of suggestions.
-    arguments:
-      arg_1: "The descrption."
-    # Check the argument's permissions.
-    check_argument_permissions:
-      arg_1: "permission.permission"
-    not_found: "The player could not be found."
-    player_no_permission: "The player you have stated does not have the required permissions."
-    # Commands to be run in console.
-    commands:
-      - "find %arg_1%"
-      - "lobby"
-    message: "```py\n%Console%\n```"
-
-
-
-info:
-  # I'd love if you kept this command on your server <3
-  # Shows information about this plugin.
-  type: "info"
-  enabled: true
-  name: "leaf"
-  message:
-    - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
-    - "&7"
-    - "&7Velocity Proxy Plugin"
-    - "&7Version &f<version>"
-    - "&7Author &fSmudge"
-    - "&7"
-    - "&8&m&l--------------------"
-  discord_bot:
-    enabled: false
-    allowed_channels:
-      - "1150803388309712947"
-    channel_not_allowed: "You cannot run this command in this channel."
-    permissions:
-      - ADMINISTRATOR
-    no_permission: "You do not have permission to run this command."
-    message:
-      embeds:
-        1:
-          title:
-            message: "Leaf"
-          description:
-            - "**Velocity Proxy Plugin**"
-            - "Version `<version>`"
-            - "Author `Smudge`"
-
-
-stafflist:
+staff_list:
   type: "list"
-  enabled: true
   name: "stafflist"
-  permission: "leaf.stafflist"
   header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
   footer: "&8&m&l--------------------"
   list:
@@ -185,70 +92,10 @@ stafflist:
       permission: "leaf.rank.helper"
       header: '&7[&f%amount%&7] &b&lHelpers'
       section: '&7- &f<player> {server_formatted}\n'
-  discord_bot:
-    enabled: false
-    allowed_channels:
-      - "1150803388309712947"
-    channel_not_allowed: "You cannot run this command in this channel."
-    permissions:
-      - ADMINISTRATOR
-    no_permission: "You do not have permission to run this command."
-    list:
-      admin:
-        permission: "leaf.rank.admin"
-        header: '**Admins**'
-        # Placeholders will parse in terms of the player.
-        section: '<player> `<server>`\n'
-      moderator:
-        permission: "leaf.rank.moderator"
-        header: '**Mods**'
-        section: '&<player> `<server>`\n'
-      helper:
-        permission: "leaf.rank.helper"
-        header: '**Helpers**'
-        section: '<player> `<server>`\n'
-    message:
-      embeds:
-        1:
-          title:
-            message: "Staff List"
-          description: "%list%"
-
-reload:
-  type: "reload"
-  enabled: true
-  name: "leafreload"
-  permission: "leaf.reload"
-  message: "{message} Reloaded all configs! <3"
-  error: "{error_colour}An error occurred and the reloading was aborted!"
-
-report:
-  type: "report"
-  enabled: true
-  name: "report"
-  permission: "leaf.report.use"
-  see_report: "leaf.report.see"
-  see_sound: "none"
-  # %message% : The players message.
-  message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
-
-send:
-  type: "send"
-  enabled: true
-  name: "send"
-  permission: "leaf.send"
-  # %from% : From command argument.
-  # %to% : To command argument.
-  # %amount% : Amount of players successfully sent.
-  message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
-  server_not_found: "{error_colour}Server not found."
-  server_offline: "{error_colour}Server requested is offline."
 
 servers:
   type: "servers"
-  enabled: true
   name: "servers"
-  permission: "leaf.servers"
   order:
     - name_of_a_server
     - testing1
@@ -257,30 +104,38 @@ servers:
   # Placeholders registered in context of the server.
   server: '{server_formatted} &f%online% &7Online Players'
   footer: '&8&m&l---------------------'
-  discord_bot:
-    enabled: false
-    allowed_channels:
-      - "1150803388309712947"
-    channel_not_allowed: "You cannot run this command in this channel."
-    permissions:
-      - ADMINISTRATOR
-    no_permission: "You do not have permission to run this command."
-    order:
-      - name_of_a_server
-      - testing1
-      - testing2
-    # Placeholders registered in context of the server.
-    server: '**<server>** `%online%` Online Players'
-    message:
-      embeds:
-        1:
-          title:
-            message: "Server List"
-          description: "%list%"
+
+find:
+  type: "find"
+  name: "find"
+  not_found: "{error_colour}Player could not be found."
+  found: "{message} Player was found on {server_formatted}"
+  found_no_args: "{message} You are on {server_formatted}"
+
+# I'd love if you kept this command on your server <3
+# Shows information about this plugin.
+info:
+  type: "info"
+  name: "leaf"
+  message:
+    - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
+    - "&7"
+    - "&7Velocity Proxy Plugin"
+    - "&7Version &f<version>"
+    - "&7Author &fSmudge"
+    - "&7"
+    - "&8&m&l--------------------"
+
+report:
+  type: "report"
+  name: "report"
+  # Players with this permission will be able to see all reports.
+  see_report: "leaf.report.see"
+  see_sound: "none"
+  message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
 
 message:
   type: "message"
-  enabled: true
   name: "globalmessage"
   aliases: [ "gmsg" ]
   not_found: "{error_colour}Player is not online."
@@ -291,53 +146,42 @@ message:
   recipient_toggled: "{error_colour}This player has there messages toggled."
   you_are_muted: "&7You are muted."
   recipient_muted: "&7Cannot sent a message to a muted player."
-  # When true, you can message a muted player.
   message_muted_players: true
-  # Placeholders will parse in terms of the other player.
   to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
   to_sound: "none"
   from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
   from_sound: "none"
-  # Spy is where other players can see messages.
   spy_format: "&8&o%from% -> %to% : %message%"
   spy_sound: "none"
 
 reply:
   type: "reply"
-  enabled: true
   name: "globalreply"
   aliases: [ "gr" ]
   not_found: "{error_colour}You have no conversation to reply to."
   ignoring: "{error_colour}This player is ignoring you."
   toggled: "{error_colour}You have your messages toggled."
   recipient_toggled: "{error_colour}This player has there messages toggled."
-  # Placeholders will parse in terms of the other player.
   to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
   to_sound: "none"
   from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
   from_sound: "none"
-  # Spy is where other players can see messages.
   spy_format: "&8&o%from% -> %to% : %message%"
   spy_sound: "none"
 
 togglemessages:
   type: "togglemessages"
-  enabled: true
   name: "togglemessages"
-  # %toggle% will be replaced with true or false
   message: "{message} Toggled messages %toggle%"
 
 togglespy:
   type: "togglespy"
-  enabled: true
   name: "togglespy"
   permission: "leaf.togglespy"
-  # %toggle% will be replaced with true or false
   message: "{message} Toggled spy %toggle%"
 
 ignore:
   type: "ignore"
-  enabled: true
   name: "ignore"
   not_found: "{error_colour}Player is not online."
   ignore_self: "{error_colour}You cannot ignore yourself."
@@ -345,14 +189,12 @@ ignore:
 
 unignore:
   type: "unignore"
-  enabled: true
   name: "unignore"
   not_found: "{error_colour}You are not ignoring this player."
   message: "{message} You are no longer ignoring <player>"
 
 ignorelist:
   type: "ignorelist"
-  enabled: true
   name: "ignorelist"
   none_ignored: "{error_colour}You are not ignoring anyone."
   message:
@@ -360,181 +202,38 @@ ignorelist:
     - "%players%"
     - "&8&m&l---------------------"
 
-history:
-  type: "history"
-  enabled: true
-  name: "history"
-  not_found: "{error_colour}Player could not be found."
-  # Amount of sections on a page.
-  page_size: 5
-  # %page% : The number of the page the player is currently viewing.
-  # %page_amount% : The amount of pages they can see.
-  header: '&8&m&l------&r &a&l<player>''s History &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
-  # %event% : The history event.
-  # %server% : The server involved in the history.
-  # %date% : The date and time it occurred.
-  section: '&7- %event%&r %server%&r &7%date%'
-  # %page% : The number of the page the player is currently viewing.
-  # %page_amount% : The amount of pages they can see.
-  footer: '&8&m&l---------------------'
-
 message_history:
   type: "messagehistory"
-  enabled: true
   name: "messagehistory"
+  permission: "leaf.messagehistory"
   not_found: "{error_colour}Player could not be found."
-  # Amount of sections on a page.
   page_size: 8
-  # %page% : The number of the page the player is currently viewing.
-  # %page_amount% : The amount of pages they can see.
   header: '&8&m&l------&r &a&lMessages &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
-  # %message% : The content of the message.
-  # %from% : The player the message was from.
-  # %to% :  player the message was sent to.
-  # %date% : The date the message was sent.
   section: '&7%date% &f%from% &7: &e%message%'
-  # %page% : The number of the page the player is currently viewing.
-  # %page_amount% : The amount of pages they can see.
   footer: '&8&m&l---------------------'
-
-change_theme:
-  type: "variable"
-  enabled: true
-  name: "theme"
-  # The variable to save to.
-  variable: "theme"
-  # Suggest options for the player to choose from.
-  suggest:
-    - "green"
-    - "gray"
-  # Only allow values from a suggested list.
-  # Defaults to false.
-  only_allow_suggestions: true
-  # Should not include yellow in the value.
-  # This uses regex.
-  exclude:
-    - "yellow"
-  incorrect_value: "{error_colour}You can only set the theme to &fgreen &7or &fgray."
-  correct_value: "{message} Theme is now set to &f<theme>"
-
-admin_menu:
-  type: "inventory"
-  enabled: true
-  name: "adminmenu"
-  aliases: [ "amenu" ]
-  permission: "leaf.adminmenu"
-  error: "{error_colour}Error occurred when opening the admin menu."
-  inventory:
-    size: GENERIC_9X6
-    title: "&8&lAdmin Menu"
-    content:
-      "top,bottom":
-        material: RED_STAINED_GLASS_PANE
-      "center0":
-        skull: "<player>"
-        name: "&a&l<player>"
-        lore:
-          - "&7Welcome Admin!"
-      "19":
-        material: "spyglass"
-        name: "&a&lToggle Spy"
-        lore:
-          - "&7Click to toggle the ability to veiw global messages."
-        commands:
-          # Only works with commands registered with this plugin.
-          - "togglespy"
-      "21":
-        material: "name_tag"
-        name: "&a&lShow Staff List"
-        # Close when clicked
-        close: true
-        lore:
-          - "&7CLick to veiw the list of staff."
-        commands:
-          - "stafflist"
-
-menu:
-  type: "inventory"
-  enabled: true
-  name: "menu"
-  error: "{error_colour}Error occurred when opening inventory."
-  inventory:
-    size: GENERIC_9X6
-    title: "&8&lMenu"
-    content:
-      "top,bottom":
-        material: "{theme_material}"
-      "center0":
-        # Sets the material to the player's skull.
-        skull: "<player>"
-        name: "&a&l<player>"
-        lore:
-          - "&7You are amazing!"
-      "8":
-        material: "end_crystal"
-        name: "&a&lFriend Settings"
-        lore:
-          - "&7Click to run the command &f/settings"
-        commands:
-          # Only works with commands registered with this plugin.
-          - "friends settings"
-      "10":
-        material: "writable_book"
-        name: "&a&lFriends list"
-        lore:
-          - "&7Click to run the command &f/friends list"
-        commands:
-          - "friends list"
-      "center1":
-        material: "Paper"
-        name: "&a&lServer List"
-        lore:
-          - "&7Click to run the command &f/servers"
-        # Close when clicked
-        close: true
-        commands:
-          - "servers"
 
 teleport:
   type: "teleport"
-  enabled: true
   name: "go"
   not_found: "{error_colour}Player could not be found."
   message: "{message} Teleporting..."
 
-join:
-  type: "join"
-  enabled: false
-  name: "survival"
-  # The name of the server to send the player to.
-  # When multiple servers are listed, the server
-  # with the least amount of players is where the
-  # player will be sent.
-  # This can also be set as a string.
-  # server: "hub"
-  server:
-    - "survival1"
-    - "survival2"
-  # If there are no servers online.
-  no_server: "{error_colour}This server is offline"
-
 mute:
   type: "mute"
-  enabled: false
   name: "globalmute"
+  permission: "leaf.mute"
   not_found: "&7Could not find player in the database."
   muted: "&7Muted <player> for &f%time%&7."
 
 unmute:
   type: "unmute"
-  enabled: false
   name: "globalunmute"
+  permission: "leaf.unmute"
   not_found: "&7Could not find player in the database."
   unmute: "&7Unmuted <player>"
 
 friends:
   type: "friends"
-  enabled: true
   name: "friends"
 
   proxy_join: "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}"
