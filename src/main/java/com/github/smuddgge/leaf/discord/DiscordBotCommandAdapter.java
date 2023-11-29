@@ -213,6 +213,17 @@ public class DiscordBotCommandAdapter {
             return;
         }
 
+        // Check if the user is in the list.
+        List<String> memberIds = this.getCommand().getSection().getListString("discord_bot.discord_members");
+        if (!memberIds.isEmpty() && !memberIds.contains(event.getMember().getId())) {
+            event.reply(new DiscordBotMessageAdapter(
+                    this.command.getSection(),
+                    "discord_bot.no_discord_id",
+                    "You are not allowed to execute this command"
+            ).buildMessage()).queue();
+            return;
+        }
+
         // Check if the member is limited.
         if (this.isLimited(event.getMember())) {
             event.reply(new DiscordBotMessageAdapter(

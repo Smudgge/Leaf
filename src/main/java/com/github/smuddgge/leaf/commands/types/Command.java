@@ -115,7 +115,7 @@ public class Command extends BaseCommandType {
         // Loop though the check argument permissions.
         ConfigurationSection checkPermissionSection = section.getSection("discord_bot.check_argument_permissions");
         for (String argumentName : checkPermissionSection.getKeys()) {
-            String permission = checkPermissionSection.getString("permission");
+            String permission = checkPermissionSection.getString(argumentName);
 
             OptionMapping optionMapping = event.getOption(argumentName);
             if (optionMapping == null) return new CommandStatus().incorrectArguments();
@@ -209,13 +209,22 @@ public class Command extends BaseCommandType {
     private @NotNull List<String> getFinalCommandList(ConfigurationSection section, String[] arguments, @NotNull User user) {
         List<String> finalCommandList = new ArrayList<>();
 
+        // Require arguments.
+        if (arguments.length < section.getInteger("required_arguments", -1)) {
+            user.sendMessage(section.getString("incorrect_arguments", "You didnt specify the correct amount of arguments."));
+            return new ArrayList<>();
+        }
+
         // Loop though the check argument permissions.
         ConfigurationSection checkPermissionSection = section.getSection("check_argument_permissions");
         for (String argumentNumber : checkPermissionSection.getKeys()) {
-            String permission = checkPermissionSection.getString("permission");
+            String permission = checkPermissionSection.getString(argumentNumber);
+
+            // Check if they have not specified arguments.
+            if (Integer.parseInt(argumentNumber) > arguments.length) break;
 
             Optional<Player> optionalPlayer = Leaf.getServer()
-                    .getPlayer(arguments[Integer.parseInt(argumentNumber)]);
+                    .getPlayer(arguments[Integer.parseInt(argumentNumber) - 1]);
 
             // Check if the player is online.
             if (optionalPlayer.isEmpty()) {

@@ -10,6 +10,9 @@ import com.github.smuddgge.leaf.discord.DiscordBotRemoveMessageHandler;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <h1>Info Command Type</h1>
@@ -29,11 +32,22 @@ public class Info extends BaseCommandType {
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        return null;
+        return new CommandSuggestions().append(section.getSection("arguments").getKeys());
     }
 
     @Override
     public CommandStatus onConsoleRun(ConfigurationSection section, String[] arguments) {
+
+        // If there are arguments.
+        if (arguments.length >= 1) {
+            String message = section.getSection("arguments").getAdaptedString(
+                    arguments[0], "\n",
+                    section.getString("alternative", "The message for this argument doesn't exist.")
+            );
+
+            MessageManager.log(PlaceholderManager.parse(message, null, new User(null, "Console")));
+            return new CommandStatus();
+        }
 
         // Get a message as a list.
         // If the message is not a list, it will return null.
@@ -44,8 +58,24 @@ public class Info extends BaseCommandType {
         return new CommandStatus();
     }
 
+    /*
+        arguments:
+          case1:
+          - "Message to sent when this argument is used"
+         */
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+
+        // If there are arguments.
+        if (arguments.length >= 1) {
+            String message = section.getSection("arguments").getAdaptedString(
+                    arguments[0], "\n",
+                    section.getString("alternative", "The message for this argument doesn't exist.")
+            );
+
+            user.sendMessage(message);
+            return new CommandStatus();
+        }
 
         // Get a message as a list.
         // If the message is not a list, it will return null.
@@ -57,7 +87,25 @@ public class Info extends BaseCommandType {
     }
 
     @Override
+    public void onDiscordRegister(ConfigurationSection section, @NotNull CommandCreateAction action) {
+        action.addOption(
+                OptionType.STRING,
+                section.getString("discord_bot.argument_name", "Argument"),
+                section.getString("discord_bot.argument_description", "")
+        );
+    }
+
+    @Override
     public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
+
+        String argument = event.getOption(section.getString("discord_bot.argument_name", "Argument")).getAsString();
+        if (!argument.isEmpty()) {
+            event.reply(new DiscordBotMessageAdapter(
+                    section, "discord_bot.arguments" + argument,
+                    section.getString("discord_bot.alternative", "The message for this argument doesn't exist.")
+            ).buildMessage()).complete();
+            return new CommandStatus();
+        }
 
         // Send the message.
         event.reply(new DiscordBotMessageAdapter(
