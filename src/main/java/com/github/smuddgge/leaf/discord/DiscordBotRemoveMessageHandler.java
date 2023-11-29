@@ -12,7 +12,6 @@ public class DiscordBotRemoveMessageHandler extends TaskContainer {
     /**
      * Used to create a discord bot remove message handler.
      *
-     * @param messageID         The message id to delete.
      * @param discordBotSection The discord bot config section.
      * @param event             The slash event.
      */
@@ -27,7 +26,7 @@ public class DiscordBotRemoveMessageHandler extends TaskContainer {
 
         // Delete the message after the specified time.
         this.runTask(
-                () -> event.getChannel().deleteMessageById(messageID),
+                () -> event.getChannel().deleteMessageById(messageID).complete(),
                 Duration.ofSeconds(deleteAfter),
                 "delete_after"
         );
