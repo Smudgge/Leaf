@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
+import com.github.smuddgge.leaf.discord.DiscordBotRemoveMessageHandler;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -90,7 +91,8 @@ public class List extends BaseCommandType {
                     }
                 });
 
-        event.reply(message.buildMessage()).queue();
+        event.reply(message.buildMessage()).complete();
+        new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
         return new CommandStatus();
     }
 

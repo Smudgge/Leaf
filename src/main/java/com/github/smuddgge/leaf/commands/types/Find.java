@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
+import com.github.smuddgge.leaf.discord.DiscordBotRemoveMessageHandler;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
@@ -131,7 +132,8 @@ public class Find extends BaseCommandType {
 
             event.reply(new DiscordBotMessageAdapter(
                     section, "discord_bot.no_args", "Incorrect arguments."
-            ).buildMessage()).queue();
+            ).buildMessage()).complete();
+            new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
 
             return new CommandStatus();
         }
@@ -145,7 +147,8 @@ public class Find extends BaseCommandType {
 
             event.reply(new DiscordBotMessageAdapter(
                     section, "discord_bot.not_found", "Player not found."
-            ).buildMessage()).queue();
+            ).buildMessage()).complete();
+            new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
 
             return new CommandStatus();
         }
@@ -153,7 +156,8 @@ public class Find extends BaseCommandType {
         // Send the result message to the member.
         event.reply(new DiscordBotMessageAdapter(
                 section, "discord_bot.found", "Player found on {server_formatted}"
-        ).setParser(new User(optionalPlayer.get())).buildMessage()).queue();
+        ).setParser(new User(optionalPlayer.get())).buildMessage()).complete();
+        new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
         return new CommandStatus();
     }
 }

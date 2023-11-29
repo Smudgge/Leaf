@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
  * Represents a date and time utility class.
  */
 public class DateAndTime {
-    
+
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH-mm-ss");
 
     /**

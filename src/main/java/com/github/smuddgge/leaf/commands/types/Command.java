@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
+import com.github.smuddgge.leaf.discord.DiscordBotRemoveMessageHandler;
 import com.github.smuddgge.leaf.utility.CommandUtility;
 import com.github.smuddgge.leaf.utility.LoggerUtility;
 import com.github.smuddgge.leaf.utility.PlayerUtility;
@@ -128,6 +129,8 @@ public class Command extends BaseCommandType {
                 event.reply(new DiscordBotMessageAdapter(
                         section, "discord_bot.not_found", "The player could not be found."
                 ).buildMessage()).complete();
+                new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
+
                 return new CommandStatus();
             }
 
@@ -137,6 +140,7 @@ public class Command extends BaseCommandType {
                 event.reply(new DiscordBotMessageAdapter(
                         section, "discord_bot.player_no_permission", "The player could not be found."
                 ).buildMessage()).complete();
+                new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
                 return new CommandStatus();
             }
         }
@@ -182,7 +186,8 @@ public class Command extends BaseCommandType {
                                 section.getSection("discord_bot").getInteger("lines", 10)
                         ));
                     }
-                }).buildMessage())).queue();
+                }).buildMessage())).complete();
+                new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
 
             } catch (Exception exception) {
                 exception.printStackTrace();

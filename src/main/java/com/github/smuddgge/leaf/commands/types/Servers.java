@@ -8,6 +8,7 @@ import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.discord.DiscordBotMessageAdapter;
+import com.github.smuddgge.leaf.discord.DiscordBotRemoveMessageHandler;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -69,7 +70,8 @@ public class Servers extends BaseCommandType {
                     }
                 });
 
-        event.reply(message.buildMessage()).queue();
+        event.reply(message.buildMessage()).complete();
+        new DiscordBotRemoveMessageHandler(section.getSection("discord_bot"), event);
         return new CommandStatus();
     }
 
