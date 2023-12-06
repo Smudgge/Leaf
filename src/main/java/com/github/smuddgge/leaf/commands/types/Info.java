@@ -92,7 +92,7 @@ public class Info extends BaseCommandType {
                 OptionType.STRING,
                 section.getString("discord_bot.argument_name", "Argument"),
                 section.getString("discord_bot.argument_description", "")
-        );
+        ).complete();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class Info extends BaseCommandType {
         String argument = event.getOption(section.getString("discord_bot.argument_name", "Argument")).getAsString();
         if (!argument.isEmpty()) {
             event.reply(new DiscordBotMessageAdapter(
-                    section, "discord_bot.arguments" + argument,
+                    section, "discord_bot.arguments." + argument,
                     section.getString("discord_bot.alternative", "The message for this argument doesn't exist.")
             ).buildMessage()).complete();
             return new CommandStatus();
