@@ -41,6 +41,8 @@ public class EventListener {
         // Run the events.
         if (event.getPreviousServer().isEmpty()) {
             EventManager.runEvent(EventType.PLAYER_JOIN, user);
+            FriendManager.onProxyJoin(user);
+            user.addHistory(server, PlayerHistoryEventType.JOIN);
         } else {
             EventManager.runEvent(EventType.PLAYER_SWITCH, user);
         }
@@ -71,10 +73,6 @@ public class EventListener {
 
         // Set connected server.
         user.setConnectedServer(server);
-
-        // Sort processes.
-        FriendManager.onProxyJoin(user);
-        user.addHistory(server, PlayerHistoryEventType.JOIN);
     }
 
     /**

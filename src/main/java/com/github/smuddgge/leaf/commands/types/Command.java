@@ -112,6 +112,16 @@ public class Command extends BaseCommandType {
     @Override
     public CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
 
+        // Get the number of required arguments.
+        int required_arguments = section.getInteger("discord_bot.required_arguments", -1);
+        if (event.getOptions().size() < required_arguments) {
+            event.reply(new DiscordBotMessageAdapter(
+                    section, "discord_bot.incorrect_arguments", "You didnt specify the correct amount of arguments."
+            ).buildMessage()).complete();
+            return new CommandStatus();
+        }
+
+
         // Loop though the check argument permissions.
         ConfigurationSection checkPermissionSection = section.getSection("discord_bot.check_argument_permissions");
         for (String argumentName : checkPermissionSection.getKeys()) {
