@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.commands.subtypes.friends;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
@@ -73,12 +74,16 @@ public class FriendMessage implements CommandType {
             return new CommandStatus();
         }
 
-        // Get amount of records that both players are in.
+        MessageManager.log("[DEBUG] Getting amount of friends");
+
+        // Get number of records that both players are in.
         int amount = Leaf.getDatabase().getTable(FriendTable.class).getAmountOfRecords(
                 new Query()
                         .match("playerUuid", user.getUniqueId().toString())
                         .match("friendPlayerUuid", optionalPlayer.get().getUniqueId().toString())
         );
+
+        MessageManager.log("[DEBUG] Got amount of friends");
 
         // Check if the record exist.
         if (amount == 0) {

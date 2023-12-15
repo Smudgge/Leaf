@@ -93,17 +93,24 @@ public class Message extends BaseCommandType {
         // Get who the message is being sent to.
         User recipient = new User(optionalRecipient.get());
 
+        MessageManager.log("[DEBUG] Check if muted");
+
         // Check if this user is muted.
         if (user.isMuted()) {
             user.sendMessage(section.getString("you_are_muted", "&7You are muted."));
             return new CommandStatus();
         }
 
+        MessageManager.log("[DEBUG] Checked if the player is muted");
+        MessageManager.log("[DEBUG] Check if muted 2");
+
         // Check if you cannot message muted players.
         if (recipient.isMuted() && !section.getBoolean("message_muted_players", true)) {
             user.sendMessage(section.getString("recipient_muted", "&7Cannot send a message to a muted player."));
             return new CommandStatus();
         }
+
+        MessageManager.log("[DEBUG] Checked if the player is muted 2");
 
         // Get if vanishable players can message vanishable players.
         boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
@@ -114,6 +121,8 @@ public class Message extends BaseCommandType {
         // Or check if recipient is not vanished.
         if ((allowVanishablePlayers && userIsVanishable)
                 || recipientNotVanished) {
+
+            MessageManager.log("[DEBUG] Check ignoring and can message");
 
             // Check for ignoring.
             if (user.isIgnoring(recipient.getUniqueId())) {
@@ -136,6 +145,8 @@ public class Message extends BaseCommandType {
                 user.sendMessage(section.getString("recipient_toggled", "{error_colour}This player has there messages toggled."));
                 return new CommandStatus();
             }
+
+            MessageManager.log("[DEBUG] Checked if ignoring and can message");
 
             // Send messages and sounds.
             recipient.sendMessage(PlaceholderManager.parse(section.getAdaptedString("from", "\n")
@@ -162,6 +173,8 @@ public class Message extends BaseCommandType {
             // Log message interaction.
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());
 
+            MessageManager.log("[DEBUG] Save in database");
+
             // Save to a database if enabled.
             if (!Leaf.isDatabaseDisabled()
                     && Leaf.getDatabase().isEnabled()
@@ -175,9 +188,11 @@ public class Message extends BaseCommandType {
                 int limit = ConfigDatabase.get().getInteger("message_limit");
                 if (limit < 0) return new CommandStatus();
 
-                // Limit old messages if the amount of messages is over the limit.
+                // Limit old messages if the number of messages is over the limit.
                 messageTable.limitMessages(user.getUniqueId().toString(), limit);
             }
+
+            MessageManager.log("[DEBUG] Saved in database");
 
             return new CommandStatus();
         }
