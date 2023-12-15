@@ -130,7 +130,10 @@ public class InventoryItem {
      */
     public ItemStack getItemStack(ItemStack item) {
         CompoundTag compoundTag = new CompoundTag();
-        Optional<Player> player = Leaf.getServer().getPlayer(this.user.getUniqueId());
+        Optional<Player> player = Optional.empty();
+        if (this.user != null) {
+            player = Leaf.getServer().getPlayer(this.user.getUniqueId());
+        }
 
         // Set the material of the item.
         try {
