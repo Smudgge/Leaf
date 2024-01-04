@@ -38,6 +38,9 @@ public class EventListener {
         // Set the users connected server.
         user.setConnectedServer(server);
 
+        // Check if vanished.
+        if (user.isVanished()) return;
+
         // Run the events.
         if (event.getPreviousServer().isEmpty()) {
             EventManager.runEvent(EventType.PLAYER_JOIN, user);

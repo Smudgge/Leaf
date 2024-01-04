@@ -93,7 +93,7 @@ public class Message extends BaseCommandType {
         // Get who the message is being sent to.
         User recipient = new User(optionalRecipient.get());
 
-        MessageManager.log("[DEBUG] Check if muted");
+        MessageManager.log("[DEBUG] Check if muted.");
 
         // Check if this user is muted.
         if (user.isMuted()) {
@@ -101,8 +101,8 @@ public class Message extends BaseCommandType {
             return new CommandStatus();
         }
 
-        MessageManager.log("[DEBUG] Checked if the player is muted");
-        MessageManager.log("[DEBUG] Check if muted 2");
+        MessageManager.log("[DEBUG] Checked if the player is muted.");
+        MessageManager.log("[DEBUG] Check if muted 2.");
 
         // Check if you cannot message muted players.
         if (recipient.isMuted() && !section.getBoolean("message_muted_players", true)) {
@@ -110,7 +110,7 @@ public class Message extends BaseCommandType {
             return new CommandStatus();
         }
 
-        MessageManager.log("[DEBUG] Checked if the player is muted 2");
+        MessageManager.log("[DEBUG] Checked if the player is muted 2.");
 
         // Get if vanishable players can message vanishable players.
         boolean allowVanishablePlayers = ConfigMain.getVanishableCanSeeVanishable();
@@ -122,7 +122,7 @@ public class Message extends BaseCommandType {
         if ((allowVanishablePlayers && userIsVanishable)
                 || recipientNotVanished) {
 
-            MessageManager.log("[DEBUG] Check ignoring and can message");
+            MessageManager.log("[DEBUG] Check ignoring and can message.");
 
             // Check for ignoring.
             if (user.isIgnoring(recipient.getUniqueId())) {
@@ -146,7 +146,7 @@ public class Message extends BaseCommandType {
                 return new CommandStatus();
             }
 
-            MessageManager.log("[DEBUG] Checked if ignoring and can message");
+            MessageManager.log("[DEBUG] Checked if ignoring and can message.");
 
             // Send messages and sounds.
             recipient.sendMessage(PlaceholderManager.parse(section.getAdaptedString("from", "\n")
@@ -164,16 +164,20 @@ public class Message extends BaseCommandType {
 
             // Spy sound.
             for (Player player : Leaf.getServer().getAllPlayers()) {
-                User temp = new User(player);
-                if (Objects.equals(temp.getRecord().toggleSeeSpy, "true")) {
-                    Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
+                try {
+                    User temp = new User(player);
+                    if (Objects.equals(temp.getRecord().toggleSeeSpy, "true")) {
+                        Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
+                    }
+                } catch (Exception exception) {
+                    MessageManager.log("[DEBUG] Unable to send sound for a player on message.");
                 }
             }
 
             // Log message interaction.
             MessageManager.setLastMessaged(user.getUniqueId(), recipient.getUniqueId());
 
-            MessageManager.log("[DEBUG] Save in database");
+            MessageManager.log("[DEBUG] Save in database.");
 
             // Save to a database if enabled.
             if (!Leaf.isDatabaseDisabled()
@@ -190,9 +194,11 @@ public class Message extends BaseCommandType {
 
                 // Limit old messages if the number of messages is over the limit.
                 messageTable.limitMessages(user.getUniqueId().toString(), limit);
+
+                MessageManager.log("[DEBUG] Saved in database.");
             }
 
-            MessageManager.log("[DEBUG] Saved in database");
+            MessageManager.log("[DEBUG] Finished Debugging.");
 
             return new CommandStatus();
         }
