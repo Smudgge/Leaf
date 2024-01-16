@@ -19,10 +19,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class OpPlayerAdapter implements Player {
 
@@ -165,6 +162,16 @@ public class OpPlayerAdapter implements Player {
     @Override
     public @Nullable ResourcePackInfo getPendingResourcePack() {
         return this.player.getPendingResourcePack();
+    }
+
+    @Override
+    public Collection<ResourcePackInfo> getAppliedResourcePacks() {
+        return null;
+    }
+
+    @Override
+    public Collection<ResourcePackInfo> getPendingResourcePacks() {
+        return null;
     }
 
     @Override

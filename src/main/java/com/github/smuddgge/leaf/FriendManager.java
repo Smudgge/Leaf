@@ -157,6 +157,8 @@ public class FriendManager {
         ConfigurationSection section = ConfigurationManager.getCommands().getCommandFromType("friends");
         if (section == null) return;
 
+        if (Leaf.isDatabaseDisabled()) return;
+
         // Get the tables.
         PlayerTable playerTable = Leaf.getDatabase().getTable(PlayerTable.class);
         FriendTable friendTable = Leaf.getDatabase().getTable(FriendTable.class);

@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>4.4.3</version>
+    <version>4.4.4</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -45,7 +45,7 @@
         <!-- Spark -->
         <repository>
             <id>sonatype-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
 
         <!-- Discord Bot -->
@@ -67,14 +67,28 @@
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-api</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
+            <version>3.3.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-proxy</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
+            <version>3.3.0-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Velocity Bleeding Edge Dependencies -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.104.Final</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.5.6</version>
         </dependency>
 
         <!-- Jupiter Tests -->
@@ -130,11 +144,6 @@
         </dependency>
 
         <!-- Elytrium -->
-        <dependency>
-            <groupId>net.elytrium</groupId>
-            <artifactId>java-commons</artifactId>
-            <version>1.1.0-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>net.elytrium</groupId>
             <artifactId>fastprepare</artifactId>

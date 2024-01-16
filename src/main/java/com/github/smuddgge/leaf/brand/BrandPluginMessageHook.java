@@ -16,6 +16,8 @@ import com.velocitypowered.proxy.protocol.packet.PluginMessage;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import net.elytrium.java.commons.reflection.ReflectionException;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,9 +52,21 @@ class BrandPluginMessageHook extends PluginMessage {
             ConnectedPlayer player = connection.getPlayer();
 
             // Write the minecraft brand.
-            player.getConnection().write(
+            ChannelFuture future = player.getConnection().write(
                     this.getMinecraftBrand(this, player)
             );
+
+            if (future == null) { return true; }
+
+			future.addListener((ChannelFutureListener) channelFuture -> {
+                if (channelFuture.isSuccess()) {
+                    // Flushes out channel in case of edge cases.
+                    channelFuture.channel().flush();
+                } else {
+                    Throwable channelCause = channelFuture.cause();
+                    channelCause.printStackTrace();
+                }
+            });
 
             return true;
 
