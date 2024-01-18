@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
@@ -48,7 +49,7 @@ public class AlertRaw extends BaseCommandType {
                 player.sendMessage(component);
 
                 // Play sound if it exists.
-                Sounds.play(section.getString("see_sound", null), player.getUniqueId());
+                if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("see_sound", null), player.getUniqueId());
             }
 
             // Log the message in console.

@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
@@ -154,7 +155,7 @@ public class Chat extends BaseCommandType {
 
             User toSend = new User(player);
             toSend.sendMessage(message);
-            Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
+            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
         }
     }
 }

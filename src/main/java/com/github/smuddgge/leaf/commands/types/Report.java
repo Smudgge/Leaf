@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
@@ -64,7 +65,7 @@ public class Report extends BaseCommandType {
             String sound = section.getString("see_sound", null);
             if (sound == null) continue;
 
-            Sounds.play(sound, user.getUniqueId());
+            if (ProtocolizeDependency.isEnabled()) Sounds.play(sound, user.getUniqueId());
         }
 
         // Check if there is a discord webhook.
@@ -112,7 +113,7 @@ public class Report extends BaseCommandType {
             toSend.sendMessage(message);
 
             // Play a sound if it exists.
-            Sounds.play(section.getString("see_sound", null), toSend.getUniqueId());
+            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("see_sound", null), toSend.getUniqueId());
         }
 
         // Send the message to the sender.
@@ -121,7 +122,7 @@ public class Report extends BaseCommandType {
         // Play a sound if it exists.
         String sound = section.getString("see_sound", null);
         if (sound != null) {
-            Sounds.play(sound, user.getUniqueId());
+            if (ProtocolizeDependency.isEnabled()) Sounds.play(sound, user.getUniqueId());
         }
 
         // Check if there is a discord webhook.

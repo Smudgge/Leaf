@@ -9,6 +9,7 @@ import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
@@ -151,11 +152,11 @@ public class Message extends BaseCommandType {
             // Send messages and sounds.
             recipient.sendMessage(PlaceholderManager.parse(section.getAdaptedString("from", "\n")
                     .replace("%message%", message), null, user));
-            Sounds.play(section.getString("from_sound"), recipient.getUniqueId());
+            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("from_sound"), recipient.getUniqueId());
 
             user.sendMessage(PlaceholderManager.parse(section.getAdaptedString("to", "\n")
                     .replace("%message%", message), null, recipient));
-            Sounds.play(section.getString("to_sound"), user.getUniqueId());
+            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("to_sound"), user.getUniqueId());
 
             MessageManager.sendSpy(section.getAdaptedString("spy_format", "\n", "&8&o%from% -> %to% : %message%")
                     .replace("%from%", user.getName())
@@ -167,7 +168,7 @@ public class Message extends BaseCommandType {
                 try {
                     User temp = new User(player);
                     if (Objects.equals(temp.getRecord().toggleSeeSpy, "true")) {
-                        Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
+                        if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
                     }
                 } catch (Exception exception) {
                     MessageManager.log("[DEBUG] Unable to send sound for a player on message.");

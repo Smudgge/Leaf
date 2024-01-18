@@ -22,7 +22,10 @@ public class Sounds {
      * @param sound      The sound to play.
      * @param playerUuid The players uuid.
      */
-    public static void play(Sound sound, UUID playerUuid) {
+    public static void play(String sound, UUID playerUuid) {
+        if (sound == null) return;
+        if (sound.equals("none")) return;
+
         // Check if protocolize is enabled.
         if (!ProtocolizeDependency.isEnabled()) {
             MessageManager.warn("Tried to use sounds when the dependency is not enabled.");
@@ -31,24 +34,6 @@ public class Sounds {
         }
 
         ProtocolizePlayer player = Protocolize.playerProvider().player(playerUuid);
-        player.playSound(sound, SoundCategory.MASTER, 1f, 1f);
-    }
-
-    /**
-     * Used to play a sound for a player.
-     *
-     * @param sound      The sound as a string.
-     * @param playerUuid The players uuid.
-     */
-    public static void play(String sound, UUID playerUuid) {
-        if (sound == null) return;
-        if (sound.equals("none")) return;
-
-        try {
-            Sounds.play(Sound.valueOf(sound.toUpperCase(Locale.ROOT)), playerUuid);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            MessageManager.warn("Invalid sound : " + sound + " : ");
-            illegalArgumentException.printStackTrace();
-        }
+        player.playSound(Sound.valueOf(sound.toUpperCase()), SoundCategory.MASTER, 1f, 1f);
     }
 }

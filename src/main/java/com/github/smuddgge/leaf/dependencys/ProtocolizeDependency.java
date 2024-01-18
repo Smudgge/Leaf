@@ -1,5 +1,7 @@
 package com.github.smuddgge.leaf.dependencys;
 
+import com.github.smuddgge.leaf.Leaf;
+
 /**
  * Represents the protocolize dependency.
  * Contains utility methods.
@@ -12,7 +14,7 @@ public class ProtocolizeDependency {
      * @return True if enabled.
      */
     public static boolean isEnabled() {
-        return ProtocolizeDependency.isInventoryEnabled();
+        return Leaf.getServer().getPluginManager().getPlugin("protocolize").isPresent();
     }
 
     /**
@@ -23,9 +25,12 @@ public class ProtocolizeDependency {
      */
     public static boolean isInventoryEnabled() {
         try {
+
             Class.forName("dev.simplix.protocolize.api.inventory.Inventory");
-            return true;
-        } catch (Exception ignored) {
+            new ProtocolizeHelper().check();
+            return isEnabled();
+
+        } catch (Exception exception) {
             return false;
         }
     }

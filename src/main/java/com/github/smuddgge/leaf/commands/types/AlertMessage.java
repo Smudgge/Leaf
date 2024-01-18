@@ -7,6 +7,7 @@ import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.configuration.ConfigurationKey;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.utility.Sounds;
@@ -52,7 +53,7 @@ public class AlertMessage extends BaseCommandType {
                 new User(player).sendMessage(message);
 
                 // Play sound if it exists.
-                Sounds.play(section.getString("see_sound", null), player.getUniqueId());
+                if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("see_sound", null), player.getUniqueId());
             }
         }
 

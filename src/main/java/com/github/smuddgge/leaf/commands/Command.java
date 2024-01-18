@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.utility.Sounds;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.command.CommandSource;
@@ -122,7 +123,7 @@ public record Command(String identifier,
         // Play sound.
         if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
             try {
-                Sounds.play(Sound.valueOf(this.getSound().toUpperCase(Locale.ROOT)), user.getUniqueId());
+                if (ProtocolizeDependency.isEnabled()) Sounds.play(this.getSound(), user.getUniqueId());
             } catch (IllegalArgumentException illegalArgumentException) {
                 MessageManager.warn("Invalid sound for command " + this.getName() + " : ");
                 illegalArgumentException.printStackTrace();
