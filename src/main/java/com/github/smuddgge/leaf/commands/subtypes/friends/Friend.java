@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.commands.subtypes.friends;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
@@ -38,11 +39,12 @@ public class Friend extends BaseCommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+        if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
+
         // Check if inventory interface is disabled.
         if (!ProtocolizeDependency.isInventoryEnabled()) {
-            MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
-            MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
-            return new CommandStatus().error();
+            FriendList.sendMessage(user, section.getSection("list"), arguments);
+            return new CommandStatus();
         }
 
         // Open the friend list inventory for the user.

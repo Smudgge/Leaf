@@ -1,17 +1,25 @@
 package com.github.smuddgge.leaf.commands.subtypes.friends;
 
+import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
+import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
+import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.inventorys.inventorys.FriendListInventory;
+import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
+import com.velocitypowered.api.proxy.Player;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * <h1>Friend List Subcommand Type</h1>
@@ -34,7 +42,7 @@ public class FriendList implements CommandType {
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
         ConfigurationSection listSection = section.getSection(this.getName());
 
-        // Check if the user is not allowed see other players friend lists.
+        // Check if the user is not allowed to see other players friend lists.
         if (listSection.getKeys().contains("permission_see_any")
                 && !user.hasPermission(listSection.getString("permission_see_any"))) return null;
 
@@ -52,10 +60,11 @@ public class FriendList implements CommandType {
 
     @Override
     public CommandStatus onPlayerRun(ConfigurationSection section, String[] arguments, User user) {
+        if (Leaf.isDatabaseDisabled()) return new CommandStatus().databaseDisabled();
+
         // Check if inventory interface is disabled.
         if (!ProtocolizeDependency.isInventoryEnabled()) {
-            MessageManager.warn("Tried to use inventorys when the dependency is not enabled.");
-            MessageManager.log("&7" + ProtocolizeDependency.getDependencyMessage());
+            FriendList.sendMessage(user, section.getSection("list"), arguments);
             return new CommandStatus().error();
         }
 
@@ -108,5 +117,65 @@ public class FriendList implements CommandType {
         }
 
         return new CommandStatus();
+    }
+
+    /**
+     * Used to send the list of friends as a message.
+     *
+     * @param user The instance of the user running the command.
+     * @param section The list section.
+     * @param arguments The list of arguments.
+     */
+    public static void sendMessage(User user, ConfigurationSection section, String[] arguments) {
+        ConfigurationSection messageSection = section.getSection("message");
+        StringBuilder builder = new StringBuilder();
+
+        // Get the header.
+        if (messageSection.getKeys().contains("header")) {
+            builder.append(section.getAdaptedString("header", "\n")).append("\n");
+        }
+
+        boolean canSeeOtherPlayers = section.getKeys().contains("permission_see_any")
+                && user.hasPermission(section.getString("permission_see_any"))
+                && !Leaf.isDatabaseDisabled();
+
+        List<FriendRecord> friendRecords;
+
+        if (canSeeOtherPlayers) {
+
+            final String playerName = arguments[1];
+            final Player player = Leaf.getServer().getPlayer(playerName).orElse(null);
+
+            // Check if the player could not be found.
+            if (player == null) {
+                user.sendMessage(section.getString("not_found", "{error_colour}Player could not be found."));
+                return;
+            }
+
+            // Load all the friend records.
+            friendRecords = Leaf.getDatabase().getTable(FriendTable.class).getRecordList(
+                    new Query().match("playerUuid", player.getUniqueId().toString())
+            );
+        } else {
+            // Load all the friend records.
+            friendRecords = Leaf.getDatabase().getTable(FriendTable.class).getRecordList(
+                    new Query().match("playerUuid", user.getUniqueId().toString())
+            );
+        }
+
+        assert friendRecords != null;
+        for (FriendRecord friendRecord : friendRecords) {
+            Player player = Leaf.getServer().getPlayer(UUID.fromString(friendRecord.friendPlayerUuid)).orElse(null);
+            builder.append(
+                    PlaceholderManager.parse(messageSection.getAdaptedString("name", "\n"), null, new User(player))
+            ).append("\n");
+        }
+
+        // Get the footer.
+        if (messageSection.getKeys().contains("footer")) {
+            builder.append(section.getAdaptedString("footer", "\n"));
+        }
+
+        user.sendMessage(builder.toString());
     }
 }

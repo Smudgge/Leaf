@@ -247,6 +247,11 @@ friends:
     permission_see_any: "leaf.friends.see"
     not_found: "{error_colour}Player could not be found."
     error: "{error_colour}Error occurred when opening inventory."
+    # If inventories are disabled.
+    message:
+      header: "&8&l----&r &a&lFriends &8&l----&r"
+      name: "&7- &f<player> &7<server>"
+      footer: "&8&l---------------"
     # %name% : Formatted name.
     # %date% : Date they started being friends
     # %last_mail% : The last mail that was sent.
