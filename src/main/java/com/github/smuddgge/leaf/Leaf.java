@@ -296,6 +296,15 @@ public class Leaf {
                 );
             }
 
+            if (Objects.equals(type, "MYSQL")) {
+                DatabaseFactory databaseFactory = DatabaseFactory.MYSQL;
+                Leaf.database = databaseFactory.create(
+                        DatabaseCredentials.MYSQL(
+                                ConfigDatabase.get().getString("connection_string", "none")
+                        )
+                );
+            }
+
         } catch (Exception exception) {
             exception.printStackTrace();
             Console.warn("Connection String : " + ConfigDatabase.get().getString("connection_string"));

@@ -13,7 +13,9 @@ enabled: true
 # databases procsesses.
 debugmode: false
 
-# ✜ Type of Database ✜
+# ---------------------------------------
+#             ✜ Database Type ✜
+# ---------------------------------------
 # SQLITE DATABASE
 # This type of database saves the data
 # to a file located in this folder.
@@ -21,10 +23,21 @@ type: SQLITE
 
 # # MONGO DATABASE
 # # This type of database saves data to the cloud.
+#
+# type: MONGO
 # connection_string: "connectionString"
 # database_name: "Leaf"
 
-# ✜ Settings ✜
+# # MYSQL DATABASE
+# # This type of database saves data on an 
+# # external server or the cloud.
+#
+# type: MYSQL
+# connection_string: "connectionString"
+
+# ---------------------------------------
+#             ✜ Settings ✜
+# ---------------------------------------
 # The maximum amount of history that will
 # be saved in the database per player.
 player_history_limit: 20
