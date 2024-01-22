@@ -29,7 +29,7 @@ type: SQLITE
 # database_name: "Leaf"
 
 # # MYSQL DATABASE
-# # This type of database saves data on an 
+# # This type of database saves data on an
 # # external server or the cloud.
 #
 # type: MYSQL

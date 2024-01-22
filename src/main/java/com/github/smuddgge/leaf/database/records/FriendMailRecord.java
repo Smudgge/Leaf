@@ -1,13 +1,13 @@
 package com.github.smuddgge.leaf.database.records;
 
-import com.github.smuddgge.squishydatabase.record.ForeignKeyAnnotation;
+import com.github.smuddgge.squishydatabase.record.Field;
+import com.github.smuddgge.squishydatabase.record.ForeignField;
 import com.github.smuddgge.squishydatabase.record.Record;
-import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 
 public class FriendMailRecord extends Record {
 
-    @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
+    @Field(type = RecordFieldType.PRIMARY)
     public String uuid;
 
     public String message;
@@ -18,12 +18,12 @@ public class FriendMailRecord extends Record {
 
     public String readDate;
 
-    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
-    @ForeignKeyAnnotation(table = "Player", field = "uuid")
+    @Field(type = RecordFieldType.FOREIGN)
+    @ForeignField(table = "Player", field = "uuid")
     public String friendFromUuid;
 
-    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
-    @ForeignKeyAnnotation(table = "Player", field = "uuid")
+    @Field(type = RecordFieldType.FOREIGN)
+    @ForeignField(table = "Player", field = "uuid")
     public String friendToUuid;
 
     /**

@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.database.records;
 
+import com.github.smuddgge.squishydatabase.record.Field;
 import com.github.smuddgge.squishydatabase.record.Record;
-import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 public class CommandLimitRecord extends Record {
 
-    @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
+    @Field(type = RecordFieldType.PRIMARY)
     public String primaryKey;
 
     public String amountExecuted;
