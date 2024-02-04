@@ -1,0 +1,15 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# Author : Smudge
+#
+# Contains the list of players that can enter the server.
+# The list can contain a player's name.
+# When they join it will be converted into there uuid.
+
+enabled: false
+reason: "&fYou are not &cwhitelisted &fon this server."
+players: []

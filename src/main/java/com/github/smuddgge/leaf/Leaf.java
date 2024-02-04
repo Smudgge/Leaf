@@ -5,12 +5,14 @@ import com.github.smuddgge.leaf.brand.HooksInitializer;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandHandler;
-import com.github.smuddgge.leaf.commands.subtypes.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.*;
+import com.github.smuddgge.leaf.commands.types.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.messages.*;
+import com.github.smuddgge.leaf.commands.types.whitelist.Whitelist;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
 import com.github.smuddgge.leaf.dependencys.MiniPlaceholdersDependency;
@@ -23,8 +25,11 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
 import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
 import com.github.smuddgge.leaf.placeholders.standard.*;
+import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
 import com.github.smuddgge.squishydatabase.DatabaseCredentials;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
+import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.console.Console;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.google.inject.Inject;
@@ -39,10 +44,13 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.UUID;
 
 @Plugin(
         id = "leaf",
@@ -61,6 +69,7 @@ public class Leaf {
     private static CommandHandler commandHandler;
     private static Database database;
     private static DiscordBot discordBot;
+    private static Configuration whitelist;
 
     private final Metrics.Factory metricsFactory;
 
@@ -79,6 +88,11 @@ public class Leaf {
 
         // Set up b stats
         this.metricsFactory = metricsFactory;
+
+        // Set up the whitelist.
+        Leaf.whitelist = new YamlConfiguration(folder.toFile(), "whitelist.yml");
+        Leaf.whitelist.setDefaultPath("whitelist.yml");
+        Leaf.whitelist.load();
     }
 
     @Subscribe
@@ -137,6 +151,7 @@ public class Leaf {
         Leaf.commandHandler.addType(new Variable());
         Leaf.commandHandler.addType(new Mute());
         Leaf.commandHandler.addType(new UnMute());
+        Leaf.commandHandler.addType(new Whitelist());
 
         Leaf.reloadCommands();
 
@@ -176,6 +191,34 @@ public class Leaf {
 
     @Subscribe
     public void onPlayerFirstJoin(PlayerChooseInitialServerEvent event) {
+
+        // Check if the whitelist is enabled.
+        if (Leaf.getWhitelistConfig().getBoolean("enabled")) {
+
+            // Get the instance of the whitelist.
+            java.util.List<String> whitelist = Leaf.getWhitelistConfig().getListString("players");
+            final String name = event.getPlayer().getUsername();
+            final String uuid = event.getPlayer().getUniqueId().toString();
+
+            // Update name to uuid.
+            if (whitelist.contains(name.toLowerCase())) {
+                whitelist.remove(name.toLowerCase());
+                whitelist.add(uuid);
+
+                Leaf.getWhitelistConfig().set("players", whitelist);
+                Leaf.getWhitelistConfig().save();
+            }
+
+            // Check if they are whitelisted.
+            if (!whitelist.contains(uuid)) {
+                event.getPlayer().disconnect(MessageManager.convertAndParse(
+                        Leaf.getWhitelistConfig().getString("reason", "&fYou are not &cwhitelisted &fon this server."),
+                        event.getPlayer()
+                ));
+                return;
+            }
+        }
+
         EventListener.onPlayerFirstJoin(event);
     }
 
@@ -250,6 +293,49 @@ public class Leaf {
      */
     public static Database getDatabase() {
         return Leaf.database;
+    }
+
+    /**
+     * Used to get the instance of the whitelist configuration.
+     *
+     * @return The instance of the whitelist config.
+     */
+    public static @NotNull Configuration getWhitelistConfig() {
+        return Leaf.whitelist;
+    }
+
+    /**
+     * Get the whitelist as a list of player names.
+     *
+     * @return The list of player names on the whitelist.
+     */
+    public static @NotNull java.util.List<String> getWhitelist() {
+        java.util.List<String> convertedList = new ArrayList<>();
+
+        for (String playerEntry : Leaf.getWhitelistConfig().getListString("players")) {
+            try {
+                UUID uuid = UUID.fromString(playerEntry);
+
+                // Check if they are online.
+                if (Leaf.getServer().getPlayer(uuid).isPresent()) {
+                    convertedList.add(Leaf.getServer().getPlayer(uuid).get().getUsername());
+                    continue;
+                }
+
+                // Check the database.
+                if (Leaf.getDatabase().isEnabled()) {
+                    PlayerRecord record = Leaf.getDatabase().getTable(PlayerTable.class)
+                            .getFirstRecord(new Query().match("uuid", uuid.toString()));
+                    if (record == null) continue;
+                    convertedList.add(record.name);
+                }
+
+            } catch (Exception exception) {
+                convertedList.add(playerEntry);
+            }
+        }
+
+        return convertedList;
     }
 
     /**

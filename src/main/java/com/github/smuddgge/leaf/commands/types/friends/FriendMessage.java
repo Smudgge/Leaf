@@ -1,37 +1,52 @@
-package com.github.smuddgge.leaf.commands.subtypes.friends;
+package com.github.smuddgge.leaf.commands.types.friends;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
 import com.github.smuddgge.leaf.commands.CommandType;
-import com.github.smuddgge.leaf.commands.types.messages.Reply;
+import com.github.smuddgge.leaf.commands.types.messages.Message;
 import com.github.smuddgge.leaf.database.tables.FriendTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
 import com.velocitypowered.api.proxy.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
- * <h1>Friend Reply Subcommand Type</h1>
- * Used to reply to a message.
+ * <h1>Friend Message Subcommand Type</h1>
+ * Used to message a friend.
  */
-public class FriendReply implements CommandType {
+public class FriendMessage implements CommandType {
 
     @Override
     public String getName() {
-        return "reply";
+        return "message";
     }
 
     @Override
     public String getSyntax() {
-        return "/[parent] [name] [message]";
+        return "/[parent] [name] [player] [message]";
     }
 
     @Override
     public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        return null;
+        CommandSuggestions commandSuggestions = new CommandSuggestions().appendFriends(user);
+        List<String> onlineFriends = new ArrayList<>();
+
+        for (String friendName : commandSuggestions.get().get(0)) {
+            Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(friendName);
+            if (optionalPlayer.isEmpty()) continue;
+
+            User friend = new User(optionalPlayer.get());
+            if (friend.isVanished()) continue;
+
+            onlineFriends.add(friendName);
+        }
+        return new CommandSuggestions().append(onlineFriends);
     }
 
     @Override
@@ -47,18 +62,11 @@ public class FriendReply implements CommandType {
         ConfigurationSection messageSection = section.getSection(this.getName());
 
         String command = arguments[0];
+        String playerName = arguments[1];
         String argString = String.join(" ", arguments);
         String[] messageArgs = argString.substring(command.length() + 1).split(" ");
 
-        User recipient = user.getLastMessaged();
-
-        // Check if the player exists.
-        if (recipient == null) {
-            user.sendMessage(section.getString("not_found", "{error_colour}You have no conversation to reply to."));
-            return new CommandStatus();
-        }
-
-        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(recipient.getName());
+        Optional<Player> optionalPlayer = Leaf.getServer().getPlayer(playerName);
 
         // Check if the player is online
         if (optionalPlayer.isEmpty()) {
@@ -66,12 +74,16 @@ public class FriendReply implements CommandType {
             return new CommandStatus();
         }
 
-        // Get amount of records that both players are in.
+        MessageManager.log("[DEBUG] Getting amount of friends");
+
+        // Get number of records that both players are in.
         int amount = Leaf.getDatabase().getTable(FriendTable.class).getAmountOfRecords(
                 new Query()
                         .match("playerUuid", user.getUniqueId().toString())
                         .match("friendPlayerUuid", optionalPlayer.get().getUniqueId().toString())
         );
+
+        MessageManager.log("[DEBUG] Got amount of friends");
 
         // Check if the record exist.
         if (amount == 0) {
@@ -80,6 +92,6 @@ public class FriendReply implements CommandType {
         }
 
         // Send a message.
-        return new Reply().onPlayerRun(messageSection, messageArgs, user);
+        return new Message().onPlayerRun(messageSection, messageArgs, user);
     }
 }

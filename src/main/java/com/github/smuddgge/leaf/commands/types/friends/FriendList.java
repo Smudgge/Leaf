@@ -1,6 +1,5 @@
-package com.github.smuddgge.leaf.commands.subtypes.friends;
+package com.github.smuddgge.leaf.commands.types.friends;
 
-import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.CommandStatus;
