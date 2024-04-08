@@ -7,12 +7,12 @@ import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 import com.velocitypowered.api.proxy.Player;
+import dev.simplix.protocolize.api.chat.ChatElement;
 import dev.simplix.protocolize.api.item.ItemFlag;
 import dev.simplix.protocolize.api.item.ItemStack;
 import dev.simplix.protocolize.data.ItemType;
 import dev.simplix.protocolize.data.inventory.InventoryType;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
 
@@ -118,7 +118,7 @@ public class InventoryItem {
      */
     public ItemStack getDefaultItemStack() {
         ItemStack item = new ItemStack(ItemType.LIGHT_GRAY_STAINED_GLASS_PANE);
-        item.displayName(MessageManager.convertToLegacy("&7"));
+        item.displayName(ChatElement.ofLegacyText("&7"));
         return item;
     }
 
@@ -174,7 +174,7 @@ public class InventoryItem {
                 )
         ), player.orElse(null));
         item.displayName(component == null ? null
-                : component.decoration(TextDecoration.ITALIC, false));
+                : ChatElement.of(component));
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
@@ -183,7 +183,7 @@ public class InventoryItem {
                     player.orElse(null)
             );
             item.addToLore(loreComponent == null ? null
-                    : loreComponent.decoration(TextDecoration.ITALIC, false));
+                    : ChatElement.of(component));
         }
 
         // Set durability.

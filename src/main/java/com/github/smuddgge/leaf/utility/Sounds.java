@@ -7,7 +7,6 @@ import dev.simplix.protocolize.api.SoundCategory;
 import dev.simplix.protocolize.api.player.ProtocolizePlayer;
 import dev.simplix.protocolize.data.Sound;
 
-import java.util.Locale;
 import java.util.UUID;
 
 /**

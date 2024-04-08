@@ -49,7 +49,8 @@ public class AlertRaw extends BaseCommandType {
                 player.sendMessage(component);
 
                 // Play sound if it exists.
-                if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("see_sound", null), player.getUniqueId());
+                if (ProtocolizeDependency.isEnabled())
+                    Sounds.play(section.getString("see_sound", null), player.getUniqueId());
             }
 
             // Log the message in console.

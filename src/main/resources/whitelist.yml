@@ -12,4 +12,4 @@
 
 enabled: false
 reason: "&fYou are not &cwhitelisted &fon this server."
-players: []
+players: [ ]

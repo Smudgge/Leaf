@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import dev.simplix.protocolize.api.Protocolize;
+import dev.simplix.protocolize.api.chat.ChatElement;
 import dev.simplix.protocolize.api.inventory.Inventory;
 import dev.simplix.protocolize.api.player.ProtocolizePlayer;
 import dev.simplix.protocolize.data.inventory.InventoryType;
@@ -46,7 +47,7 @@ public abstract class InventoryInterface {
         }
 
         this.inventory = new Inventory(this.getInventoryType());
-        this.inventory.title(MessageManager.convertToLegacy(this.getTitle()));
+        this.inventory.title(ChatElement.ofLegacyText(this.getTitle()));
 
         this.load();
 

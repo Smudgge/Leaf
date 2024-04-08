@@ -97,6 +97,7 @@ public class FriendRequestOptionsInventory extends CustomInventory {
                 this.section.getString("sent", "{message} You are now friends with &f<name>"),
                 null, user
         ));
-        if (ProtocolizeDependency.isEnabled()) Sounds.play(this.section.getString("accept_sound"), userSentTo.getUniqueId());
+        if (ProtocolizeDependency.isEnabled())
+            Sounds.play(this.section.getString("accept_sound"), userSentTo.getUniqueId());
     }
 }

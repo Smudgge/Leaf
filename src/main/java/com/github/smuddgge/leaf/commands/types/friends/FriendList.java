@@ -121,8 +121,8 @@ public class FriendList implements CommandType {
     /**
      * Used to send the list of friends as a message.
      *
-     * @param user The instance of the user running the command.
-     * @param section The list section.
+     * @param user      The instance of the user running the command.
+     * @param section   The list section.
      * @param arguments The list of arguments.
      */
     public static void sendMessage(User user, ConfigurationSection section, String[] arguments) {

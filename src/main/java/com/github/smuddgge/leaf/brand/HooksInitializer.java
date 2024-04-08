@@ -1,5 +1,7 @@
 package com.github.smuddgge.leaf.brand;
 
+import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
 import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
@@ -7,7 +9,6 @@ import com.velocitypowered.proxy.protocol.MinecraftPacket;
 import com.velocitypowered.proxy.protocol.StateRegistry;
 import io.netty.util.collection.IntObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.elytrium.java.commons.reflection.ReflectionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
@@ -55,8 +56,12 @@ public final class HooksInitializer {
 
             ((Map<ProtocolVersion, StateRegistry.PacketRegistry.ProtocolRegistry>) versionsField.invokeExact(playClientside)).forEach(consumer);
 
-        } catch (Throwable e) {
-            throw new ReflectionException(e);
+        } catch (Throwable exception) {
+            if (Leaf.getServer().getVersion().getVersion().contains("3.3.0")) {
+                MessageManager.warn("The brand feature currently does not work with Velocity-3.3.0+");
+                return;
+            }
+            throw new RuntimeException(exception);
         }
     }
 

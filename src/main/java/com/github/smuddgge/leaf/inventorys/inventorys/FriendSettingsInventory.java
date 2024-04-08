@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.inventorys.inventorys;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.datatype.User;
@@ -28,6 +29,7 @@ public class FriendSettingsInventory extends CustomInventory {
         FriendSettingsRecord friendSettings = friendSettingsTable.getFirstRecord(new Query().match("playerUuid", user.getUniqueId()));
 
         if (friendSettings == null) {
+            System.out.println("test");
             this.friendSettingsRecord = new FriendSettingsRecord();
             this.friendSettingsRecord.playerUuid = user.getUniqueId().toString();
             return;
@@ -50,9 +52,13 @@ public class FriendSettingsInventory extends CustomInventory {
         for (int slot : inventoryItem.getSlots(this.getInventoryType())) {
             this.addAction(slot, () -> {
                 RecordField recordField = this.friendSettingsRecord.getField(functionType);
-                assert recordField != null;
 
-                if (recordField.getValue() == "true") {
+                if (recordField == null) {
+                    MessageManager.warn("No such setting type: " + functionType + " Please change this in your configuration file.");
+                    throw new RuntimeException("Setting type does not exist: " + functionType);
+                }
+
+                if (recordField.getValue().equals("true")) {
                     recordField.setValue("false");
                 } else {
                     recordField.setValue("true");
@@ -60,7 +66,7 @@ public class FriendSettingsInventory extends CustomInventory {
 
                 FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
                 friendSettingsTable.insertRecord(this.friendSettingsRecord);
-                this.load();
+                new FriendSettingsInventory(this.section, this.user).open();
             });
         }
 

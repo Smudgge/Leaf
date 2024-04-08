@@ -50,6 +50,8 @@ public class DiscordBot extends ListenerAdapter {
                     .setMemberCachePolicy(MemberCachePolicy.ALL)
                     .setChunkingFilter(ChunkingFilter.ALL)
                     .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                    .enableIntents(GatewayIntent.GUILD_PRESENCES)
+                    .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(this)
                     .build();
 

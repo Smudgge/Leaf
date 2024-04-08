@@ -48,7 +48,8 @@ public class Alert extends BaseCommandType {
             new User(player).sendMessage(message);
 
             // Play sound if it exists.
-            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("see_sound", null), player.getUniqueId());
+            if (ProtocolizeDependency.isEnabled())
+                Sounds.play(section.getString("see_sound", null), player.getUniqueId());
         }
 
         // Check if there is a discord webhook.
@@ -82,7 +83,8 @@ public class Alert extends BaseCommandType {
             new User(player).sendMessage(message);
 
             // Play sound if it exists.
-            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("see_sound", null), player.getUniqueId());
+            if (ProtocolizeDependency.isEnabled())
+                Sounds.play(section.getString("see_sound", null), player.getUniqueId());
         }
 
         // Log the message in console.

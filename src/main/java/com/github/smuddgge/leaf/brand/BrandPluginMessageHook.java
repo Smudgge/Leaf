@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.brand;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.datatype.User;
@@ -40,6 +41,10 @@ class BrandPluginMessageHook extends PluginMessage {
                 || !ConfigMain.get().getBoolean("brand.in_game.enabled", false)
                 || !PluginMessageUtil.isMcBrand(this)) {
 
+            return super.handle(handler);
+        }
+
+        if (Leaf.getServer().getVersion().getVersion().contains("3.3.0")) {
             return super.handle(handler);
         }
 

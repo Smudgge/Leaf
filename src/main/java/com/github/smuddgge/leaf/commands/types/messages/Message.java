@@ -152,7 +152,8 @@ public class Message extends BaseCommandType {
             // Send messages and sounds.
             recipient.sendMessage(PlaceholderManager.parse(section.getAdaptedString("from", "\n")
                     .replace("%message%", message), null, user));
-            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("from_sound"), recipient.getUniqueId());
+            if (ProtocolizeDependency.isEnabled())
+                Sounds.play(section.getString("from_sound"), recipient.getUniqueId());
 
             user.sendMessage(PlaceholderManager.parse(section.getAdaptedString("to", "\n")
                     .replace("%message%", message), null, recipient));
@@ -168,7 +169,8 @@ public class Message extends BaseCommandType {
                 try {
                     User temp = new User(player);
                     if (Objects.equals(temp.getRecord().toggleSeeSpy, "true")) {
-                        if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
+                        if (ProtocolizeDependency.isEnabled())
+                            Sounds.play(section.getString("spy_sound"), temp.getUniqueId());
                     }
                 } catch (Exception exception) {
                     MessageManager.log("[DEBUG] Unable to send sound for a player on message.");

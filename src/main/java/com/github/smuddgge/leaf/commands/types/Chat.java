@@ -155,7 +155,8 @@ public class Chat extends BaseCommandType {
 
             User toSend = new User(player);
             toSend.sendMessage(message);
-            if (ProtocolizeDependency.isEnabled()) Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
+            if (ProtocolizeDependency.isEnabled())
+                Sounds.play(section.getString("receive_sound"), toSend.getUniqueId());
         }
     }
 }

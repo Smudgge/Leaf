@@ -12,7 +12,6 @@ import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
-import dev.simplix.protocolize.data.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
