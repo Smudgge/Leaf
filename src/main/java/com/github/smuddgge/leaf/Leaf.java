@@ -27,6 +27,7 @@ import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
 import com.github.smuddgge.leaf.placeholders.standard.*;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
+import com.github.smuddgge.squishydatabase.DatabaseBuilder;
 import com.github.smuddgge.squishydatabase.DatabaseCredentials;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
 import com.github.smuddgge.squishydatabase.Query;
@@ -354,42 +355,19 @@ public class Leaf {
      * @param folder The plugin's folder.
      */
     public static void setupDatabase(File folder) {
-        // Set up the database
+
+        // Set up the database.
         if (!ConfigDatabase.get().getBoolean("enabled", true)) {
             Leaf.database = null;
             return;
         }
 
+        // Create the database connection.
         try {
-            String type = ConfigDatabase.get().getString("type", "SQLITE");
-
-            // Check if it's an SQLITE database.
-            if (Objects.equals(type, "SQLITE")) {
-                DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
-                Leaf.database = databaseFactory.create(
-                        DatabaseCredentials.SQLITE(folder.getAbsolutePath() + File.separator + "database.sqlite3")
-                );
-            }
-
-            // Check if it's a MONGO database.
-            if (Objects.equals(type, "MONGO")) {
-                DatabaseFactory databaseFactory = DatabaseFactory.MONGO;
-                Leaf.database = databaseFactory.create(
-                        DatabaseCredentials.MONGO(
-                                ConfigDatabase.get().getString("connection_string", "none"),
-                                ConfigDatabase.get().getString("database_name", "Database")
-                        )
-                );
-            }
-
-            if (Objects.equals(type, "MYSQL")) {
-                DatabaseFactory databaseFactory = DatabaseFactory.MYSQL;
-                Leaf.database = databaseFactory.create(
-                        DatabaseCredentials.MYSQL(
-                                ConfigDatabase.get().getString("connection_string", "none")
-                        )
-                );
-            }
+            Leaf.database = new DatabaseBuilder(
+                    ConfigDatabase.get(),
+                    folder.getAbsolutePath() + File.separator + "database.sqlite3"
+            ).build();
 
         } catch (Exception exception) {
             exception.printStackTrace();

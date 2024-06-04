@@ -33,7 +33,9 @@ type: SQLITE
 # # external server or the cloud.
 #
 # type: MYSQL
-# connection_string: "connectionString"
+# connection_string: "jdbc:mysql://localhost/test"
+# username: ""
+# password: ""
 
 # ---------------------------------------
 #             ✜ Settings ✜

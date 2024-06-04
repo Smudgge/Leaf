@@ -156,6 +156,11 @@ public class DiscordBot extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+
+        // Check if the author is a bot.
+        if (event.getAuthor().isBot()) return;
+
+        // Loop though commands.
         for (DiscordBotCommandAdapter discordCommand : this.discordCommandList) {
             discordCommand.onMessage(event);
         }
