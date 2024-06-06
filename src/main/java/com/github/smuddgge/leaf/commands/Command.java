@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.database.tables.CommandCooldownTable;
 import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
@@ -14,6 +15,7 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -119,6 +121,9 @@ public record Command(String identifier,
         // Check the command limit.
         if (this.isLimited(user)) return new CommandStatus().isLimited();
 
+        // Check the command cooldown.
+        if (this.isOnCooldown(user)) return new CommandStatus().isOnCooldown();
+
         // Play sound.
         if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
             try {
@@ -132,7 +137,9 @@ public record Command(String identifier,
         // Check if there are no sub command types.
         if (this.commandType.getSubCommandTypes().isEmpty()
                 || arguments.length <= 0)
-            return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseExecutions(user, this);
+            return this.commandType.onPlayerRun(this.getSection(), arguments, user)
+                    .increaseExecutions(user, this)
+                    .updateCooldownTimeStamp(user, this);
 
         // Otherwise, check if it is a sub command.
         for (CommandType commandType : this.commandType.getSubCommandTypes()) {
@@ -143,10 +150,14 @@ public record Command(String identifier,
             subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
 
             if (subCommandNames.contains(name))
-                return commandType.onPlayerRun(this.getSection(), arguments, user).increaseExecutions(user, this);
+                return commandType.onPlayerRun(this.getSection(), arguments, user)
+                        .increaseExecutions(user, this)
+                        .updateCooldownTimeStamp(user, this);
         }
 
-        return this.commandType.onPlayerRun(this.getSection(), arguments, user).increaseExecutions(user, this);
+        return this.commandType.onPlayerRun(this.getSection(), arguments, user)
+                .increaseExecutions(user, this)
+                .updateCooldownTimeStamp(user, this);
     }
 
     /**
@@ -259,7 +270,8 @@ public record Command(String identifier,
         // Check if the database is disabled.
         // We return true because the database may have disabled its self
         // and the admin may still want commands to be limited.
-        if (Leaf.isDatabaseDisabled()) return true;
+        // -> If the admin is not using a database, they will set the limit to -1.
+        if (Leaf.isDatabaseDisabled()) return false;
 
         int amountExecuted = Leaf.getDatabase()
                 .getTable(CommandLimitTable.class)
@@ -268,6 +280,25 @@ public record Command(String identifier,
         // Check if the amount of times the command
         // has been executed is bigger or equal to the limit.
         return amountExecuted >= limit;
+    }
+
+    private boolean isOnCooldown(@NotNull User user) {
+
+        long cooldown = ConfigurationManager.getCommands().getCommandCooldown(this.identifier);
+
+        if (cooldown == -1) return false;
+
+        // Check if the database is disabled.
+        // We return true because the database may have disabled its self
+        // and the admin may still want commands to be limited.
+        // -> If the admin is not using a database, they will set the cooldown to -1.
+        if (Leaf.isDatabaseDisabled()) return true;
+
+        long lastExecutedTimeStamp = Leaf.getDatabase()
+                .getTable(CommandCooldownTable.class)
+                .getExecutedTimeStamp(user.getUniqueId(), this.identifier);
+
+        return (lastExecutedTimeStamp + cooldown) > System.currentTimeMillis();
     }
 
     /**
@@ -284,6 +315,23 @@ public record Command(String identifier,
         return limit != -1;
     }
 
+    public boolean hasCooldown() {
+        long cooldown = ConfigurationManager.getCommands().getCommandCooldown(this.identifier);
+        return cooldown != -1;
+    }
+
+    public @NotNull String getCooldown(@NotNull User user) {
+        long cooldown = ConfigurationManager.getCommands().getCommandCooldown(this.identifier);
+
+        if (cooldown == -1) return "0";
+
+        long lastCooldownTimeStamp = Leaf.getDatabase()
+                .getTable(CommandCooldownTable.class)
+                .getExecutedTimeStamp(user.getUniqueId(), this.getIdentifier());
+
+        return String.valueOf(Duration.ofMillis((lastCooldownTimeStamp + cooldown) - System.currentTimeMillis()).toSeconds());
+    }
+
     @Override
     public void execute(final Invocation invocation) {
         CommandSource source = invocation.source();
@@ -297,6 +345,12 @@ public record Command(String identifier,
                 if (status.hasIncorrectArguments()) {
                     user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
                             .replace("[name]", this.getName()));
+                }
+
+                if (status.hasOnCooldown()) {
+                    user.sendMessage(ConfigMessages.getOnCooldown()
+                            .replace("%cooldown%", this.getCooldown(user))
+                    );
                 }
 
                 String message = status.getMessage();

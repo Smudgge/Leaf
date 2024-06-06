@@ -554,6 +554,15 @@ public class User {
                 .increaseAmountExecuted(this.getUniqueId(), commandId);
     }
 
+    public void updateCooldownTimeStamp(@NotNull String commandId) {
+
+        if (Leaf.isDatabaseDisabled()) return;
+
+        Leaf.getDatabase()
+                .getTable(CommandCooldownTable.class)
+                .updateExecutedTimeStamp(this.getUniqueId(), commandId);
+    }
+
     /**
      * Used to check if this user is friends with another player.
      *

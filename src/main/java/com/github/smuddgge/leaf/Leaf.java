@@ -28,8 +28,6 @@ import com.github.smuddgge.leaf.placeholders.standard.*;
 import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
 import com.github.smuddgge.squishydatabase.DatabaseBuilder;
-import com.github.smuddgge.squishydatabase.DatabaseCredentials;
-import com.github.smuddgge.squishydatabase.DatabaseFactory;
 import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.console.Console;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
@@ -50,13 +48,12 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.UUID;
 
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "5.0.1",
+        version = "5.2.0",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -356,6 +353,12 @@ public class Leaf {
      */
     public static void setupDatabase(File folder) {
 
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         // Set up the database.
         if (!ConfigDatabase.get().getBoolean("enabled", true)) {
             Leaf.database = null;
@@ -396,6 +399,9 @@ public class Leaf {
 
         // Version 4.3.0
         Leaf.database.createTable(new CommandLimitTable());
+
+        // Version 5.2.0
+        Leaf.database.createTable(new CommandCooldownTable());
     }
 
     /**

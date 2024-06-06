@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.database.tables.CommandCooldownTable;
 import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;
 import net.dv8tion.jda.api.entities.Member;
@@ -20,6 +21,7 @@ public class CommandStatus {
     private boolean hasPlayerCommand = false;
     private boolean hasNoPermission = false;
     private boolean hasIsLimited = false;
+    private boolean hasOnCooldown = false;
 
     private boolean hasStopIncreaseLimit = false;
 
@@ -90,6 +92,11 @@ public class CommandStatus {
      */
     public CommandStatus isLimited() {
         this.hasIsLimited = true;
+        return this;
+    }
+
+    public CommandStatus isOnCooldown() {
+        this.hasOnCooldown = true;
         return this;
     }
 
@@ -168,6 +175,10 @@ public class CommandStatus {
         return this.hasIsLimited;
     }
 
+    public boolean hasOnCooldown() {
+        return this.hasOnCooldown;
+    }
+
     /**
      * Used to check if the increase of the command limit
      * should be stopped.
@@ -239,6 +250,25 @@ public class CommandStatus {
         Leaf.getDatabase()
                 .getTable(CommandLimitTable.class)
                 .increaseAmountExecuted(member, command.getIdentifier());
+
+        return this;
+    }
+
+    public @NotNull CommandStatus updateCooldownTimeStamp(@NotNull User user, @NotNull Command command) {
+        if (this.hasOnCooldown()) return this;
+        if (!command.hasCooldown()) return this;
+        user.updateCooldownTimeStamp(command.getIdentifier());
+        return this;
+    }
+
+    public @NotNull CommandStatus updateCooldownTimeStamp(@NotNull Member member, @NotNull Command command) {
+        if (this.hasOnCooldown()) return this;
+        if (command.getSection().getSection("discord_bot").getLong("cooldown", -1) == -1) return this;
+        if (Leaf.isDatabaseDisabled()) return this;
+
+        Leaf.getDatabase()
+                .getTable(CommandCooldownTable.class)
+                .updateExecutedTimeStamp(member, command.getIdentifier());
 
         return this;
     }

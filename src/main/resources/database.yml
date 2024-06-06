@@ -33,7 +33,8 @@ type: SQLITE
 # # external server or the cloud.
 #
 # type: MYSQL
-# connection_string: "jdbc:mysql://localhost/test"
+# connection_string: "address:port"
+# database_name: "Leaf"
 # username: ""
 # password: ""
 

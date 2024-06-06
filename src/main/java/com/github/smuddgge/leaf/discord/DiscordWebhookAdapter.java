@@ -75,7 +75,8 @@ public class DiscordWebhookAdapter extends TaskContainer {
          * @param string The instance of the string to parse.
          * @return The parsed string.
          */
-        @NotNull String parsePlaceholders(@NotNull String string);
+        @NotNull
+        String parsePlaceholders(@NotNull String string);
     }
 
     /**

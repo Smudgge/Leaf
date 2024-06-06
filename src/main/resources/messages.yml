@@ -16,3 +16,4 @@ messages:
   error: "{error_colour}Error occurred while running command."
   no_permission: "{error_colour}No permission."
   is_limited: "{error_colour}You cannot execute this command anymore as you have reached the limit."
+  on_cooldown: "{error_colour}Please wait %cooldown% before executing this command again."

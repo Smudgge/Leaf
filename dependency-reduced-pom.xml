@@ -4,7 +4,7 @@
   <groupId>com.github.smuddgge</groupId>
   <artifactId>Leaf</artifactId>
   <name>Leaf</name>
-  <version>5.1.1</version>
+  <version>5.2.0</version>
   <description>A velocity utility plugin</description>
   <build>
     <resources>
@@ -27,6 +27,16 @@
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <minimizeJar>true</minimizeJar>
+              <artifactSet>
+                <excludes>
+                  <exclude>jupiter:*</exclude>
+                  <exclude>spark-api:*</exclude>
+                  <exclude>dev.simplix:*</exclude>
+                </excludes>
+              </artifactSet>
+            </configuration>
           </execution>
         </executions>
       </plugin>

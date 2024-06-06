@@ -113,4 +113,9 @@ public class ConfigMessages extends YamlConfiguration {
         return ConfigMessages.config.getSection("messages")
                 .getString("is_limited", "{error_colour}You cannot execute this command anymore as you have reached the limit.");
     }
+
+    public static String getOnCooldown() {
+        return ConfigMessages.config.getSection("messages")
+                .getString("on_cooldown", "{error_colour}Please wait %cooldown% before executing this command again.");
+    }
 }

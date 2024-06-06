@@ -148,6 +148,10 @@ public class CommandConfigurationHandler extends ConfigurationHandler {
         return this.getCommand(identifier).getInteger("limit", -1);
     }
 
+    public long getCommandCooldown(String identifier) {
+        return this.getCommand(identifier).getLong("cooldown", -1);
+    }
+
     /**
      * Used to get the first command with a certain
      * command type.

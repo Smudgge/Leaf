@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.discord;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.commands.CommandStatus;
+import com.github.smuddgge.leaf.database.tables.CommandCooldownTable;
 import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.utility.DiscordUtility;
 import com.github.smuddgge.squishydatabase.console.Console;
@@ -13,6 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,6 +168,37 @@ public class DiscordBotCommandAdapter {
         return amountExecuted >= limit;
     }
 
+    public boolean isOnCooldown(@NotNull Member member) {
+
+        long cooldown = this.command.getSection()
+                .getSection("discord_bot")
+                .getLong("cooldown", -1);
+
+        if (cooldown == -1) return false;
+        if (Leaf.isDatabaseDisabled()) return true;
+
+        long lastCooldownTimeStamp = Leaf.getDatabase()
+                .getTable(CommandCooldownTable.class)
+                .getExecutedTimeStamp(member, this.getCommand().getIdentifier());
+
+        return (lastCooldownTimeStamp + cooldown) > System.currentTimeMillis();
+    }
+
+    public @NotNull Duration getCooldown(@NotNull Member member) {
+
+        long cooldown = this.command.getSection()
+                .getSection("discord_bot")
+                .getLong("cooldown", -1);
+
+        if (cooldown == -1) return Duration.ofMillis(0);
+
+        long lastCooldownTimeStamp = Leaf.getDatabase()
+                .getTable(CommandCooldownTable.class)
+                .getExecutedTimeStamp(member, this.getCommand().getIdentifier());
+
+        return Duration.ofMillis((lastCooldownTimeStamp + cooldown) - System.currentTimeMillis());
+    }
+
     /**
      * Used to execute the discord command.
      *
@@ -235,6 +268,21 @@ public class DiscordBotCommandAdapter {
             return;
         }
 
+        // Check if the member is on cooldown.
+        if (this.isOnCooldown(event.getMember())) {
+            event.reply(new DiscordBotMessageAdapter(
+                    this.command.getSection(),
+                    "discord_bot.on_cooldown",
+                    "Please wait %cooldown%s seconds before executing this command."
+            ).setParser(new DiscordBotMessageAdapter.PlaceholderParser() {
+                @Override
+                public @NotNull String parsePlaceholders(@NotNull String string) {
+                    return string.replace("%cooldown%", String.valueOf(DiscordBotCommandAdapter.this.getCooldown(event.getMember()).toSecondsPart()));
+                }
+            }).buildMessage()).queue();
+            return;
+        }
+
         // Execute as discord command.
         CommandStatus status = this.getCommand().getBaseCommandType().onDiscordRun(
                 this.getCommand().getSection(),
@@ -249,6 +297,7 @@ public class DiscordBotCommandAdapter {
 
         // Increase the command executions.
         status.increaseExecutions(event.getMember(), this.command);
+        status.updateCooldownTimeStamp(event.getMember(), this.command);
 
         // Send a status message if given.
         String message = status.getMessage();

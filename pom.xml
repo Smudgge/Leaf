@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>5.1.1</version>
+    <version>5.2.0</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -97,7 +97,7 @@
         <dependency>
             <groupId>com.github.smuddgge</groupId>
             <artifactId>SquishyDatabase</artifactId>
-            <version>3.5.0</version>
+            <version>4.0.0</version>
         </dependency>
 
         <!-- Configuration API -->
@@ -239,6 +239,16 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>jupiter:*</exclude>
+                                    <exclude>spark-api:*</exclude>
+                                    <exclude>dev.simplix:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
