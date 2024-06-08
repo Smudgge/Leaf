@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>5.2.0</version>
+    <version>5.2.1</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -97,7 +97,7 @@
         <dependency>
             <groupId>com.github.smuddgge</groupId>
             <artifactId>SquishyDatabase</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
 
         <!-- Configuration API -->

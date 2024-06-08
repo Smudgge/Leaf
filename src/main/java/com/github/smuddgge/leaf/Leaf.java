@@ -53,7 +53,7 @@ import java.util.UUID;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "5.2.0",
+        version = "5.2.1",
         description = "A velocity utility plugin",
         authors = {"Smudge"}
 )
@@ -353,12 +353,6 @@ public class Leaf {
      */
     public static void setupDatabase(File folder) {
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
         // Set up the database.
         if (!ConfigDatabase.get().getBoolean("enabled", true)) {
             Leaf.database = null;
@@ -373,8 +367,13 @@ public class Leaf {
             ).build();
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Console.warn("Unable to create a connection to the database.");
+            Console.warn("- If you are using mysql make sure the connection string is address:port");
+            Console.warn("- Ensure you have filled the correct values in the database.yml config");
+            Console.warn("&7");
             Console.warn("Connection String : " + ConfigDatabase.get().getString("connection_string"));
+            Console.warn("&7");
+            exception.printStackTrace();
         }
 
         if (ConfigDatabase.isDebugMode()) {
