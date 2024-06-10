@@ -4,7 +4,7 @@
   <groupId>com.github.smuddgge</groupId>
   <artifactId>Leaf</artifactId>
   <name>Leaf</name>
-  <version>5.2.1</version>
+  <version>5.2.2</version>
   <description>A velocity utility plugin</description>
   <build>
     <resources>
@@ -28,7 +28,11 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <minimizeJar>true</minimizeJar>
+              <transformers>
+                <transformer>
+                  <resource>META-INF/services/java.sql.Driver</resource>
+                </transformer>
+              </transformers>
               <artifactSet>
                 <excludes>
                   <exclude>jupiter:*</exclude>
