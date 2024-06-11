@@ -110,6 +110,7 @@ public class Leaf {
         PlaceholderManager.register(new PlayerServerPlaceholder());
         PlaceholderManager.register(new PlayerVanishedPlaceholder());
         PlaceholderManager.register(new VersionPlaceholder());
+        PlaceholderManager.register(new ServerTPSPlaceholder());
 
         // Register placeholder conditions.
         ConditionManager.register(new MatchCondition());
