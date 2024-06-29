@@ -12,6 +12,8 @@ import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.record.RecordField;
 import dev.simplix.protocolize.api.item.ItemStack;
 
+import java.util.UUID;
+
 public class FriendSettingsInventory extends CustomInventory {
 
     private final FriendSettingsRecord friendSettingsRecord;
@@ -26,11 +28,13 @@ public class FriendSettingsInventory extends CustomInventory {
         super(section, user, "inventory");
 
         FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
-        FriendSettingsRecord friendSettings = friendSettingsTable.getFirstRecord(new Query().match("playerUuid", user.getUniqueId()));
+        FriendSettingsRecord friendSettings = friendSettingsTable.getFirstRecord(
+                new Query().match("playerUuid", user.getUniqueId().toString())
+        );
 
         if (friendSettings == null) {
-            System.out.println("test");
             this.friendSettingsRecord = new FriendSettingsRecord();
+            this.friendSettingsRecord.uuid = UUID.randomUUID().toString();
             this.friendSettingsRecord.playerUuid = user.getUniqueId().toString();
             return;
         }
