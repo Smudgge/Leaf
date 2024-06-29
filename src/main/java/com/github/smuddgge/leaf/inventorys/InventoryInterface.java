@@ -9,6 +9,7 @@ import dev.simplix.protocolize.api.chat.ChatElement;
 import dev.simplix.protocolize.api.inventory.Inventory;
 import dev.simplix.protocolize.api.player.ProtocolizePlayer;
 import dev.simplix.protocolize.data.inventory.InventoryType;
+import net.kyori.adventure.text.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public abstract class InventoryInterface {
         }
 
         this.inventory = new Inventory(this.getInventoryType());
-        this.inventory.title(ChatElement.ofLegacyText(this.getTitle()));
+        this.inventory.title(ChatElement.of(MessageManager.convertAndParse(this.getTitle(), null)));
 
         this.load();
 
