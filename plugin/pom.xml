@@ -25,7 +25,7 @@
     <parent>
         <groupId>com.github.smuddgge</groupId>
         <artifactId>Leaf</artifactId>
-        <version>6.0.0</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>plugin</artifactId>
@@ -145,6 +145,7 @@
     </dependencies>
 
     <build>
+        <finalName>Leaf-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>

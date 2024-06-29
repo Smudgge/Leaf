@@ -1,0 +1,1 @@
+{"id":"leaf","name":"Leaf","version":"@version@","description":"A velocity utility plugin.","authors":["Smudge"],"dependencies":[],"main":"com.github.smuddgge.plugin.Leaf"}
