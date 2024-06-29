@@ -5,6 +5,9 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
+# File: placeholders.yml
+# Description: Used to create placeholders you can use
+#              in this plugin.
 #
 # ★ Don't want some of the placeholders? ★
 # You can delete a placeholder by removing it
@@ -14,8 +17,7 @@
 # Custom placeholders can be used in any message using curly brackets.
 # You can add as many custom placeholders as you like.
 #
-# In custom placeholders, you can also use standard placeholders.
-# Standard placeholders :
+# In custom placeholders, you can also use standard placeholders:
 # <player> <server> <vanished> <version>
 
 # ❤︎ Simple placeholders ❤︎
@@ -24,7 +26,7 @@ message: "&8&l[&f&lServer&8&l]&a"
 error_colour: "&7"
 
 # ❤︎ Conditional placeholders ❤︎
-# More information is on the wiki: https://smuddgge.gitbook.io/leaf
+# More information is on the wiki.
 # {vanish_colour} {server_formatted} {rank_colour} {theme_material}
 vanish_colour:
   condition: "MATCH:<vanished>"

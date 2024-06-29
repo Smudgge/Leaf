@@ -5,6 +5,8 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
+# File: config.yml
+# Description: Contains general settings.
 
 # ✿ Vanish Support ✿
 # The permission used to check if a player is able to vanish.

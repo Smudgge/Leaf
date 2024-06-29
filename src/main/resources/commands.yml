@@ -4,7 +4,12 @@
 #  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
-# Author : Smudge
+# Author: Smudge
+# File: commands.yml
+# Description: Contains commands that will be created
+#              when enabled or reloaded.
+# Required: []
+# Optional: <>
 #
 # ★ Don't want all of these commands? ★
 # You can disable independent commands by deleting them
@@ -12,109 +17,11 @@
 #
 # ★ Want more commands? ★
 # Create your own custom commands by adding them to this file.
-# The list of possible commands is on the wiki!
+# You can copy and paste examples from the wiki.
 
-reload:
-  type: "reload"
-  name: "leafreload"
-  permission: "leaf.reload"
-  message: "{message} Reloaded all configs! <3"
-  error: "{error_colour}An error occurred and the reloading was aborted!"
-
-alert:
-  type: "alert"
-  name: "alert"
-  permission: "leaf.alert"
-  message: "&8&l[&f&lAlert&8&l]&r &a%message%"
-
-send:
-  type: "send"
-  name: "send"
-  permission: "leaf.send"
-  message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
-  server_not_found: "{error_colour}Server not found."
-  server_offline: "{error_colour}Server requested is offline."
-
-history:
-  type: "history"
-  name: "history"
-  permission: "leaf.history"
-  not_found: "{error_colour}Player could not be found."
-  page_size: 5
-  header: '&8&m&l------&r &a&l<player>''s History &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
-  section: '&7- %event%&r %server%&r &7%date%'
-  footer: '&8&m&l---------------------'
-
-staff_chat:
-  type: "chat"
-  name: "staffchat"
-  aliases: [ "sc" ]
-  permission: "leaf.staffchat"
-  format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
-  receive_sound: "BLOCK_NOTE_BLOCK_XYLOPHONE"
-  sound: "BLOCK_NOTE_BLOCK_XYLOPHONE"
-  # Discord -> Minecraft
-  # Add a discord bots token to the config.yml and enable
-  # this to let staff chat discord messages get sent to minecraft.
-  discord_bot:
-    enabled: false
-    # The staff chat channel.
-    allowed_channels:
-      - "1150803388309712947"
-    format: "&b&lDiscord&r &f%name%&r &7: &f%message%"
-  # Minecraft -> Discord
-  # Connect a web hook to allow minecraft staff chat
-  # to be sent to the discord channel.
-  # Uncomment the following to use:
-  # discord_webhook:
-  #   url: "url"
-  #   message:
-  #     username: "<player>"
-  #     avatar: "https://crafatar.com/avatars/<uuid>?overlay"
-  #     message: "%message%"
-
-staff_list:
-  type: "list"
-  name: "stafflist"
-  header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
-  footer: "&8&m&l--------------------"
-  list:
-    admin:
-      permission: "leaf.rank.admin"
-      header: '&7[&f%amount%&7] &c&lAdmins'
-      # Placeholders will parse in terms of the player.
-      section: '&7- &f<player> {server_formatted}\n'
-    moderator:
-      permission: "leaf.rank.moderator"
-      header: '&7[&f%amount%&7] &a&lMods'
-      section: '&7- &f<player> {server_formatted}\n'
-    helper:
-      permission: "leaf.rank.helper"
-      header: '&7[&f%amount%&7] &b&lHelpers'
-      section: '&7- &f<player> {server_formatted}\n'
-
-servers:
-  type: "servers"
-  name: "servers"
-  order:
-    - name_of_a_server
-    - testing1
-    - testing2
-  header: '&8&m&l------&r &a&lServers &8&m&l------'
-  # Placeholders registered in context of the server.
-  server: '{server_formatted} &f%online% &7Online Players'
-  footer: '&8&m&l---------------------'
-
-find:
-  type: "find"
-  name: "find"
-  not_found: "{error_colour}Player could not be found."
-  found: "{message} Player was found on {server_formatted}"
-  found_no_args: "{message} You are on {server_formatted}"
-
-# I'd love if you kept this command on your server <3
-# Shows information about this plugin.
 info:
+  # Syntax: /leaf
+  # Description: Shows infomation about this plugin.
   type: "info"
   name: "leaf"
   message:
@@ -126,408 +33,89 @@ info:
     - "&7"
     - "&8&m&l--------------------"
 
-report:
-  type: "report"
-  name: "report"
-  # Players with this permission will be able to see all reports.
-  see_report: "leaf.report.see"
-  see_sound: "none"
-  message: "&f<player> {server_formatted} &chas reported &7: &f%message%"
+reload:
+  # Syntax: /leafreload
+  # Description: Reloads the configuration files and then re-register the commands.
+  type: "reload"
+  name: "leafreload"
+  permission: "leaf.reload"
+  message: "{message} Reloaded all configs! <3"
+  error: "{error_colour}An error occurred while reloading. Somethings may be reverted back."
 
-message:
-  type: "message"
-  name: "globalmessage"
-  aliases: [ "gmsg" ]
-  not_found: "{error_colour}Player is not online."
-  message_self: "{error_colour}You cannot message yourself."
-  ignoring: "{error_colour}You have ignored this player."
-  recipient_ignoring: "{error_colour}This player has ignored you."
-  toggled: "{error_colour}You have your messages toggled."
-  recipient_toggled: "{error_colour}This player has there messages toggled."
-  you_are_muted: "&7You are muted."
-  recipient_muted: "&7Cannot sent a message to a muted player."
-  message_muted_players: true
-  to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
-  to_sound: "none"
-  from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
-  from_sound: "none"
-  spy_format: "&8&o%from% -> %to% : %message%"
-  spy_sound: "none"
+alert:
+  # Syntax: /alert [message]
+  # Description: Sends a message to all players online.
+  type: "alert"
+  name: "alert"
+  permission: "leaf.alert"
+  message: "&8&l[&f&lAlert&8&l]&r &a%message%"
 
-reply:
-  type: "reply"
-  name: "globalreply"
-  aliases: [ "gr" ]
-  not_found: "{error_colour}You have no conversation to reply to."
-  ignoring: "{error_colour}This player is ignoring you."
-  toggled: "{error_colour}You have your messages toggled."
-  recipient_toggled: "{error_colour}This player has there messages toggled."
-  to: "&f✉ &7&ome -> &f&o<player> &7&o: &f&o%message%"
-  to_sound: "none"
-  from: "&f✉ &f&o<player> -> &7&ome &7&o: &f&o%message%"
-  from_sound: "none"
-  spy_format: "&8&o%from% -> %to% : %message%"
-  spy_sound: "none"
+send:
+  # Syntax: /send [from] [to]
+  # Description: Used to send groups of players to different servers.
+  type: "send"
+  name: "send"
+  permission: "leaf.send"
+  message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
+  server_not_found: "{error_colour}Server not found."
+  server_offline: "{error_colour}Server requested is offline."
 
-togglemessages:
-  type: "togglemessages"
-  name: "togglemessages"
-  message: "{message} Toggled messages %toggle%"
+staff_chat:
+  # Syntax: /sc [message]
+  # Description: Used to send a message to all staff.
+  type: "chat"
+  name: "staffchat"
+  aliases: [ "sc" ]
+  permission: "leaf.staffchat"
+  format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
 
-togglespy:
-  type: "togglespy"
-  name: "togglespy"
-  permission: "leaf.togglespy"
-  message: "{message} Toggled spy %toggle%"
+staff_list:
+  # Syntax: /stafflist
+  # Description: Used to which staff are online. Supports good vanish plugins.
+  type: "list"
+  name: "stafflist"
+  header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
+  footer: "&8&m&l--------------------"
+  list:
+    admin:
+      permission: "leaf.rank.admin"
+      header: '&7[&f%amount%&7] &c&lAdmins'
+      section: '&7- &f<player> {server_formatted}\n'
+    moderator:
+      permission: "leaf.rank.moderator"
+      header: '&7[&f%amount%&7] &a&lMods'
+      section: '&7- &f<player> {server_formatted}\n'
+    helper:
+      permission: "leaf.rank.helper"
+      header: '&7[&f%amount%&7] &b&lHelpers'
+      section: '&7- &f<player> {server_formatted}\n'
 
-ignore:
-  type: "ignore"
-  name: "ignore"
-  not_found: "{error_colour}Player is not online."
-  ignore_self: "{error_colour}You cannot ignore yourself."
-  message: "{message} You are now ignoring <player>"
-
-unignore:
-  type: "unignore"
-  name: "unignore"
-  not_found: "{error_colour}You are not ignoring this player."
-  message: "{message} You are no longer ignoring <player>"
-
-ignorelist:
-  type: "ignorelist"
-  name: "ignorelist"
-  none_ignored: "{error_colour}You are not ignoring anyone."
-  message:
-    - "&8&m&l------&r &a&lIgnored Players &8&m&l------"
-    - "%players%"
-    - "&8&m&l---------------------"
-
-message_history:
-  type: "messagehistory"
-  name: "messagehistory"
-  permission: "leaf.messagehistory"
-  not_found: "{error_colour}Player could not be found."
-  page_size: 8
-  header: '&8&m&l------&r &a&lMessages &7[&f%page%&7/&f%page_amount%&7] &8&m&l------'
-  section: '&7%date% &f%from% &7: &e%message%'
+servers:
+  # Syntax: /servers
+  # Description: Used to see how many players are online on each server.
+  type: "servers"
+  name: "servers"
+  order:
+    - name_of_a_server
+    - testing1
+    - testing2
+  header: '&8&m&l------&r &a&lServers &8&m&l------'
+  server: '{server_formatted} &f%online% &7Online Players'
   footer: '&8&m&l---------------------'
 
-teleport:
-  type: "teleport"
-  name: "go"
+find:
+  # Syntax: /find [player]
+  # Description: Used to see what server a player is on.
+  type: "find"
+  name: "find"
   not_found: "{error_colour}Player could not be found."
-  message: "{message} Teleporting..."
+  found: "{message} Player was found on {server_formatted}"
+  found_no_args: "{message} You are on {server_formatted}"
 
-mute:
-  type: "mute"
-  name: "globalmute"
-  permission: "leaf.mute"
-  not_found: "&7Could not find player in the database."
-  muted: "&7Muted <player> for &f%time%&7."
-
-unmute:
-  type: "unmute"
-  name: "globalunmute"
-  permission: "leaf.unmute"
-  not_found: "&7Could not find player in the database."
-  unmute: "&7Unmuted <player>"
-
-friends:
-  type: "friends"
-  name: "friends"
-
-  proxy_join: "&8[&a+&8] &7Your friend &a<player> &7joined {server_formatted}"
-  proxy_leave: "&8[&c-&8] &7Your friend &c<player> &7left the network"
-  server_change: "&8[&e=&8] &7Your friend &e<player> &7switched to {server_formatted}"
-
-  list:
-    name: "list"
-    enabled: true
-    # Lets you see other players friend lists.
-    permission_see_any: "leaf.friends.see"
-    not_found: "{error_colour}Player could not be found."
-    error: "{error_colour}Error occurred when opening inventory."
-    # If inventories are disabled.
-    message:
-      header: "&8&l----&r &a&lFriends &8&l----&r"
-      name: "&7- &f<player> &7<server>"
-      footer: "&8&l---------------"
-    # %name% : Formatted name.
-    # %date% : Date they started being friends
-    # %last_mail% : The last mail that was sent.
-    # %mail_status% : If the mail was read or not.
-    player:
-      skull: "%name%"
-      name: "&6&l%name%"
-      lore:
-        - "&7Friends since %date%"
-    no_player:
-      material: LIGHT_GRAY_STAINED_GLASS_PANE
-    # The inventory displaying the friend list.
-    inventory:
-      size: GENERIC_9X6
-      title: "&8&lFriends List"
-      content:
-        "top,bottom":
-          material: LIME_STAINED_GLASS_PANE
-        "row1,row2,row3,row4":
-          function:
-            type: "player"
-        "45":
-          function:
-            type: "last_page"
-            always_show: false
-          material: YELLOW_STAINED_GLASS_PANE
-          name: "&a&lLast Page"
-          lore:
-            - "&7Click to go back a page"
-        "53":
-          function:
-            type: "next_page"
-            always_show: false
-          material: YELLOW_STAINED_GLASS_PANE
-          name: "&a&lNext Page"
-          lore:
-            - "&7Click to go to the next page"
-
-  online:
-    name: "online"
-    enabled: true
-    # Lets you see other players friend lists.
-    permission_see_any: "leaf.friends.see"
-    not_found: "{error_colour}Player could not be found."
-    error: "{error_colour}Error occurred when opening inventory."
-    # %name% : Formatted name.
-    # %date% : Date they started being friends
-    # %last_mail% : The last mail that was sent.
-    # %mail_status% : If the mail was read or not.
-    player:
-      skull: "%name%"
-      name: "&6&l%name%"
-      lore:
-        - "&7Friends since %date%"
-    no_player:
-      material: LIGHT_GRAY_STAINED_GLASS_PANE
-    # The inventory displaying the friend list.
-    inventory:
-      size: GENERIC_9X6
-      title: "&8&lFriends List"
-      content:
-        "top,bottom":
-          material: LIME_STAINED_GLASS_PANE
-        "row1,row2,row3,row4":
-          function:
-            type: "player"
-        "45":
-          function:
-            type: "last_page"
-            always_show: false
-          material: YELLOW_STAINED_GLASS_PANE
-          name: "&a&lLast Page"
-          lore:
-            - "&7Click to go back a page"
-        "53":
-          function:
-            type: "next_page"
-            always_show: false
-          material: YELLOW_STAINED_GLASS_PANE
-          name: "&a&lNext Page"
-          lore:
-            - "&7Click to go to the next page"
-
-
-  request:
-    name: "request"
-    enabled: true
-    not_found: "{error_colour}Player has never played on this server."
-    requests_off: "{error_colour}This player has there friend requests off."
-    already_requested: "{error_colour}You have already requested to be friends with this player."
-    already_friends: "{error_colour}You are already friends with this player."
-    has_request: "{error_colour}This player has already sent you a request."
-    self: "{error_colour}You can not be friends with your self."
-    # Placeholders will parse in terms of the other player.
-    sent: "{message} You have sent a friend request to &f<player>"
-    # Placeholders will parse in terms of the player that sent the request.
-    from: "{message} You have received a friend request from &f<player>. &aTo accept run the command &e/friends accept"
-
-  accept:
-    name: "accept"
-    enabled: true
-    error: "{error_colour}Error occurred when opening inventory."
-    requests_off: "{error_colour}This player has there friend requests off."
-    already_requested: "{error_colour}You have already requested to be friends with this player."
-    # Placeholders will parse in terms of the player that sent the request.
-    # Message is sent to the friend accepter.
-    from: "{message} You are now friends with &f<player>"
-    # Placeholders will parse in terms of the player that accepted the friend request.
-    # Message is sent to the requester.
-    sent: "{message} You are now friends with &f<player>"
-    # %name% : Formatted name of the player that is requesting.
-    accept_sound: "none"
-    player:
-      skull: "%name%"
-      name: "&6&l%name%"
-      lore:
-        - "&7Click to open request options."
-    no_player:
-      material: LIGHT_GRAY_STAINED_GLASS_PANE
-    # The inventory displaying the friend requests list.
-    inventory:
-      size: GENERIC_9X6
-      title: "&8&lFriend Requests"
-      content:
-        "top,bottom":
-          material: LIME_STAINED_GLASS_PANE
-        "row1,row2,row3,row4":
-          function:
-            type: "player"
-        "45":
-          function:
-            type: "last_page"
-            always_show: false
-          material: YELLOW_STAINED_GLASS_PANE
-          name: "&a&lLast Page"
-          lore:
-            - "&7Click to go back a page"
-        "53":
-          function:
-            type: "next_page"
-            always_show: false
-          material: YELLOW_STAINED_GLASS_PANE
-          name: "&a&lNext Page"
-          lore:
-            - "&7Click to go to the next page"
-    options:
-      size: GENERIC_9X3
-      title: "&8&lFriend Request"
-      content:
-        "0-2,9-11,18-20":
-          function:
-            type: "deny"
-          material: RED_STAINED_GLASS_PANE
-          name: "&c&lDeny"
-          lore:
-            - "&7Anonymously remove this player"
-            - "&7from your requests."
-        "6-8,15-17,24-26":
-          function:
-            type: "accept"
-          material: LIME_STAINED_GLASS_PANE
-          name: "&a&lAccept"
-          lore:
-            - "Click to &aaccept &7friend request."
-
-  settings:
-    name: "settings"
-    enabled: true
-    error: "{error_colour}Error occurred when opening inventory."
-    inventory:
-      size: GENERIC_9X3
-      title: "&8&lFriend Requests"
-      content:
-        "row0,row2":
-          material: GRAY_STAINED_GLASS_PANE
-        "10":
-          function:
-            type: "toggleProxyJoin"
-            # When true what should the item be overridden with
-            true:
-              material: LIME_STAINED_GLASS_PANE
-          # Default item
-          material: RED_STAINED_GLASS_PANE
-          name: "&6&lToggle Join Messages"
-          lore:
-            - "&7Click to toggle join messages"
-            - "&6Currently &f%toggleProxyJoin%"
-        "11":
-          function:
-            type: "toggleProxyLeave"
-            # When true what should the item be overridden with
-            true:
-              material: LIME_STAINED_GLASS_PANE
-          # Default item
-          material: RED_STAINED_GLASS_PANE
-          name: "&6&lToggle Leave Messages"
-          lore:
-            - "&7Click to toggle leave messages"
-            - "&6Currently &f%toggleProxyLeave%"
-        "12":
-          function:
-            type: "toggleServerChange"
-            # When true what should the item be overridden with
-            true:
-              material: LIME_STAINED_GLASS_PANE
-          # Default item
-          material: RED_STAINED_GLASS_PANE
-          name: "&6&lToggle Server Change Messages"
-          lore:
-            - "&7Click to toggle server change messages"
-            - "&6Currently &f%toggleServerChange%"
-        "15":
-          function:
-            type: "toggleMail"
-            # When true what should the item be overridden with
-            true:
-              material: LIME_STAINED_GLASS_PANE
-          # Default item
-          material: RED_STAINED_GLASS_PANE
-          name: "&6&lToggle Mail"
-          lore:
-            - "&7Click to toggle mail"
-            - "&6Currently &f%toggleMail%"
-        "16":
-          function:
-            type: "toggleRequests"
-            # When true what should the item be overridden with
-            true:
-              material: LIME_STAINED_GLASS_PANE
-          # Default item
-          material: RED_STAINED_GLASS_PANE
-          name: "&6&lToggle Friend Requests"
-          lore:
-            - "&7Click to toggle friend requests"
-            - "&6Currently &f%toggleRequests%"
-
-  unfriend:
-    name: "unfriend"
-    enabled: true
-    not_found: "{error_colour}Invalid player name."
-    # Placeholders will register in terms of the friend.
-    message: "{message} You are no longer friends with <player>"
-
-  message:
-    enable: true
-    name: "msg"
-    not_found: "{error_colour}Player is not online."
-    not_friend: "{error_colour}You are not friends with this player."
-    message_self: "{error_colour}You cannot message yourself."
-    ignoring: "{error_colour}You have ignored this player."
-    recipient_ignoring: "{error_colour}This player has ignored you."
-    toggled: "{error_colour}You have your messages toggled."
-    recipient_toggled: "{error_colour}This player has there messages toggled."
-    # Placeholders will parse in terms of the other player.
-    to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
-    to_sound: "none"
-    from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
-    from_sound: "none"
-    # Spy is where other players can see messages.
-    spy_format: "&8&o%from% -> %to% : %message%"
-    spy_sound: "none"
-
-  reply:
-    type: "reply"
-    enable: true
-    name: "r"
-    not_found: "{error_colour}You have no conversation to reply to."
-    not_friend: "{error_colour}You are not friends with this player."
-    ignoring: "{error_colour}This player is ignoring you."
-    toggled: "{error_colour}You have your messages toggled."
-    recipient_toggled: "{error_colour}This player has there messages toggled."
-    # Placeholders will parse in terms of the other player.
-    to: "&f✉ &7&ome -> &f&o<player> &7&o<server> &7&o: &f&o%message%"
-    to_sound: "none"
-    from: "&f✉ &f&o<player> &7&o<server> -> &7&ome &7&o: &f&o%message%"
-    from_sound: "none"
-    # Spy is where other players can see messages.
-    spy_format: "&8&o%from% -> %to% : %message%"
-    spy_sound: "none"
+report:
+  # Syntax: /report [message]
+  # Description: Used to send a message to staff members.
+  type: "report"
+  name: "report"
+  see_report: "leaf.report.see"
+  message: "&f<player> {server_formatted} &chas reported &7: &f%message%"

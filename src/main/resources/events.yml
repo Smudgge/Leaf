@@ -5,39 +5,21 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
+# File: events.yml
+# Description: Contains events that will be created
+#              when enabled or reloaded.
 #
 # ★ Don't want events? ★
 # You can disable all by deleting the content of this file.
 # If you delete the file a new one will be generated.
 
 load_balancing:
-  # The type of event.
-  type: "playerjoin"
-  # Used to enable and disable the event.
-  # Defaults to true.
   enabled: false
-  # Add commands to be run.
-  commands:
-    - "leaf"
+  # Executed when a player joins the server.
+  type: "playerjoin"
   # Add servers to be sent to.
   # If more than 1 server is stated the player will
-  # go to the server with the least number of players
+  # go to the server with the least number of players.
   servers:
     - "hub1"
     - "hub2"
-
-discord_message:
-  type: "discordmessage"
-  enabled: false
-  # Channels to listen to.
-  allowed_channels:
-    - "1150803388309712947"
-  # Permissions to require.
-  permissions:
-    - ADMINISTRATOR
-  # The minecraft servers to send to.
-  send_to:
-    - server_1
-  # %name% The member's discord name.
-  # %message% The message sent.
-  message: "&b&lDiscord &f%name% &7: &f%message%"

@@ -5,38 +5,39 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
+# File: database.yml
+# Description: Contains the database settings.
 #
-# Changing these values requires a proxy restart.
-# Enable the database?
+# ⚠ Changing these values requires a proxy restart. ⚠
+
 enabled: true
+
 # Debug mode will output to console the
 # databases procsesses.
 debugmode: false
 
 # ---------------------------------------
-#             ✜ Database Type ✜
+#           ✜ Database Type ✜
 # ---------------------------------------
-# SQLITE DATABASE
 # This type of database saves the data
 # to a file located in this folder.
-type: SQLITE
+sqlite:
+  enable: true
 
-# # MONGO DATABASE
-# # This type of database saves data to the cloud.
-#
-# type: MONGO
-# connection_string: "connectionString"
-# database_name: "Leaf"
+# This type of database saves data to the cloud.
+mongo:
+  enable: false
+  connection_string: "connectionString"
+  database_name: "Leaf"
 
-# # MYSQL DATABASE
-# # This type of database saves data on an
-# # external server or the cloud.
-#
-# type: MYSQL
-# connection_string: "address:port"
-# database_name: "Leaf"
-# username: ""
-# password: ""
+# This type of database saves data on an
+# external server or the cloud.
+mysql:
+  enable: false
+  connection_string: "address:port"
+  database_name: "Leaf"
+  username: ""
+  password: ""
 
 # ---------------------------------------
 #             ✜ Settings ✜
