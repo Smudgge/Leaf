@@ -67,6 +67,20 @@
     </repositories>
 
     <dependencies>
+        <!-- Dependencies -->
+        <dependency>
+            <groupId>com.github.smuddgge</groupId>
+            <artifactId>common</artifactId>
+            <version>${parent.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.github.smuddgge</groupId>
+                    <artifactId>SquishyConfiguration</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Velocity -->
         <dependency>
             <groupId>com.velocitypowered</groupId>
@@ -170,7 +184,8 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/services/java.sql.Driver</resource>
                                 </transformer>
                             </transformers>
