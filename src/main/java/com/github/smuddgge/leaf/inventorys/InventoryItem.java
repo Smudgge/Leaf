@@ -173,8 +173,7 @@ public class InventoryItem {
                         null, this.user
                 )
         ), player.orElse(null));
-        item.displayName(component == null ? null
-                : ChatElement.of(component));
+        item.displayName(ChatElement.of(component));
 
         // Set the lore.
         for (String line : this.section.getListString("lore", new ArrayList<>())) {
@@ -182,8 +181,7 @@ public class InventoryItem {
                     this.parsePlaceholders(PlaceholderManager.parse(line, null, this.user)),
                     player.orElse(null)
             );
-            item.addToLore(loreComponent == null ? null
-                    : ChatElement.of(component));
+            item.addToLore(ChatElement.of(loreComponent));
         }
 
         // Set durability.
