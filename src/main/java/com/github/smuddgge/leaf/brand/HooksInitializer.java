@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.brand;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
+import com.github.smuddgge.leaf.exception.LeafException;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.proxy.connection.backend.BackendPlaySessionHandler;
 import com.velocitypowered.proxy.connection.backend.VelocityServerConnection;
@@ -56,12 +57,12 @@ public final class HooksInitializer {
 
             ((Map<ProtocolVersion, StateRegistry.PacketRegistry.ProtocolRegistry>) versionsField.invokeExact(playClientside)).forEach(consumer);
 
-        } catch (Throwable exception) {
+        } catch (Exception exception) {
             if (Leaf.getServer().getVersion().getVersion().contains("3.3.0")) {
                 MessageManager.warn("The brand feature currently does not work with Velocity-3.3.0+");
                 return;
             }
-            throw new RuntimeException(exception);
+            throw new LeafException(exception);
         }
     }
 
@@ -88,8 +89,8 @@ public final class HooksInitializer {
                 packetClassToId.put(hook.getHookClass(), packetId);
                 packetIdToSupplier.remove(packetId);
                 packetIdToSupplier.put(packetId, hook.getHook());
-            } catch (Throwable exception) {
-                exception.printStackTrace();
+            } catch (Exception exception) {
+                throw new LeafException(exception);
             }
         };
         return consumer;

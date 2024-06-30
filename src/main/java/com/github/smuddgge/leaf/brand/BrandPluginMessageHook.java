@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.exception.LeafException;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.velocitypowered.api.network.ProtocolVersion;
 import com.velocitypowered.api.proxy.Player;
@@ -62,8 +63,8 @@ class BrandPluginMessageHook extends PluginMessage {
 
             return true;
 
-        } catch (Throwable exception) {
-            throw new ReflectionException(exception);
+        } catch (Exception exception) {
+            throw new LeafException(exception);
         }
     }
 

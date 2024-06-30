@@ -32,7 +32,7 @@ public class EventManager {
      */
     public static void unRegister(@NotNull Event event) {
         EventManager.eventTypeList.remove(event);
-        MessageManager.log("&7[Events] &eUnregistered &7event : " + event.getIdentifier());
+        MessageManager.log("&7[Events] &cUnregistered &7event : " + event.getIdentifier());
     }
 
     /**

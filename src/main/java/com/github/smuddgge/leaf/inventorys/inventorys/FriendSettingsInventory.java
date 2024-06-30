@@ -5,6 +5,7 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.datatype.User;
+import com.github.smuddgge.leaf.exception.LeafException;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
@@ -59,7 +60,7 @@ public class FriendSettingsInventory extends CustomInventory {
 
                 if (recordField == null) {
                     MessageManager.warn("No such setting type: " + functionType + " Please change this in your configuration file.");
-                    throw new RuntimeException("Setting type does not exist: " + functionType);
+                    throw new LeafException("Setting type does not exist: " + functionType);
                 }
 
                 if (recordField.getValue().equals("true")) {

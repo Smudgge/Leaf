@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf.discord;
 import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.Command;
 import com.github.smuddgge.leaf.events.EventManager;
+import com.github.smuddgge.leaf.exception.LeafException;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -53,7 +54,8 @@ public class DiscordBot extends ListenerAdapter {
                     .enableIntents(GatewayIntent.GUILD_PRESENCES)
                     .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                     .addEventListeners(this)
-                    .build();
+                    .build()
+                    .awaitReady();
 
             MessageManager.log("&7[Discord Bot] &aEnabled");
 
@@ -63,7 +65,7 @@ public class DiscordBot extends ListenerAdapter {
             MessageManager.warn("- The discord bot has the correct &fPrivileged Gateway Intents.");
             MessageManager.warn("- The discord bot has the correct permissions on the server.");
             MessageManager.warn("Exception for debugging:");
-            exception.printStackTrace();
+            throw new LeafException(exception);
         }
     }
 
@@ -124,7 +126,7 @@ public class DiscordBot extends ListenerAdapter {
         if (this.bot == null) return this;
 
         for (DiscordBotCommandAdapter commandAdapter : this.discordCommandList) {
-            MessageManager.log("&7[Discord Bot] &eRemoving &7command : " + commandAdapter.getCommand().getName());
+            MessageManager.log("&7[Discord Bot] &cRemoving &7command : " + commandAdapter.getCommand().getName());
             this.bot.deleteCommandById(commandAdapter.getSnowflake()).complete();
         }
 

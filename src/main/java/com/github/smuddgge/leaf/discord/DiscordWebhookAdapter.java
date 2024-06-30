@@ -6,6 +6,7 @@ import club.minnced.discord.webhook.receive.ReadonlyMessage;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.github.smuddgge.leaf.exception.LeafException;
 import com.github.smuddgge.leaf.task.TaskContainer;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.console.Console;
@@ -148,7 +149,7 @@ public class DiscordWebhookAdapter extends TaskContainer {
                         client.close();
 
                     } catch (InterruptedException | ExecutionException exception) {
-                        throw new RuntimeException(exception);
+                        throw new LeafException(exception);
                     }
 
                 }, Duration.ofSeconds(this.section.getInteger("delete_after", -1)), "delete");

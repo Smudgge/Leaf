@@ -15,6 +15,10 @@ public class LeafException extends RuntimeException {
         ), exception);
     }
 
+    public LeafException(final Exception exception) {
+        this(exception, exception.getMessage());
+    }
+
     public LeafException(final String message) {
         this(null, message);
     }

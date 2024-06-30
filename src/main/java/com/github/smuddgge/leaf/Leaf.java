@@ -55,7 +55,7 @@ import java.util.UUID;
         id = "leaf",
         name = "Leaf",
         version = "5.3.0",
-        description = "A velocity utility plugin",
+        description = "A velocity utility plugin.",
         authors = {"Smudge"}
 )
 public class Leaf {
@@ -96,7 +96,6 @@ public class Leaf {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-
         try {
 
             // Set up b stats.
@@ -420,28 +419,40 @@ public class Leaf {
     public static void reloadCommands() {
         Leaf.commandHandler.unregister();
 
+        if (!Leaf.commandHandler.isEmpty()) {
+            MessageManager.warn("&7[Commands] &cUnregistered &7commands");
+        }
+
         // Check if the discord bot is not null.
         if (Leaf.discordBot != null) {
-            Leaf.discordBot.removeCommands()
-                    .shutdown();
+            Leaf.discordBot.removeCommands().shutdown();
         }
 
         // Create new connection.
         Leaf.discordBot = new DiscordBot(ConfigMain.get().getString("discord_token", null));
 
+        // Loop though commands.
         for (String identifier : ConfigurationManager.getCommands().getAllIdentifiers()) {
+
+            // Get the type of command.
             String commandTypeString = ConfigurationManager.getCommands().getCommandType(identifier);
             if (commandTypeString == null) continue;
 
+            // Get the base command type.
             BaseCommandType commandType = Leaf.commandHandler.getType(commandTypeString);
 
+            // Check if the command type doesn't exist.
             if (commandType == null) {
                 MessageManager.warn("Invalid command type for : " + identifier);
                 continue;
             }
 
+            // Create the command and register.
             Command command = new Command(identifier, commandType);
             Leaf.commandHandler.append(command);
+
+            // Register the command with the discord bot.
+            // This method will also check if it is a discord command.
             Leaf.discordBot.registerCommand(command);
         }
 

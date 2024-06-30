@@ -191,8 +191,8 @@ public class MessageManager {
                 &7
                       &7By Smudge    Version &b%s
                 &7
-                &7- &aEnabled &7Discord Support &f~10mib
-                &7- &aEnabled &7Database Support &f~10mib
+                &7| &aEnabled &7Discord Support &f~10mib
+                &7| &aEnabled &7Database Support &f~10mib
                 &7
                 """.formatted(Leaf.class.getAnnotation(Plugin.class).version());
 

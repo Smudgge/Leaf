@@ -166,4 +166,8 @@ public class CommandHandler {
         // Execute the command as a player.
         command.onPlayerRun(arguments, new User(player));
     }
+
+    public boolean isEmpty() {
+        return this.commands.isEmpty();
+    }
 }
