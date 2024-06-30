@@ -5,11 +5,12 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
-#
-# Contains the list of players that can enter the server.
-# The list can contain a player's name.
-# When they join it will be converted into there uuid.
+# File: whitelist.yml
+# Description: Contains the players that are whitelisted on this server.
+#              The list can contain the players name, when they log on it
+#              will be converted to there uuid. Uuids don't change when players
+#              change there minecraft names.
 
 enabled: false
 reason: "&fYou are not &cwhitelisted &fon this server."
-players: [ ]
+players: []

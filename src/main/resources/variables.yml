@@ -5,6 +5,9 @@
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
 # Author : Smudge
+# File: variables.yml
+# Description: Used to create variables that can be used as a
+#              placeholder and changed with commands.
 #
 # Variables can be used to store custom data for each player.
 #
@@ -13,14 +16,9 @@
 # to get the players variable. Variables use <> brackets like standard placeholders.
 #
 # WARNING: Variable identifiers must be unique to other variables and standard placeholders.
-# REQUIREMENT: Database must be enabled.
-#
-# ★ Don't want variables? ★
-# You can disable all the variables by deleting the content of this file.
-# If you delete the file a new one will be generated.
+# REQUIREMENT: The database must be enabled.
 
-# The variable identifier.
-# Example: <theme> will return the string data that is set for the player.
-theme:
-  # The default value if the variable is not set.
-  default: "green"
+# # Example <theme> will return the string data that is set for the player.
+#
+# theme:
+#   default: "green"

@@ -30,6 +30,7 @@ brand:
     enabled: false
     brand: "&aLeaf <version>&r"
   # The in game brand.
+  # This does not work on velocity 3.3+
   in_game:
     enabled: false
     brand: "&aLeaf <version>&r"
