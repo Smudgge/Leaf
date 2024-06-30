@@ -44,7 +44,8 @@ class BrandPluginMessageHook extends PluginMessage {
             return super.handle(handler);
         }
 
-        if (Leaf.getServer().getVersion().getVersion().contains("3.3.0")) {
+        // Check if the version is higher than 3.3
+        if (Leaf.getServer().getVersion().getVersion().matches("3|4|5|6|7\\.[3456789]")) {
             return super.handle(handler);
         }
 
