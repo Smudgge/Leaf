@@ -3,7 +3,7 @@ package com.github.smuddgge.leaf.configuration.handlers;
 import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.VariablePlaceholder;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;

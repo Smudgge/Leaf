@@ -2,7 +2,7 @@ package com.github.smuddgge.leaf.configuration.handlers;
 
 import com.github.smuddgge.leaf.commands.CommandAliases;
 import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishyconfiguration.memory.MemoryConfigurationSection;
 

@@ -6,7 +6,7 @@ import com.github.smuddgge.leaf.placeholders.CustomConditionalPlaceholder;
 import com.github.smuddgge.leaf.placeholders.Placeholder;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderType;
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;

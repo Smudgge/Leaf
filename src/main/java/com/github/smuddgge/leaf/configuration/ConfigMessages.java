@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.configuration;
 
 
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The incorrect argument message.
      */
     public static String getIncorrectArguments(String commandSyntax) {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("incorrect_arguments", "{error} Incorrect arguments. %command%")
                 .replace("%command%", commandSyntax);
     }
@@ -59,7 +59,7 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The database error message.
      */
     public static String getDatabaseDisabled() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("database_disabled", "{error_colour}Database Disabled.");
     }
 
@@ -69,7 +69,7 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The database empty message.
      */
     public static String getDatabaseEmpty() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("database_empty", "{error_colour}There are no records in the database.");
     }
 
@@ -80,7 +80,7 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The requested player command message.
      */
     public static String getPlayerCommand() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("player_command", "{error_colour}This command can only be run by the player.");
     }
 
@@ -90,7 +90,7 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The requested error message.
      */
     public static String getError() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("error", "{error_colour}Error occurred while running command.");
     }
 
@@ -100,7 +100,7 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The requested no permission message.
      */
     public static String getNoPermission() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("no_permission", "{error_colour}No permission.");
     }
 
@@ -110,12 +110,12 @@ public class ConfigMessages extends YamlConfiguration {
      * @return The requested is limited message.
      */
     public static String getIsLimited() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("is_limited", "{error_colour}You cannot execute this command anymore as you have reached the limit.");
     }
 
     public static String getOnCooldown() {
-        return ConfigMessages.config.getSection("messages")
+        return ConfigMessages.config
                 .getString("on_cooldown", "{error_colour}Please wait %cooldown% before executing this command again.");
     }
 }

@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.configuration;
 
-import com.github.smuddgge.squishyconfiguration.implementation.yaml.YamlConfiguration;
+import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 
 import java.io.File;
 
