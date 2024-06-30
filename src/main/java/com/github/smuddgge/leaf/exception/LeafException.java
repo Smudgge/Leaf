@@ -11,7 +11,11 @@ public class LeafException extends RuntimeException {
                 "&7--------------------------------------------------\n" +
                 "&cLeaf Version: &r" + Leaf.class.getAnnotation(Plugin.class).version() + "\n" +
                 "&cServer Version: &r" + Leaf.getServer().getVersion().getVersion() + "\n" +
-                (message == null ? "\n" : "&7\n&c" + message + "\n&c")
+                (message == null ? "\n" : "&7\n&c" + message + "\n&c") +
+                "\n" +
+                "&cIf you are unable to fix this error, feel free to send the error with versions above to Smuddgge for help.\n" +
+                "&c"
+
         ), exception);
     }
 
