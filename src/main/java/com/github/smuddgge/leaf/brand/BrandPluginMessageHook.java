@@ -18,7 +18,6 @@ import com.velocitypowered.proxy.protocol.packet.PluginMessage;
 import com.velocitypowered.proxy.protocol.util.PluginMessageUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import net.elytrium.java.commons.reflection.ReflectionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
@@ -63,8 +62,8 @@ class BrandPluginMessageHook extends PluginMessage {
 
             return true;
 
-        } catch (Exception exception) {
-            throw new LeafException(exception);
+        } catch (Throwable exception) {
+            throw new LeafException(exception.getMessage());
         }
     }
 

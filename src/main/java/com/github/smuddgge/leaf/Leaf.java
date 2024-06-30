@@ -171,7 +171,7 @@ public class Leaf {
 
             if (!MiniPlaceholdersDependency.isEnabled()) {
                 MessageManager.log("&7[Dependencies] Could not find optional dependency &fMini Placeholders");
-                MessageManager.log("&7[Dependencies] This optional plugin lets you use mini placeholders, not to be confused with leaf placeholders.");
+                MessageManager.log("&7[Dependencies] Lets you use mini placeholders, not to be confused with leaf placeholders.");
                 MessageManager.log(MiniPlaceholdersDependency.getDependencyMessage());
             }
 

@@ -57,12 +57,12 @@ public final class HooksInitializer {
 
             ((Map<ProtocolVersion, StateRegistry.PacketRegistry.ProtocolRegistry>) versionsField.invokeExact(playClientside)).forEach(consumer);
 
-        } catch (Exception exception) {
+        } catch (Throwable exception) {
             if (Leaf.getServer().getVersion().getVersion().contains("3.3.0")) {
                 MessageManager.warn("The brand feature currently does not work with Velocity-3.3.0+");
                 return;
             }
-            throw new LeafException(exception);
+            throw new LeafException(exception.getMessage());
         }
     }
 
