@@ -249,7 +249,7 @@
                                 <excludes>
                                     <exclude>jupiter:*</exclude>
                                     <exclude>spark-api:*</exclude>
-                                    <exclude>dev.simplix:*</exclude>
+                                    <exclude>me.clip:*</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>
