@@ -54,7 +54,7 @@ import java.util.UUID;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "5.3.0",
+        version = "6.0.0.dev",
         description = "A velocity utility plugin.",
         authors = {"Smudge"}
 )
