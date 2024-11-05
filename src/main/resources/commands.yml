@@ -6,6 +6,7 @@
 #
 # Author: Smudge
 # File: commands.yml
+# Last Changed: ~5.2.2
 # Description: Contains commands that will be created
 #              when enabled or reloaded.
 # Required: []

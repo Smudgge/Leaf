@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf;
 
-import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.configurationold.ConfigurationManager;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.FriendRequestRecord;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;

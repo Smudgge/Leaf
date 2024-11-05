@@ -1,6 +1,6 @@
-package com.github.smuddgge.leaf.configuration.handlers;
+package com.github.smuddgge.leaf.configurationold.handlers;
 
-import com.github.smuddgge.leaf.configuration.ConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.ConfigurationHandler;
 import com.github.smuddgge.leaf.events.Event;
 import com.github.smuddgge.leaf.events.EventManager;
 import com.github.smuddgge.leaf.events.EventType;

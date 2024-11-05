@@ -4,9 +4,16 @@
 #  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
-# Author : Smudge
+# Author: Smudge
 # File: config.yml
+# Last Changed: 6.0.0
 # Description: Contains general settings.
+
+# Should the plugin only summarise logs?
+# It's recommended to keep these false unless you are
+# experienced with using the leaf plugin and prefer less logging.
+decreased_logging:
+  header: false
 
 # ✿ Vanish Support ✿
 # The permission used to check if a player is able to vanish.
@@ -23,20 +30,18 @@ vanish_permission: "leaf.vanishable"
 vanishable_can_see_vanishable: false
 
 # ⚾︎ Server Brand ⚾︎
-# Used to change the server brand.
+# ping: Used to customise result of the ping command.
+# in_game: Used to customise the text shown in F3.
+#          This does not work on velocity 3.3+
 brand:
-  # The brand shown in ping.
   ping:
     enabled: false
     brand: "&aLeaf <version>&r"
-  # The in game brand.
-  # This does not work on velocity 3.3+
   in_game:
     enabled: false
     brand: "&aLeaf <version>&r"
 
 # ☁︎ Discord bot support ☁︎
-# Paste your discord bot token in here
-# and restart the proxy server to
-# enable discord bot support.
+# Paste your discord bot token in here and restart the
+# proxy server to enable discord bot support.
 discord_token: ""

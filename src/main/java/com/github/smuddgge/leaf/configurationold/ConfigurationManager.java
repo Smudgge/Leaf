@@ -1,9 +1,9 @@
-package com.github.smuddgge.leaf.configuration;
+package com.github.smuddgge.leaf.configurationold;
 
-import com.github.smuddgge.leaf.configuration.handlers.CommandConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.handlers.EventConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.handlers.PlaceholderConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.handlers.VariableConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.CommandConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.EventConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.PlaceholderConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.VariableConfigurationHandler;
 
 import java.io.File;
 

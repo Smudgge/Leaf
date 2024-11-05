@@ -9,13 +9,14 @@ import com.github.smuddgge.leaf.commands.types.*;
 import com.github.smuddgge.leaf.commands.types.friends.Friend;
 import com.github.smuddgge.leaf.commands.types.messages.*;
 import com.github.smuddgge.leaf.commands.types.whitelist.Whitelist;
-import com.github.smuddgge.leaf.configuration.ConfigDatabase;
-import com.github.smuddgge.leaf.configuration.ConfigMain;
-import com.github.smuddgge.leaf.configuration.ConfigurationManager;
-import com.github.smuddgge.leaf.configuration.handlers.CommandConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.handlers.EventConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.handlers.PlaceholderConfigurationHandler;
-import com.github.smuddgge.leaf.configuration.handlers.VariableConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.Config;
+import com.github.smuddgge.leaf.configurationold.ConfigDatabase;
+import com.github.smuddgge.leaf.configurationold.ConfigMain;
+import com.github.smuddgge.leaf.configurationold.ConfigurationManager;
+import com.github.smuddgge.leaf.configurationold.handlers.CommandConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.EventConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.PlaceholderConfigurationHandler;
+import com.github.smuddgge.leaf.configurationold.handlers.VariableConfigurationHandler;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
@@ -96,60 +97,31 @@ public class Leaf {
             this.logger = new Logger(componentLogger);
             this.metricsFactory = metricsFactory;
 
-            // Set up configuration and directories.
-            this.setUpConfigurationAndDirectories();
-
-            // Set up the database
-            this.setUpDatabase();
-
         } catch (Exception exception) {
             throw new LeafException(exception, "Failed to initialise the plugin.");
         }
-    }
-
-    private void setUpConfigurationAndDirectories() {
-        Logger tempLogger = this.logger.extend(" &b.setUpConfigurationAndDirectories() &7Leaf.java:104");
-
-        tempLogger.debug("Initializing&b config.yml");
-        this.config = new YamlConfiguration(this.folder, "config.yml");
-        this.config.setResourcePath("config.yml");
-        this.config.load();
-
-        tempLogger.debug("Initializing&b database.yml");
-        this.databaseConfig = new YamlConfiguration(this.folder, "database.yml");
-        this.databaseConfig.setResourcePath("database.yml");
-        this.databaseConfig.load();
-
-        tempLogger.debug("Initializing&b messages.yml");
-        this.messagesConfig = new YamlConfiguration(this.folder, "messages.yml");
-        this.messagesConfig.setResourcePath("messages.yml");
-        this.messagesConfig.load();
-
-        tempLogger.debug("Initializing&b whitelist.yml");
-        this.whitelistConfig = new YamlConfiguration(this.folder, "whitelist.yml");
-        this.whitelistConfig.setResourcePath("whitelist.yml");
-        this.whitelistConfig.load();
-
-    }
-
-    private void setUpDatabase() {
-
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         try {
 
+            // Set up the methods debug logger.
+            Logger tempLogger = this.logger.extend(" &b.onProxyInitialization() &7Leaf.java:105");
+
+            // Display the plugins name in console.
+            this.logHeader();
+
             // Set up b stats.
+            tempLogger.debug("Setting up b-stats.");
             this.metricsFactory.make(this, 17381);
+            this.logger.info(" &7[b-stats] Enabled");
 
-            // Log header.
-            MessageManager.logHeader();
+            // Set up configuration and directories.
+            this.setUpConfigurationAndDirectories(tempLogger);
 
-            // Set up the whitelist.
-            Leaf.whitelist = new YamlConfiguration(folder.toFile(), "whitelist.yml");
-            Leaf.whitelist.setDefaultPath("whitelist.yml");
-            Leaf.whitelist.load();
+            // Set up the database.
+            this.setUpDatabase(tempLogger);
 
             // Register placeholders.
             PlaceholderManager.register(new PlayerNamePlaceholder());
@@ -226,6 +198,67 @@ public class Leaf {
         } catch (Exception exception) {
             throw new LeafException(exception, "Failed to initialise the plugin.");
         }
+    }
+
+    private void logHeader() {
+        final String message = """
+                &7
+                &a __         ______     ______     ______
+                &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\
+                &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\
+                &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\
+                &a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/
+                &7
+                      &7By Smudge    Version &b%s
+                &7
+                &7| &aEnabled &7Discord Support &f~10mib
+                &7
+                """.formatted(Leaf.class.getAnnotation(Plugin.class).version());
+
+        final String decreasedMessage = """
+                &7
+                &a __         ______     ______     ______
+                &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\
+                &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\
+                &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\
+                &a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/
+                &7
+                      &7By Smudge    Version &b%s
+                &7            
+                """.formatted(Leaf.class.getAnnotation(Plugin.class).version());
+
+        if (this.config.getBoolean(Config.DECREASED_LOGGING_HEADER_KEY)) {
+            this.logger.info(decreasedMessage);
+            return;
+        }
+
+        this.logger.info(message);
+    }
+
+    private void setUpConfigurationAndDirectories(@NotNull Logger tempLogger) {
+        tempLogger.debug("Initializing&b config.yml");
+        this.config = new YamlConfiguration(this.folder, "config.yml");
+        this.config.setResourcePath("config.yml");
+        this.config.load();
+
+        tempLogger.debug("Initializing&b database.yml");
+        this.databaseConfig = new YamlConfiguration(this.folder, "database.yml");
+        this.databaseConfig.setResourcePath("database.yml");
+        this.databaseConfig.load();
+
+        tempLogger.debug("Initializing&b messages.yml");
+        this.messagesConfig = new YamlConfiguration(this.folder, "messages.yml");
+        this.messagesConfig.setResourcePath("messages.yml");
+        this.messagesConfig.load();
+
+        tempLogger.debug("Initializing&b whitelist.yml");
+        this.whitelistConfig = new YamlConfiguration(this.folder, "whitelist.yml");
+        this.whitelistConfig.setResourcePath("whitelist.yml");
+        this.whitelistConfig.load();
+    }
+
+    private void setUpDatabase(@NotNull Logger tempLogger) {
+
     }
 
     @Subscribe

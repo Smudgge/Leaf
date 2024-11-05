@@ -1,4 +1,4 @@
-package com.github.smuddgge.leaf.configuration;
+package com.github.smuddgge.leaf.configurationold;
 
 import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
 

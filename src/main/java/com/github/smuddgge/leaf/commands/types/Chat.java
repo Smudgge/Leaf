@@ -5,7 +5,7 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigurationKey;
+import com.github.smuddgge.leaf.configurationold.ConfigurationKey;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.dependencys.ProtocolizeDependency;
 import com.github.smuddgge.leaf.discord.DiscordWebhookAdapter;
