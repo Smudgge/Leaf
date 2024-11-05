@@ -6,6 +6,7 @@
 #
 # Author : Smudge
 # File: whitelist.yml
+# Last Changed: ~5.2.2
 # Description: Contains the players that are whitelisted on this server.
 #              The list can contain the players name, when they log on it
 #              will be converted to there uuid. Uuids don't change when players

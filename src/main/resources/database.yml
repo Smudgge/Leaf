@@ -6,6 +6,7 @@
 #
 # Author : Smudge
 # File: database.yml
+# Last Changed: ~5.2.2
 # Description: Contains the database settings.
 #
 # ⚠ Changing these values requires a proxy restart. ⚠

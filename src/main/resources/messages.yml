@@ -6,6 +6,7 @@
 #
 # Author : Smudge
 # File: messages.yml
+# Last Changed: ~5.2.2
 # Description: Default messages used in the plugin.
 
 incorrect_arguments: "{error_colour}Incorrect arguments. %command%"

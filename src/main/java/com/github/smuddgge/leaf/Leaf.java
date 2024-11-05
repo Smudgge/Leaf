@@ -12,6 +12,10 @@ import com.github.smuddgge.leaf.commands.types.whitelist.Whitelist;
 import com.github.smuddgge.leaf.configuration.ConfigDatabase;
 import com.github.smuddgge.leaf.configuration.ConfigMain;
 import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.configuration.handlers.CommandConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.handlers.EventConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.handlers.PlaceholderConfigurationHandler;
+import com.github.smuddgge.leaf.configuration.handlers.VariableConfigurationHandler;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.*;
 import com.github.smuddgge.leaf.datatype.ProxyServerInterface;
@@ -21,17 +25,15 @@ import com.github.smuddgge.leaf.discord.DiscordBot;
 import com.github.smuddgge.leaf.exception.LeafException;
 import com.github.smuddgge.leaf.inventorys.SlotManager;
 import com.github.smuddgge.leaf.listeners.EventListener;
+import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.placeholders.ConditionManager;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholders.conditions.MatchCondition;
 import com.github.smuddgge.leaf.placeholders.conditions.PermissionCondition;
 import com.github.smuddgge.leaf.placeholders.standard.*;
-import com.github.smuddgge.squishyconfiguration.implementation.YamlConfiguration;
-import com.github.smuddgge.squishyconfiguration.interfaces.Configuration;
-import com.github.smuddgge.squishydatabase.DatabaseBuilder;
-import com.github.smuddgge.squishydatabase.Query;
-import com.github.smuddgge.squishydatabase.console.Console;
-import com.github.smuddgge.squishydatabase.interfaces.Database;
+import com.github.squishylib.configuration.Configuration;
+import com.github.squishylib.configuration.implementation.YamlConfiguration;
+import com.github.squishylib.database.Database;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -60,38 +62,78 @@ import java.util.UUID;
 )
 public class Leaf {
 
-    private static Leaf plugin;
-    private static ProxyServer server;
-    private static Path folder;
-    private static ComponentLogger componentLogger;
+    private static @NotNull Leaf instance;
 
-    private static CommandHandler commandHandler;
-    private static Database database;
-    private static DiscordBot discordBot;
-    private static Configuration whitelist;
-
+    private ProxyServer proxyServer;
+    private File folder;
+    private Logger logger;
     private final Metrics.Factory metricsFactory;
 
-    @Inject
-    public Leaf(ProxyServer server, @DataDirectory final Path folder, Metrics.Factory metricsFactory, ComponentLogger componentLogger) {
-        try {
-            Leaf.server = server;
-            Leaf.plugin = this;
-            Leaf.folder = folder;
-            Leaf.componentLogger = componentLogger;
+    private Configuration config;
+    private Configuration databaseConfig;
+    private Configuration messagesConfig;
+    private Configuration whitelistConfig;
+    private CommandConfigurationHandler commandsDirectory;
+    private PlaceholderConfigurationHandler placeholdersDirectory;
+    private VariableConfigurationHandler variableDirectory;
+    private EventConfigurationHandler eventDirectory;
 
-            // Set up the configuration files.
-            ConfigurationManager.initialise(folder.toFile());
+    private CommandHandler commandHandler;
+    private Database database;
+    private DiscordBot discordBot;
+
+    @Inject
+    public Leaf(ProxyServer proxyServer, @DataDirectory final Path folder, ComponentLogger componentLogger, Metrics.Factory metricsFactory) {
+
+        // Assign the pointer to this instance.
+        Leaf.instance = this;
+
+        try {
+
+            // Set up basic variables.
+            this.proxyServer = proxyServer;
+            this.folder = folder.toFile();
+            this.logger = new Logger(componentLogger);
+            this.metricsFactory = metricsFactory;
+
+            // Set up configuration and directories.
+            this.setUpConfigurationAndDirectories();
 
             // Set up the database
-            Leaf.setupDatabase(folder.toFile());
-
-            // Set up b stats
-            this.metricsFactory = metricsFactory;
+            this.setUpDatabase();
 
         } catch (Exception exception) {
             throw new LeafException(exception, "Failed to initialise the plugin.");
         }
+    }
+
+    private void setUpConfigurationAndDirectories() {
+        Logger tempLogger = this.logger.extend(" &b.setUpConfigurationAndDirectories() &7Leaf.java:104");
+
+        tempLogger.debug("Initializing&b config.yml");
+        this.config = new YamlConfiguration(this.folder, "config.yml");
+        this.config.setResourcePath("config.yml");
+        this.config.load();
+
+        tempLogger.debug("Initializing&b database.yml");
+        this.databaseConfig = new YamlConfiguration(this.folder, "database.yml");
+        this.databaseConfig.setResourcePath("database.yml");
+        this.databaseConfig.load();
+
+        tempLogger.debug("Initializing&b messages.yml");
+        this.messagesConfig = new YamlConfiguration(this.folder, "messages.yml");
+        this.messagesConfig.setResourcePath("messages.yml");
+        this.messagesConfig.load();
+
+        tempLogger.debug("Initializing&b whitelist.yml");
+        this.whitelistConfig = new YamlConfiguration(this.folder, "whitelist.yml");
+        this.whitelistConfig.setResourcePath("whitelist.yml");
+        this.whitelistConfig.load();
+
+    }
+
+    private void setUpDatabase() {
+
     }
 
     @Subscribe
@@ -457,5 +499,14 @@ public class Leaf {
         }
 
         Leaf.commandHandler.register();
+    }
+
+    /**
+     * Gets the instance of the loaded leaf plugin.
+     *
+     * @return The instance of the leaf plugin.
+     */
+    public static @NotNull Leaf get() {
+        return Leaf.instance;
     }
 }
