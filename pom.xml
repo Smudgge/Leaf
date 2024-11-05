@@ -30,7 +30,7 @@
             <url>https://mvn.exceptionflug.de/repository/exceptionflug-public/</url>
         </repository>
 
-        <!-- Jitpack -->
+        <!-- Jitpack (GitHub Projects) -->
         <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
@@ -67,14 +67,22 @@
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-api</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
+            <version>3.4.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Tools, Configuration and Database Library -->
+        <!-- Includes Gson, slf4j and Jetbrains annotations -->
         <dependency>
-            <groupId>com.velocitypowered</groupId>
-            <artifactId>velocity-proxy</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>com.github.squishylib</groupId>
+            <artifactId>SquishyLibrary</artifactId>
+            <version>1.0.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-engine</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Jupiter Tests -->
@@ -91,20 +99,6 @@
             <artifactId>protocolize-api</artifactId>
             <version>2.4.0</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- Database Library -->
-        <dependency>
-            <groupId>com.github.smuddgge</groupId>
-            <artifactId>SquishyDatabase</artifactId>
-            <version>4.2.0</version>
-        </dependency>
-
-        <!-- Configuration Library -->
-        <dependency>
-            <groupId>com.github.smuddgge</groupId>
-            <artifactId>SquishyConfiguration</artifactId>
-            <version>2.2.1</version>
         </dependency>
 
         <!-- Discord Webhooks -->
@@ -305,7 +299,8 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>@{project.version}</tagNameFormat>
                     <scmCommentPrefix xml:space="preserve">[RELEASE] </scmCommentPrefix>
-                    <goals>install deploy site-deploy
+                    <goals>
+                        install deploy site-deploy
                     </goals> <!-- install is here to fix javadoc generation in multi-module projects -->
                     <releaseProfiles>release</releaseProfiles>
                 </configuration>
