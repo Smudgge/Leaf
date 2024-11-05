@@ -1,6 +1,6 @@
 package com.github.smuddgge.leaf.database.tables;
 
-import com.github.smuddgge.leaf.configuration.ConfigDatabase;
+import com.github.smuddgge.leaf.configurationold.ConfigDatabase;
 import com.github.smuddgge.leaf.database.records.HistoryRecord;
 import com.github.smuddgge.leaf.listeners.PlayerHistoryEventType;
 import com.github.smuddgge.leaf.utility.DateAndTime;

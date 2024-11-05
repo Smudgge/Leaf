@@ -5,7 +5,7 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigMessages;
+import com.github.smuddgge.leaf.configurationold.ConfigMessages;
 import com.github.smuddgge.leaf.database.records.MessageRecord;
 import com.github.smuddgge.leaf.database.tables.MessageTable;
 import com.github.smuddgge.leaf.database.tables.PlayerTable;

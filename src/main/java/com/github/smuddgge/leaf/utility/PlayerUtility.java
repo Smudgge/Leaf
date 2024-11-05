@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.utility;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.configurationold.ConfigMain;
 import com.github.smuddgge.leaf.database.records.FriendRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.FriendTable;

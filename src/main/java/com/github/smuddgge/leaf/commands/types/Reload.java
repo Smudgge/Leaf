@@ -5,8 +5,8 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.commands.BaseCommandType;
 import com.github.smuddgge.leaf.commands.CommandStatus;
 import com.github.smuddgge.leaf.commands.CommandSuggestions;
-import com.github.smuddgge.leaf.configuration.ConfigDatabase;
-import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.configurationold.ConfigDatabase;
+import com.github.smuddgge.leaf.configurationold.ConfigurationManager;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 

@@ -2,7 +2,7 @@ package com.github.smuddgge.leaf.brand;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.configurationold.ConfigMain;
 import com.github.smuddgge.leaf.datatype.User;
 import com.github.smuddgge.leaf.exception.LeafException;
 import com.github.smuddgge.leaf.placeholders.PlaceholderManager;

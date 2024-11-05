@@ -2,8 +2,8 @@ package com.github.smuddgge.leaf.commands;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigMessages;
-import com.github.smuddgge.leaf.configuration.ConfigurationManager;
+import com.github.smuddgge.leaf.configurationold.ConfigMessages;
+import com.github.smuddgge.leaf.configurationold.ConfigurationManager;
 import com.github.smuddgge.leaf.database.tables.CommandCooldownTable;
 import com.github.smuddgge.leaf.database.tables.CommandLimitTable;
 import com.github.smuddgge.leaf.datatype.User;

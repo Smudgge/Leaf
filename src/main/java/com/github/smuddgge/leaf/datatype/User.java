@@ -3,7 +3,7 @@ package com.github.smuddgge.leaf.datatype;
 import com.github.smuddgge.leaf.FriendManager;
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.configuration.ConfigMain;
+import com.github.smuddgge.leaf.configurationold.ConfigMain;
 import com.github.smuddgge.leaf.database.records.IgnoreRecord;
 import com.github.smuddgge.leaf.database.records.PlayerRecord;
 import com.github.smuddgge.leaf.database.tables.*;
