@@ -1,28 +1,21 @@
 package com.github.smuddgge.leaf.logger;
 
-import com.github.squishylib.common.indicator.Replicable;
-import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import com.github.squishylib.common.logger.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class Logger implements Replicable<Logger> {
+public class SquishyLoggerAdapter extends Logger {
 
-    private final ComponentLogger componentLogger;
-    private final com.github.squishylib.common.logger.Logger logger;
+    private final @NotNull com.github.smuddgge.leaf.logger.Logger logger;
 
-    public Logger(@NotNull ComponentLogger componentLogger, @Nullable String prefix) {
-        this.componentLogger = componentLogger;
+    public SquishyLoggerAdapter(@NotNull final com.github.smuddgge.leaf.logger.Logger logger) {
+        // Note that this logger with the leaf package will never be used.
+        super("com.github.smuddgge.leaf");
 
-        // Please note that the logger com.github.smuddgge.leaf.logger will not be used!
-        // This class will just use he component logger provided to log.
-        this.logger = new com.github.squishylib.common.logger.Logger("com.github.smuddgge.leaf");
-        this.logger.setPrefix(prefix);
+        this.logger = logger;
     }
 
-    public Logger(@NotNull ComponentLogger componentLogger) {
-        this(componentLogger, null);
-    }
-
+    @Override
     public @Nullable String getPrefix() {
         return this.logger.getPrefix();
     }
@@ -33,6 +26,7 @@ public class Logger implements Replicable<Logger> {
      *
      * @return The formatted prefix.
      */
+    @Override
     public @NotNull String getPrefixFormatted() {
         return this.logger.getPrefixFormatted();
     }
@@ -44,28 +38,33 @@ public class Logger implements Replicable<Logger> {
      * @param prefix The prefix.
      * @return This instance.
      */
+    @Override
     public @NotNull Logger setPrefix(@Nullable String prefix) {
         this.logger.setPrefix(prefix);
         return this;
     }
 
+    @Override
     public @NotNull Logger error(@NotNull String message) {
-        this.componentLogger.error("&c" + this.getPrefixFormatted() + message + "&r");
+        this.logger.error(message);
         return this;
     }
 
+    @Override
     public @NotNull Logger warn(@NotNull String message) {
-        this.componentLogger.warn("&e" + this.getPrefixFormatted() + message+ "&r");
+        this.logger.warn(message);
         return this;
     }
 
+    @Override
     public @NotNull Logger info(@NotNull String message) {
-        this.componentLogger.info("&7" + this.getPrefixFormatted() + message+ "&r");
+        this.logger.info(message);
         return this;
     }
 
+    @Override
     public @NotNull Logger debug(@NotNull String message) {
-        this.componentLogger.debug("&7" + this.getPrefixFormatted() + message+ "&r");
+        this.logger.debug(message);
         return this;
     }
 
@@ -76,14 +75,13 @@ public class Logger implements Replicable<Logger> {
      * @param prefixExtension The prefix to add to the current prefix.
      * @return A new logger with the extended prefix but linked log level.
      */
+    @Override
     public @NotNull Logger extend(@NotNull String prefixExtension) {
-        if (this.getPrefix() == null) prefixExtension = prefixExtension.trim();
-        else prefixExtension = this.getPrefix() + prefixExtension;
-        return this.duplicate().setPrefix(prefixExtension);
+        return new SquishyLoggerAdapter(this.logger.extend(prefixExtension));
     }
 
     @Override
     public @NotNull Logger duplicate() {
-        return new Logger(this.componentLogger, this.logger.getPrefix());
+        return new SquishyLoggerAdapter(this.logger.duplicate());
     }
 }

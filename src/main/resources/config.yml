@@ -9,11 +9,13 @@
 # Last Changed: 6.0.0
 # Description: Contains general settings.
 
-# Should the plugin only summarise logs?
-# It's recommended to keep these false unless you are
+# Should the plugin log everything?
+# It's recommended to keep these set to true unless you are
 # experienced with using the leaf plugin and prefer less logging.
-decreased_logging:
-  header: false
+# However, debug mode is mainly for developers as it logs most processes.
+logging:
+  debug_mode: false
+  b_stats: true
 
 # ✿ Vanish Support ✿
 # The permission used to check if a player is able to vanish.
