@@ -11,12 +11,12 @@ public class PlayerServerPlaceholder implements Placeholder {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "server";
+        return "player_server";
     }
 
     @Override
     public @NotNull List<String> getAliases() {
-        return List.of("player_server");
+        return List.of("server");
     }
 
     @Override

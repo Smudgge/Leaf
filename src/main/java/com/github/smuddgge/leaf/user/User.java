@@ -15,6 +15,8 @@ public interface User {
 
     @Nullable RegisteredServer getServer();
 
+    long getPing();
+
     void sendMessage(@NotNull String message);
 
     void sendMessage(@NotNull List<String> messageList);

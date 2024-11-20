@@ -11,12 +11,12 @@ public class PlayerUuidPlaceholder implements Placeholder {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "uuid";
+        return "player_uuid";
     }
 
     @Override
     public @NotNull List<String> getAliases() {
-        return List.of("player_uuid");
+        return List.of("uuid");
     }
 
     @Override

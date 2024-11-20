@@ -7,16 +7,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class PlayerPlaceholder implements Placeholder {
+public class PlayerPingPlaceholder implements Placeholder {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "player_name";
+        return "player_ping";
     }
 
     @Override
     public @NotNull List<String> getAliases() {
-        return List.of("player", "name");
+        return List.of("ping");
     }
 
     @Override
@@ -26,6 +26,6 @@ public class PlayerPlaceholder implements Placeholder {
 
     @Override
     public @Nullable String getValue(@Nullable User user) {
-        return user != null ? user.getName() : null;
+        return user != null ? String.valueOf(user.getPing()) : null;
     }
 }
