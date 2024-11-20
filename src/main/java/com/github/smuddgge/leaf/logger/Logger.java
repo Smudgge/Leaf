@@ -9,6 +9,7 @@ public class Logger implements Replicable<Logger> {
 
     private final ComponentLogger componentLogger;
     private final com.github.squishylib.common.logger.Logger logger;
+    private boolean debugMode;
 
     public Logger(@NotNull ComponentLogger componentLogger, @Nullable String prefix) {
         this.componentLogger = componentLogger;
@@ -17,10 +18,21 @@ public class Logger implements Replicable<Logger> {
         // This class will just use he component logger provided to log.
         this.logger = new com.github.squishylib.common.logger.Logger("com.github.smuddgge.leaf");
         this.logger.setPrefix(prefix);
+
+        this.debugMode = false;
     }
 
     public Logger(@NotNull ComponentLogger componentLogger) {
         this(componentLogger, null);
+    }
+
+    public boolean isDebugMode() {
+        return this.debugMode;
+    }
+
+    public @NotNull Logger setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+        return this;
     }
 
     public @Nullable String getPrefix() {
@@ -50,22 +62,24 @@ public class Logger implements Replicable<Logger> {
     }
 
     public @NotNull Logger error(@NotNull String message) {
-        this.componentLogger.error("&c" + this.getPrefixFormatted() + message + "&r");
+        this.componentLogger.error("&c{}{}&r", this.getPrefixFormatted(), message);
         return this;
     }
 
     public @NotNull Logger warn(@NotNull String message) {
-        this.componentLogger.warn("&e" + this.getPrefixFormatted() + message+ "&r");
+        this.componentLogger.warn("&e{}{}&r", this.getPrefixFormatted(), message);
         return this;
     }
 
     public @NotNull Logger info(@NotNull String message) {
-        this.componentLogger.info("&7" + this.getPrefixFormatted() + message+ "&r");
+        this.componentLogger.info("&7{}{}&r", this.getPrefixFormatted(), message);
         return this;
     }
 
     public @NotNull Logger debug(@NotNull String message) {
-        this.componentLogger.debug("&7" + this.getPrefixFormatted() + message+ "&r");
+        if (this.debugMode) {
+            this.componentLogger.info("&7{}{}&r", this.getPrefixFormatted(), message);
+        }
         return this;
     }
 

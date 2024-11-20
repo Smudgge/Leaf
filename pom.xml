@@ -6,7 +6,7 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>6.0.0.dev</version>
+    <version>6.0.0.dev.0</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>com.github.squishylib</groupId>
             <artifactId>SquishyLibrary</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.junit.jupiter</groupId>

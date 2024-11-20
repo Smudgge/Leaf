@@ -3,17 +3,11 @@ package com.github.smuddgge.leaf;
 import com.github.smuddgge.leaf.configuration.*;
 import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.logger.SquishyLoggerAdapter;
-import com.github.squishylib.configuration.Configuration;
 import com.github.squishylib.database.Database;
 import com.github.squishylib.database.DatabaseBuilder;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
-import com.velocitypowered.api.event.connection.DisconnectEvent;
-import com.velocitypowered.api.event.player.PlayerChatEvent;
-import com.velocitypowered.api.event.player.PlayerChooseInitialServerEvent;
-import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
-import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -22,13 +16,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.UUID;
 
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "6.0.0.dev",
+        version = "6.0.0.dev.0",
         description = "A velocity utility plugin.",
         authors = {"Smudge"}
 )
@@ -53,7 +45,7 @@ public class Leaf {
     private Database database;
 
     @Inject
-    public Leaf(ProxyServer proxyServer, @DataDirectory final Path folder, ComponentLogger componentLogger, Metrics.Factory metricsFactory) {
+    public Leaf(@NotNull ProxyServer proxyServer, @DataDirectory final Path folder, ComponentLogger componentLogger, Metrics.@NotNull Factory metricsFactory) {
 
         // Assign the pointer to this instance.
         Leaf.instance = this;
@@ -67,7 +59,10 @@ public class Leaf {
             this.metricsFactory = metricsFactory;
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "Leaf", "Failed to initialise the plugin.");
+            throw new LeafException(exception, "Leaf",
+                    "Failed to initialise the plugin.",
+                    "This is a unexpected error, please report it to the developer."
+            );
         }
     }
 
@@ -90,6 +85,8 @@ public class Leaf {
 
         // Set up the database.
         this.setupDatabase();
+
+        // Register placeholders.
     }
 
     private void logHeader() {
@@ -108,7 +105,7 @@ public class Leaf {
 
             this.logger.info(message);
         } catch (Exception exception) {
-            throw new LeafException(exception, "logHeader", "Failed to initialise the plugin.");
+            throw new LeafException(exception, "logHeader", "Failed to log the plugins header.");
         }
     }
 
@@ -117,7 +114,10 @@ public class Leaf {
             this.metricsFactory.make(this, 17381);
             if (this.config.shouldLogBStats()) this.logger.info(" &7[b-stats] Enabled");
         } catch (Exception exception) {
-            throw new LeafException(exception, "setupBStats", "Failed to initialise b stats.");
+            throw new LeafException(exception, "setupBStats",
+                    "Failed to initialise b stats.",
+                    "Please attempt to restart your proxy server. If this error still occurs please report it to the developer."
+            );
         }
     }
 
@@ -130,6 +130,13 @@ public class Leaf {
             tempLogger.debug("Initializing&b config.yml");
             this.config = new Config(this.folder, "config.yml");
             this.config.setResourcePath("config.yml");
+            this.config.addListener((section) -> {
+                if (((Config) section).inDebugMode()) {
+                    this.setDebugMode(true);
+                    return;
+                }
+                this.setDebugMode(false);
+            });
             this.config.load();
 
             tempLogger.debug("Initializing&b database.yml");
@@ -182,6 +189,13 @@ public class Leaf {
             DatabaseBuilder builder = new DatabaseBuilder(this.databaseConfig);
             builder.setLogger(new SquishyLoggerAdapter(this.logger));
             builder.setDebugMode(this.inDebugMode());
+            tempLogger.debug("Initialized the database builder");
+
+            // The database class does their own logging.
+            this.database = builder.create();
+            this.database.connect();
+
+            // Add tables.
 
         } catch (Exception exception) {
             throw new LeafException(exception, "setupDatabase", "Failed to initialise the database.");
@@ -234,6 +248,11 @@ public class Leaf {
 
     public boolean inDebugMode() {
         return this.config.inDebugMode();
+    }
+
+    public @NotNull Leaf setDebugMode(boolean debugMode) {
+        this.logger.setDebugMode(debugMode);
+        return this;
     }
 
     /**
