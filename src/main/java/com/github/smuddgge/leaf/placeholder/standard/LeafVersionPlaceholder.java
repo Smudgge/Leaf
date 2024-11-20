@@ -12,13 +12,8 @@ import java.util.List;
 public class LeafVersionPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull String getIdentifier() {
-        return "leaf_version";
-    }
-
-    @Override
-    public @NotNull List<String> getAliases() {
-        return List.of("version");
+    public @NotNull List<String> getIdentifierList() {
+        return List.of("leaf_version", "version");
     }
 
     @Override

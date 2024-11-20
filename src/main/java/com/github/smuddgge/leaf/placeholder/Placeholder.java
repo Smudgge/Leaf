@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.user.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,20 +66,11 @@ public interface Placeholder {
 
     /**
      * For example the identifier of the placeholder
-     * {@literal <player>} would be "player".
+     * {@literal <player>} would be "player_name" or "player" or "name".
      *
-     * @return The placeholder's identifier.
+     * @return The placeholder's identifiers.
      */
-    @NotNull String getIdentifier();
-
-    /**
-     * The other names this placeholder will convert for.
-     * For example the alias of the {@literal <player>}
-     * placeholder could be {@literal <playername>}.
-     *
-     * @return The placeholder's aliases.
-     */
-    @NotNull List<String> getAliases();
+    @NotNull List<String> getIdentifierList();
 
     /**
      * If the placeholder is ether hard coded (standard) or if
@@ -97,14 +89,46 @@ public interface Placeholder {
     @Nullable String getValue(@Nullable User user);
 
     /**
-     * Returns the identifier wrapped in the prefix and suffix.
+     * Get the placeholder identifiers as formatted strings.
      * <p>
-     * For example, for the player placeholder this would
-     * return "{@literal <player>}".
-     *
-     * @return The formatted identifier.
+     * For example: {@literal <player_name>}.
+     * @return The list of formatted identifiers.
      */
-    default @NotNull String getFormatted() {
-        return this.getType().getPrefix() + this.getIdentifier() + this.getType().getSuffix();
+    default @NotNull List<String> getFormattedIdentifierList() {
+        return this.getIdentifierList().stream()
+                .map(identifier -> this.getType().getPrefix() + identifier + this.getType().getSuffix())
+                .toList();
+    }
+
+    default @NotNull String asString() {
+        return String.join(" ", this.getFormattedIdentifierList());
+    }
+
+    /**
+     * Checks if the string contains the identifier or any of the aliases.
+     *
+     * @param string The string to check.
+     * @return True if teh string contains one of the identifiers.
+     */
+    default boolean isIn(@NotNull String string) {
+        for (String formattedIdentifier : this.getFormattedIdentifierList()) {
+            if (string.contains(formattedIdentifier)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * If a identifier from this placeholder is in another placeholder.
+     *
+     * @param placeholder The placeholder to cross-reference.
+     * @return True if there is a matching identifier in both.
+     */
+    default boolean overlaps(@NotNull Placeholder placeholder) {
+        for (String identifier : this.getIdentifierList()) {
+            for (String otherIdentifier : placeholder.getIdentifierList()) {
+                if (identifier.equals(otherIdentifier)) return true;
+            }
+        }
+        return false;
     }
 }
