@@ -12,7 +12,7 @@ import java.util.List;
 public class LeafVersionPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull List<String> getIdentifierList() {
+    public @NotNull List<String> getNameList() {
         return List.of("leaf_version", "version");
     }
 

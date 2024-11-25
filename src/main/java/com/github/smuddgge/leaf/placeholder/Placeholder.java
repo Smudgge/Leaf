@@ -4,7 +4,6 @@ import com.github.smuddgge.leaf.user.User;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +44,7 @@ public interface Placeholder {
 
         /**
          * Used to create a new placeholder type.
-         * The prefix and suffix go ether side of the placeholder identifier.
+         * The prefix and suffix go ether side of the placeholder name.
          *
          * @param prefix The prefix of the placeholder.
          * @param suffix The suffix of the placeholder.
@@ -65,12 +64,12 @@ public interface Placeholder {
     }
 
     /**
-     * For example the identifier of the placeholder
+     * For example the name of the placeholder
      * {@literal <player>} would be "player_name" or "player" or "name".
      *
-     * @return The placeholder's identifiers.
+     * @return The placeholder's names.
      */
-    @NotNull List<String> getIdentifierList();
+    @NotNull List<String> getNameList();
 
     /**
      * If the placeholder is ether hard coded (standard) or if
@@ -89,46 +88,61 @@ public interface Placeholder {
     @Nullable String getValue(@Nullable User user);
 
     /**
-     * Get the placeholder identifiers as formatted strings.
+     * Get the placeholder names as formatted strings.
      * <p>
      * For example: {@literal <player_name>}.
-     * @return The list of formatted identifiers.
+     * @return The list of formatted names.
      */
-    default @NotNull List<String> getFormattedIdentifierList() {
-        return this.getIdentifierList().stream()
+    default @NotNull List<String> getFormattedNameList() {
+        return this.getNameList().stream()
                 .map(identifier -> this.getType().getPrefix() + identifier + this.getType().getSuffix())
                 .toList();
     }
 
     default @NotNull String asString() {
-        return String.join(" ", this.getFormattedIdentifierList());
+        return String.join(" ", this.getFormattedNameList());
     }
 
     /**
-     * Checks if the string contains the identifier or any of the aliases.
+     * Checks if the string contains the name or any of the aliases.
      *
      * @param string The string to check.
-     * @return True if teh string contains one of the identifiers.
+     * @return True if the string contains one of the names.
      */
     default boolean isIn(@NotNull String string) {
-        for (String formattedIdentifier : this.getFormattedIdentifierList()) {
+        for (String formattedIdentifier : this.getFormattedNameList()) {
             if (string.contains(formattedIdentifier)) return true;
         }
         return false;
     }
 
     /**
-     * If a identifier from this placeholder is in another placeholder.
+     * If a name from this placeholder is in another placeholder.
      *
      * @param placeholder The placeholder to cross-reference.
-     * @return True if there is a matching identifier in both.
+     * @return True if there is a matching name in both.
      */
     default boolean overlaps(@NotNull Placeholder placeholder) {
-        for (String identifier : this.getIdentifierList()) {
-            for (String otherIdentifier : placeholder.getIdentifierList()) {
+        for (String identifier : this.getNameList()) {
+            for (String otherIdentifier : placeholder.getNameList()) {
                 if (identifier.equals(otherIdentifier)) return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Used to convert these placeholder names within the string.
+     *
+     * @param string The string to parse.
+     * @param user The user context.
+     * @return The parsed string.
+     */
+    default @NotNull String parse(@NotNull String string, @Nullable User user) {
+        final String result = this.getValue(user);
+        for (String identifier : this.getFormattedNameList()) {
+            string = string.replace(identifier, result == null ? "null" : result);
+        }
+        return string;
     }
 }

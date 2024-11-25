@@ -10,7 +10,7 @@ import java.util.List;
 public class PlayerPingPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull List<String> getIdentifierList() {
+    public @NotNull List<String> getNameList() {
         return List.of("player_ping", "ping");
     }
 

@@ -3,6 +3,7 @@ package com.github.smuddgge.leaf;
 import com.github.smuddgge.leaf.configuration.*;
 import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.logger.SquishyLoggerAdapter;
+import com.github.smuddgge.leaf.placeholder.PlaceholderManager;
 import com.github.squishylib.database.Database;
 import com.github.squishylib.database.DatabaseBuilder;
 import com.google.inject.Inject;
@@ -43,6 +44,7 @@ public class Leaf {
     private EventDirectory eventDirectory;
 
     private Database database;
+    private PlaceholderManager placeholderManager;
 
     @Inject
     public Leaf(@NotNull ProxyServer proxyServer, @DataDirectory final Path folder, ComponentLogger componentLogger, Metrics.@NotNull Factory metricsFactory) {
@@ -87,6 +89,7 @@ public class Leaf {
         this.setupDatabase();
 
         // Register placeholders.
+        this.placeholderManager = new PlaceholderManager();
     }
 
     private void logHeader() {
@@ -244,6 +247,10 @@ public class Leaf {
 
     public @NotNull EventDirectory getEventDirectory() {
         return this.eventDirectory;
+    }
+
+    public @NotNull PlaceholderManager getPlaceholderManager() {
+        return this.placeholderManager;
     }
 
     public boolean inDebugMode() {

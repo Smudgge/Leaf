@@ -13,23 +13,26 @@ import java.util.List;
  * <pre>
  * Example:
  * {@code
- * vanish_colour:
- *   condition: "MATCH:<vanished>"
+ * server_color:
+ *   condition: "PERMISSION"
  *   options:
- *     Default: "<#ffffee>"
- *     true: "<#c0fce6>"
- *     false: "<#ffffee>"
+ *     Default: "&f"
+ *     server.red: "&c"
+ *     server.blue: "&b"
  * }
  */
-public class MatchCondition implements Condition {
+public class PermissionCondition implements Condition {
 
     @Override
     public @NotNull String getConditionIdentifier() {
-        return "MATCH";
+        return "PERMISSION";
     }
 
     @Override
     public @Nullable String getValue(@NotNull ConfigurationSection section, @Nullable User user, @NotNull String identifier) {
+
+        if (user == null) return null;
+
         final String condition = section.getString("condition");
 
         if (condition == null) {
@@ -39,27 +42,24 @@ public class MatchCondition implements Condition {
             return null;
         }
 
-        if (condition.split(":").length != 2) {
-            Leaf.get().getLogger().warn("&eIncorrect match placeholder &f" + identifier + "&e. " +
-                    "The condition should be formated like MATCH:string. " +
-                    "Where the string can contain leaf placeholders with <> and/or {}.");
+        if (condition.split(":").length != 1) {
+            Leaf.get().getLogger().warn("&eIncorrect permission placeholder &f" + identifier + "&e. " +
+                    "The condition should just be \"PERMISSION\". " +
+                    "The options are the actual permissions to check.");
             return null;
         }
-
-        final String string = condition.split(":")[1];
-        final String pattern = Leaf.get().getPlaceholderManager().parseLeafPlaceholders(string, user);
 
         List<String> options = section.getKeys("options");
 
         if (options.isEmpty()) {
-            Leaf.get().getLogger().warn("&eIncorrect match placeholder &f" + identifier + ". " +
+            Leaf.get().getLogger().warn("&eIncorrect permission placeholder &f" + identifier + ". " +
                     "Does not contain a options field. " +
                     "Please see the wiki for how placeholders should be configured.");
             return null;
         }
 
         for (final String key : options) {
-            if (!key.equals(pattern)) continue;
+            if (!user.hasPermission(key)) continue;
             return section.getSection("options").getString(key);
         }
 

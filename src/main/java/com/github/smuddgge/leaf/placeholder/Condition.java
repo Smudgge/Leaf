@@ -7,7 +7,10 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Condition {
 
-    @NotNull String getIdentifier();
+    @NotNull String getConditionIdentifier();
 
-    @Nullable String getValue(@NotNull ConfigurationSection section, @Nullable User user);
+    @Nullable String getValue(@NotNull ConfigurationSection section,
+                              @Nullable User user,
+                              @NotNull String identifier
+    );
 }
