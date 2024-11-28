@@ -1,59 +1,48 @@
 package com.github.smuddgge.leaf.placeholder;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.user.User;
-import com.github.squishylib.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 
 /**
  * Represents a placeholder within the placeholder directory.
  */
 public class CustomPlaceholder implements Placeholder {
 
-    public static class SectionOrString {
-
-        public final String string;
-        public final ConfigurationSection section;
-
-        public SectionOrString(final String string) {
-            this.string = string;
-            this.section = null;
-        }
-
-        public SectionOrString(final ConfigurationSection section) {
-            this.section = section;
-            this.string = null;
-        }
-    }
-
     private final @NotNull String identifier;
+    private final @Nullable Condition condition;
+
     /**
      * @param identifier The configuration key within the placeholder directory.
      */
     public CustomPlaceholder(@NotNull String identifier) {
         this.identifier = identifier;
+        this.condition = Condition.of(Leaf.get().getPlaceholdersDirectory()
+                .getSection(this.identifier)
+                .getString("condition", null)
+        );
     }
 
-    /**
-     * Gets the custom placeholder from the configuration.
-     * This could ether be a string or a configuration section.
-     *
-     * @return The section or string.
-     */
-    public @NotNull SectionOrString getSectionOrString() {
-        final String string = Leaf.get().getPlaceholdersDirectory().getString(this.identifier, null);
+    private void errorIfConditionIsNull() {
+        if (this.condition == null) {
+            final String conditionIdentifier = Leaf.get().getPlaceholdersDirectory()
+                    .getSection(this.identifier)
+                    .getString("condition", "null")
+                    .split(":")[0];
 
-        if (string == null) {
-            return new SectionOrString(Leaf.get().getPlaceholdersDirectory().getSection(this.identifier));
+            Logger logger = Leaf.get().getLogger().extend(" &7[Placeholders]");
+            logger.warn("Could not find a condition type that matches " + conditionIdentifier
+                    + " for placeholder with identifier " + this.identifier);
         }
+    }
 
-        return new SectionOrString(string);
+    public @NotNull String getIdentifier() {
+        return this.identifier;
     }
 
     @Override
@@ -61,11 +50,12 @@ public class CustomPlaceholder implements Placeholder {
         List<String> nameList = new ArrayList<>();
         nameList.add(this.identifier);
 
-        final SectionOrString sectionOrString = this.getSectionOrString();
-        if (sectionOrString.section != null) nameList.addAll(
-                sectionOrString.section.getListString("aliases", new ArrayList<>())
-        );
-        
+        final List<String> aliases = Leaf.get().getPlaceholdersDirectory()
+                .getSection(this.identifier)
+                .getListString("aliases", new ArrayList<>());
+
+        if (aliases.isEmpty()) return nameList;
+        nameList.addAll(aliases);
         return nameList;
     }
 
@@ -76,6 +66,22 @@ public class CustomPlaceholder implements Placeholder {
 
     @Override
     public @Nullable String getValue(@Nullable User user) {
-        return "";
+
+        // Is the placeholder hard coded to a value?
+        final String value = Leaf.get().getPlaceholdersDirectory()
+                .getString(this.identifier, null);
+        if (value != null) return value;
+
+        // Is there a condition?
+        if (this.condition == null) {
+            this.errorIfConditionIsNull();
+            return null;
+        }
+
+        return this.condition.getValue(
+                Leaf.get().getPlaceholdersDirectory().getSection(identifier),
+                user,
+                this.identifier
+        );
     }
 }

@@ -3,7 +3,11 @@ package com.github.smuddgge.leaf;
 import com.github.smuddgge.leaf.configuration.*;
 import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.logger.SquishyLoggerAdapter;
+import com.github.smuddgge.leaf.placeholder.CustomPlaceholder;
+import com.github.smuddgge.leaf.placeholder.Placeholder;
 import com.github.smuddgge.leaf.placeholder.PlaceholderManager;
+import com.github.smuddgge.leaf.placeholder.standard.*;
+import com.github.squishylib.configuration.ConfigurationSection;
 import com.github.squishylib.database.Database;
 import com.github.squishylib.database.DatabaseBuilder;
 import com.google.inject.Inject;
@@ -17,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 
 @Plugin(
         id = "leaf",
@@ -88,8 +93,8 @@ public class Leaf {
         // Set up the database.
         this.setupDatabase();
 
-        // Register placeholders.
-        this.placeholderManager = new PlaceholderManager();
+        // Set up placeholders.
+        this.setupPlaceholders();
     }
 
     private void logHeader() {
@@ -202,6 +207,37 @@ public class Leaf {
 
         } catch (Exception exception) {
             throw new LeafException(exception, "setupDatabase", "Failed to initialise the database.");
+        }
+    }
+
+    private void setupPlaceholders() {
+        this.placeholderManager = new PlaceholderManager();
+
+        this.placeholderManager.register(new LeafVersionPlaceholder());
+        this.placeholderManager.register(new PlayerPingPlaceholder());
+        this.placeholderManager.register(new PlayerPlaceholder());
+        this.placeholderManager.register(new PlayerServerPlaceholder());
+        this.placeholderManager.register(new PlayerUuidPlaceholder());
+        this.placeholderManager.register(new PlayerVanishedPlaceholder());
+        this.placeholderManager.register(new VelocityVersionPlaceholder());
+
+        this.registerCustomPlaceholders();
+    }
+
+    private void registerCustomPlaceholders() {
+        for (String key : this.placeholdersDirectory.getKeys()) {
+            final CustomPlaceholder placeholder = new CustomPlaceholder(key);
+            this.placeholderManager.register(placeholder);
+        }
+    }
+
+    private void unregisterCustomPlaceholders() {
+        List<Placeholder> registeredCustomPlaceholders = this.placeholderManager.getPlaceholders()
+                .stream().filter(placeholder -> placeholder instanceof CustomPlaceholder)
+                .toList();
+
+        for (Placeholder placeholder : registeredCustomPlaceholders) {
+            this.placeholderManager.unregister(placeholder);
         }
     }
 

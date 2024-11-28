@@ -91,6 +91,7 @@ public interface Placeholder {
      * Get the placeholder names as formatted strings.
      * <p>
      * For example: {@literal <player_name>}.
+     *
      * @return The list of formatted names.
      */
     default @NotNull List<String> getFormattedNameList() {
@@ -135,7 +136,7 @@ public interface Placeholder {
      * Used to convert these placeholder names within the string.
      *
      * @param string The string to parse.
-     * @param user The user context.
+     * @param user   The user context.
      * @return The parsed string.
      */
     default @NotNull String parse(@NotNull String string, @Nullable User user) {
