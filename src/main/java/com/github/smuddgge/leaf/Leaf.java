@@ -95,6 +95,9 @@ public class Leaf {
 
         // Set up placeholders.
         this.setupPlaceholders();
+
+        // Set up commands.
+        this.setupCommands();
     }
 
     private void logHeader() {
@@ -224,14 +227,14 @@ public class Leaf {
         this.registerCustomPlaceholders();
     }
 
-    private void registerCustomPlaceholders() {
+    public void registerCustomPlaceholders() {
         for (String key : this.placeholdersDirectory.getKeys()) {
             final CustomPlaceholder placeholder = new CustomPlaceholder(key);
             this.placeholderManager.register(placeholder);
         }
     }
 
-    private void unregisterCustomPlaceholders() {
+    public void unregisterCustomPlaceholders() {
         List<Placeholder> registeredCustomPlaceholders = this.placeholderManager.getPlaceholders()
                 .stream().filter(placeholder -> placeholder instanceof CustomPlaceholder)
                 .toList();
@@ -239,6 +242,10 @@ public class Leaf {
         for (Placeholder placeholder : registeredCustomPlaceholders) {
             this.placeholderManager.unregister(placeholder);
         }
+    }
+
+    public void setupCommands() {
+
     }
 
     public @NotNull ProxyServer getProxyServer() {
@@ -283,6 +290,10 @@ public class Leaf {
 
     public @NotNull EventDirectory getEventDirectory() {
         return this.eventDirectory;
+    }
+
+    public @NotNull Database getDatabase() {
+        return this.database;
     }
 
     public @NotNull PlaceholderManager getPlaceholderManager() {

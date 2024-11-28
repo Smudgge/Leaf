@@ -14,12 +14,6 @@ database_disabled: "{error_colour}Database disabled."
 database_empty: "{error_colour}There are no records in the database."
 player_command: "{error_colour}This command can only be run by the player."
 error: "{error_colour}Error occurred while running command."
-no_permission: "{error_colour}No permission."
+no_permission: "{error_colour}You do not have permission to run this command."
 is_limited: "{error_colour}You cannot execute this command anymore as you have reached the limit."
 on_cooldown: "{error_colour}Please wait %cooldown% before executing this command again."
-
-placeholders:
-  extension: " &7[Placeholders]"
-  duplicate: "&eAttempted to register the placeholder &f{placeholder} &ebut it already exists! Make sure there are no identifier or alias duplicates."
-  registered: "&aRegistered &7%placeholder%"
-  unregistered: "&cUnregistered &7%placeholder%"

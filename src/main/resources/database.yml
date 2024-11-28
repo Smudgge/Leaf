@@ -6,16 +6,21 @@
 #
 # Author : Smudge
 # File: database.yml
-# Last Changed: ~5.2.2
+# Last Changed: 6.0.0
 # Description: Contains the database settings.
 #
 # ⚠ Changing these values requires a proxy restart. ⚠
 
-enabled: true
+enabled: false
 
-# Debug mode will output to console the
-# databases procsesses.
-debugmode: false
+# ---------------------------------------
+#           ✜ Database Settings ✜
+# ---------------------------------------
+should_reconnect_every_cycle: true
+reconnect_cooldown_millis: 2000
+will_reconnect: true
+time_between_requests_millis: 100
+max_requests_pending: 40
 
 # ---------------------------------------
 #           ✜ Database Type ✜
@@ -23,25 +28,26 @@ debugmode: false
 # This type of database saves the data
 # to a file located in this folder.
 sqlite:
-  enable: true
-
-# This type of database saves data to the cloud.
-mongo:
-  enable: false
-  connection_string: "connectionString"
-  database_name: "Leaf"
+  enabled: true
+  path: "plugins/CozyJoinLeave/database.sqlite3"
 
 # This type of database saves data on an
 # external server or the cloud.
 mysql:
-  enable: false
+  enabled: false
   connection_string: "address:port"
-  database_name: "Leaf"
+  database_name: ""
   username: ""
   password: ""
 
+# This type of database saves data to the cloud.
+mongo:
+  enabled: false
+  connection_string: "" # example: "mongodb+srv://Name:Password@Name.?.mongodb.net/?retryWrites=true&w=majority"
+  database_name: ""
+
 # ---------------------------------------
-#             ✜ Settings ✜
+#             ✜ Leaf Settings ✜
 # ---------------------------------------
 # The maximum amount of history that will
 # be saved in the database per player.

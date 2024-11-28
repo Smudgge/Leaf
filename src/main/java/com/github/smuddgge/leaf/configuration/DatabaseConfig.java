@@ -10,4 +10,8 @@ public class DatabaseConfig extends YamlConfiguration {
     public DatabaseConfig(@NotNull final File folder, @NotNull final String fileName) {
         super(folder, fileName);
     }
+
+    public boolean isDisabled() {
+        return this.getBoolean("enabled", false);
+    }
 }

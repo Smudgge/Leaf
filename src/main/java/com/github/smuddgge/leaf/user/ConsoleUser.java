@@ -1,6 +1,5 @@
 package com.github.smuddgge.leaf.user;
 
-import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -8,17 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerUser implements User{
-
-    private final Player player;
-
-    public PlayerUser(@NotNull final Player player) {
-        this.player = player;
-    }
-
-    public @NotNull Player getPlayer() {
-        return this.player;
-    }
+public class ConsoleUser implements User {
 
     @Override
     public @NotNull UUID getUuid() {
@@ -58,9 +47,5 @@ public class PlayerUser implements User{
     @Override
     public boolean hasPermission(@NotNull String permission) {
         return false;
-    }
-
-    public void increaseAmountExecuted(@NotNull String commandIdentifier) {
-
     }
 }
