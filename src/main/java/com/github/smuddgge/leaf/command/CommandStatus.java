@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.command;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.database.CommandLimitTable;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.smuddgge.leaf.user.User;
 import net.dv8tion.jda.api.entities.Member;

@@ -11,8 +11,8 @@ import java.util.Objects;
 
 public class CommandCooldownRecord implements Record<CommandCooldownRecord> {
 
-    public static final @NotNull String ID_FIELD = "id";
-    public static final @NotNull String LAST_EXECUTED_TIMESTAMP_FIELD = "lastExecutedTimestamp";
+    public static final @NotNull String ID_FIELD = "primaryKey";
+    public static final @NotNull String LAST_EXECUTED_TIMESTAMP_FIELD = "lastExecutedTimeStamp";
 
     @Primary
     @Field(ID_FIELD)
