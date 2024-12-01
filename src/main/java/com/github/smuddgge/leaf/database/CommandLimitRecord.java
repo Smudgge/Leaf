@@ -5,13 +5,15 @@ import com.github.squishylib.configuration.implementation.MemoryConfigurationSec
 import com.github.squishylib.database.Record;
 import com.github.squishylib.database.annotation.Field;
 import com.github.squishylib.database.annotation.Primary;
+import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CommandLimitRecord implements Record<CommandLimitRecord> {
 
-    public static final @NotNull String ID_FIELD = "id";
+    public static final @NotNull String ID_FIELD = "primaryKey";
     public static final @NotNull String AMOUNT_EXECUTED_FIELD = "amountExecuted";
 
     @Primary
@@ -54,5 +56,29 @@ public class CommandLimitRecord implements Record<CommandLimitRecord> {
         this.amountExecuted = section.getString(AMOUNT_EXECUTED_FIELD);
 
         return this;
+    }
+
+    /**
+     * Used to create the records primary key from
+     * the players uuid and the commands id.
+     *
+     * @param uuid      The players uuid.
+     * @param commandId The command's id.
+     * @return The requested primary key.
+     */
+    public static @NotNull String createId(@NotNull UUID uuid, @NotNull String commandId) {
+        return "minecraft--" + uuid + "--" + commandId;
+    }
+
+    /**
+     * Used to create the record primary key from
+     * the members name and commands id.
+     *
+     * @param member    The instance of the member.
+     * @param commandId The command's identifier.
+     * @return The requested primary key.
+     */
+    public static @NotNull String createId(@NotNull Member member, @NotNull String commandId) {
+        return "discord--" + member.getUser().getName() + "--" + commandId;
     }
 }
