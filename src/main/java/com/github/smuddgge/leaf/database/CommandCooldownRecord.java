@@ -14,8 +14,8 @@ public class CommandCooldownRecord implements Record<CommandCooldownRecord> {
     public static final @NotNull String ID_FIELD = "id";
     public static final @NotNull String LAST_EXECUTED_TIMESTAMP_FIELD = "lastExecutedTimestamp";
 
-    @Field(ID_FIELD)
     @Primary
+    @Field(ID_FIELD)
     private @NotNull String id;
     private @Field(LAST_EXECUTED_TIMESTAMP_FIELD) String lastExecutedTimestamp;
 

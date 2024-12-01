@@ -7,9 +7,11 @@ import com.github.squishylib.database.annotation.Field;
 import com.github.squishylib.database.annotation.Foreign;
 import com.github.squishylib.database.annotation.Primary;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.print.DocFlavor;
 import java.util.Objects;
+import java.util.UUID;
 
 public class FriendRecord implements Record<FriendRecord> {
 
@@ -26,8 +28,8 @@ public class FriendRecord implements Record<FriendRecord> {
     public static final @NotNull String PLAYER_UUID = "playerUuid";
     public static final @NotNull String FRIEND_PLAYER_UUID = "friendPlayerUuid";
 
-    @Field(UUID_FIELD)
     @Primary
+    @Field(UUID_FIELD)
     private @NotNull String uuid;
 
     private @Field(TIMESTAMP_CREATED_FIELD) String timestampCreated;
@@ -50,6 +52,109 @@ public class FriendRecord implements Record<FriendRecord> {
 
     public FriendRecord(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public @NotNull UUID getUuid() {
+        return UUID.fromString(uuid);
+    }
+
+    public long getTimestampCreated() {
+        return Long.parseLong(this.timestampCreated);
+    }
+
+    public @NotNull FriendRecord setTimestampCreated(long timestampCreated) {
+        this.timestampCreated = String.valueOf(timestampCreated);
+        return this;
+    }
+
+    public @Nullable String getDateCreated() {
+        return this.dateCreated;
+    }
+
+    public @NotNull FriendRecord setDateCreated(@Nullable String dateCreated) {
+        this.dateCreated = dateCreated;
+        return this;
+    }
+
+    public boolean isStared() {
+        return Boolean.parseBoolean(this.staredBoolean);
+    }
+
+    public @NotNull FriendRecord setStared(boolean stared) {
+        this.staredBoolean = Boolean.toString(stared);
+        return this;
+    }
+
+    public @Nullable String getFriendNameFormatted() {
+        return this.friendNameFormatted;
+    }
+
+    public @NotNull FriendRecord setFriendNameFormatted(@Nullable String friendNameFormatted) {
+        this.friendNameFormatted = friendNameFormatted;
+        return this;
+    }
+
+    public @Nullable String getFriendNotes() {
+        return this.friendNotes;
+    }
+
+    public @NotNull FriendRecord setFriendNotes(@Nullable String friendNotes) {
+        this.friendNotes = friendNotes;
+        return this;
+    }
+
+    public @Nullable String getFriendMeta() {
+        return this.friendMeta;
+    }
+
+    public @NotNull FriendRecord setFriendMeta(@Nullable String friendMeta) {
+        this.friendMeta = friendMeta;
+        return this;
+    }
+
+    public boolean getToggleProxyJoin() {
+        return Boolean.parseBoolean(this.toggleProxyJoin);
+    }
+
+    public @NotNull FriendRecord setToggleProxyJoin(boolean toggleProxyJoin) {
+        this.toggleProxyJoin = Boolean.toString(toggleProxyJoin);
+        return this;
+    }
+
+    public boolean getToggleProxyLeave() {
+        return Boolean.parseBoolean(this.toggleProxyLeave);
+    }
+
+    public @NotNull FriendRecord setToggleProxyLeave(boolean toggleProxyLeave) {
+        this.toggleProxyLeave = Boolean.toString(toggleProxyLeave);
+        return this;
+    }
+
+    public boolean getToggleServerChange() {
+        return Boolean.parseBoolean(this.toggleServerChange);
+    }
+
+    public @NotNull FriendRecord setToggleServerChange(boolean toggleServerChange) {
+        this.toggleServerChange = Boolean.toString(toggleServerChange);
+        return this;
+    }
+
+    public @Nullable UUID getPlayerUuid() {
+        return UUID.fromString(this.playerUuid);
+    }
+
+    public @NotNull FriendRecord setPlayerUuid(@Nullable UUID playerUuid) {
+        this.playerUuid = playerUuid == null ? null : playerUuid.toString();
+        return this;
+    }
+
+    public @Nullable UUID getFriendPlayerUuid() {
+        return UUID.fromString(this.friendPlayerUuid);
+    }
+
+    public @NotNull FriendRecord setFriendPlayerUuid(@Nullable UUID friendPlayerUuid) {
+        this.friendPlayerUuid = friendPlayerUuid == null ? null : friendPlayerUuid.toString();
+        return this;
     }
 
     @Override

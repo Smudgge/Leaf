@@ -14,8 +14,8 @@ public class CommandLimitRecord implements Record<CommandLimitRecord> {
     public static final @NotNull String ID_FIELD = "id";
     public static final @NotNull String AMOUNT_EXECUTED_FIELD = "amountExecuted";
 
-    @Field(ID_FIELD)
     @Primary
+    @Field(ID_FIELD)
     private @NotNull String id;
     private @Field(AMOUNT_EXECUTED_FIELD) String amountExecuted;
 

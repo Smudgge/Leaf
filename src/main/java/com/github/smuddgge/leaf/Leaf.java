@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf;
 
 import com.github.smuddgge.leaf.configuration.*;
+import com.github.smuddgge.leaf.database.*;
 import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.logger.SquishyLoggerAdapter;
 import com.github.smuddgge.leaf.placeholder.CustomPlaceholder;
@@ -207,6 +208,14 @@ public class Leaf {
             this.database.connect();
 
             // Add tables.
+            this.database.createTable(new CommandCooldownTable());
+            this.database.createTable(new CommandLimitTable());
+            this.database.createTable(new FriendTable());
+            this.database.createTable(new HistoryTable());
+            this.database.createTable(new IgnoreTable());
+            this.database.createTable(new MessageTable());
+            this.database.createTable(new MuteTable());
+            this.database.createTable(new PlayerTable());
 
         } catch (Exception exception) {
             throw new LeafException(exception, "setupDatabase", "Failed to initialise the database.");
