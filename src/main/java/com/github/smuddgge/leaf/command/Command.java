@@ -1,11 +1,22 @@
 package com.github.smuddgge.leaf.command;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.database.CommandCooldownRecord;
+import com.github.smuddgge.leaf.database.CommandCooldownTable;
+import com.github.smuddgge.leaf.database.CommandLimitRecord;
+import com.github.smuddgge.leaf.database.CommandLimitTable;
+import com.github.smuddgge.leaf.dependency.ProtocolizeDependency;
+import com.github.smuddgge.leaf.helper.SoundHelper;
+import com.github.smuddgge.leaf.user.ConsoleUser;
+import com.github.smuddgge.leaf.user.PlayerUser;
+import com.github.smuddgge.leaf.user.User;
 import com.github.squishylib.configuration.ConfigurationSection;
+import com.github.squishylib.database.Query;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -15,233 +26,122 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * <h1>Represents a custom command.</h1>
- *
- * @param identifier  The command's identifier in the configuration.
- * @param commandType The base command type it will use.
+ * Represents a command within this plugin.
+ * <p>
+ * Please note this implementation only allows for 1
+ * subcommand per command.
+ * This is also as the configuration file would
+ * start to get messy with more sub commands.
  */
-public record Command(String identifier,
-                      BaseCommandType commandType) implements SimpleCommand {
+public class Command implements SimpleCommand {
+
+    private final @NotNull String identifier;
+    private final @NotNull BaseCommandType commandType;
 
     /**
-     * Used to get the command's syntax.
-     * This is to get the raw syntax where the placeholders
-     * have not been parsed.
+     * Creates a new instance of a leaf command.
      *
-     * @return The command's syntax.
+     * @param identifier  The command's identifier.
+     *                    This is the key of the configuration section.
+     * @param commandType The command's type.
      */
-    public String getSyntax() {
-        return this.getSection().getString("syntax", this.commandType.getSyntax());
+    public Command(@NotNull String identifier, @NotNull BaseCommandType commandType) {
+        this.identifier = identifier;
+        this.commandType = commandType;
     }
 
-    /**
-     * Used to get the tab suggestions.
-     *
-     * @param section The configuration section.
-     * @param user    The user completing the command.
-     * @return The command's argument suggestions.
-     */
-    public CommandSuggestions getSuggestions(ConfigurationSection section, User user) {
-        return this.commandType.getSuggestions(section, user);
-    }
-
-    /**
-     * Executed when the command is run in the console.
-     *
-     * @param arguments The arguments given in the command.
-     * @return The command's status.
-     */
-    public CommandStatus onConsoleRun(String[] arguments) {
-        // Check if there are no subcommands or there are no arguments.
-        if (this.commandType.getSubCommandTypes().isEmpty()
-                || arguments.length == 0) return this.commandType.onConsoleRun(this.getSection(), arguments);
-
-        // For each sub command.
-        for (CommandType commandType : this.commandType.getSubCommandTypes()) {
-            String name = arguments[0];
-
-            // Get the sub command section.
-            ConfigurationSection subcommandSection = this.getSection().getSection(commandType.getName());
-
-            // Get the list of all the command names.
-            List<String> subCommandNames = new ArrayList<>();
-            subCommandNames.add(subcommandSection.getString("name", commandType.getName()));
-            subCommandNames.addAll(subcommandSection.getListString("aliases", new ArrayList<>()));
-
-            if (subCommandNames.contains(name)) return commandType.onConsoleRun(this.getSection(), arguments);
-        }
-
-        return this.commandType.onConsoleRun(this.getSection(), arguments);
-    }
-
-    /**
-     * Executed when a player runs the command.
-     * This will also check for permissions.
-     *
-     * @param arguments The arguments given in the command.
-     * @param user      The instance of the user running the command.
-     * @return The command's status.
-     */
-    public CommandStatus onPlayerRun(String[] arguments, User user) {
-
-        // Double check permissions.
-        if (!user.hasPermission(this.getPermission())) return new CommandStatus().noPermission();
-
-        // Check for permission-based requirements.
-        if (this.getSection().getKeys().contains("require")) {
-            ConfigurationSection requireSection = this.getSection().getSection("require");
-
-            // For each requirement.
-            for (String identifier : requireSection.getKeys()) {
-                // Get the permission.
-                String permission = requireSection.getSection(identifier).getString("permission", null);
-                if (permission == null) continue;
-
-                // Get a server list.
-                List<String> serverList = requireSection.getSection(identifier).getListString("servers", new ArrayList<>());
-                if (serverList.size() <= 0) continue;
-
-                boolean userOnServer = serverList.contains(user.getConnectedServer().getServerInfo().getName());
-                boolean hasPermission = user.hasPermission(permission);
-
-                if (userOnServer && !hasPermission) {
-                    return new CommandStatus().noPermission();
-                }
-            }
-        }
-
-        // Check the command limit.
-        if (this.isLimited(user)) return new CommandStatus().isLimited();
-
-        // Check the command cooldown.
-        if (this.isOnCooldown(user)) return new CommandStatus().isOnCooldown();
-
-        // Play sound.
-        if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
-            try {
-                if (ProtocolizeDependency.isEnabled()) Sounds.play(this.getSound(), user.getUniqueId());
-            } catch (IllegalArgumentException illegalArgumentException) {
-                MessageManager.warn("Invalid sound for command " + this.getName() + " : ");
-                illegalArgumentException.printStackTrace();
-            }
-        }
-
-        // Check if there are no sub command types.
-        if (this.commandType.getSubCommandTypes().isEmpty()
-                || arguments.length <= 0)
-            return this.commandType.onPlayerRun(this.getSection(), arguments, user)
-                    .increaseExecutions(user, this)
-                    .updateCooldownTimeStamp(user, this);
-
-        // Otherwise, check if it is a sub command.
-        for (CommandType commandType : this.commandType.getSubCommandTypes()) {
-            String name = arguments[0];
-
-            List<String> subCommandNames = new ArrayList<>();
-            subCommandNames.add(this.getSection().getSection(commandType.getName()).getString("name", commandType.getName()));
-            subCommandNames.addAll(this.getSection().getSection(commandType.getName()).getListString("aliases", new ArrayList<>()));
-
-            if (subCommandNames.contains(name))
-                return commandType.onPlayerRun(this.getSection(), arguments, user)
-                        .increaseExecutions(user, this)
-                        .updateCooldownTimeStamp(user, this);
-        }
-
-        return this.commandType.onPlayerRun(this.getSection(), arguments, user)
-                .increaseExecutions(user, this)
-                .updateCooldownTimeStamp(user, this);
-    }
-
-    /**
-     * Used to get the command's identifier.
-     *
-     * @return Commands identifier.
-     */
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return this.identifier;
     }
 
-    /**
-     * Used to get the command's configuration section.
-     *
-     * @return The configuration section.
-     */
-    public ConfigurationSection getSection() {
-        return ConfigurationManager.getCommands().getCommand(this.identifier);
-    }
-
-    /**
-     * Used to get the name of the command.
-     *
-     * @return The name of the command.
-     */
-    public String getName() {
-        return ConfigurationManager.getCommands().getCommandName(this.identifier);
-    }
-
-    /**
-     * Used to get the command's description.
-     * This will be used for discord commands.
-     *
-     * @return The command's description.
-     */
-    public String getDescription() {
-        return ConfigurationManager.getCommands().getCommand(this.identifier).getString("description", "No Description");
-    }
-
-    /**
-     * Used to get the command's aliases.
-     * These are other command names that will execute this command.
-     *
-     * @return The list of aliases.
-     */
-    public CommandAliases getAliases() {
-        return ConfigurationManager.getCommands().getCommandAliases(this.identifier);
-    }
-
-    /**
-     * Used to get the permission to execute the command.
-     *
-     * @return Command permission.
-     */
-    public String getPermission() {
-        return ConfigurationManager.getCommands().getCommandPermission(this.identifier);
-    }
-
-    /**
-     * Used to get the sound played when the command is executed.
-     *
-     * @return The sound to play as a string.
-     */
-    public String getSound() {
-        return ConfigurationManager.getCommands().getCommandSound(this.identifier);
-    }
-
-    /**
-     * Used to get the base command type.
-     *
-     * @return The base command type.
-     */
-    public BaseCommandType getBaseCommandType() {
+    public @NotNull BaseCommandType getCommandType() {
         return this.commandType;
     }
 
     /**
-     * Used to get if the command is enabled.
+     * The configuration of the command located in the
+     * command directory.
+     *
+     * @return The command's configuration section.
+     */
+    public @NotNull ConfigurationSection getSection() {
+        return Leaf.get().getCommandsDirectory().getSection(this.identifier);
+    }
+
+    public @NotNull String getName() {
+        final String name = this.getSection().getString("name", null);
+        if (name != null) return name;
+
+        Leaf.get().getLogger().warn(
+                "The command with identifier {identifier} does not have a name! Please add its name to the command configuration directory. For now the name will be /null-command."
+                        .replace("{identifier}", this.identifier)
+        );
+        return "null-command";
+    }
+
+    public @NotNull List<String> getAliases() {
+        return this.getSection().getListString("aliases", new ArrayList<>());
+    }
+
+    public @NotNull String getDescription() {
+        return this.getSection().getString("description", "No Description");
+    }
+
+    public @NotNull String getDefaultSyntax() {
+        return this.commandType.getSyntax()
+                .replace("[name]", this.getName());
+    }
+
+    public @NotNull String getSyntax() {
+        return this.getSection().getString("syntax", this.getDefaultSyntax())
+                .replace("[name]", this.getName());
+    }
+
+    public @Nullable String getPermission() {
+        return this.getSection().getString("permission", null);
+    }
+
+    public @Nullable String getSound() {
+        return this.getSection().getString("sound", null);
+    }
+
+    /**
+     * Defaults to true.
      *
      * @return True if the command is enabled.
      */
     public boolean isEnabled() {
-        return ConfigurationManager.getCommands().isCommandEnabled(this.identifier);
+        return this.getSection().getBoolean("enabled", true);
+    }
+
+    public boolean isDisabled() {
+        return !this.isEnabled();
     }
 
     /**
-     * Used to check if the command is executable from discord.
+     * Defaults to false.
      *
-     * @return True if this command can be executed on discord.
+     * @return True if the command can also be run
+     * on a discord server.
      */
     public boolean isDiscordEnabled() {
-        return ConfigurationManager.getCommands().getCommand(this.identifier).getBoolean("discord_bot.enabled", false);
+        return this.getSection().getBoolean("discord_bot.enabled", false);
+    }
+
+    public int getLimit() {
+        return this.getSection().getInteger("limit", -1);
+    }
+
+    public long getCooldown() {
+        return this.getSection().getLong("cooldown", -1);
+    }
+
+    public boolean hasLimit() {
+        return this.getLimit() != -1;
+    }
+
+    public boolean hasCooldown() {
+        return this.getCooldown() != -1L;
     }
 
     /**
@@ -253,8 +153,10 @@ public record Command(String identifier,
      */
     public boolean isLimited(@NotNull User user) {
 
+        if (!(user instanceof PlayerUser)) return false;
+
         // Get the command limit for this command.
-        int limit = ConfigurationManager.getCommands().getCommandLimit(this.identifier);
+        int limit = this.getLimit();
 
         // Check if there is no limit.
         if (limit == -1) return false;
@@ -263,80 +165,219 @@ public record Command(String identifier,
         // We return true because the database may have disabled its self
         // and the admin may still want commands to be limited.
         // -> If the admin is not using a database, they will set the limit to -1.
-        if (Leaf.isDatabaseDisabled()) return false;
+        if (Leaf.get().isDatabaseDisabled()) return true;
 
-        int amountExecuted = Leaf.getDatabase()
+        // Get the users command limit record.
+        final CommandLimitRecord record = Leaf.get().getDatabase()
                 .getTable(CommandLimitTable.class)
-                .getAmountExecuted(user.getUniqueId(), this.identifier);
+                .getFirstRecord(new Query().match(
+                        CommandLimitRecord.ID_FIELD,
+                        CommandLimitRecord.createId(user.getUuid(), this.identifier)
+                ))
+                .waitAndGet();
+
+        // Is the user not limited?
+        if (record == null) return false;
 
         // Check if the amount of times the command
         // has been executed is bigger or equal to the limit.
-        return amountExecuted >= limit;
+        return record.getAmountExecuted() >= limit;
     }
 
     private boolean isOnCooldown(@NotNull User user) {
 
-        long cooldown = ConfigurationManager.getCommands().getCommandCooldown(this.identifier);
+        if (!(user instanceof PlayerUser)) return false;
 
+        long cooldown = this.getCooldown();
         if (cooldown == -1) return false;
 
         // Check if the database is disabled.
         // We return true because the database may have disabled its self
         // and the admin may still want commands to be limited.
         // -> If the admin is not using a database, they will set the cooldown to -1.
-        if (Leaf.isDatabaseDisabled()) return true;
+        if (Leaf.get().isDatabaseDisabled()) return true;
 
-        long lastExecutedTimeStamp = Leaf.getDatabase()
+        final CommandCooldownRecord record = Leaf.get().getDatabase()
                 .getTable(CommandCooldownTable.class)
-                .getExecutedTimeStamp(user.getUniqueId(), this.identifier);
+                .getFirstRecord(new Query().match(CommandCooldownRecord.ID_FIELD, CommandCooldownRecord.createId(user.getUuid(), this.identifier)))
+                .waitAndGet();
 
-        return (lastExecutedTimeStamp + cooldown) > System.currentTimeMillis();
+        // Is the user not on a cooldown?
+        if (record == null) return false;
+
+        // Is the user on a cooldown right now?
+        return (record.getLastExecutedTimestamp() + cooldown) > System.currentTimeMillis();
     }
 
     /**
-     * Used to check if the command has a limit.
+     * Returns the amount of time the user will have to wait until
+     * they can execute the command again.
      *
-     * @return True if teh command has a limit.
+     * @param user The instance of the user.
+     * @return The duration until they can execute the command.
      */
-    public boolean hasLimit() {
+    public @NotNull Duration getCooldownDurationLeft(@NotNull User user) {
 
-        // Get the command limit for this command.
-        int limit = ConfigurationManager.getCommands().getCommandLimit(this.identifier);
+        if (!(user instanceof PlayerUser)) return Duration.ofSeconds(0);
 
-        // Check if there is no limit.
-        return limit != -1;
-    }
+        // Get the command's cooldown.
+        long cooldown = this.getCooldown();
 
-    public boolean hasCooldown() {
-        long cooldown = ConfigurationManager.getCommands().getCommandCooldown(this.identifier);
-        return cooldown != -1;
-    }
+        // Is there no cooldown?
+        if (cooldown == -1) return Duration.ofSeconds(0);
 
-    public @NotNull String getCooldown(@NotNull User user) {
-        long cooldown = ConfigurationManager.getCommands().getCommandCooldown(this.identifier);
-
-        if (cooldown == -1) return "0";
-
-        long lastCooldownTimeStamp = Leaf.getDatabase()
+        final CommandCooldownRecord record = Leaf.get().getDatabase()
                 .getTable(CommandCooldownTable.class)
-                .getExecutedTimeStamp(user.getUniqueId(), this.getIdentifier());
+                .getFirstRecord(new Query().match(CommandCooldownRecord.ID_FIELD, CommandCooldownRecord.createId(user.getUuid(), this.identifier)))
+                .waitAndGet();
 
-        return String.valueOf(Duration.ofMillis((lastCooldownTimeStamp + cooldown) - System.currentTimeMillis()).toSeconds());
+        // Does the user have no cooldown?
+        if (record == null) return Duration.ofSeconds(0);
+
+        return Duration.ofMillis((record.getLastExecutedTimestamp() + cooldown) - System.currentTimeMillis());
+    }
+
+    public @NotNull CommandStatus onConsoleRun(@NotNull String[] arguments) {
+
+        final boolean noSubCommands = this.commandType.getSubCommandTypes().isEmpty();
+        final boolean noArguments = arguments.length == 0;
+
+        // If there's no sub commands or if there's no arguments.
+        if (noSubCommands || noArguments) {
+            return new CommandStatus()
+                    .merge(this.commandType.onUser(this.getSection(), new ConsoleUser(), arguments))
+                    .merge(this.commandType.onConsole(this.getSection(), new ConsoleUser(), arguments));
+        }
+
+        // For each sub command.
+        // Only supports one subcommand.
+        for (CommandType commandType : this.commandType.getSubCommandTypes()) {
+            String name = arguments[0];
+
+            // Get the sub command section.
+            ConfigurationSection subCommandSection = this.getSection().getSection(commandType.getIdentifier());
+
+            // Get the list of all the command names.
+            List<String> subCommandNames = new ArrayList<>();
+            subCommandNames.add(subCommandSection.getString("name", commandType.getIdentifier()));
+            subCommandNames.addAll(subCommandSection.getListString("aliases", new ArrayList<>()));
+
+            if (subCommandNames.contains(name)) {
+                return new CommandStatus()
+                        .merge(commandType.onUser(this.getSection(), new ConsoleUser(), arguments))
+                        .merge(commandType.onConsole(this.getSection(), new ConsoleUser(), arguments));
+            }
+        }
+
+        return new CommandStatus()
+                .merge(this.commandType.onUser(this.getSection(), new ConsoleUser(), arguments))
+                .merge(this.commandType.onConsole(this.getSection(), new ConsoleUser(), arguments));
+    }
+
+    /**
+     * This will also check if they have permission to run the command.
+     *
+     * @param arguments The arguments given in the command.
+     * @param user      The instance of the user running the command.
+     * @return The command's status.
+     */
+    public @NotNull CommandStatus onPlayerRun(@NotNull String[] arguments, @NotNull PlayerUser user) {
+
+        final boolean permissionExists = this.getPermission() != null;
+        final boolean hasPermission = user.hasPermission(this.getPermission() == null ? "" : this.getPermission());
+
+        // Does the player have permission to run the base command?
+        if (permissionExists && hasPermission) return new CommandStatus().set(CommandStatus.Status.NO_PERMISSION);
+
+        // Check for permission-based requirements.
+        if (this.getSection().getKeys().contains("require")) {
+
+            // Get the requirement configuration section.
+            final ConfigurationSection requireSection = this.getSection().getSection("require");
+
+            // For each requirement.
+            for (String identifier : requireSection.getKeys()) {
+
+                // Get the permission.
+                final String permission = requireSection.getSection(identifier).getString("permission", null);
+                if (permission == null) continue;
+
+                // Get a server list.
+                List<String> serverList = requireSection.getSection(identifier).getListString("servers", new ArrayList<>());
+                if (serverList.isEmpty()) continue;
+
+                boolean userOnServer = serverList.contains(user.getServerName());
+                boolean noPermission = user.hasPermission(permission);
+
+                if (userOnServer && noPermission) {
+                    return new CommandStatus().set(CommandStatus.Status.NO_PERMISSION);
+                }
+            }
+        }
+
+        // Check the command limit.
+        if (this.isLimited(user)) return new CommandStatus().set(CommandStatus.Status.IS_LIMITED);
+
+        // Check the command cooldown.
+        if (this.isOnCooldown(user)) return new CommandStatus().set(CommandStatus.Status.IS_ON_COOLDOWN);
+
+        // Play sound.
+        if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
+            try {
+                if (ProtocolizeDependency.isEnabled()) SoundHelper.play(this.getSound(), user.getUuid());
+            } catch (IllegalArgumentException illegalArgumentException) {
+                Leaf.get().getLogger().warn("Invalid sound for command /" + this.getName() + " : ");
+                illegalArgumentException.printStackTrace();
+            }
+        }
+
+        final boolean noSubCommands = this.commandType.getSubCommandTypes().isEmpty();
+        final boolean noArguments = arguments.length == 0;
+
+        // If there's no sub commands or if there's no arguments.
+        if (noSubCommands || noArguments) return new CommandStatus()
+                .merge(this.commandType.onUser(this.getSection(), user, arguments))
+                .merge(this.commandType.onPlayer(this.getSection(), user, arguments))
+                .increaseExecutions(user, this)
+                .applyCooldownIfNeeded(user, this);
+
+        // Otherwise, check if it is a sub command.
+        for (CommandType commandType : this.commandType.getSubCommandTypes()) {
+            String name = arguments[0];
+
+            List<String> subCommandNames = new ArrayList<>();
+            subCommandNames.add(this.getSection().getSection(commandType.getIdentifier()).getString("name", commandType.getIdentifier()));
+            subCommandNames.addAll(this.getSection().getSection(commandType.getIdentifier()).getListString("aliases", new ArrayList<>()));
+
+            if (subCommandNames.contains(name)) return new CommandStatus()
+                    .merge(commandType.onUser(this.getSection(), user, arguments))
+                    .merge(commandType.onPlayer(this.getSection(), user, arguments))
+                    .increaseExecutions(user, this)
+                    .applyCooldownIfNeeded(user, this);
+        }
+
+        return new CommandStatus()
+                .merge(this.commandType.onUser(this.getSection(), user, arguments))
+                .merge(this.commandType.onPlayer(this.getSection(), user, arguments))
+                .increaseExecutions(user, this)
+                .applyCooldownIfNeeded(user, this);
     }
 
     @Override
     public void execute(final Invocation invocation) {
-        CommandSource source = invocation.source();
+        final CommandSource source = invocation.source();
 
-        if (source instanceof Player) {
-            User user = new User((Player) source);
+        if (source instanceof Player player) {
+            final PlayerUser user = new PlayerUser(player);
 
             try {
+
                 // Run the command as a player.
-                CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
-                if (status.hasIncorrectArguments()) {
-                    user.sendMessage(ConfigMessages.getIncorrectArguments(this.getSyntax())
-                            .replace("[name]", this.getName()));
+                final CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
+
+                if (status.has(CommandStatus.Status.INCORRECT_ARGUMENTS)) {
+                    user.sendMessage(Leaf.get().getMessagesConfig().incorrectArguments()
+                            .replace("%command%", this.getSyntax()));
                 }
 
                 if (status.hasOnCooldown()) {

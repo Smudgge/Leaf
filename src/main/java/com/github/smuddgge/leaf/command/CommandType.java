@@ -19,14 +19,14 @@ import org.jetbrains.annotations.Nullable;
 public interface CommandType {
 
     /**
-     * The name of the command type.
+     * The types unique identifier.
      * <p>
      * For example, "info" for the type of command that
      * responds with a message.
      *
-     * @return The command type's name.
+     * @return The command type's identifier.
      */
-    @NotNull String getName();
+    @NotNull String getIdentifier();
 
     /**
      * The command's syntax.
@@ -35,8 +35,7 @@ public interface CommandType {
      * <> Is a optional argument.
      *
      * [name] Will be replaced with the commands name.
-     * [parent] Will be replaced with the parent command
-     *          name if it's a subcommand.
+     * [parent] Currently won't be replaced.
      *
      * Example: "/[parent] [name] [player]"
      *
@@ -57,11 +56,17 @@ public interface CommandType {
      */
     @Nullable CommandSuggestions getSuggestions(ConfigurationSection section, PlayerUser user);
 
-    @NotNull CommandStatus onUser(@NotNull ConfigurationSection section, @NotNull User user);
+    default @NotNull CommandStatus onUser(@NotNull ConfigurationSection section, @NotNull User user, @NotNull String[] arguments) {
+        return new CommandStatus();
+    }
 
-    @NotNull CommandStatus onPlayer(@NotNull ConfigurationSection section, @NotNull PlayerUser user);
+    default @NotNull CommandStatus onPlayer(@NotNull ConfigurationSection section, @NotNull PlayerUser user, @NotNull String[] arguments) {
+        return new CommandStatus();
+    }
 
-    @NotNull CommandStatus onConsole(@NotNull ConfigurationSection section, @NotNull ConsoleUser user);
+    default @NotNull CommandStatus onConsole(@NotNull ConfigurationSection section, @NotNull ConsoleUser user, @NotNull String[] arguments) {
+        return new CommandStatus();
+    }
 
     /**
      * Executed when a command is registered.

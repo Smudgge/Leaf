@@ -1,70 +1,37 @@
 package com.github.smuddgge.leaf.command;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.MessageManager;
-import com.github.smuddgge.leaf.datatype.User;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.proxy.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * <h1>Represents the command handler.</h1>
- * Handles registering and unregistering commands.
+ * Contains all the registered commands and
+ * handles execution of commands.
  */
 public class CommandHandler {
 
-    private List<Command> commands = new ArrayList<>();
-
+    private final List<Command> commands = new ArrayList<>();
     private final List<BaseCommandType> commandTypes = new ArrayList<>();
+    private final List<String> registeredCommandNames = new ArrayList<>();
 
-    private List<String> registeredCommands = new ArrayList<>();
-
-    /**
-     * Used to append a command type to the command handler.
-     *
-     * @param command The command to append.
-     */
-    public void append(Command command) {
-        this.commands.add(command);
-    }
-
-    /**
-     * Used to add a type of command to the list.
-     *
-     * @param commandType Instance of the command type.
-     */
-    public void addType(BaseCommandType commandType) {
-        this.commandTypes.add(commandType);
-    }
-
-    /**
-     * Used to get a command type.
-     *
-     * @param name The name of the command type to get.
-     * @return The command type instance.
-     */
-    public BaseCommandType getType(String name) {
-        for (BaseCommandType commandType : this.commandTypes) {
-            if (Objects.equals(commandType.getName(), name)) return commandType;
+    public @Nullable BaseCommandType getCommandType(@NotNull String identifier) {
+        for (final BaseCommandType commandType : this.commandTypes) {
+            if (commandType.getIdentifier().equals(identifier)) return commandType;
         }
 
         return null;
     }
 
-    /**
-     * Used to get a command given the command name.
-     *
-     * @param name The name of the command or alias.
-     * @return The requested command instance.
-     */
-    public Command getCommand(String name) {
+    public @Nullable Command getCommand(String name) {
         for (Command command : this.commands) {
-            if (Objects.equals(command.getName(), name)) return command;
-            if (command.getAliases().get().contains(name)) return command;
+            if (command.getName().equals(name)) return command;
+            if (command.getAliases()) return command;
         }
         return null;
     }
@@ -98,14 +65,14 @@ public class CommandHandler {
 
             // Register main command name
             manager.register(manager.metaBuilder(command.getName()).build(), command);
-            this.registeredCommands.add(command.getName());
+            this.registeredCommandNames.add(command.getName());
 
             // Register aliases if they exist
             if (command.getAliases().get().isEmpty()) continue;
 
             for (String alias : command.getAliases().get()) {
                 manager.register(manager.metaBuilder(alias).build(), command);
-                this.registeredCommands.add(alias);
+                this.registeredCommandNames.add(alias);
             }
         }
     }
@@ -117,7 +84,7 @@ public class CommandHandler {
     public void unregister() {
         CommandManager manager = Leaf.getServer().getCommandManager();
 
-        for (String commandName : this.registeredCommands) {
+        for (String commandName : this.registeredCommandNames) {
             // Unregister the command
             manager.unregister(commandName);
         }
@@ -127,7 +94,7 @@ public class CommandHandler {
             command.getBaseCommandType().removeSubCommands();
         }
 
-        this.registeredCommands = new ArrayList<>();
+        this.registeredCommandNames = new ArrayList<>();
         this.commands = new ArrayList<>();
     }
 

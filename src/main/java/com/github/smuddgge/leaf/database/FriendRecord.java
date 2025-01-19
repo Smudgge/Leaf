@@ -9,7 +9,6 @@ import com.github.squishylib.database.annotation.Primary;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.print.DocFlavor;
 import java.util.Objects;
 import java.util.UUID;
 

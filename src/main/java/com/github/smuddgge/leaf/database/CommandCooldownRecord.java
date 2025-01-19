@@ -3,11 +3,14 @@ package com.github.smuddgge.leaf.database;
 import com.github.squishylib.configuration.ConfigurationSection;
 import com.github.squishylib.configuration.implementation.MemoryConfigurationSection;
 import com.github.squishylib.database.Record;
+import com.github.squishylib.database.Table;
 import com.github.squishylib.database.annotation.Field;
 import com.github.squishylib.database.annotation.Primary;
+import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CommandCooldownRecord implements Record<CommandCooldownRecord> {
 
@@ -36,6 +39,11 @@ public class CommandCooldownRecord implements Record<CommandCooldownRecord> {
         return this;
     }
 
+    public @NotNull CommandCooldownRecord setTimestampToNow() {
+        this.setLastExecutedTimestamp(System.currentTimeMillis());
+        return this;
+    }
+
     @Override
     public @NotNull ConfigurationSection convert() {
         final ConfigurationSection section = new MemoryConfigurationSection();
@@ -53,5 +61,29 @@ public class CommandCooldownRecord implements Record<CommandCooldownRecord> {
         this.lastExecutedTimestamp = section.getString(LAST_EXECUTED_TIMESTAMP_FIELD);
 
         return this;
+    }
+
+    /**
+     * Used to create the records primary key from
+     * the players uuid and the commands id.
+     *
+     * @param uuid      The players uuid.
+     * @param commandId The command's id.
+     * @return The requested primary key.
+     */
+    public static @NotNull String createId(@NotNull UUID uuid, @NotNull String commandId) {
+        return uuid + commandId;
+    }
+
+    /**
+     * Used to create the record primary key from
+     * the members name and commands id.
+     *
+     * @param member    The instance of the member.
+     * @param commandId The command's identifier.
+     * @return The requested primary key.
+     */
+    public static @NotNull String createId(@NotNull Member member, @NotNull String commandId) {
+        return "Discord" + member.getUser().getName() + commandId;
     }
 }

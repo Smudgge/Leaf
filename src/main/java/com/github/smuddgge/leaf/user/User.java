@@ -15,6 +15,8 @@ public interface User {
 
     @Nullable RegisteredServer getServer();
 
+    @Nullable String getServerName();
+
     long getPing();
 
     void sendMessage(@NotNull String message);

@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.database;
 
 import com.github.squishylib.database.Table;
-import com.github.squishylib.database.field.PrimaryFieldMap;
+import com.github.squishylib.database.field.RecordFieldPool;
 import org.jetbrains.annotations.NotNull;
 
 public class HistoryTable extends Table<HistoryRecord> {
@@ -12,7 +12,7 @@ public class HistoryTable extends Table<HistoryRecord> {
     }
 
     @Override
-    public @NotNull HistoryRecord createEmpty(@NotNull PrimaryFieldMap identifiers) {
-        return new HistoryRecord(identifiers.getString(HistoryRecord.UUID_FIELD));
+    public @NotNull HistoryRecord createEmptyRecord(@NotNull RecordFieldPool pool) {
+        return new HistoryRecord(pool.getString(HistoryRecord.UUID_FIELD));
     }
 }

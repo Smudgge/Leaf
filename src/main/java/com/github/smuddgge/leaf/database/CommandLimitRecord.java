@@ -39,6 +39,11 @@ public class CommandLimitRecord implements Record<CommandLimitRecord> {
         return this;
     }
 
+    public @NotNull CommandLimitRecord increaseAmountExecuted() {
+        this.setAmountExecuted(this.getAmountExecuted() + 1);
+        return this;
+    }
+
     @Override
     public @NotNull ConfigurationSection convert() {
         final ConfigurationSection section = new MemoryConfigurationSection();

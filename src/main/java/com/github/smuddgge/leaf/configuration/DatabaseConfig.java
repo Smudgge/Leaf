@@ -11,7 +11,7 @@ public class DatabaseConfig extends YamlConfiguration {
         super(folder, fileName);
     }
 
-    public boolean isDisabled() {
+    public boolean isEnabled() {
         return this.getBoolean("enabled", false);
     }
 }

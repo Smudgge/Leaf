@@ -317,6 +317,14 @@ public class Leaf {
         return this;
     }
 
+    public boolean isDatabaseEnabled() {
+        return this.getDatabaseConfig().isEnabled();
+    }
+
+    public boolean isDatabaseDisabled() {
+        return !this.isDatabaseEnabled();
+    }
+
     /**
      * Gets the instance of the loaded leaf plugin.
      *

@@ -1,7 +1,7 @@
 package com.github.smuddgge.leaf.database;
 
 import com.github.squishylib.database.Table;
-import com.github.squishylib.database.field.PrimaryFieldMap;
+import com.github.squishylib.database.field.RecordFieldPool;
 import org.jetbrains.annotations.NotNull;
 
 public class FriendTable extends Table<FriendRecord> {
@@ -12,7 +12,7 @@ public class FriendTable extends Table<FriendRecord> {
     }
 
     @Override
-    public @NotNull FriendRecord createEmpty(@NotNull PrimaryFieldMap identifiers) {
-        return new FriendRecord(identifiers.getString(FriendRecord.UUID_FIELD));
+    public @NotNull FriendRecord createEmptyRecord(@NotNull RecordFieldPool pool) {
+        return new FriendRecord(pool.getString(FriendRecord.UUID_FIELD));
     }
 }

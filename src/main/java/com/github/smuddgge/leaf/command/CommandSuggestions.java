@@ -161,10 +161,10 @@ public class CommandSuggestions {
     public void appendSubCommandTypes(List<CommandType> subCommandTypes, ConfigurationSection section, String[] arguments, User user) {
         for (CommandType commandType : subCommandTypes) {
 
-            ConfigurationSection commandSection = section.getSection(commandType.getName());
+            ConfigurationSection commandSection = section.getSection(commandType.getIdentifier());
 
             // Get the commands name.
-            String name = commandSection.getString("name", commandType.getName());
+            String name = commandSection.getString("name", commandType.getIdentifier());
 
             // Add all the aliases.
             List<String> commandNames = new ArrayList<>(commandSection.getListString("aliases", new ArrayList<>()));
