@@ -8,7 +8,6 @@ import com.github.smuddgge.leaf.placeholder.CustomPlaceholder;
 import com.github.smuddgge.leaf.placeholder.Placeholder;
 import com.github.smuddgge.leaf.placeholder.PlaceholderManager;
 import com.github.smuddgge.leaf.placeholder.standard.*;
-import com.github.squishylib.configuration.ConfigurationSection;
 import com.github.squishylib.database.Database;
 import com.github.squishylib.database.DatabaseBuilder;
 import com.google.inject.Inject;
@@ -60,7 +59,7 @@ public class Leaf {
 
         try {
 
-            // Set up basic variables.
+            // Set up basics.
             this.proxyServer = proxyServer;
             this.folder = folder.toFile();
             this.logger = new Logger(componentLogger);
