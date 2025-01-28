@@ -1,5 +1,6 @@
 package com.github.smuddgge.leaf.user;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import org.jetbrains.annotations.NotNull;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerUser implements User{
+public class PlayerUser implements User {
 
     private final Player player;
 
@@ -36,6 +37,11 @@ public class PlayerUser implements User{
     }
 
     @Override
+    public @Nullable String getServerName() {
+        return "";
+    }
+
+    @Override
     public long getPing() {
         return 0;
     }
@@ -53,6 +59,11 @@ public class PlayerUser implements User{
     @Override
     public boolean isVanished() {
         return false;
+    }
+
+    @Override
+    public boolean isNotVanishable() {
+        return !this.hasPermission(Leaf.get().getConfig().getVanishablePermission());
     }
 
     @Override

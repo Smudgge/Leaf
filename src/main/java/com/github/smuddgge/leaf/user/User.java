@@ -25,6 +25,8 @@ public interface User {
 
     boolean isVanished();
 
+    boolean isNotVanishable();
+
     boolean hasPermission(@NotNull String permission);
 
     default boolean hasPermission(@NotNull List<String> permissionList) {

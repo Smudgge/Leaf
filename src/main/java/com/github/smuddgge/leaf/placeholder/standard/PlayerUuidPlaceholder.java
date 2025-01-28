@@ -10,13 +10,8 @@ import java.util.List;
 public class PlayerUuidPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull String getIdentifier() {
-        return "player_uuid";
-    }
-
-    @Override
-    public @NotNull List<String> getAliases() {
-        return List.of("uuid");
+    public @NotNull List<String> getNameList() {
+        return List.of("uuid", "player_uuid");
     }
 
     @Override

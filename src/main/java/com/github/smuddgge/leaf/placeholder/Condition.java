@@ -16,7 +16,8 @@ public interface Condition {
                               @NotNull String identifier
     );
 
-    static @Nullable Condition of(@NotNull final String condition) {
+    static @Nullable Condition of(final @Nullable String condition) {
+        if (condition == null) return null;
         if (condition.contains("MATCH")) return new MatchCondition();
         if (condition.contains("PERMISSION")) return new PermissionCondition();
         return null;

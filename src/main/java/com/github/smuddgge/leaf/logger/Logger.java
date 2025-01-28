@@ -1,9 +1,13 @@
 package com.github.smuddgge.leaf.logger;
 
+import com.github.smuddgge.leaf.Leaf;
 import com.github.squishylib.common.indicator.Replicable;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 public class Logger implements Replicable<Logger> {
 
@@ -61,24 +65,52 @@ public class Logger implements Replicable<Logger> {
         return this;
     }
 
+    private void send(@NotNull String message, @NotNull String color, @NotNull Consumer<Component> runLog) {
+        for (final String part : message.split("\n")) {
+            runLog.accept(Leaf.get().getPlaceholderManager().parseColorsOnly(
+                    color + this.getPrefixFormatted() + part
+            ));
+        }
+    }
+
     public @NotNull Logger error(@NotNull String message) {
-        this.componentLogger.error("&c{}{}&r", this.getPrefixFormatted(), message);
+        this.send(message, "&c", this.componentLogger::error);
         return this;
     }
 
     public @NotNull Logger warn(@NotNull String message) {
-        this.componentLogger.warn("&e{}{}&r", this.getPrefixFormatted(), message);
+        this.send(message, "&e", this.componentLogger::warn);
         return this;
     }
 
     public @NotNull Logger info(@NotNull String message) {
-        this.componentLogger.info("&7{}{}&r", this.getPrefixFormatted(), message);
+        this.send(message, "&7", this.componentLogger::info);
         return this;
     }
 
     public @NotNull Logger debug(@NotNull String message) {
         if (this.debugMode) {
-            this.componentLogger.info("&7{}{}&r", this.getPrefixFormatted(), message);
+            this.send(message, "&7", this.componentLogger::info);
+        }
+        return this;
+    }
+
+    /**
+     * Separate levels defined in the config.yml
+     * <p>
+     * For example, if commands is set to true in config.yml
+     * it will log when commands are registered and unregistered.
+     */
+    public enum Opt {
+        B_STATS,
+        COMMANDS
+    }
+
+    public @NotNull Logger optional(@NotNull Opt level, @NotNull String message) {
+        if (Leaf.get().getConfig().getSection("logging")
+                .getBoolean(level.name().toLowerCase())) {
+
+            this.info(message);
         }
         return this;
     }

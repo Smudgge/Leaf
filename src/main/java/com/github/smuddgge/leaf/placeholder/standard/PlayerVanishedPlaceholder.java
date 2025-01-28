@@ -10,13 +10,8 @@ import java.util.List;
 public class PlayerVanishedPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull String getIdentifier() {
-        return "player_vanished";
-    }
-
-    @Override
-    public @NotNull List<String> getAliases() {
-        return List.of("vanished");
+    public @NotNull List<String> getNameList() {
+        return List.of("vanished", "player_vanished");
     }
 
     @Override

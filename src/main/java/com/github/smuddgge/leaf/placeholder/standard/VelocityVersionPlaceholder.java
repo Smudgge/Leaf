@@ -11,13 +11,8 @@ import java.util.List;
 public class VelocityVersionPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull String getIdentifier() {
-        return "velocity_version";
-    }
-
-    @Override
-    public @NotNull List<String> getAliases() {
-        return List.of();
+    public @NotNull List<String> getNameList() {
+        return List.of("velocity_version");
     }
 
     @Override

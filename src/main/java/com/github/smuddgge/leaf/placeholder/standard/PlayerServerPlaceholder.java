@@ -10,13 +10,8 @@ import java.util.List;
 public class PlayerServerPlaceholder implements Placeholder {
 
     @Override
-    public @NotNull String getIdentifier() {
-        return "player_server";
-    }
-
-    @Override
-    public @NotNull List<String> getAliases() {
-        return List.of("server");
+    public @NotNull List<String> getNameList() {
+        return List.of("server", "player_server");
     }
 
     @Override

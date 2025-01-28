@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A command type defines a command's functionality.
+ * Defines a command's functionality.
  * <p>
  * Admins can then write configuration and apply the
- * functionality to the configuration sections.
+ * functionality to a command name.
  */
 public interface CommandType {
 
@@ -54,7 +54,7 @@ public interface CommandType {
      * @param user    The player that is tab completing.
      * @return The command's argument suggestions.
      */
-    @Nullable CommandSuggestions getSuggestions(ConfigurationSection section, PlayerUser user);
+    @Nullable CommandSuggestions getSuggestions(@NotNull ConfigurationSection section, @NotNull PlayerUser user);
 
     default @NotNull CommandStatus onUser(@NotNull ConfigurationSection section, @NotNull User user, @NotNull String[] arguments) {
         return new CommandStatus();
@@ -69,7 +69,7 @@ public interface CommandType {
     }
 
     /**
-     * Executed when a command is registered.
+     * Executed when the command is registered.
      *
      * @param section The command section.
      * @param action  The create command action to add options.

@@ -4,7 +4,6 @@
 #  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
-# Author : Smudge
 # File: database.yml
 # Last Changed: 6.0.0
 # Description: Contains the database settings.
@@ -13,26 +12,46 @@
 
 enabled: false
 
-# ---------------------------------------
-#           ✜ Database Settings ✜
-# ---------------------------------------
+#  ▗▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖ ▗▄▄▖
+# ▐▌   ▐▌     █    █    █  ▐▛▚▖▐▌▐▌   ▐▌
+#  ▝▀▚▖▐▛▀▀▘  █    █    █  ▐▌ ▝▜▌▐▌▝▜▌ ▝▀▚▖
+# ▗▄▄▞▘▐▙▄▄▖  █    █  ▗▄█▄▖▐▌  ▐▌▝▚▄▞▘▗▄▄▞▘
+
+# If the database should actively disconnect and reconnect when there
+# hasn't been any requests in a while.
+#
+# This should be true if you are using sqlite.
+# Sqlite likes to have a new connection per request.
 should_reconnect_every_cycle: true
-reconnect_cooldown_millis: 2000
+
+# Should the database reconnect if an error occurs?
 will_reconnect: true
+
+# If an error occurs and the connection is lost this is
+# The amount of millis it will wait before reconnecting.
+reconnect_cooldown_millis: 2000
+
+# Should there be much time between requests?
+# It's not to give the database some power naps.
 time_between_requests_millis: 100
+
+# The max amount of requests that can wait in the queue.
+# If for some reason the queue gets flooded, this is nice to have so
+# the requests in the queue are relatively new.
 max_requests_pending: 40
 
-# ---------------------------------------
-#           ✜ Database Type ✜
-# ---------------------------------------
-# This type of database saves the data
-# to a file located in this folder.
+# ▗▄▄▄▖▗▖  ▗▖▗▄▄▖ ▗▄▄▄▖
+#   █   ▝▚▞▘ ▐▌ ▐▌▐▌
+#   █    ▐▌  ▐▛▀▘ ▐▛▀▀▘
+#   █    ▐▌  ▐▌   ▐▙▄▄▖
+#
+# sqlite: Saves the data to a file located in this folder.
+# mysql: Saves the data on a external server.
+# mongo: Saves the data on a external server. (Easier to view data)
 sqlite:
   enabled: true
   path: "plugins/CozyJoinLeave/database.sqlite3"
 
-# This type of database saves data on an
-# external server or the cloud.
 mysql:
   enabled: false
   connection_string: "address:port"
@@ -40,19 +59,7 @@ mysql:
   username: ""
   password: ""
 
-# This type of database saves data to the cloud.
 mongo:
   enabled: false
   connection_string: "" # example: "mongodb+srv://Name:Password@Name.?.mongodb.net/?retryWrites=true&w=majority"
   database_name: ""
-
-# ---------------------------------------
-#             ✜ Leaf Settings ✜
-# ---------------------------------------
-# The maximum amount of history that will
-# be saved in the database per player.
-player_history_limit: 20
-
-# The maximum number of messages that will
-# be saved in the database per player.
-message_limit: 100

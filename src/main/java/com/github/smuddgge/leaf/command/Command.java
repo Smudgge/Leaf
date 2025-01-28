@@ -1,12 +1,11 @@
 package com.github.smuddgge.leaf.command;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.LeafException;
 import com.github.smuddgge.leaf.database.CommandCooldownRecord;
 import com.github.smuddgge.leaf.database.CommandCooldownTable;
 import com.github.smuddgge.leaf.database.CommandLimitRecord;
 import com.github.smuddgge.leaf.database.CommandLimitTable;
-import com.github.smuddgge.leaf.dependency.ProtocolizeDependency;
-import com.github.smuddgge.leaf.helper.SoundHelper;
 import com.github.smuddgge.leaf.user.ConsoleUser;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.smuddgge.leaf.user.User;
@@ -22,16 +21,18 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Represents a command within this plugin.
  * <p>
  * Please note this implementation only allows for 1
- * subcommand per command.
- * This is also as the configuration file would
- * start to get messy with more sub commands.
+ * subcommand layer per command. The configuration file
+ * would get quite messy if there were more layers anyway.
+ * <pre>
+ * /name
+ * /name arguments
+ * /name layer1 arguments
  */
 public class Command implements SimpleCommand {
 
@@ -58,12 +59,6 @@ public class Command implements SimpleCommand {
         return this.commandType;
     }
 
-    /**
-     * The configuration of the command located in the
-     * command directory.
-     *
-     * @return The command's configuration section.
-     */
     public @NotNull ConfigurationSection getSection() {
         return Leaf.get().getCommandsDirectory().getSection(this.identifier);
     }
@@ -101,15 +96,6 @@ public class Command implements SimpleCommand {
         return this.getSection().getString("permission", null);
     }
 
-    public @Nullable String getSound() {
-        return this.getSection().getString("sound", null);
-    }
-
-    /**
-     * Defaults to true.
-     *
-     * @return True if the command is enabled.
-     */
     public boolean isEnabled() {
         return this.getSection().getBoolean("enabled", true);
     }
@@ -118,12 +104,6 @@ public class Command implements SimpleCommand {
         return !this.isEnabled();
     }
 
-    /**
-     * Defaults to false.
-     *
-     * @return True if the command can also be run
-     * on a discord server.
-     */
     public boolean isDiscordEnabled() {
         return this.getSection().getBoolean("discord_bot.enabled", false);
     }
@@ -144,13 +124,6 @@ public class Command implements SimpleCommand {
         return this.getCooldown() != -1L;
     }
 
-    /**
-     * Used to check if a user has exceeded the limit
-     * on using this command.
-     *
-     * @param user The instance of the user.
-     * @return True if the user has reached the limit.
-     */
     public boolean isLimited(@NotNull User user) {
 
         if (!(user instanceof PlayerUser)) return false;
@@ -237,7 +210,7 @@ public class Command implements SimpleCommand {
         return Duration.ofMillis((record.getLastExecutedTimestamp() + cooldown) - System.currentTimeMillis());
     }
 
-    public @NotNull CommandStatus onConsoleRun(@NotNull String[] arguments) {
+    private @NotNull CommandStatus onConsoleRun(@NotNull String[] arguments) {
 
         final boolean noSubCommands = this.commandType.getSubCommandTypes().isEmpty();
         final boolean noArguments = arguments.length == 0;
@@ -281,7 +254,7 @@ public class Command implements SimpleCommand {
      * @param user      The instance of the user running the command.
      * @return The command's status.
      */
-    public @NotNull CommandStatus onPlayerRun(@NotNull String[] arguments, @NotNull PlayerUser user) {
+    private @NotNull CommandStatus onPlayerRun(@NotNull String[] arguments, @NotNull PlayerUser user) {
 
         final boolean permissionExists = this.getPermission() != null;
         final boolean hasPermission = user.hasPermission(this.getPermission() == null ? "" : this.getPermission());
@@ -321,16 +294,6 @@ public class Command implements SimpleCommand {
         // Check the command cooldown.
         if (this.isOnCooldown(user)) return new CommandStatus().set(CommandStatus.Status.IS_ON_COOLDOWN);
 
-        // Play sound.
-        if (this.getSound() != null || Objects.equals(this.getSound(), "")) {
-            try {
-                if (ProtocolizeDependency.isEnabled()) SoundHelper.play(this.getSound(), user.getUuid());
-            } catch (IllegalArgumentException illegalArgumentException) {
-                Leaf.get().getLogger().warn("Invalid sound for command /" + this.getName() + " : ");
-                illegalArgumentException.printStackTrace();
-            }
-        }
-
         final boolean noSubCommands = this.commandType.getSubCommandTypes().isEmpty();
         final boolean noArguments = arguments.length == 0;
 
@@ -365,56 +328,44 @@ public class Command implements SimpleCommand {
 
     @Override
     public void execute(final Invocation invocation) {
-        final CommandSource source = invocation.source();
+        try {
 
-        if (source instanceof Player player) {
-            final PlayerUser user = new PlayerUser(player);
+            final CommandSource source = invocation.source();
 
-            try {
-
-                // Run the command as a player.
-                final CommandStatus status = this.onPlayerRun(invocation.arguments(), user);
-
-                if (status.has(CommandStatus.Status.INCORRECT_ARGUMENTS)) {
-                    user.sendMessage(Leaf.get().getMessagesConfig().incorrectArguments()
-                            .replace("%command%", this.getSyntax()));
-                }
-
-                if (status.hasOnCooldown()) {
-                    user.sendMessage(ConfigMessages.getOnCooldown()
-                            .replace("%cooldown%", this.getCooldown(user))
-                    );
-                }
-
-                String message = status.getMessage();
-                if (message == null) return;
-                user.sendMessage(message);
-
-                return;
-            } catch (Exception exception) {
-                user.sendMessage(ConfigMessages.getError());
-                MessageManager.warn("Error occurred while running command : " + this.getName());
-                exception.printStackTrace();
+            if (source instanceof Player player) {
+                this.execute(invocation.arguments(), player);
                 return;
             }
-        }
 
-        try {
             // Run the command in console.
             CommandStatus status = this.onConsoleRun(invocation.arguments());
-            if (status.hasIncorrectArguments()) {
-                MessageManager.log(ConfigMessages.getIncorrectArguments(this.getSyntax())
-                        .replace("[name]", this.getName()));
-            }
 
-            String message = status.getMessage();
+            // Get the status message.
+            final String message = status.getFirstMessage();
             if (message == null) return;
-            MessageManager.log(message);
+
+            // Send the message to console.
+            Leaf.get().getLogger().info(message);
 
         } catch (Exception exception) {
-            MessageManager.warn("Error occurred while running command : " + this.getName());
-            exception.printStackTrace();
+            throw new LeafException(exception, "execute", "Error occurred while executing command");
         }
+    }
+
+    public void execute(@NotNull String[] arguments, @NotNull Player player) {
+
+        // Create a player user.
+        final PlayerUser user = new PlayerUser(player);
+
+        // Run the command as a player.
+        final CommandStatus status = this.onPlayerRun(arguments, user);
+
+        // Get the status message.
+        final String message = status.getFirstMessage();
+        if (message == null) return;
+
+        // Send the message to the player.
+        user.sendMessage(message.replace("%command%", this.getSyntax()));
     }
 
     @Override
@@ -428,20 +379,21 @@ public class Command implements SimpleCommand {
 
     @Override
     public CompletableFuture<List<String>> suggestAsync(final Invocation invocation) {
-        CommandSource source = invocation.source();
+
+        final CommandSource source = invocation.source();
 
         // If the command runner is not a player return empty suggestions.
-        if (!(source instanceof Player)) return CompletableFuture.completedFuture(List.of());
+        if (!(source instanceof Player player)) return CompletableFuture.completedFuture(List.of());
 
-        // Get the user
-        User user = new User((Player) source);
+        // Get the player as a user.
+        PlayerUser user = new PlayerUser(player);
 
         // Get the argument index. Example: [0, 1, 2...]
         int index = invocation.arguments().length - 1;
         if (index == -1) index = 0;
 
         // Get this commands suggestions.
-        CommandSuggestions suggestions = this.getSuggestions(this.getSection(), new User((Player) source));
+        CommandSuggestions suggestions = this.commandType.getSuggestions(this.getSection(), user);
         if (suggestions == null) suggestions = new CommandSuggestions();
 
         // Add sub command types.

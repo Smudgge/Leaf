@@ -31,6 +31,10 @@ public abstract class BaseCommandType implements CommandType {
         return this;
     }
 
+    public void loadSubCommands() {
+
+    }
+
     /**
      * Checks which subcommands should be removed from the command type.
      *

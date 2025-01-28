@@ -17,7 +17,6 @@ public class PlayerRecord implements Record<PlayerRecord> {
     public static final @NotNull String NAME_FIELD = "name";
     public static final @NotNull String TOGGLE_CAN_MESSAGE_FIELD = "toggleCanMessage";
     public static final @NotNull String TOGGLE_SEE_SPY_FIELD = "toggleSeeSpy";
-    public static final @NotNull String VARIABLES_FIELD = "variables";
 
     @Primary
     @Field(UUID_FIELD)
@@ -26,7 +25,6 @@ public class PlayerRecord implements Record<PlayerRecord> {
     public @Field(NAME_FIELD) String name;
     public @Field(TOGGLE_CAN_MESSAGE_FIELD) String toggleCanMessage = null;
     public @Field(TOGGLE_SEE_SPY_FIELD) String toggleSeeSpy = null;
-    public @Field(VARIABLES_FIELD) String variables;
 
     public PlayerRecord(final @NotNull String uuid) {
         this.uuid = uuid;
@@ -62,16 +60,6 @@ public class PlayerRecord implements Record<PlayerRecord> {
         this.toggleSeeSpy = toggleSeeSpy;
         return this;
     }
-
-    public @Nullable String getVariables() {
-        return this.variables;
-    }
-
-    public @NotNull PlayerRecord setVariables(@Nullable final String variables) {
-        this.variables = variables;
-        return this;
-    }
-
     @Override
     public @NotNull ConfigurationSection convert() {
         final ConfigurationSection section = new MemoryConfigurationSection();
@@ -80,7 +68,6 @@ public class PlayerRecord implements Record<PlayerRecord> {
         section.set(NAME_FIELD, this.name);
         section.set(TOGGLE_CAN_MESSAGE_FIELD, this.toggleCanMessage);
         section.set(TOGGLE_SEE_SPY_FIELD, this.toggleSeeSpy);
-        section.set(VARIABLES_FIELD, this.variables);
 
         return section;
     }
@@ -92,7 +79,6 @@ public class PlayerRecord implements Record<PlayerRecord> {
         this.name = section.getString(NAME_FIELD);
         this.toggleCanMessage = section.getString(TOGGLE_CAN_MESSAGE_FIELD);
         this.toggleSeeSpy = section.getString(TOGGLE_SEE_SPY_FIELD);
-        this.variables = section.getString(VARIABLES_FIELD);
 
         return this;
     }

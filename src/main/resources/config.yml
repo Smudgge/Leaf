@@ -4,22 +4,37 @@
 #  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
 #   \/_____/   \/_____/   \/_/\/_/   \/_/
 #
-# Author: Smudge
 # File: config.yml
 # Last Changed: 6.0.0
 # Description: Contains general settings.
 
+# ▗▖    ▗▄▖  ▗▄▄▖ ▗▄▄▖▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖
+# ▐▌   ▐▌ ▐▌▐▌   ▐▌     █  ▐▛▚▖▐▌▐▌
+# ▐▌   ▐▌ ▐▌▐▌▝▜▌▐▌▝▜▌  █  ▐▌ ▝▜▌▐▌▝▜▌
+# ▐▙▄▄▖▝▚▄▞▘▝▚▄▞▘▝▚▄▞▘▗▄█▄▖▐▌  ▐▌▝▚▄▞▘
+#
+# ❐ Logging ❐
+#
 # Should the plugin log everything?
-# It's recommended to keep these set to true unless you are
+# It's recommended to keep these set to true except debug unless you are
 # experienced with using the leaf plugin and prefer less logging.
-# However, debug mode is mainly for developers as it logs most processes.
 logging:
   debug_mode: false
+  header: true
   b_stats: true
+  commands: true
 
+# ▗▖  ▗▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▖ ▗▖
+# ▐▌  ▐▌▐▌ ▐▌▐▛▚▖▐▌  █  ▐▌   ▐▌ ▐▌
+# ▐▌  ▐▌▐▛▀▜▌▐▌ ▝▜▌  █   ▝▀▚▖▐▛▀▜▌
+#  ▝▚▞▘ ▐▌ ▐▌▐▌  ▐▌▗▄█▄▖▗▄▄▞▘▐▌ ▐▌
+#
 # ✿ Vanish Support ✿
+#
 # The permission used to check if a player is able to vanish.
-vanish_permission: "leaf.vanishable"
+# To support almost every vanish plugin, this plugin is quite crafty.
+# It uses the tab list and the players permissions to check if they are vanished.
+vanishable_permission: "leaf.vanishable"
 
 # Sometimes a vanishable player will be on an empty server.
 # Unfortunately we cannot check if the player is vanished or not.
@@ -29,21 +44,43 @@ vanish_permission: "leaf.vanishable"
 # vanishable players regardless of the rank.
 #
 # Defaults to false.
-vanishable_can_see_vanishable: false
+can_vanishable_see_vanishable: false
 
-# ⚾︎ Server Brand ⚾︎
-# ping: Used to customise result of the ping command.
-# in_game: Used to customise the text shown in F3.
-#          This does not work on velocity 3.3+
-brand:
-  ping:
-    enabled: false
-    brand: "&aLeaf <version>&r"
-  in_game:
-    enabled: false
-    brand: "&aLeaf <version>&r"
-
+# ▗▄▄▄ ▗▄▄▄▖ ▗▄▄▖ ▗▄▄▖ ▗▄▖ ▗▄▄▖ ▗▄▄▄
+# ▐▌  █  █  ▐▌   ▐▌   ▐▌ ▐▌▐▌ ▐▌▐▌  █
+# ▐▌  █  █   ▝▀▚▖▐▌   ▐▌ ▐▌▐▛▀▚▖▐▌  █
+# ▐▙▄▄▀▗▄█▄▖▗▄▄▞▘▝▚▄▄▖▝▚▄▞▘▐▌ ▐▌▐▙▄▄▀
+#
 # ☁︎ Discord bot support ☁︎
+#
 # Paste your discord bot token in here and restart the
 # proxy server to enable discord bot support.
 discord_token: ""
+
+# ▗▄▄▖ ▗▄▄▖  ▗▄▖ ▗▖  ▗▖▗▄▄▄
+# ▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌  █
+# ▐▛▀▚▖▐▛▀▚▖▐▛▀▜▌▐▌ ▝▜▌▐▌  █
+# ▐▙▄▞▘▐▌ ▐▌▐▌ ▐▌▐▌  ▐▌▐▙▄▄▀
+#
+# ⚾︎ Server Brand ⚾︎
+#
+# ping: Used to customise result of the ping command.
+ping:
+  enabled: false
+  brand: "&aLeaf <version>&r"
+
+# ▗▖ ▗▖▗▖ ▗▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖▗▖   ▗▄▄▄▖ ▗▄▄▖▗▄▄▄▖
+# ▐▌ ▐▌▐▌ ▐▌  █    █  ▐▌   ▐▌     █  ▐▌     █
+# ▐▌ ▐▌▐▛▀▜▌  █    █  ▐▛▀▀▘▐▌     █   ▝▀▚▖  █
+# ▐▙█▟▌▐▌ ▐▌▗▄█▄▖  █  ▐▙▄▄▖▐▙▄▄▖▗▄█▄▖▗▄▄▞▘  █
+#
+# ✓ Simple Whitelist ✓
+#
+# Contains the players that are whitelisted on this server.
+# The list can contain the players name, when they log on it
+# will be converted to there uuid. Uuids don't change when players
+# change there minecraft names.
+whitelist:
+  enabled: false
+  reason: "&fYou are not &cwhitelisted &fon this server."
+  players: []

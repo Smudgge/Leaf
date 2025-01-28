@@ -15,7 +15,19 @@ public class Config extends YamlConfiguration {
         return this.getBoolean("logging.debug_mode");
     }
 
+    public boolean shouldLogHeader() {
+        return this.getBoolean("logging.header");
+    }
+
     public boolean shouldLogBStats() {
         return this.getBoolean("logging.b_stats");
+    }
+
+    public @NotNull String getVanishablePermission() {
+        return this.getString("vanishable_permission", "leaf.vanishable");
+    }
+
+    public boolean canVanishableSeeVanishable() {
+        return this.getBoolean("can_vanishable_see_vanishable");
     }
 }

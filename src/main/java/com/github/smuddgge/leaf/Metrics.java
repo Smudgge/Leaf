@@ -38,6 +38,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * This is b-stats.
+ * Lets us see how many people use the plugin and versions ect.
+ */
 public class Metrics {
 
     /**

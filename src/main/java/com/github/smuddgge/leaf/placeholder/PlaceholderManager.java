@@ -47,9 +47,7 @@ public class PlaceholderManager {
         }
 
         this.placeholderList.add(placeholder);
-        logger.info("&aRegistered &7%placeholder%"
-                .replace("%placeholder%", placeholder.asString())
-        );
+        logger.info("&aRegistered &7" + placeholder.asString());
         return this;
     }
 
@@ -114,7 +112,7 @@ public class PlaceholderManager {
         return string;
     }
 
-    public @NotNull Component parseMiniMessage(String message, @Nullable Player player) {
+    private @NotNull Component parseMiniMessage(String message, @Nullable Player player) {
 
         // Check if the mini placeholders dependency is disabled.
         if (!MiniPlaceholdersDependency.isEnabled()) {
@@ -124,7 +122,7 @@ public class PlaceholderManager {
         return MiniPlaceholdersAdapter.parseMiniPlaceholders(message, player);
     }
 
-    public @NotNull String convertLegacyHexToMiniMessage(@NotNull String message) {
+    private @NotNull String convertLegacyHexToMiniMessage(@NotNull String message) {
         final StringBuilder builder = new StringBuilder(
                 message.replace("&#", "<#")
         );
@@ -139,6 +137,37 @@ public class PlaceholderManager {
         return builder.toString();
     }
 
+    private @NotNull String convertLegacyToMiniMessage(@NotNull String message) {
+        return this.convertLegacyHexToMiniMessage(message)
+                .replace("§", "&") // Ensure there are no legacy symbols.
+                .replace("&0", "<reset><black>")
+                .replace("&1", "<reset><dark_blue>")
+                .replace("&2", "<reset><dark_green>")
+                .replace("&3", "<reset><dark_aqua>")
+                .replace("&4", "<reset><dark_red>")
+                .replace("&5", "<reset><dark_purple>")
+                .replace("&6", "<reset><gold>")
+                .replace("&7", "<reset><gray>")
+                .replace("&8", "<reset><dark_gray>")
+                .replace("&9", "<reset><blue>")
+                .replace("&a", "<reset><green>")
+                .replace("&b", "<reset><aqua>")
+                .replace("&c", "<reset><red>")
+                .replace("&d", "<reset><light_purple>")
+                .replace("&e", "<reset><yellow>")
+                .replace("&f", "<reset><white>")
+                .replace("&k", "<obf>")
+                .replace("&l", "<b>")
+                .replace("&m", "<st>")
+                .replace("&n", "<u>")
+                .replace("&o", "<i>")
+                .replace("&r", "<reset>");
+    }
+
+    public @NotNull Component parse(@NotNull String string) {
+        return this.parse(string, (User) null);
+    }
+
     public @NotNull Component parse(@NotNull String string, @Nullable User user) {
         if (user instanceof PlayerUser player) return this.parse(string, player.getPlayer());
         return this.parse(string, (Player) null);
@@ -147,34 +176,20 @@ public class PlaceholderManager {
     public @NotNull Component parse(@NotNull String string, @Nullable Player player) {
         try {
 
-            String legacyString = this.convertLegacyHexToMiniMessage(string)
-                    .replace("§", "&") // Ensure there are no legacy symbols.
-                    .replace("&0", "<reset><black>")
-                    .replace("&1", "<reset><dark_blue>")
-                    .replace("&2", "<reset><dark_green>")
-                    .replace("&3", "<reset><dark_aqua>")
-                    .replace("&4", "<reset><dark_red>")
-                    .replace("&5", "<reset><dark_purple>")
-                    .replace("&6", "<reset><gold>")
-                    .replace("&7", "<reset><gray>")
-                    .replace("&8", "<reset><dark_gray>")
-                    .replace("&9", "<reset><blue>")
-                    .replace("&a", "<reset><green>")
-                    .replace("&b", "<reset><aqua>")
-                    .replace("&c", "<reset><red>")
-                    .replace("&d", "<reset><light_purple>")
-                    .replace("&e", "<reset><yellow>")
-                    .replace("&f", "<reset><white>")
-                    .replace("&k", "<obf>")
-                    .replace("&l", "<b>")
-                    .replace("&m", "<st>")
-                    .replace("&n", "<u>")
-                    .replace("&o", "<i>")
-                    .replace("&r", "<reset>");
-
+            String legacyString = this.convertLegacyToMiniMessage(string);
             String leafPlaceholderString = this.parseLeafPlaceholders(legacyString, player != null ? new PlayerUser(player) : null);
-
             return this.parseMiniMessage(leafPlaceholderString, player);
+
+        } catch (Exception exception) {
+            throw new LeafException(exception, "parse", "Failed to convert message &f\"" + string + "\"");
+        }
+    }
+
+    public @NotNull Component parseColorsOnly(@NotNull String string) {
+        try {
+
+            String legacyString = this.convertLegacyToMiniMessage(string);
+            return this.parseMiniMessage(legacyString, null);
 
         } catch (Exception exception) {
             throw new LeafException(exception, "parse", "Failed to convert message &f\"" + string + "\"");

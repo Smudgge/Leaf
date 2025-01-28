@@ -1,8 +1,8 @@
 package com.github.smuddgge.leaf.command;
 
-import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.utility.PlayerUtility;
-import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
+import com.github.smuddgge.leaf.helper.PlayerHelper;
+import com.github.smuddgge.leaf.user.PlayerUser;
+import com.github.squishylib.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,33 +17,16 @@ public class CommandSuggestions {
     private final List<List<String>> data = new ArrayList<>();
     private boolean isContinuous = false;
 
-    /**
-     * Used to append the next suggestion list.
-     *
-     * @param list Instance of a list.
-     * @return This instance.
-     */
     public CommandSuggestions append(List<String> list) {
         this.data.add(list);
         return this;
     }
 
-    /**
-     * Used to append the next suggestion list.
-     *
-     * @param list Instance of a string array.
-     * @return This instance.
-     */
     public CommandSuggestions append(String[] list) {
         this.data.add(new ArrayList<>(Arrays.stream(list).toList()));
         return this;
     }
 
-    /**
-     * Append something to the first tab item.
-     *
-     * @param string The string.
-     */
     public void appendBase(String string) {
         if (this.data.isEmpty()) {
             this.data.add(new ArrayList<>(Arrays.stream(new String[]{string}).toList()));
@@ -52,11 +35,6 @@ public class CommandSuggestions {
         this.data.get(0).add(string);
     }
 
-    /**
-     * Append a list of suggestions to the first tab item.
-     *
-     * @param strings A list of strings.
-     */
     public void appendBase(List<String> strings) {
         if (this.data.isEmpty()) {
             this.data.add(strings);
@@ -65,11 +43,6 @@ public class CommandSuggestions {
         this.data.get(0).addAll(strings);
     }
 
-    /**
-     * Used to get the suggestions.
-     *
-     * @return The suggestions as a 3D list.
-     */
     public List<List<String>> get() {
         return this.data;
     }
@@ -80,7 +53,7 @@ public class CommandSuggestions {
      * @return This instance.
      */
     public CommandSuggestions appendPlayers() {
-        this.data.add(PlayerUtility.getPlayers());
+        this.data.add(PlayerHelper.getPlayers());
         return this;
     }
 
@@ -92,8 +65,8 @@ public class CommandSuggestions {
      * @param user The user to check if they are able to vanish.
      * @return This instance
      */
-    public CommandSuggestions appendPlayers(User user) {
-        this.data.add(PlayerUtility.getPlayers(user));
+    public CommandSuggestions appendPlayers(PlayerUser user) {
+        this.data.add(PlayerHelper.getPlayers(user));
         return this;
     }
 
@@ -104,7 +77,7 @@ public class CommandSuggestions {
      * @return This instance.
      */
     public CommandSuggestions appendPlayersRaw() {
-        this.data.add(PlayerUtility.getPlayersRaw());
+        this.data.add(PlayerHelper.getPlayersRaw());
         return this;
     }
 
@@ -114,7 +87,7 @@ public class CommandSuggestions {
      * @return This instance
      */
     public CommandSuggestions appendDatabasePlayers() {
-        this.data.add(PlayerUtility.getDatabasePlayers());
+        this.data.add(PlayerHelper.getDatabasePlayers());
         return this;
     }
 
@@ -124,8 +97,8 @@ public class CommandSuggestions {
      * @param user The instance of the user.
      * @return This instance.
      */
-    public CommandSuggestions appendFriends(User user) {
-        this.data.add(PlayerUtility.getFriends(user));
+    public CommandSuggestions appendFriends(PlayerUser user) {
+        this.data.add(PlayerHelper.getFriends(user));
         return this;
     }
 
@@ -150,15 +123,15 @@ public class CommandSuggestions {
     }
 
     /**
-     * Used to add a subcommands names and suggestions to this
-     * commands suggestions.
+     * Used to add a subcommands names and suggestions to
+     * these commands suggestions.
      *
      * @param subCommandTypes The subcommand types of the command.
      * @param section         The configuration section of the command.
      * @param arguments       The arguments suggested.
      * @param user            The instance of the user executing the command.
      */
-    public void appendSubCommandTypes(List<CommandType> subCommandTypes, ConfigurationSection section, String[] arguments, User user) {
+    public void appendSubCommandTypes(List<CommandType> subCommandTypes, ConfigurationSection section, String[] arguments, PlayerUser user) {
         for (CommandType commandType : subCommandTypes) {
 
             ConfigurationSection commandSection = section.getSection(commandType.getIdentifier());
