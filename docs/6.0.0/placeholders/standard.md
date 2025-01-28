@@ -1,11 +1,14 @@
 ---
-description: Placeholders already made for you that are useable anywere!
+description: Placeholders that are already made for you.
 cover: >-
-  https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHwxfHxtb3VudGFpbnxlbnwwfHx8fDE3MzgwOTgwOTN8MA&ixlib=rb-4.0.3&q=85
+  https://images.unsplash.com/photo-1568051864106-6c9b883e24a6?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw3fHxyb2NrfGVufDB8fHx8MTczODA5ODMyMHww&ixlib=rb-4.0.3&q=85
 coverY: 0
 ---
 
 # Standard
 
-<table><thead><tr><th width="408">Placeholder</th><th width="291">Description</th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
+{% hint style="info" %}
+Some placeholders have multiple names you can choose from.
+{% endhint %}
 
+<table><thead><tr><th width="310">Placeholder Name</th><th valign="middle">Description</th></tr></thead><tbody><tr><td>&#x3C;player_name> &#x3C;player> &#x3C;name></td><td valign="middle">The player's name.</td></tr><tr><td>&#x3C;player_uuid> &#x3C;uuid></td><td valign="middle">The player's uuid.</td></tr><tr><td>&#x3C;player_server> &#x3C;server></td><td valign="middle">The server the player is connected to.</td></tr><tr><td>&#x3C;player_vanished> &#x3C;vanished></td><td valign="middle"><code>"true"</code> if the player is hidden with a vanish plugin, otherwise <code>"false"</code>.</td></tr><tr><td>&#x3C;player_ping> &#x3C;ping></td><td valign="middle">The player's ping. (milliseconds)</td></tr><tr><td>&#x3C;leaf_version> &#x3C;version></td><td valign="middle">The version of the leaf plugin.</td></tr><tr><td>&#x3C;velocity_version></td><td valign="middle">The version of velocity the proxy is running.</td></tr></tbody></table>

@@ -5,3 +5,4 @@
 ## Placeholders
 
 * [Standard](placeholders/standard.md)
+* [Custom](placeholders/custom.md)
