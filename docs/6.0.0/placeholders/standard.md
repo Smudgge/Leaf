@@ -1,7 +1,7 @@
 ---
 description: Placeholders that are already made for you.
 cover: >-
-  https://images.unsplash.com/photo-1568051864106-6c9b883e24a6?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw3fHxyb2NrfGVufDB8fHx8MTczODA5ODMyMHww&ixlib=rb-4.0.3&q=85
+  https://images.unsplash.com/photo-1629246479981-457f396bb41d?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHwxMHx8cm9ja3xlbnwwfHx8fDE3MzgwOTgzMjB8MA&ixlib=rb-4.0.3&q=85
 coverY: 0
 ---
 

@@ -1,6 +1,12 @@
+---
+cover: >-
+  https://images.unsplash.com/photo-1554322662-5b660295377d?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw4fHxyb2NrfGVufDB8fHx8MTczODA5ODMyMHww&ixlib=rb-4.0.3&q=85
+coverY: 0
+---
+
 # Custom
 
-{% hint style="success" %}
+{% hint style="info" %}
 Create your own placeholders by adding configuration to the placeholder folder.
 {% endhint %}
 
@@ -44,3 +50,24 @@ Therefore, if the player has the permission `leaf.rank.admin` it will return `&c
 {% endtab %}
 {% endtabs %}
 
+## Copy and Paste Examples
+
+{% code title="Diff color when vanished" %}
+```yaml
+vanish_colour:
+  condition: "MATCH:<vanished>"
+  options:
+    "true": "&#c0fce6"
+    "false": "&#ffffee"
+```
+{% endcode %}
+
+{% code title="Server name with color" %}
+```yaml
+server_formatted:
+  condition: "MATCH:<server>"
+  options:
+    Default: "&f&l<server>"
+    "TestingServer": "&e&lTest Server"
+```
+{% endcode %}
