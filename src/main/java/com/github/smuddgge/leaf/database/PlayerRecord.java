@@ -60,6 +60,7 @@ public class PlayerRecord implements Record<PlayerRecord> {
         this.toggleSeeSpy = toggleSeeSpy;
         return this;
     }
+
     @Override
     public @NotNull ConfigurationSection convert() {
         final ConfigurationSection section = new MemoryConfigurationSection();

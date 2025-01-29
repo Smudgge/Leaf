@@ -108,7 +108,8 @@ public class PlaceholderManager {
         }
 
         // Check if there are still placeholders to parse.
-        if (this.stringContainsPlaceholder(string)) return this.parseLeafPlaceholders(string, user, maxDepth, currentDepth + 1);
+        if (this.stringContainsPlaceholder(string))
+            return this.parseLeafPlaceholders(string, user, maxDepth, currentDepth + 1);
         return string;
     }
 

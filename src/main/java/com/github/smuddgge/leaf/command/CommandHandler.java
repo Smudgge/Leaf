@@ -2,16 +2,13 @@ package com.github.smuddgge.leaf.command;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.logger.Logger;
-import com.github.smuddgge.leaf.user.PlayerUser;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.proxy.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Contains all the active commands.

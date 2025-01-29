@@ -3,7 +3,6 @@ package com.github.smuddgge.leaf.command.type;
 import com.github.smuddgge.leaf.command.BaseCommandType;
 import com.github.smuddgge.leaf.command.CommandStatus;
 import com.github.smuddgge.leaf.command.CommandSuggestions;
-import com.github.smuddgge.leaf.command.CommandType;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.smuddgge.leaf.user.User;
 import com.github.squishylib.configuration.ConfigurationSection;

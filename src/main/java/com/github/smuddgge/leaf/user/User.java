@@ -19,8 +19,18 @@ public interface User {
 
     long getPing();
 
+    /**
+     * This will also parse placeholders and colors.
+     *
+     * @param message The message to send to the user.
+     */
     void sendMessage(@NotNull String message);
 
+    /**
+     * This will also parse placeholders and colors.
+     *
+     * @param messageList The lines of a message to send to the user.
+     */
     void sendMessage(@NotNull List<String> messageList);
 
     boolean isVanished();
@@ -29,6 +39,13 @@ public interface User {
 
     boolean hasPermission(@NotNull String permission);
 
+    /**
+     * Has every single permission within a
+     * list of permissions.
+     *
+     * @param permissionList
+     * @return
+     */
     default boolean hasPermission(@NotNull List<String> permissionList) {
         for (String permission : permissionList) {
             if (!this.hasPermission(permission)) return false;

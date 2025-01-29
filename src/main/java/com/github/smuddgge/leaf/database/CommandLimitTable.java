@@ -1,9 +1,7 @@
 package com.github.smuddgge.leaf.database;
 
-import com.github.squishylib.database.Query;
 import com.github.squishylib.database.Table;
 import com.github.squishylib.database.field.RecordFieldPool;
-import net.dv8tion.jda.api.entities.Member;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandLimitTable extends Table<CommandLimitRecord> {

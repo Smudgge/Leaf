@@ -114,16 +114,16 @@ public class Leaf {
             final String condensed = "Starting Leaf V&b%s".formatted(version);
 
             final String message = """
-                &7
-                &a __         ______     ______     ______
-                &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\
-                &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\
-                &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\
-                &a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/
-                &7
-                      &7By Smudge    Version &b%s
-                &7
-                """.formatted(version);
+                    &7
+                    &a __         ______     ______     ______
+                    &a/\\ \\       /\\  ___\\   /\\  __ \\   /\\  ___\\
+                    &a\\ \\ \\____  \\ \\  __\\   \\ \\  __ \\  \\ \\  __\\
+                    &a \\ \\_____\\  \\ \\_____\\  \\ \\_\\ \\_\\  \\ \\_\\
+                    &a  \\/_____/   \\/_____/   \\/_/\\/_/   \\/_/
+                    &7
+                          &7By Smudge    Version &b%s
+                    &7
+                    """.formatted(version);
 
             // Should we log the big header or the condensed version?
             if (this.getConfig().shouldLogHeader()) this.logger.info(message);

@@ -3,7 +3,6 @@ package com.github.smuddgge.leaf.database;
 import com.github.squishylib.configuration.ConfigurationSection;
 import com.github.squishylib.configuration.implementation.MemoryConfigurationSection;
 import com.github.squishylib.database.Record;
-import com.github.squishylib.database.Table;
 import com.github.squishylib.database.annotation.Field;
 import com.github.squishylib.database.annotation.Primary;
 import net.dv8tion.jda.api.entities.Member;
