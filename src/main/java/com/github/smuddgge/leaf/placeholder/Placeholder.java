@@ -85,7 +85,7 @@ public interface Placeholder {
      * @param user Optional argument of a user to get context of.
      * @return The current value or null if no value.
      */
-    @Nullable String getValue(@Nullable User user);
+    @Nullable String getValue(@Nullable User user, @NotNull String string);
 
     /**
      * Get the placeholder names as formatted strings.
@@ -105,14 +105,14 @@ public interface Placeholder {
     }
 
     /**
-     * Checks if the string contains the name or any of the aliases.
+     * Checks if the string contains this placeholder.
      *
      * @param string The string to check.
      * @return True if the string contains one of the names.
      */
     default boolean isIn(@NotNull String string) {
-        for (String formattedIdentifier : this.getFormattedNameList()) {
-            if (string.contains(formattedIdentifier)) return true;
+        for (String name : this.getNameList()) {
+            if (string.contains(this.getType().getPrefix() + name)) return true;
         }
         return false;
     }
@@ -140,10 +140,27 @@ public interface Placeholder {
      * @return The parsed string.
      */
     default @NotNull String parse(@NotNull String string, @Nullable User user) {
-        final String result = this.getValue(user);
-        for (String identifier : this.getFormattedNameList()) {
-            string = string.replace(identifier, result == null ? "null" : result);
+
+        // Loop though the placeholders names.
+        for (String name : this.getNameList()) {
+
+            // Attempt to get the index of the first occurrence in the string.
+            final int index = string.indexOf(this.getType().getPrefix() + name);
+            if (index == -1) continue;
+
+            // Get the placeholder by its self.
+            final String chopped = string.substring(index);
+            final int endIndex = chopped.indexOf(this.getType().getSuffix());
+            final String placeholder = chopped.substring(0, endIndex);
+
+            // Get the result of this placeholder.
+            final String result = this.getValue(user, placeholder);
+
+            string = string.replace(placeholder, result == null ? "null" : result);
         }
+
+        // Check if this placeholder still exists in the string.
+        if (this.isIn(string)) return this.parse(string, user);
         return string;
     }
 }

@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.user;
 
 import com.github.smuddgge.leaf.Leaf;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 public class PlayerUser implements User {
 
-    private final Player player;
+    private final @NotNull Player player;
 
     public PlayerUser(@NotNull final Player player) {
         this.player = player;
@@ -23,27 +24,31 @@ public class PlayerUser implements User {
 
     @Override
     public @NotNull UUID getUuid() {
-        return null;
+        return this.player.getUniqueId();
     }
 
     @Override
     public @NotNull String getName() {
-        return "";
+        return this.player.getUsername();
     }
 
     @Override
     public @Nullable RegisteredServer getServer() {
-        return null;
+        final ServerConnection connection =  this.player.getCurrentServer().orElse(null);
+        if (connection == null) return null;
+        return connection.getServer();
     }
 
     @Override
     public @Nullable String getServerName() {
-        return "";
+        final RegisteredServer server = this.getServer();
+        if (server == null) return null;
+        return server.getServerInfo().getName();
     }
 
     @Override
     public long getPing() {
-        return 0;
+        return this.player.getPing();
     }
 
     @Override
