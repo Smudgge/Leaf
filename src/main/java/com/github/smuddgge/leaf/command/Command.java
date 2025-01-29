@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.database.CommandCooldownRecord;
 import com.github.smuddgge.leaf.database.CommandCooldownTable;
 import com.github.smuddgge.leaf.database.CommandLimitRecord;
 import com.github.smuddgge.leaf.database.CommandLimitTable;
+import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.user.ConsoleUser;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.smuddgge.leaf.user.User;
@@ -254,7 +255,9 @@ public class Command implements SimpleCommand {
      * @param user      The instance of the user running the command.
      * @return The command's status.
      */
-    private @NotNull CommandStatus onPlayerRun(@NotNull String[] arguments, @NotNull PlayerUser user) {
+    private @NotNull CommandStatus onPlayerRun(@NotNull String[] arguments, @NotNull PlayerUser user, String alias) {
+
+        Leaf.get().getLogger().optional(Logger.Opt.COMMAND_RUN, "[Commands] " + user.getName() + " ran /" + alias + " " + String.join(" ", arguments));
 
         final boolean permissionExists = this.getPermission() != null;
         final boolean hasPermission = user.hasPermission(this.getPermission() == null ? "" : this.getPermission());
@@ -333,7 +336,7 @@ public class Command implements SimpleCommand {
             final CommandSource source = invocation.source();
 
             if (source instanceof Player player) {
-                this.execute(invocation.arguments(), player);
+                this.execute(invocation.arguments(), player, invocation.alias());
                 return;
             }
 
@@ -348,17 +351,17 @@ public class Command implements SimpleCommand {
             Leaf.get().getLogger().info(message);
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "execute", "Error occurred while executing command");
+            throw new LeafException(exception, "Command.execute(invocation)", "Error occurred while executing command &c" + invocation.alias() + "&f.", null);
         }
     }
 
-    public void execute(@NotNull String[] arguments, @NotNull Player player) {
+    public void execute(@NotNull String[] arguments, @NotNull Player player, String alias) {
 
         // Create a player user.
         final PlayerUser user = new PlayerUser(player);
 
         // Run the command as a player.
-        final CommandStatus status = this.onPlayerRun(arguments, user);
+        final CommandStatus status = this.onPlayerRun(arguments, user, alias);
 
         // Get the status message.
         final String message = status.getFirstMessage();

@@ -22,7 +22,7 @@ public class LeafVersionPlaceholder implements Placeholder {
     }
 
     @Override
-    public @Nullable String getValue(@Nullable User user) {
+    public @Nullable String getValue(@Nullable User user, @NotNull String string) {
         return Leaf.class.getAnnotation(Plugin.class).version();
     }
 }

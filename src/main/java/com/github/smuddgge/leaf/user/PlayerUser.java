@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,12 +54,14 @@ public class PlayerUser implements User {
 
     @Override
     public void sendMessage(@NotNull String message) {
-
+        final Component component = Leaf.get().getPlaceholderManager().parse(message, this.player);
+        this.player.sendMessage(component);
     }
 
     @Override
     public void sendMessage(@NotNull List<String> messageList) {
-
+        final Component component = Leaf.get().getPlaceholderManager().parse(String.join("\n", messageList), this.player);
+        this.player.sendMessage(component);
     }
 
     @Override

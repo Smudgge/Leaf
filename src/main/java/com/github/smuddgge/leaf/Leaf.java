@@ -130,7 +130,7 @@ public class Leaf {
             else this.logger.info(condensed);
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "logHeader", "Failed to log the header message.");
+            throw new LeafException(exception, "Leaf.logHeader()", "Failed to log the header message.", null);
         }
     }
 
@@ -139,7 +139,7 @@ public class Leaf {
             this.metricsFactory.make(this, 17381);
             this.logger.optional(Logger.Opt.B_STATS, "[b-stats] Enabled");
         } catch (Exception exception) {
-            throw new LeafException(exception, "setupBStats",
+            throw new LeafException(exception, "Leaf.setupBStats()",
                     "Failed to initialise b stats.",
                     "Please attempt to restart your proxy server. If this error still occurs please report it to the developer."
             );
@@ -190,7 +190,7 @@ public class Leaf {
             this.eventDirectory.load(false);
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "setupConfigurationAndDirectories", "Failed to initialise config files and directories.");
+            throw new LeafException(exception, "Leaf.setupConfigurationAndDirectories()", "Failed to initialise config files and directories.", null);
         }
     }
 
@@ -221,18 +221,22 @@ public class Leaf {
             this.database.createTable(new PlayerTable());
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "setupDatabase", "Failed to initialise the database.");
+            throw new LeafException(exception, "Leaf.setupDatabase()", "Failed to initialise the database.", null);
         }
     }
 
     private void setupPlaceholders() {
 
-        this.placeholderManager.register(new LeafVersionPlaceholder());
         this.placeholderManager.register(new PlayerPingPlaceholder());
         this.placeholderManager.register(new PlayerPlaceholder());
         this.placeholderManager.register(new PlayerServerPlaceholder());
         this.placeholderManager.register(new PlayerUuidPlaceholder());
         this.placeholderManager.register(new PlayerVanishedPlaceholder());
+
+        this.placeholderManager.register(new DisplayTitlePlaceholder());
+        this.placeholderManager.register(new DisplaySubTitlePlaceholder());
+
+        this.placeholderManager.register(new LeafVersionPlaceholder());
         this.placeholderManager.register(new VelocityVersionPlaceholder());
 
         this.registerCustomPlaceholders();
@@ -269,7 +273,7 @@ public class Leaf {
 
         // Unregister the current registered commands.
         this.commandHandler.unregisterCommands();
-        this.logger.optional(Logger.Opt.COMMANDS, "[Commands] Unregistered Commands");
+        this.logger.optional(Logger.Opt.COMMAND_REGISTERED, "[Commands] Unregistered Commands");
 
         for (final String identifier : this.commandsDirectory.getKeys()) {
 

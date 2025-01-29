@@ -20,7 +20,7 @@ public class PlayerPingPlaceholder implements Placeholder {
     }
 
     @Override
-    public @Nullable String getValue(@Nullable User user) {
+    public @Nullable String getValue(@Nullable User user, @NotNull String string) {
         return user != null ? String.valueOf(user.getPing()) : null;
     }
 }

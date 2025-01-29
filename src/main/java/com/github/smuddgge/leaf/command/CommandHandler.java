@@ -72,7 +72,7 @@ public class CommandHandler {
 
             // Check if command is enabled
             if (!command.isEnabled()) {
-                logger.optional(Logger.Opt.COMMANDS, command.getIdentifier() + " is disabled in the configuration file.");
+                logger.optional(Logger.Opt.COMMAND_REGISTERED, command.getIdentifier() + " is disabled in the configuration file.");
                 continue;
             }
 
@@ -83,7 +83,7 @@ public class CommandHandler {
             }
 
             // Log enable message.
-            logger.optional(Logger.Opt.COMMANDS, "&aEnabling &7" + command.getIdentifier());
+            logger.optional(Logger.Opt.COMMAND_REGISTERED, "&aEnabling &7" + command.getIdentifier());
 
             // Load subcommands.
             command.getCommandType().loadSubCommands();
@@ -159,7 +159,7 @@ public class CommandHandler {
         if (command == null) return;
 
         // Execute the command as a player.
-        command.execute(arguments, player);
+        command.execute(arguments, player, name);
     }
 
     public boolean isEmpty() {

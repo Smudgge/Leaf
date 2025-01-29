@@ -1,23 +1,38 @@
 package com.github.smuddgge.leaf;
 
+import com.github.smuddgge.leaf.logger.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LeafException extends RuntimeException {
 
-    public LeafException(@Nullable Exception exception, @NotNull final String methodName, @NotNull final String cause, @NotNull final String helpMessage) {
-        super(cause, exception);
-    }
+    public static long lastErrorTimeStamp;
 
-    public LeafException(@NotNull final String methodName, @NotNull final String cause, @NotNull final String helpMessage) {
-        this(null, methodName, cause, helpMessage);
-    }
+    /**
+     *
+     * @param exception The optional instance of the exception.
+     * @param source For example: Leaf.get()
+     * @param reason If there is a specific reason.
+     * @param helpMessage A way of solving the problem.
+     */
+    public LeafException(@Nullable Exception exception, @NotNull final String source, @Nullable final String reason, @Nullable final String... helpMessage) {
 
-    public LeafException(@Nullable Exception exception, @NotNull final String methodName, @NotNull final String cause) {
-        this(exception, methodName, cause, "This is a unexpected error, please report it to the developer.");
-    }
+        // Stop lots of errors.
+        // Solve the first one first.
+        if (lastErrorTimeStamp != -1 && System.currentTimeMillis() - lastErrorTimeStamp < 100) {
+            return;
+        }
 
-    public LeafException(@NotNull final String methodName, @NotNull final String cause) {
-        this(null, methodName, cause, "This is a unexpected error, please report it to the developer.");
+        lastErrorTimeStamp = System.currentTimeMillis();
+
+        Logger logger = Leaf.get().getLogger();
+        logger.error("source: &f" + source);
+        if (reason != null) logger.error("reason: &f" + reason);
+        if (helpMessage != null) logger.error("&7" + String.join("\n&7", helpMessage));
+        logger.error("&c");
+
+        for (StackTraceElement element : exception.getStackTrace()) {
+            logger.error("[Trace] " + element.toString());
+        }
     }
 }

@@ -65,7 +65,7 @@ public class CustomPlaceholder implements Placeholder {
     }
 
     @Override
-    public @Nullable String getValue(@Nullable User user) {
+    public @Nullable String getValue(@Nullable User user, @NotNull String string) {
 
         // Is the placeholder hard coded to a value?
         final String value = Leaf.get().getPlaceholdersDirectory()

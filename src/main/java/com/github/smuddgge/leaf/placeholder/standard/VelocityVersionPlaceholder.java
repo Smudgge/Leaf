@@ -21,7 +21,7 @@ public class VelocityVersionPlaceholder implements Placeholder {
     }
 
     @Override
-    public @Nullable String getValue(@Nullable User user) {
+    public @Nullable String getValue(@Nullable User user, @NotNull String string) {
         return Leaf.get().getProxyServer().getVersion().getVersion();
     }
 }

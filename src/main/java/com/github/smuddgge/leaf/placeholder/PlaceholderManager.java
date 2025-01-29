@@ -182,7 +182,7 @@ public class PlaceholderManager {
             return this.parseMiniMessage(leafPlaceholderString, player);
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "parse", "Failed to convert message &f\"" + string + "\"");
+            throw new LeafException(exception, "PlaceholderManager.parse(string, user)", "Failed to convert message &f\"" + string + "\"", null);
         }
     }
 
@@ -193,7 +193,7 @@ public class PlaceholderManager {
             return this.parseMiniMessage(legacyString, null);
 
         } catch (Exception exception) {
-            throw new LeafException(exception, "parse", "Failed to convert message &f\"" + string + "\"");
+            throw new LeafException(exception, "PlaceholderManager.parse(string)", "Failed to convert message &f\"" + string + "\"", null);
         }
     }
 }

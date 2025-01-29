@@ -151,7 +151,7 @@ public interface Placeholder {
             // Get the placeholder by its self.
             final String chopped = string.substring(index);
             final int endIndex = chopped.indexOf(this.getType().getSuffix());
-            final String placeholder = chopped.substring(0, endIndex);
+            final String placeholder = chopped.substring(0, endIndex + 1);
 
             // Get the result of this placeholder.
             final String result = this.getValue(user, placeholder);

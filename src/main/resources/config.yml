@@ -22,7 +22,9 @@ logging:
   debug_mode: false
   header: true
   b_stats: true
-  commands: true
+  command_registered: true
+  command_run: true
+
 
 # ▗▖  ▗▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▖ ▗▖
 # ▐▌  ▐▌▐▌ ▐▌▐▛▚▖▐▌  █  ▐▌   ▐▌ ▐▌
