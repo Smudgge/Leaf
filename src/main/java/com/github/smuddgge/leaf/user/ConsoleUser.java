@@ -12,12 +12,12 @@ public class ConsoleUser implements User {
 
     @Override
     public @NotNull UUID getUuid() {
-        return null;
+        return UUID.randomUUID();
     }
 
     @Override
     public @NotNull String getName() {
-        return "";
+        return "Console";
     }
 
     @Override
@@ -27,7 +27,7 @@ public class ConsoleUser implements User {
 
     @Override
     public @Nullable String getServerName() {
-        return "";
+        return null;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ConsoleUser implements User {
 
     @Override
     public boolean isVanished() {
-        return false;
+        return true;
     }
 
     @Override
@@ -61,6 +61,6 @@ public class ConsoleUser implements User {
 
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return false;
+        return true;
     }
 }

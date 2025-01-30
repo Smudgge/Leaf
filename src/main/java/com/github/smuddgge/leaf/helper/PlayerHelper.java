@@ -8,10 +8,13 @@ import com.github.smuddgge.leaf.database.PlayerTable;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.squishylib.database.Query;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PlayerHelper {
 
@@ -111,5 +114,21 @@ public class PlayerHelper {
         }
 
         return friendNameList;
+    }
+
+    /**
+     * Get a player that is unable to vanish on a specific server.
+     *
+     * @param server The server.
+     * @return A random player that is unable to vanish.
+     */
+    public static @Nullable Player getNotVanishablePlayer(@NotNull RegisteredServer server) {
+        for (final Player player : server.getPlayersConnected()) {
+            final PlayerUser user = new PlayerUser(player);
+
+            if (user.isNotVanishable()) return player;
+        }
+
+        return null;
     }
 }

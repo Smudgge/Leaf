@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.user;
 
 import com.github.smuddgge.leaf.Leaf;
+import com.github.smuddgge.leaf.helper.PlayerHelper;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -66,7 +67,23 @@ public class PlayerUser implements User {
 
     @Override
     public boolean isVanished() {
-        return false;
+
+        // If they are unable to vanish return false
+        if (this.isNotVanishable()) return false;
+
+        // Get the server they are connected to.
+        final RegisteredServer server = this.getServer();
+        if (server == null) return true;
+
+        final Player unableToVanishPlayer = PlayerHelper.getNotVanishablePlayer(server);
+
+        // If there are no players online that can not vanish
+        // we assume they are vanished.
+        if (unableToVanishPlayer == null) return true;
+
+        // Check if this player can be seen on the tab list by
+        // players that cannot vanish.
+        return !unableToVanishPlayer.getTabList().containsEntry(this.player.getUniqueId());
     }
 
     @Override
@@ -76,7 +93,7 @@ public class PlayerUser implements User {
 
     @Override
     public boolean hasPermission(@NotNull String permission) {
-        return false;
+        return this.player.hasPermission(permission);
     }
 
     public void increaseAmountExecuted(@NotNull String commandIdentifier) {

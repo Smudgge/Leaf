@@ -35,6 +35,14 @@ public interface User {
 
     boolean isVanished();
 
+    default boolean isNotVanished() {
+        return !isVanished();
+    }
+
+    default boolean isVanishable() {
+        return !isNotVanishable();
+    }
+
     boolean isNotVanishable();
 
     boolean hasPermission(@NotNull String permission);
