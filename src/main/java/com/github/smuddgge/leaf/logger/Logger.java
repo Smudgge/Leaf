@@ -104,7 +104,9 @@ public class Logger implements Replicable<Logger> {
     public enum Opt {
         B_STATS,
         COMMAND_REGISTERED,
-        COMMAND_RUN
+        COMMAND_RUN,
+        DISCORD_BOT_LOAD,
+        DISCORD_BOT_COMMAND_RUN
     }
 
     public @NotNull Logger optional(@NotNull Opt level, @NotNull String message) {

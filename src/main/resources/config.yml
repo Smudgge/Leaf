@@ -24,6 +24,8 @@ logging:
   b_stats: true
   command_registered: true
   command_run: true
+  discord_bot_load: true
+  discord_bot_command_run: true
 
 
 # ▗▖  ▗▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖ ▗▄▄▖▗▖ ▗▖
