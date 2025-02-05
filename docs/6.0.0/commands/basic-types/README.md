@@ -6,41 +6,4 @@ coverY: 0
 
 # Basic Types
 
-<details>
-
-<summary>Info <mark style="color:yellow;">Sends a message back</mark></summary>
-
-```yaml
-command:
-  type: "info"
-  name: "name"
-  message: "Hi there!"
-```
-
-```yaml
-command:
-  type: "info"
-  name: "name"
-  message:
-  - "Line 1"
-  - "Line 2"
-```
-
-{% code title="Example" %}
-```yaml
-info:
-  type: "info"
-  name: "leaf"
-  message:
-    - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
-    - "&7"
-    - "&7Velocity Proxy Plugin"
-    - "&7Version &f<version>"
-    - "&7Author &fSmudge"
-    - "&7"
-    - "&8&m&l--------------------"
-```
-{% endcode %}
-
-</details>
-
+Simple command types that make up the backbone of many servers.
