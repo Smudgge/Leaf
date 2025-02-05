@@ -2,6 +2,7 @@ package com.github.smuddgge.leaf.configuration;
 
 import com.github.squishylib.configuration.implementation.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -29,5 +30,11 @@ public class Config extends YamlConfiguration {
 
     public boolean canVanishableSeeVanishable() {
         return this.getBoolean("can_vanishable_see_vanishable");
+    }
+
+    public @Nullable String getDiscordToken() {
+        final String token = this.getString("discord_token");
+        if (token == null) return null;
+        return token.isEmpty() ? null : token;
     }
 }

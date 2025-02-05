@@ -106,7 +106,8 @@ public class Command implements SimpleCommand {
     }
 
     public boolean isDiscordEnabled() {
-        return this.getSection().getBoolean("discord_bot.enabled", false);
+        if (this.getSection().getSection("discord_bot").getKeys().isEmpty()) return false;
+        return this.getSection().getBoolean("discord_bot.enabled", true);
     }
 
     public int getLimit() {

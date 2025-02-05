@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.Leaf;
 import com.github.smuddgge.leaf.LeafException;
 import com.github.smuddgge.leaf.command.Command;
 import com.github.smuddgge.leaf.logger.Logger;
+import com.github.smuddgge.leaf.user.DiscordBotUser;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -128,10 +129,11 @@ public class DiscordBot extends ListenerAdapter {
 
         for (DiscordBotCommandAdapter discordCommand : this.discordCommandList) {
             if (!discordCommand.getCommand().getName().equals(name)) continue;
-            discordCommand.execute(event);
+            discordCommand.execute(event, new DiscordBotUser(event));
             return;
         }
     }
+
 //
 //    @Override
 //    public void onMessageReceived(@NotNull MessageReceivedEvent event) {

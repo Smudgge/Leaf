@@ -19,7 +19,7 @@ public class LeafException extends RuntimeException {
 
         // Stop lots of errors.
         // Solve the first one first.
-        if (lastErrorTimeStamp != -1 && System.currentTimeMillis() - lastErrorTimeStamp < 100) {
+        if (lastErrorTimeStamp != -1 && System.currentTimeMillis() - lastErrorTimeStamp < 1000) {
             return;
         }
 
@@ -32,7 +32,7 @@ public class LeafException extends RuntimeException {
         logger.error("&c");
 
         for (StackTraceElement element : exception.getStackTrace()) {
-            logger.error("[Trace] " + element.toString());
+            logger.error("[Trace] " + element.getMethodName() + ":" + element.getLineNumber());
         }
     }
 }

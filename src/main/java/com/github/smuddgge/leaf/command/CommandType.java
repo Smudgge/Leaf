@@ -1,6 +1,7 @@
 package com.github.smuddgge.leaf.command;
 
 import com.github.smuddgge.leaf.user.ConsoleUser;
+import com.github.smuddgge.leaf.user.DiscordBotUser;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.smuddgge.leaf.user.User;
 import com.github.squishylib.configuration.ConfigurationSection;
@@ -74,7 +75,7 @@ public interface CommandType {
      * @param section The command section.
      * @param action  The create command action to add options.
      */
-    default void onDiscordRegister(ConfigurationSection section, @NotNull CommandCreateAction action) {
+    default void onDiscordRegister(@NotNull ConfigurationSection section, @NotNull CommandCreateAction action) {
     }
 
     /**
@@ -85,7 +86,7 @@ public interface CommandType {
      * @param event   The instance of the slash event.
      * @return The instance of the command's status.
      */
-    default CommandStatus onDiscordRun(ConfigurationSection section, SlashCommandInteractionEvent event) {
+    default CommandStatus onDiscordRun(@NotNull ConfigurationSection section, @NotNull SlashCommandInteractionEvent event, @NotNull DiscordBotUser user) {
         return null;
     }
 
@@ -95,7 +96,7 @@ public interface CommandType {
      * @param section The instance of the configuration section.
      * @param event   The instance of the event.
      */
-    default void onDiscordMessage(ConfigurationSection section, @NotNull MessageReceivedEvent event) {
+    default void onDiscordMessage(@NotNull ConfigurationSection section, @NotNull MessageReceivedEvent event) {
 
     }
 }

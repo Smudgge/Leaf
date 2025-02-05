@@ -6,6 +6,7 @@ import com.github.smuddgge.leaf.command.CommandHandler;
 import com.github.smuddgge.leaf.command.type.Info;
 import com.github.smuddgge.leaf.configuration.*;
 import com.github.smuddgge.leaf.database.*;
+import com.github.smuddgge.leaf.discord.DiscordBot;
 import com.github.smuddgge.leaf.logger.Logger;
 import com.github.smuddgge.leaf.logger.SquishyLoggerAdapter;
 import com.github.smuddgge.leaf.placeholder.CustomPlaceholder;
@@ -54,6 +55,7 @@ public class Leaf {
     private Database database;
     private final PlaceholderManager placeholderManager;
     private CommandHandler commandHandler;
+    private DiscordBot discordBot;
 
     @Inject
     public Leaf(@NotNull ProxyServer proxyServer, @DataDirectory final Path folder, ComponentLogger componentLogger, Metrics.@NotNull Factory metricsFactory) {
@@ -96,6 +98,9 @@ public class Leaf {
         // Set up b stats.
         tempLogger.debug("Setting up b-stats.");
         this.setupBStats();
+
+        // Set up discord bot.
+        this.discordBot = new DiscordBot(this.getConfig().getDiscordToken());
 
         // Set up the database.
         this.setupDatabase();
@@ -144,6 +149,15 @@ public class Leaf {
                     "Please attempt to restart your proxy server. If this error still occurs please report it to the developer."
             );
         }
+    }
+
+    private void setupDiscordBot() {
+        final String token = this.getConfig().getDiscordToken();
+        if (token == null) return;
+
+        this.logger.debug("[DiscordBot] Setting up discord bot.");
+        this.discordBot = new DiscordBot(token);
+        this.logger.optional(Logger.Opt.DISCORD_BOT_LOAD, "[DiscordBot] Enabled");
     }
 
     private void setUpConfigurationAndDirectories() {
@@ -275,6 +289,11 @@ public class Leaf {
         this.commandHandler.unregisterCommands();
         this.logger.optional(Logger.Opt.COMMAND_REGISTERED, "[Commands] Unregistered Commands");
 
+        // Unregister discord commands.
+        if (this.discordBot != null) {
+            this.discordBot.removeCommands();
+        }
+
         for (final String identifier : this.commandsDirectory.getKeys()) {
 
             // Get the command section.
@@ -304,6 +323,10 @@ public class Leaf {
             // Create the command and register.
             Command command = new Command(identifier, commandType);
             this.commandHandler.addCommand(command);
+
+            if (this.discordBot != null) {
+                this.discordBot.registerCommand(command);
+            }
         }
 
         // Register all the commands with the velocity proxy.
@@ -352,6 +375,14 @@ public class Leaf {
 
     public @NotNull PlaceholderManager getPlaceholderManager() {
         return this.placeholderManager;
+    }
+
+    public @NotNull CommandHandler getCommandHandler() {
+        return this.commandHandler;
+    }
+
+    public @NotNull DiscordBot getDiscordBot() {
+        return this.discordBot;
     }
 
     public boolean inDebugMode() {
