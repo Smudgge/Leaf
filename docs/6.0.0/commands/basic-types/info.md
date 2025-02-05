@@ -8,7 +8,7 @@ coverY: 0
 # Info
 
 {% hint style="success" %}
-Run command, get answer. As simple as it gets.
+Run command, get answer. Super simple.
 {% endhint %}
 
 {% tabs %}
@@ -87,7 +87,11 @@ This page named %page% doesn't exist.
 
 {% tab title="Discord Bot" %}
 {% hint style="info" %}
-For all embed options click here: &#x20;
+All embed options:  [embeded-message.md](../../discord/embeded-message.md "mention")
+{% endhint %}
+
+{% hint style="info" %}
+More discord command options: [#command-defaults](../../discord/bot.md#command-defaults "mention")
 {% endhint %}
 
 ```yaml
@@ -116,9 +120,15 @@ example_command:
     default: "This page named %page% doesn't exist."
 ```
 
-{% code title="/example 1" %}
+{% code title="In Discord -> /example 1" %}
 ```
 Hi
+```
+{% endcode %}
+
+{% code title="In Minecraft -> /example" %}
+```
+Hi there!
 ```
 {% endcode %}
 {% endtab %}
