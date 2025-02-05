@@ -10,4 +10,5 @@
 ## Commands
 
 * [Overview](commands/overview.md)
-* [Basic Types](commands/basic-types.md)
+* [Basic Types](commands/basic-types/README.md)
+  * [Info](commands/basic-types/info.md)
