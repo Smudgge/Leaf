@@ -57,7 +57,8 @@ public class Info extends BaseCommandType {
             // Get the message given the argument.
             String message = section.getSection("pages").getAdaptedString(
                 arguments[0], "\n",
-                section.getString("default", "The page &f{page} &7doesnt exist.".replace("{page}", arguments[0]))
+                section.getString("default", "The page &f%page% &7doesnt exist.")
+                    .replace("%page%", arguments[0])
             );
 
             user.sendMessage(message);
@@ -102,7 +103,8 @@ public class Info extends BaseCommandType {
                 user.sendMessage(
                     section,
                     "discord_bot.pages" + argumentMapping.getAsString(),
-                    section.getString("discord_bot.default", "The page {page} doesnt exist.".replace("{page}", page))
+                    section.getString("discord_bot.default", "The page %page% doesnt exist.")
+                        .replace("%page%", page)
                 );
             }
         }

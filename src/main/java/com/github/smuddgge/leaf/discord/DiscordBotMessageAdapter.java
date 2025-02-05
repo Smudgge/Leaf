@@ -1,13 +1,10 @@
 package com.github.smuddgge.leaf.discord;
 
 import com.github.smuddgge.leaf.Leaf;
-import com.github.smuddgge.leaf.placeholder.Placeholder;
-import com.github.smuddgge.leaf.placeholder.PlaceholderManager;
 import com.github.smuddgge.leaf.user.PlayerUser;
 import com.github.squishylib.configuration.ConfigurationSection;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
