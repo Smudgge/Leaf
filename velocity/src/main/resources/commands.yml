@@ -1,0 +1,121 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# File: commands.yml
+# Last Changed: ~5.2.2
+# Description: Contains commands that will be created
+#              when enabled or reloaded.
+# Required: []
+# Optional: <>
+#
+# ★ Don't want all of these commands? ★
+# You can disable independent commands by deleting them
+# from this file.
+#
+# ★ Want more commands? ★
+# Create your own custom commands by adding them to this file.
+# You can copy and paste examples from the wiki.
+
+info:
+  # Syntax: /leaf
+  # Description: Shows infomation about this plugin.
+  type: "info"
+  name: "leaf"
+  message:
+    - "&8&m&l-------&r &a&lLeaf &8&m&l-------"
+    - "&7"
+    - "&7Velocity Proxy Plugin"
+    - "&7Version &f<version>"
+    - "&7Author &fSmudge"
+    - "&7"
+    - "&8&m&l--------------------"
+
+reload:
+  # Syntax: /leafreload
+  # Description: Reloads the configuration files and then re-register the commands.
+  type: "reload"
+  name: "leafreload"
+  permission: "leaf.reload"
+  message: "{message} Reloaded all configs! <3"
+  error: "{error_colour}An error occurred while reloading. Somethings may be reverted back."
+
+alert:
+  # Syntax: /alert [message]
+  # Description: Sends a message to all players online.
+  type: "alert"
+  name: "alert"
+  permission: "leaf.alert"
+  message: "&8&l[&f&lAlert&8&l]&r &a%message%"
+
+send:
+  # Syntax: /send [from] [to]
+  # Description: Used to send groups of players to different servers.
+  type: "send"
+  name: "send"
+  permission: "leaf.send"
+  message: "{message} Sending %from% to %to% &7[&f%amount% &7players]"
+  server_not_found: "{error_colour}Server not found."
+  server_offline: "{error_colour}Server requested is offline."
+
+staff_chat:
+  # Syntax: /sc [message]
+  # Description: Used to send a message to all staff.
+  type: "chat"
+  name: "staffchat"
+  aliases: [ "sc" ]
+  permission: "leaf.staffchat"
+  format: "{server_formatted}&r {rank_colour}<player>&r &7: {vanish_colour}%message%"
+
+staff_list:
+  # Syntax: /stafflist
+  # Description: Used to which staff are online. Supports good vanish plugins.
+  type: "list"
+  name: "stafflist"
+  header: "&8&m&l-----&r &a&lStaff List &8&m&l-----"
+  footer: "&8&m&l--------------------"
+  list:
+    admin:
+      permission: "leaf.rank.admin"
+      header: '&7[&f%amount%&7] &c&lAdmins'
+      section: '&7- &f<player> {server_formatted}\n'
+    moderator:
+      permission: "leaf.rank.moderator"
+      header: '&7[&f%amount%&7] &a&lMods'
+      section: '&7- &f<player> {server_formatted}\n'
+    helper:
+      permission: "leaf.rank.helper"
+      header: '&7[&f%amount%&7] &b&lHelpers'
+      section: '&7- &f<player> {server_formatted}\n'
+
+servers:
+  # Syntax: /servers
+  # Description: Used to see how many players are online on each server.
+  type: "servers"
+  name: "servers"
+  order:
+    - name_of_a_server
+    - testing1
+    - testing2
+  header: '&8&m&l------&r &a&lServers &8&m&l------'
+  server: '{server_formatted} &f%online% &7Online Players'
+  footer: '&8&m&l---------------------'
+
+find:
+  # Syntax: /find [player]
+  # Description: Used to see what server a player is on.
+  type: "find"
+  name: "find"
+  not_found: "{error_colour}Player could not be found."
+  found: "{message} Player was found on {server_formatted}"
+  found_no_args: "{message} You are on {server_formatted}"
+
+report:
+  # Syntax: /report [message]
+  # Description: Used to send a message to staff members.
+  type: "report"
+  name: "report"
+  see_report: "leaf.report.see"
+  message: "&f<player> {server_formatted} &chas reported &7: &f%message%"

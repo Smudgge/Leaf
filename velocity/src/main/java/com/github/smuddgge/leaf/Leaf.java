@@ -17,6 +17,7 @@ import com.github.squishylib.configuration.ConfigurationSection;
 import com.github.squishylib.database.Database;
 import com.github.squishylib.database.DatabaseBuilder;
 import com.google.inject.Inject;
+import com.mysql.cj.Constants;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -32,7 +33,7 @@ import java.util.List;
 @Plugin(
         id = "leaf",
         name = "Leaf",
-        version = "6.0.0.dev.0",
+        version = "6.0.0",
         description = "A velocity utility plugin.",
         authors = {"Smudge"}
 )
@@ -100,7 +101,10 @@ public class Leaf {
         this.setupBStats();
 
         // Set up discord bot.
-        this.discordBot = new DiscordBot(this.getConfig().getDiscordToken());
+        final String discordToken = this.getConfig().getDiscordToken();
+        if (discordToken != null && !discordToken.isEmpty()) {
+            this.discordBot = new DiscordBot(discordToken);
+        }
 
         // Set up the database.
         this.setupDatabase();
@@ -316,7 +320,7 @@ public class Leaf {
 
             // Check if the command type doesn't exist.
             if (commandType == null) {
-                this.logger.warn("[Commands] &f" + commandTypeString + " &eis not a valid command type. command identifier: &f" + identifier + "&e.");
+                this.logger.warn("[Commands] &f" + commandTypeString + " &eis not a valid command type. (command identifier: &f" + identifier + "&e)");
                 continue;
             }
 

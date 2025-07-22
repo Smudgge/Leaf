@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.smuddgge</groupId>
+    <artifactId>Leaf</artifactId>
+    <version>HIDDEN</version>
+  </parent>
+
+  <artifactId>libraries</artifactId>
+  <version>6.0.0</version>
+  <packaging>jar</packaging>
+  <name>leaf-libraries</name>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <repositories>
+    <!-- Paper -->
+    <repository>
+      <id>papermc-repo</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+
+    <!-- Jitpack (GitHub Projects) -->
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+
+    <!-- Spark -->
+    <repository>
+      <id>sonatype-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+
+    <!-- Discord Bot -->
+    <repository>
+      <id>dv8tion</id>
+      <name>m2-dv8tion</name>
+      <url>https://m2.dv8tion.net/releases</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- Tools, Configuration and Database Library -->
+    <!-- Includes Gson, slf4j and Jetbrains annotations -->
+    <dependency>
+      <groupId>com.github.squishylib</groupId>
+      <artifactId>SquishyLibrary</artifactId>
+      <version>2.4.6</version>
+    </dependency>
+
+    <!-- Discord Webhooks -->
+    <dependency>
+      <groupId>club.minnced</groupId>
+      <artifactId>discord-webhooks</artifactId>
+      <version>0.8.4</version>
+    </dependency>
+
+    <!-- Discord Bot -->
+    <dependency>
+      <groupId>net.dv8tion</groupId>
+      <artifactId>JDA</artifactId>
+      <version>5.0.0-beta.14</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>Leaf-Libraries-${version}</finalName>
+    <defaultGoal>clean package</defaultGoal>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <!-- Shade -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <excludes>
+                  <exclude>jupiter:*</exclude>
+                  <exclude>spark-api:*</exclude>
+                  <exclude>me.clip:*</exclude>
+                </excludes>
+              </artifactSet>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Velocity -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>16</source>
+          <target>16</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>templating-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <id>filter-src</id>
+            <goals>
+              <goal>filter-sources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.9.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>net.trajano.wagon</groupId>
+            <artifactId>wagon-git</artifactId>
+            <version>2.0.4</version>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.maven.doxia</groupId>
+            <artifactId>doxia-module-markdown</artifactId>
+            <version>1.9.1</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+          <scmCommentPrefix xml:space="preserve">[RELEASE] </scmCommentPrefix>
+          <goals>
+            install deploy site-deploy
+          </goals> <!-- install is here to fix javadoc generation in multi-module projects -->
+          <releaseProfiles>release</releaseProfiles>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

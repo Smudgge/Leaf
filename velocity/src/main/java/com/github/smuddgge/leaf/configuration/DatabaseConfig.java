@@ -8,7 +8,7 @@ import java.io.File;
 public class DatabaseConfig extends YamlConfiguration {
 
     public DatabaseConfig(@NotNull final File folder, @NotNull final String fileName) {
-        super(folder, fileName);
+        super(folder, fileName, DatabaseConfig.class);
     }
 
     public boolean isEnabled() {

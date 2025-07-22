@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <artifactId>Leaf</artifactId>
+    <groupId>com.github.smuddgge</groupId>
+    <version>HIDDEN</version>
+  </parent>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.github.smuddgge</groupId>
-  <artifactId>Leaf</artifactId>
-  <name>Leaf</name>
+  <artifactId>libraries</artifactId>
+  <name>leaf-libraries</name>
   <version>6.0.0</version>
-  <description>A velocity utility plugin</description>
   <build>
+    <defaultGoal>clean package</defaultGoal>
     <resources>
       <resource>
         <filtering>true</filtering>
@@ -17,6 +21,7 @@
         <directory>src/main/resources</directory>
       </resource>
     </resources>
+    <finalName>Leaf-Libraries-${version}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
@@ -89,58 +94,6 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>release</id>
-      <build>
-        <resources>
-          <resource>
-            <filtering>true</filtering>
-            <directory>src/main/resources</directory>
-          </resource>
-        </resources>
-        <plugins>
-          <plugin>
-            <artifactId>maven-source-plugin</artifactId>
-            <version>3.2.0</version>
-            <executions>
-              <execution>
-                <id>attach-sources</id>
-                <goals>
-                  <goal>jar-no-fork</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.2.0</version>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.6</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
   <repositories>
     <repository>
       <id>papermc-repo</id>
@@ -168,12 +121,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.github.squishylib</groupId>
-      <artifactId>SquishyLibrary</artifactId>
-      <version>2.4.6</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.9.2</version>
@@ -198,16 +145,9 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-      </plugin>
-    </plugins>
-  </reporting>
   <properties>
-    <java.version>17</java.version>
+    <maven.compiler.target>17</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>

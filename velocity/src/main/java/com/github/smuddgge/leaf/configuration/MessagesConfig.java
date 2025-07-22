@@ -8,7 +8,7 @@ import java.io.File;
 public class MessagesConfig extends YamlConfiguration {
 
     public MessagesConfig(@NotNull final File folder, @NotNull final String fileName) {
-        super(folder, fileName);
+        super(folder, fileName, MessagesConfig.class);
     }
 
     public @NotNull String incorrectArguments() {

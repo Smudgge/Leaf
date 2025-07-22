@@ -9,7 +9,7 @@ import java.io.File;
 public class Config extends YamlConfiguration {
 
     public Config(@NotNull final File folder, @NotNull final String fileName) {
-        super(folder, fileName);
+        super(folder, fileName, Config.class);
     }
 
     public boolean inDebugMode() {

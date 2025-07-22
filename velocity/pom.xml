@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.github.smuddgge</groupId>
+    <artifactId>Leaf</artifactId>
+    <version>HIDDEN</version>
+  </parent>
+
+  <artifactId>velocity</artifactId>
+  <version>6.0.0</version>
+  <packaging>jar</packaging>
+  <name>leaf</name>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+
+  <repositories>
+    <!-- Paper -->
+    <repository>
+      <id>papermc-repo</id>
+      <url>https://repo.papermc.io/repository/maven-public/</url>
+    </repository>
+
+    <!-- Jitpack (GitHub Projects) -->
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
+
+    <!-- Spark -->
+    <repository>
+      <id>sonatype-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+
+    <!-- Discord Bot -->
+    <repository>
+      <id>dv8tion</id>
+      <name>m2-dv8tion</name>
+      <url>https://m2.dv8tion.net/releases</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <!-- Libraries -->
+    <dependency>
+      <groupId>com.github.smuddgge</groupId>
+      <artifactId>libraries</artifactId>
+      <version>6.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>Leaf-${version}</finalName>
+    <defaultGoal>clean package</defaultGoal>
+  </build>
+
+</project>

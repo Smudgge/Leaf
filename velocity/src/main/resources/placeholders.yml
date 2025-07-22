@@ -1,0 +1,43 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# File: placeholders.yml
+# Last Changed: ~5.2.2
+# Description: Used to create placeholders you can use
+#              in this plugin.
+#
+# ★ Don't want some of the placeholders? ★
+# You can delete a placeholder by removing it
+# from the file.
+#
+# ★ What are these placeholders? ★
+# Custom placeholders can be used in any message using curly brackets.
+# You can add as many custom placeholders as you like.
+#
+# In custom placeholders, you can also use standard placeholders:
+# <player> <server> <vanished> <version>
+
+message: "&8&l[&f&lServer&8&l]&a"
+
+error_colour: "&7"
+
+vanish_colour:
+  condition: "MATCH:<vanished>"
+  options:
+    "true": "&#c0fce6"
+    "false": "&#ffffee"
+
+server_formatted:
+  condition: "MATCH:<server>"
+  options:
+    Default: "&f&l<server>"
+    "TestingServer": "&e&lTest Server"
+
+rank_colour:
+  condition: "PERMISSION:leaf.rank.?"
+  options:
+    Default: "&f"
+    "admin": "&a"

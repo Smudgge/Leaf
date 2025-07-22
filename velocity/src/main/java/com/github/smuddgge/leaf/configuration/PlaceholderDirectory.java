@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public class CommandDirectory extends ConfigurationDirectory {
+public class PlaceholderDirectory extends ConfigurationDirectory {
 
-    public CommandDirectory(@NotNull File directory) {
-        super(directory);
+    public PlaceholderDirectory(@NotNull File directory) {
+        super(directory, PlaceholderDirectory.class);
     }
 }

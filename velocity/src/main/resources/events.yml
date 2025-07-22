@@ -1,0 +1,25 @@
+#  __         ______     ______     ______
+# /\ \       /\  ___\   /\  __ \   /\  ___\
+# \ \ \____  \ \  __\   \ \  __ \  \ \  __\
+#  \ \_____\  \ \_____\  \ \_\ \_\  \ \_\
+#   \/_____/   \/_____/   \/_/\/_/   \/_/
+#
+# File: events.yml
+# Last Changed: ~5.2.2
+# Description: Contains events that will be created
+#              when enabled or reloaded.
+#
+# ★ Don't want events? ★
+# You can disable all by deleting the content of this file.
+# If you delete the file a new one will be generated.
+
+load_balancing:
+  enabled: false
+  # Executed when a player joins the server.
+  type: "playerjoin"
+  # Add servers to be sent to.
+  # If more than 1 server is stated the player will
+  # go to the server with the least number of players.
+  servers:
+    - "hub1"
+    - "hub2"
