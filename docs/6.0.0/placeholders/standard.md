@@ -17,7 +17,7 @@ Some placeholders have multiple names you can choose from.
 
 ## Display
 
-<table><thead><tr><th width="310">Placeholder Name</th><th valign="middle">Description</th></tr></thead><tbody><tr><td>&#x3C;title: &#x26;f&#x26;lWelcome!></td><td valign="middle">Displays a title to the players screen.</td></tr><tr><td>&#x3C;subtitle: &#x26;f&#x26;lHello there></td><td valign="middle">Displays a subtitle to the players screen.</td></tr><tr><td>&#x3C;action: &#x26;f&#x26;lAction Bar></td><td valign="middle">Displays a action bar message on the players screen.</td></tr></tbody></table>
+<table><thead><tr><th width="310">Placeholder Name</th><th valign="middle">Description</th></tr></thead><tbody><tr><td>&#x3C;title: '&#x26;f&#x26;lWelcome!' 4s></td><td valign="middle">Displays a title to the players screen.</td></tr><tr><td>&#x3C;subtitle: '&#x26;f&#x26;lHello there' 4s></td><td valign="middle">Displays a subtitle to the players screen.</td></tr><tr><td>&#x3C;action: '&#x26;f&#x26;lAction Bar' 4s></td><td valign="middle">Displays a action bar message on the players screen.</td></tr></tbody></table>
 
 ## General
 
