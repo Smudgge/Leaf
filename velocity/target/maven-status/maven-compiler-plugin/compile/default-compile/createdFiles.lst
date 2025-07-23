@@ -36,6 +36,7 @@ com/github/smuddgge/leaf/command/CommandStatus.class
 com/github/smuddgge/leaf/user/PlayerUser.class
 com/github/smuddgge/leaf/Metrics$CustomChart.class
 com/github/smuddgge/leaf/placeholder/package-info.class
+com/github/smuddgge/leaf/command/type/Reload.class
 com/github/smuddgge/leaf/database/HistoryTable.class
 com/github/smuddgge/leaf/database/PlayerRecord.class
 com/github/smuddgge/leaf/placeholder/condition/PermissionCondition.class

@@ -264,7 +264,7 @@ public class Command implements SimpleCommand {
         final boolean hasPermission = user.hasPermission(this.getPermission() == null ? "" : this.getPermission());
 
         // Does the player have permission to run the base command?
-        if (permissionExists && hasPermission) return new CommandStatus().set(CommandStatus.Status.NO_PERMISSION);
+        if (permissionExists && !hasPermission) return new CommandStatus().set(CommandStatus.Status.NO_PERMISSION);
 
         // Check for permission-based requirements.
         if (this.getSection().getKeys().contains("require")) {

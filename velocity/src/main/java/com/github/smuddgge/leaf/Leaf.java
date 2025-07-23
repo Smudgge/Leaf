@@ -4,6 +4,7 @@ import com.github.smuddgge.leaf.command.BaseCommandType;
 import com.github.smuddgge.leaf.command.Command;
 import com.github.smuddgge.leaf.command.CommandHandler;
 import com.github.smuddgge.leaf.command.type.Info;
+import com.github.smuddgge.leaf.command.type.Reload;
 import com.github.smuddgge.leaf.configuration.*;
 import com.github.smuddgge.leaf.database.*;
 import com.github.smuddgge.leaf.discord.DiscordBot;
@@ -282,6 +283,7 @@ public class Leaf {
         // Add command types.
         this.commandHandler = new CommandHandler();
         this.commandHandler.addCommandType(new Info());
+        this.commandHandler.addCommandType(new Reload());
 
         // Reload commands.
         this.reloadCommands();

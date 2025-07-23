@@ -177,9 +177,10 @@ public class PlaceholderManager {
     public @NotNull Component parse(@NotNull String string, @Nullable Player player) {
         try {
 
-            String legacyString = this.convertLegacyToMiniMessage(string);
-            String leafPlaceholderString = this.parseLeafPlaceholders(legacyString, player != null ? new PlayerUser(player) : null);
-            return this.parseMiniMessage(leafPlaceholderString, player);
+            String miniMessageString = this.convertLegacyToMiniMessage(string);
+            String leafPlaceholderString = this.parseLeafPlaceholders(miniMessageString, player != null ? new PlayerUser(player) : null);
+            String miniMessageString2 = this.convertLegacyToMiniMessage(leafPlaceholderString);
+            return this.parseMiniMessage(miniMessageString2, player);
 
         } catch (Exception exception) {
             throw new LeafException(exception, "PlaceholderManager.parse(string, user)", "Failed to convert message &f\"" + string + "\"", null);
