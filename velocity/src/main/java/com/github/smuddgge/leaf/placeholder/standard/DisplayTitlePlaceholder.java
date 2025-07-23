@@ -46,7 +46,7 @@ public class DisplayTitlePlaceholder implements Placeholder {
             final int durationEnd = chopped.indexOf("s");
             final String durationString = chopped.substring(durationStart + 1, durationEnd);
 
-            final String message = string.substring(messageStart, messageEnd);
+            final String message = string.substring(messageStart + 1, messageEnd);
 
             Duration duration;
             try {
@@ -87,7 +87,7 @@ public class DisplayTitlePlaceholder implements Placeholder {
                     "DisplayTitlePlaceholder.sendTitle()",
                     "Failed to parse a title placeholder.",
                     "Placeholder that threw an error: " + string,
-                    "Example of a correct title placeholder: <title: 'hi' 4s>"
+                    "Example of a correct title placeholder: &6<title: 'hi' 4s>"
             );
         }
     }

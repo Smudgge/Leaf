@@ -57,6 +57,15 @@
       <version>6.0.0</version>
       <scope>provided</scope>
     </dependency>
+
+
+    <!-- Tools, Configuration and Database Library -->
+    <!-- Includes Gson, slf4j and Jetbrains annotations -->
+    <dependency>
+      <groupId>com.github.squishylib</groupId>
+      <artifactId>SquishyLibrary</artifactId>
+      <version>2.4.6</version>
+    </dependency>
   </dependencies>
 
   <build>

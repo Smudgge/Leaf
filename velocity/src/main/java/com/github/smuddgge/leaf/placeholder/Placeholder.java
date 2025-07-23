@@ -149,9 +149,9 @@ public interface Placeholder {
             if (index == -1) continue;
 
             // Get the placeholder by its self.
-            final String chopped = string.substring(index);
-            final int endIndex = chopped.indexOf(this.getType().getSuffix());
-            final String placeholder = chopped.substring(0, endIndex + 1);
+            final String choppedLeft = string.substring(index);
+            final int endIndex = this.getEndIndex(choppedLeft);
+            final String placeholder = choppedLeft.substring(0, endIndex + 1);
 
             // Get the result of this placeholder.
             final String result = this.getValue(user, placeholder);
@@ -162,5 +162,24 @@ public interface Placeholder {
         // Check if this placeholder still exists in the string.
         if (this.isIn(string)) return this.parse(string, user);
         return string;
+    }
+
+    default int getEndIndex(@NotNull String choppedLeft) {
+        int bracketDepth = 0;
+        int index = 0;
+
+        for (char c : choppedLeft.toCharArray()) {
+            if (c == this.getType().getPrefix().toCharArray()[0]) bracketDepth++;
+
+            if (c == this.getType().getSuffix().toCharArray()[0]) {
+                if (bracketDepth <= 1) {
+                    return index;
+                }
+                bracketDepth--;
+            }
+
+            index++;
+        }
+        return choppedLeft.length() - 1;
     }
 }
