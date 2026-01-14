@@ -97,15 +97,14 @@ public class PlaceholderManager {
      * @param placeholder The placeholder to register.
      */
     public static void register(Placeholder placeholder) {
-
-        // Check if the placeholder identifier has already been registered.
         if (PlaceholderManager.get(placeholder.getIdentifier()) != null) {
-            MessageManager.warn("&7[Placeholders] &eDuplicate placeholder : " + placeholder.getIdentifier() + " (This version of the placeholder has been disabled)");
+            MessageManager.warn("Duplicate placeholder : " + placeholder.getIdentifier());
             return;
         }
 
         PlaceholderManager.placeholderList.add(placeholder);
-        MessageManager.log("&7[Placeholders] &aRegistered &7placeholder : " + placeholder.getString());
+
+        MessageManager.log("&7[Placeholders] &aRegistered &7placeholder : " + placeholder.getIdentifier());
     }
 
     /**
@@ -118,7 +117,7 @@ public class PlaceholderManager {
 
         if (placeholder == null) return;
 
-        MessageManager.log("&7[Placeholders] &cUnregistered &7placeholder : " + identifier);
+        MessageManager.log("&7[Placeholders] &eUnregistered &7placeholder : " + identifier);
 
         PlaceholderManager.placeholderList.remove(placeholder);
     }

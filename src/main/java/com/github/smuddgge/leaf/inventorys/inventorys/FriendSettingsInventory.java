@@ -5,15 +5,12 @@ import com.github.smuddgge.leaf.MessageManager;
 import com.github.smuddgge.leaf.database.records.FriendSettingsRecord;
 import com.github.smuddgge.leaf.database.tables.FriendSettingsTable;
 import com.github.smuddgge.leaf.datatype.User;
-import com.github.smuddgge.leaf.exception.LeafException;
 import com.github.smuddgge.leaf.inventorys.CustomInventory;
 import com.github.smuddgge.leaf.inventorys.InventoryItem;
 import com.github.smuddgge.squishyconfiguration.interfaces.ConfigurationSection;
 import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.record.RecordField;
 import dev.simplix.protocolize.api.item.ItemStack;
-
-import java.util.UUID;
 
 public class FriendSettingsInventory extends CustomInventory {
 
@@ -29,13 +26,11 @@ public class FriendSettingsInventory extends CustomInventory {
         super(section, user, "inventory");
 
         FriendSettingsTable friendSettingsTable = Leaf.getDatabase().getTable(FriendSettingsTable.class);
-        FriendSettingsRecord friendSettings = friendSettingsTable.getFirstRecord(
-                new Query().match("playerUuid", user.getUniqueId().toString())
-        );
+        FriendSettingsRecord friendSettings = friendSettingsTable.getFirstRecord(new Query().match("playerUuid", user.getUniqueId()));
 
         if (friendSettings == null) {
+            System.out.println("test");
             this.friendSettingsRecord = new FriendSettingsRecord();
-            this.friendSettingsRecord.uuid = UUID.randomUUID().toString();
             this.friendSettingsRecord.playerUuid = user.getUniqueId().toString();
             return;
         }
@@ -60,7 +55,7 @@ public class FriendSettingsInventory extends CustomInventory {
 
                 if (recordField == null) {
                     MessageManager.warn("No such setting type: " + functionType + " Please change this in your configuration file.");
-                    throw new LeafException("Setting type does not exist: " + functionType);
+                    throw new RuntimeException("Setting type does not exist: " + functionType);
                 }
 
                 if (recordField.getValue().equals("true")) {

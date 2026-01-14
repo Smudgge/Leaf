@@ -20,7 +20,6 @@
 
 package com.github.smuddgge.leaf.task;
 
-import com.github.smuddgge.leaf.exception.LeafException;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -58,7 +57,7 @@ public class TaskContainer {
 
         // Check if the identifier already exists.
         if (this.taskMap.containsKey(identifier)) {
-            throw new LeafException("Identifier already exists within task container.");
+            throw new RuntimeException("Identifier already exists within task container.");
         }
 
         // Start the thread.
@@ -84,7 +83,7 @@ public class TaskContainer {
                     Thread.sleep(SLEEP_TIME_MILLIS);
 
                 } catch (InterruptedException exception) {
-                    throw new LeafException(exception);
+                    throw new RuntimeException(exception);
                 }
             }
 

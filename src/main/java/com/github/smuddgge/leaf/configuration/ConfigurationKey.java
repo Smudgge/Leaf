@@ -1,4 +1,4 @@
-package com.github.smuddgge.leaf.configurationold;
+package com.github.smuddgge.leaf.configuration;
 
 import org.jetbrains.annotations.NotNull;
 

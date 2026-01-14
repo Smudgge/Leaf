@@ -5,6 +5,7 @@ import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
 
 public class MiniPlaceholdersAdapter {
@@ -17,16 +18,19 @@ public class MiniPlaceholdersAdapter {
      * @return The parsed message.
      */
     public static Component parseMiniPlaceholders(String message, @Nullable Player player) {
+        MiniMessage miniMessage = MiniMessage.miniMessage();
+
         if (player != null) {
-            return MiniMessage.miniMessage().deserialize(
-                    message,
-                    MiniPlaceholders.getAudienceGlobalPlaceholders(Audience.audience(player))
+            return miniMessage.deserialize(
+                message,
+                player,
+                TagResolver.resolver(MiniPlaceholders.audiencePlaceholders())
             );
         }
 
-        return MiniMessage.miniMessage().deserialize(
-                message,
-                MiniPlaceholders.getGlobalPlaceholders()
+        return miniMessage.deserialize(
+            message,
+            MiniPlaceholders.globalPlaceholders()
         );
     }
 }
