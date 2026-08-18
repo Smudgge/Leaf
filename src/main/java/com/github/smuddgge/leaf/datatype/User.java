@@ -262,7 +262,7 @@ public class User {
         String[] parts = message.split("::");
 
         boolean hasTitle = false;
-        Title.Times times = Title.Times.of(
+        Title.Times times = Title.Times.times(
                 Duration.ofMillis(1000),
                 Duration.ofMillis(1000),
                 Duration.ofMillis(1000)
@@ -342,7 +342,7 @@ public class User {
                 ? Integer.parseInt(durations[3]) : 1000;
 
         // Create durations.
-        return Title.Times.of(
+        return Title.Times.times(
                 Duration.ofMillis(fadeIn),
                 Duration.ofMillis(stay),
                 Duration.ofMillis(fadeOut)

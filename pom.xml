@@ -6,14 +6,14 @@
 
     <groupId>com.github.smuddgge</groupId>
     <artifactId>Leaf</artifactId>
-    <version>5.2.2-dev-1-miniplaceholderfix</version>
+    <version>5.2.2-dev-3-titlesfix</version>
     <packaging>jar</packaging>
 
     <name>Leaf</name>
 
     <description>A velocity utility plugin</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>com.velocitypowered</groupId>
             <artifactId>velocity-api</artifactId>
-            <version>3.4.0-SNAPSHOT</version>
+            <version>4.1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -259,6 +259,14 @@
                 <configuration>
                     <source>16</source>
                     <target>16</target>
+                    <!-- add the annotation processor -->
+                    <annotationProcessorPaths>
+                      <path>
+                        <groupId>com.velocitypowered</groupId>
+                        <artifactId>velocity-api</artifactId>
+                        <version>4.1.0-SNAPSHOT</version>
+                      </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
